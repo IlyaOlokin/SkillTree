@@ -3,6 +3,7 @@ using UnityEngine;
 
 public enum StatModifierIncreasedType
 {
+    Empty = 9999,
     // Damage
     IncreasedDamage = 0,
     IncreasedElementalDamage = 1,

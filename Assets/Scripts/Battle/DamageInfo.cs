@@ -1,32 +1,31 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Battle
 {
     [Serializable]
-    public class Damage
+    public class DamageInfo
     {
         public BaseUnitModifiers BaseStatModifier;
-        public List<BaseDamage> damage = new List<BaseDamage>();
+        public List<BaseDamage> damages = new List<BaseDamage>();
         public float criticalChance;
         public float criticalDamageBonus;
+        [HideInInspector] public bool isCritical = false;
         
-        public Damage(){}
+        public DamageInfo(){}
 
-        public Damage(Damage other)
+        public DamageInfo(DamageInfo other)
         {
-            damage = new List<BaseDamage>(other.damage);
+            damages = new List<BaseDamage>();
+            foreach (var damage in other.damages)
+            {
+                damages.Add(damage.Clone());
+            }
             criticalChance = other.criticalChance;
             criticalDamageBonus = other.criticalDamageBonus;
-        }
-
-        public DamageInstance GetDamage()
-        {
-            DamageInstance damageInstance = new DamageInstance();
-            damageInstance.Damage[DamageType.Physical] = damage.Find(x => x.damageType == DamageType.Physical).damage;
-
-            return damageInstance;
         }
     }
 
@@ -35,6 +34,15 @@ namespace Battle
     {
         public DamageType damageType;
         public float damage;
+        
+        public BaseDamage Clone()
+        {
+            return new BaseDamage
+            {
+                damage = damage,
+                damageType = damageType
+            };
+        }
     }
 
     public class DamageInstance

@@ -5,9 +5,11 @@ namespace Battle
 {
     public class Attacker : MonoBehaviour
     {
-        private BaseUnitModifiers _baseUnitModifiers;
+        private Unit _owner;
         [SerializeField] private BaseWeapon weapon;
         public ITarget Target { get; private set; }
+
+        public float AttackProgress => 1 - _attackTimer / GetCalculatedAttackSpeed();
 
         private float _attackTimer;
 
@@ -16,9 +18,9 @@ namespace Battle
             ResetAttackCooldown();
         }
         
-        public void Init(BaseUnitModifiers baseUnitModifiers)
+        public void Init(Unit owner)
         {
-            _baseUnitModifiers = baseUnitModifiers;
+            _owner = owner;
         }
 
         public void SetTarget(ITarget target)
@@ -39,18 +41,24 @@ namespace Battle
             }
         }
 
+        private float GetCalculatedAttackSpeed()
+        {
+            return 1f / weapon.attacksSpeed;
+        }
+
         private void ResetAttackCooldown()
         {
-            _attackTimer = 1f / weapon.attacksSpeed;
+            _attackTimer = GetCalculatedAttackSpeed();
         }
 
         private void AttackTarget()
         {
-            Damage damage = new Damage(weapon.damage)
+            DamageInfo damageInfo = new DamageInfo(weapon.damageInfo)
             {
-                BaseStatModifier = new BaseUnitModifiers(_baseUnitModifiers)
+                BaseStatModifier = new BaseUnitModifiers(_owner.baseUnitModifiers)
             };
-            Target.ReceiveAttack(damage);
+            
+            AttackProcessor.InitiateAttack(_owner, damageInfo, Target);
         }
     }
 }

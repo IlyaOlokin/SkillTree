@@ -1,31 +1,44 @@
 using System;
+using System.Collections.Generic;
+using SkillTree;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Battle
 {
-    public abstract class Unit : MonoBehaviour, ITarget
+    public class Unit : MonoBehaviour, ITarget
     {
         [SerializeField] public Health health;
         [SerializeField] public Attacker attacker;
         [SerializeField] public BaseUnitModifiers baseUnitModifiers;
-
-        private void Awake()
+        
+        public Unit UnitObject
+        {
+            get => this;
+            set{}
+        }
+        
+        protected virtual void Awake()
         {
             health.OnHealthZero += Death;
             baseUnitModifiers = new BaseUnitModifiers();
             health.Init(baseUnitModifiers);
-            attacker.Init(baseUnitModifiers);
+            attacker.Init(this);
         }
 
-        public void ReceiveAttack(Damage damage)
+        public void ReceiveDamage(DamageInstance damageInstance)
         {
-            health.TakeDamage(damage);
+            health.TakeDamage(damageInstance);
         }
 
         private void Death()
         {
             Destroy(gameObject);
+        }
+
+        public bool IsOnLowLife()
+        {
+            return health.CurrentHealth <= health.MaxHealth * 0.5f;
         }
     }
 }

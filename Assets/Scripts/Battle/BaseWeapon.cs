@@ -8,7 +8,7 @@ namespace Battle
     public class BaseWeapon : ScriptableObject
     {
         public WeaponType weaponType;
-        public Damage damage; // change
+        [FormerlySerializedAs("damage")] public DamageInfo damageInfo; // change
         
         public float attacksSpeed;
     }

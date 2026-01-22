@@ -4,7 +4,9 @@ namespace Battle
 {
     public interface ITarget
     {
-        public void ReceiveAttack(Damage damage);
+        public Unit UnitObject { get; set; }
+
+        public void ReceiveDamage(DamageInstance damageInstance);
     }
 }
 

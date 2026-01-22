@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: 
   weaponType: 1
-  damage:
-    damage:
+  damageInfo:
+    damages:
     - damageType: 0
       damage: 5
     criticalChance: 0.05
     criticalDamageBonus: 0.5
+    isCritical: 0
   attacksSpeed: 1

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9140746461347518866}
   - component: {fileID: 956679600491400372}
   - component: {fileID: 8280504164276382073}
+  - component: {fileID: 5751231110311033075}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -101,7 +102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9eefa3c3e8f12542b7971e661c10dd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseUnitModifiers: {fileID: 0}
   <MaxHealth>k__BackingField: 100
 --- !u!114 &8280504164276382073
 MonoBehaviour:
@@ -115,5 +115,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14f21ff87f467724b88976e82849bb97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseUnitModifiers: {fileID: 0}
   weapon: {fileID: 11400000, guid: 306b9b6096676c14d941243c9a464dc7, type: 2}
+--- !u!114 &5751231110311033075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4884718464874992480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd55a87c3d7252a4eac662ea6d18d565, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unit: {fileID: 0}
+  unitNotificationEffect: {fileID: 9209489120575824937, guid: 0c417aa8158cbe848842fce85c460f55, type: 3}

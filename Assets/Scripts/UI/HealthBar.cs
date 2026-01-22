@@ -21,8 +21,8 @@ public class HealthBar : MonoBehaviour
         UpdateHealthBar(health.CurrentHealth);
     }
 
-    private void UpdateHealthBar(float value)
+    private void UpdateHealthBar(float delta)
     {
-        slider.value = value / health.MaxHealth;
+        slider.value = health.CurrentHealth / health.MaxHealth;
     }
 }

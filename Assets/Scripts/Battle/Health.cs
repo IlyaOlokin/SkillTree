@@ -18,15 +18,14 @@ namespace Battle
             _baseUnitModifiers = baseUnitModifiers;
         }
 
-        public float TakeDamage(Damage damage)
+        public float TakeDamage(DamageInstance damageInstance)
         {
-            DamageInstance damageInstance = damage.GetDamage();
-            foreach (var damageType in damageInstance.Damage.Keys)
+            float previousHealth = CurrentHealth;
+            foreach (var damageValue in damageInstance.Damage.Values)
             {
-                float dmg = damageInstance.Damage[damageType];
-                CurrentHealth -= dmg;
+                CurrentHealth -= damageValue;
             }
-            OnHealthChange?.Invoke(CurrentHealth);
+            OnHealthChange?.Invoke(previousHealth - CurrentHealth);
             if (CurrentHealth <= 0f)
             {
                 OnHealthZero?.Invoke();

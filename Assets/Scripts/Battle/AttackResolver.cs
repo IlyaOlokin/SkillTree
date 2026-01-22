@@ -8,7 +8,23 @@ namespace Battle
         public static AttackResolver instance;
         
         private List<EnemyUnit> enemies;
-        
+
+        public Unit UnitObject
+        {
+            get
+            {
+                for (int i = 0; i < enemies.Count; i++)
+                {
+                    if (enemies[i] == null)
+                        continue;
+                    return enemies[i];
+                }
+
+                return null;
+            }
+            set{}
+        }
+
         private void Awake()
         {
             if (instance == null)
@@ -17,20 +33,16 @@ namespace Battle
             }
         }
         
-        public void ReceiveAttack(Damage damage)
+        public void ReceiveDamage(DamageInstance damageInstance)
         {
-            for (int i = 0; i < enemies.Count; i++)
-            {
-                if (enemies[i] == null)
-                    continue;
-                enemies[i].ReceiveAttack(damage);
-                break;
-            }
+            UnitObject.ReceiveDamage(damageInstance);
         }
 
         public void SetNewEnemies(List<EnemyUnit> enemyUnits)
         {
             enemies = new List<EnemyUnit>(enemyUnits);
         }
+
+        
     }
 }

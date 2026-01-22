@@ -10,52 +10,91 @@ namespace SkillTree
     [Serializable]
     public class Node : MonoBehaviour
     { 
-        public virtual  bool IsConnectedToRoot { get; private set; }
         public virtual bool IsAllocated { get; private set; }
         
         [SerializeField] private List<Node> connectedNodes = new List<Node>();
         public IReadOnlyList<Node> ConnectedNodes => connectedNodes;
-        
-        private bool _isSelected;
-        public event Action<bool> OnSelectedChanged;
-        public event Action<bool> OnAllocatedChanged;
-        public static event Action<Node> OnAnyNodeSelected;
+
+        [field:SerializeField] public List<Modifier> Modifiers { get; private set; }
+
+        public event Action<Node> OnAllocatedChanged;
+        public static event Action<Node> OnAnyNodeAllocatedChanged;
 
         public bool CanBeAllocated()
         {
-            return HasRootConnection();
+            return !IsAllocated && HasRootConnection();
         }
 
-        private bool HasRootConnection()
+        protected virtual bool HasRootConnection()
         {
-            return IsConnectedToRoot || connectedNodes.Any(node => node.IsConnectedToRoot);
+            var visited = new HashSet<Node>();
+            return DFS(this, visited);
         }
+
+        bool DFS(Node current, HashSet<Node> visited)
+        {
+            if (current == null)
+                return false;
+
+            if (current is RootNode)
+                return true;
+
+            if (!visited.Add(current))
+                return false;
+
+            foreach (var next in current.ConnectedNodes)
+            {
+                if (next.IsAllocated && DFS(next, visited))
+                    return true;
+            }
+
+            return false;
+        }
+
 
         public void Allocate()
         {
             if (!CanBeAllocated()) return;
             
-            
             IsAllocated = true;
-            _isSelected = false;
-
-            if (HasRootConnection())
-            {
-                IsConnectedToRoot = true;
-            }
             
-            OnSelectedChanged?.Invoke(_isSelected);
-            OnAllocatedChanged?.Invoke(IsAllocated);
+            OnAllocatedChanged?.Invoke(this);
+            OnAnyNodeAllocatedChanged?.Invoke(this);
         }
 
-        private void OnMouseDown()
+        public void Deallocate()
         {
-            if (!CanBeAllocated()) return;
-            Debug.Log("OnMouseDown");
+            IsAllocated = false;
+            bool allowDeallocation = true;
+            foreach (var node in ConnectedNodes)
+            {
+                if (!node.HasRootConnection() && node.IsAllocated)
+                {
+                    allowDeallocation = false;
+                    break;
+                }
+            }
 
-            _isSelected = true;
-            OnSelectedChanged?.Invoke(_isSelected);
-            OnAnyNodeSelected?.Invoke(this);
+            if (!allowDeallocation)
+            {
+                IsAllocated = true;
+                return;
+            }
+            
+            OnAllocatedChanged?.Invoke(this);
+            OnAnyNodeAllocatedChanged?.Invoke(this);
+        }
+        
+        
+        private void OnMouseOver () {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Allocate();
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                Deallocate();
+            }
         }
     }
 }

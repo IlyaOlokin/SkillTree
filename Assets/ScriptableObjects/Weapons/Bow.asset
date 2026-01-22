@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Bow
   m_EditorClassIdentifier: 
   weaponType: 2
-  damage:
-    damage:
+  damageInfo:
+    damages:
     - damageType: 0
       damage: 4
     criticalChance: 0.07
     criticalDamageBonus: 0.5
+    isCritical: 0
   attacksSpeed: 1.2

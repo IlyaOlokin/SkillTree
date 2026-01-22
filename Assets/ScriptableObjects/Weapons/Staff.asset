@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Staff
   m_EditorClassIdentifier: 
   weaponType: 3
-  damage:
-    damage:
+  damageInfo:
+    damages:
     - damageType: 1
       damage: 7
     criticalChance: 0.05
     criticalDamageBonus: 0.5
+    isCritical: 0
   attacksSpeed: 0.8

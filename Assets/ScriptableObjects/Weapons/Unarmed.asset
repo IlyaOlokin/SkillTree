@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Unarmed
   m_EditorClassIdentifier: 
   weaponType: 0
-  damage:
-    damage:
+  damageInfo:
+    damages:
     - damageType: 0
       damage: 1
     criticalChance: 0.01
     criticalDamageBonus: 0.5
+    isCritical: 0
   attacksSpeed: 0.5
