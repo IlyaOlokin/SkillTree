@@ -2,7 +2,7 @@ namespace Battle
 {
     public static class AttackProcessor
     {
-        public static void InitiateAttack(Unit attackerUnit, DamageInfo damageInfo, ITarget defender)
+        public static void HandleAttack(Unit attackerUnit, DamageInfo damageInfo, ITarget defender)
         {
             // Base Modifiers are applied on skill tree update
             
@@ -13,6 +13,7 @@ namespace Battle
             DamageInstance damageInstance = DamageCalculator.CalculateAttackDamage(damageInfo);
             
             // defence with Defences Defence(DamageInstance damageInfo)
+            Armor.ApplyArmorMitigation(damageInstance, defender.UnitObject, attackerUnit);
             
             defender.ReceiveDamage(damageInstance);
         }

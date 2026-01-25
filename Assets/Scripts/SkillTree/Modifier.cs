@@ -11,6 +11,7 @@ namespace SkillTree
         public virtual void ApplyEffect(Unit unit) { }
 
         public virtual void ApplyEffect(DamageInfo damageInfo) { }
+        public virtual void ApplyEffect(BaseUnitModifiers baseUnitModifiers) { }
     }
 
     [Serializable]

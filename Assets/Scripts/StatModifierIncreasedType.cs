@@ -31,5 +31,9 @@ public enum StatModifierIncreasedType
     
     // AttackSpeed
     IncreasedAttackSpeed = 17,
+    
+    // Defence
+    IncreasedArmor = 18,
+    IncreasedEvasion = 19,
 }
 

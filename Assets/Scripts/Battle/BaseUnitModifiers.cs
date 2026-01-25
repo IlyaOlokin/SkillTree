@@ -11,6 +11,9 @@ namespace Battle
 
         public Dictionary<StatModifierIncreasedType, BaseStatModifier> increasedStatModifiers =
             new Dictionary<StatModifierIncreasedType, BaseStatModifier>();
+        
+        public Dictionary<StatModifierMoreType, List<float>> moreStatModifiers =
+            new Dictionary<StatModifierMoreType, List<float>>();
 
         public BaseUnitModifiers()
         {
@@ -23,12 +26,14 @@ namespace Battle
                 new Dictionary<StatModifierAddedType, BaseStatModifier>(baseUnitModifiers.addedStatModifiers);
             increasedStatModifiers =
                 new Dictionary<StatModifierIncreasedType, BaseStatModifier>(baseUnitModifiers.increasedStatModifiers);
+            moreStatModifiers = new Dictionary<StatModifierMoreType, List<float>>(baseUnitModifiers.moreStatModifiers);
         }
 
         public void Reset()
         {
             addedStatModifiers.Clear();
             increasedStatModifiers.Clear();
+            moreStatModifiers.Clear();
             foreach (StatModifierAddedType type in Enum.GetValues(typeof(StatModifierAddedType)))
             {
                 addedStatModifiers.Add(type, new BaseStatModifier(0));
@@ -37,6 +42,11 @@ namespace Battle
             foreach (StatModifierIncreasedType type in Enum.GetValues(typeof(StatModifierIncreasedType)))
             {
                 increasedStatModifiers.Add(type, new BaseStatModifier(0));
+            }
+            
+            foreach (StatModifierMoreType type in Enum.GetValues(typeof(StatModifierMoreType)))
+            {
+                moreStatModifiers.Add(type, new List<float>());
             }
         }
         
@@ -68,6 +78,21 @@ namespace Battle
             increasedStatModifiers[type] = modifier;
         }
 
+        public void AddMoreStatModifier(StatModifierMoreType type, float value)
+        {
+            moreStatModifiers[type].Add(value);
+        }
+        
+        public void SetMoreStatModifier(StatModifierMoreType type, List<float> value)
+        {
+            moreStatModifiers[type] = value;
+        }
+        
+        public void RemoveMoreStatModifier(StatModifierMoreType type, float value)
+        {
+            moreStatModifiers[type].Remove(value);
+        }
+
 
         public void MergeModifiers(BaseUnitModifiers baseUnitModifiers)
         {
@@ -78,6 +103,14 @@ namespace Battle
             foreach (var modifier in baseUnitModifiers.increasedStatModifiers)
             {
                 ChangeIncreasedValue(modifier.Key,modifier.Value.Value);
+            }
+
+            foreach (var modifier in baseUnitModifiers.moreStatModifiers)
+            {
+                foreach (var mod in modifier.Value)
+                {
+                    AddMoreStatModifier(modifier.Key, mod);
+                }
             }
         }
         
@@ -92,6 +125,15 @@ namespace Battle
             foreach (var modifier in src.increasedStatModifiers)
             {
                 result.SetIncreasedValue(modifier.Key,modifier.Value.Value * value);
+            }
+            foreach (var modifier in src.moreStatModifiers)
+            {
+                List<float> modifiers = new List<float>();
+                foreach (var mod in modifier.Value)
+                {
+                    modifiers.Add(mod * value);
+                }
+                result.SetMoreStatModifier(modifier.Key, modifiers);
             }
 
             return result;

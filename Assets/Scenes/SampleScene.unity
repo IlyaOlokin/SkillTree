@@ -194,7 +194,7 @@ PrefabInstance:
     - target: {fileID: 3041048277598826952, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
       propertyPath: '<Modifiers>k__BackingField.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 9724029542b1d3140a587067ace38d7c, type: 2}
+      objectReference: {fileID: 11400000, guid: cb96b29a23d61c24d9b061d1f463f7b0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -325,7 +325,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _StateTex:
-        m_Texture: {fileID: 1692691115}
+        m_Texture: {fileID: 339303049}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -787,6 +787,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dab5c7d4c32e743048dfca98e2d5914f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!28 &339303049
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 3
+  m_Width: 7
+  m_Height: 1
+  m_CompleteImageSize: 112
+  m_MipsStripped: 0
+  m_TextureFormat: 20
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_IsPreProcessed: 0
+  m_IgnoreMipmapLimit: 1
+  m_MipmapLimitGroupName: 
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_LightmapFormat: 0
+  m_ColorSpace: 0
+  m_PlatformBlob: 
+  image data: 112
+  _typelessdata: 0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
 --- !u!4 &372008781 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9021093592181253767, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
@@ -1530,6 +1576,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3041048277598826952, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
       propertyPath: '<Modifiers>k__BackingField.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: eb4ac0a1d921fe3419968dbac581787e, type: 2}
+    - target: {fileID: 3041048277598826952, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
+      propertyPath: '<Modifiers>k__BackingField.Array.data[1]'
       value: 
       objectReference: {fileID: 11400000, guid: 9724029542b1d3140a587067ace38d7c, type: 2}
     m_RemovedComponents: []
@@ -2359,52 +2409,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 12786875266663409, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
   m_PrefabInstance: {fileID: 1666484026}
   m_PrefabAsset: {fileID: 0}
---- !u!28 &1692691115
-Texture2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 3
-  m_Width: 7
-  m_Height: 1
-  m_CompleteImageSize: 112
-  m_MipsStripped: 0
-  m_TextureFormat: 20
-  m_MipCount: 1
-  m_IsReadable: 1
-  m_IsPreProcessed: 0
-  m_IgnoreMipmapLimit: 1
-  m_MipmapLimitGroupName: 
-  m_StreamingMipmaps: 0
-  m_StreamingMipmapsPriority: 0
-  m_VTOnly: 0
-  m_AlphaIsTransparency: 0
-  m_ImageCount: 1
-  m_TextureDimension: 2
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_LightmapFormat: 0
-  m_ColorSpace: 0
-  m_PlatformBlob: 
-  image data: 112
-  _typelessdata: 0000803f0000003f0000003f0000003f0000803f0000003f0000003f0000003f0000803f0000003f0000003f0000003f0000803f0000003f0000003f0000003f0000803f0000003f0000003f0000003f0000803f0000003f0000003f0000003f0000803f0000003f0000003f0000003f
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
 --- !u!4 &1753010486 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7914629936765169120, guid: 338a6eda77d16fe43840b420c6cab6f9, type: 3}

@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseAttributeModifiers: {fileID: 11400000, guid: 08f5d0b3db26af6499e879706e505263, type: 2}
-  Strength: 100
+  Strength: 1
   Dexterity: 1
   Intelligence: 1
 --- !u!114 &7463270014328316196 stripped

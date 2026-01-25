@@ -23,7 +23,7 @@ namespace Battle
 
             AddFlatDamage(damageInfo);
             IncreaseDamage(damageInfo);
-            //MoreDamage
+            MoreDamage(damageInfo);
             CalculateCrit(damageInfo);
 
             foreach (var baseDamage in damageInfo.damages)
@@ -34,7 +34,6 @@ namespace Battle
             return damageInstance;
         }
 
-        
 
         private static void AddFlatDamage(DamageInfo damageInfo)
         {
@@ -52,15 +51,31 @@ namespace Battle
             }
         }
         
+        private static void MoreDamage(DamageInfo damageInfo)
+        {
+            foreach (BaseDamage baseDamage in damageInfo.damages)
+            {
+                baseDamage.damage *= GetCorespondingMoreDamageMultiplier(baseDamage,damageInfo.BaseStatModifier);
+            }
+        }
+
         private static void CalculateCrit(DamageInfo damageInfo)
         {
             float critChance = damageInfo.criticalChance;
             critChance += damageInfo.BaseStatModifier.addedStatModifiers[StatModifierAddedType.AddedBaseCritChance].Value;
             critChance *= damageInfo.BaseStatModifier.increasedStatModifiers[StatModifierIncreasedType.IncreasedCritChance].Value;
+            foreach (var mod in damageInfo.BaseStatModifier.moreStatModifiers[StatModifierMoreType.MoreCritChance])
+            {
+                critChance *= 1 + mod;
+            }
             
             float critBonus = damageInfo.criticalDamageBonus;
             critBonus += damageInfo.BaseStatModifier.addedStatModifiers[StatModifierAddedType.AddedBaseCritDamageBonus].Value;
             critBonus *= damageInfo.BaseStatModifier.increasedStatModifiers[StatModifierIncreasedType.IncreasedCritDamageBonus].Value;
+            foreach (var mod in damageInfo.BaseStatModifier.moreStatModifiers[StatModifierMoreType.MoreCritDamageBonus])
+            {
+                critBonus *= 1 + mod;
+            }
 
             if (critChance >= Random.Range(0, 1))
             {
@@ -93,6 +108,27 @@ namespace Battle
             }
         }
         
+        private static StatModifierMoreType GetCorespondingMoreDamageType(DamageType damageType)
+        {
+            switch (damageType)
+            {
+                case DamageType.Physical:
+                    return StatModifierMoreType.MorePhysicalDamage;
+                case DamageType.Fire:
+                    return StatModifierMoreType.MoreFireDamage;
+                case DamageType.Cold:
+                    return StatModifierMoreType.MoreColdDamage;
+                case DamageType.Lightning:
+                    return StatModifierMoreType.MoreLightningDamage;
+                case DamageType.Light:
+                    return StatModifierMoreType.MoreLightDamage;
+                case DamageType.Darkness:
+                    return StatModifierMoreType.MoreDarknessDamage;
+                default:
+                    return StatModifierMoreType.Empty;
+            }
+        }
+        
         private static StatModifierIncreasedType GetCorespondingIncreasedDamageType(DamageType damageType)
         {
             switch (damageType)
@@ -114,12 +150,27 @@ namespace Battle
             }
         }
         
-        private static float GetCorespondingIncreasedDamageMultiplier(BaseDamage baseDamage, BaseUnitModifiers modifier)
+        private static float GetCorespondingIncreasedDamageMultiplier(BaseDamage baseDamage, BaseUnitModifiers modifiers)
         {
-            float multiplier = modifier.increasedStatModifiers[StatModifierIncreasedType.IncreasedDamage].Value;
-            multiplier += modifier.increasedStatModifiers[GetCorespondingIncreasedDamageType(baseDamage.damageType)].Value;
+            float multiplier = modifiers.increasedStatModifiers[StatModifierIncreasedType.IncreasedDamage].Value;
+            multiplier += modifiers.increasedStatModifiers[GetCorespondingIncreasedDamageType(baseDamage.damageType)].Value;
 
             return 1f + multiplier;
+        }
+        
+        private static float GetCorespondingMoreDamageMultiplier(BaseDamage baseDamage, BaseUnitModifiers modifiers)
+        {
+            float multiplier = 1;
+            foreach (var mod in modifiers.moreStatModifiers[StatModifierMoreType.MoreDamage])
+            {
+                multiplier *= 1 + mod;
+            }
+            foreach (var mod in modifiers.moreStatModifiers[GetCorespondingMoreDamageType(baseDamage.damageType)])
+            {
+                multiplier *= 1 + mod;
+            }
+
+            return multiplier;
         }
     }
 }

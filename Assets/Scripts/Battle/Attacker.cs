@@ -58,7 +58,7 @@ namespace Battle
                 BaseStatModifier = new BaseUnitModifiers(_owner.baseUnitModifiers)
             };
             
-            AttackProcessor.InitiateAttack(_owner, damageInfo, Target);
+            AttackProcessor.HandleAttack(_owner, damageInfo, Target);
         }
     }
 }

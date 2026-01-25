@@ -15,4 +15,7 @@ public enum StatModifierAddedType
     
     AddedBaseCritChance = 9,
     AddedBaseCritDamageBonus = 10,
+    
+    AddedArmor = 11,
+    AddedEvasion = 12
 }
