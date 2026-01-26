@@ -13,6 +13,11 @@ namespace Battle
             DamageInstance damageInstance = DamageCalculator.CalculateAttackDamage(damageInfo);
             
             // defence with Defences Defence(DamageInstance damageInfo)
+            if (Evasion.ApplyEvasion(damageInstance, defender.UnitObject, attackerUnit))
+            {
+                defender.OnEvaded(damageInstance);
+                return;
+            }
             Armor.ApplyArmorMitigation(damageInstance, defender.UnitObject, attackerUnit);
             
             defender.ReceiveDamage(damageInstance);

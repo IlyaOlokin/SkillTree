@@ -38,6 +38,11 @@ namespace Battle
             UnitObject.ReceiveDamage(damageInstance);
         }
 
+        public void OnEvaded(DamageInstance damageInstance)
+        {
+            
+        }
+
         public void SetNewEnemies(List<EnemyUnit> enemyUnits)
         {
             enemies = new List<EnemyUnit>(enemyUnits);

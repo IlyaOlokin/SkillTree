@@ -12,6 +12,11 @@ namespace SkillTree
 
         public virtual void ApplyEffect(DamageInfo damageInfo) { }
         public virtual void ApplyEffect(BaseUnitModifiers baseUnitModifiers) { }
+
+        public virtual string GetDescription()
+        {
+            return "Empty description";
+        }
     }
 
     [Serializable]

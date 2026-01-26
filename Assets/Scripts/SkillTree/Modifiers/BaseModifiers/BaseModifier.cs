@@ -1,3 +1,4 @@
+using System.Text;
 using Battle;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -20,5 +21,25 @@ namespace SkillTree
             unit.baseUnitModifiers.ChangeAddedValue(addedModifierType, addedValue);
             unit.baseUnitModifiers.AddMoreStatModifier(moreModifierType, moreValue);
         }
+
+        public override string GetDescription()
+        {
+            StringBuilder builder = new StringBuilder();
+            if (addedValue != 0) builder.Append("+")
+                .Append(addedValue)
+                .Append(" to ")
+                .Append(addedModifierType.ToPrettyString().Replace("Added", ""));
+            if (increasedValue != 0) builder.Append("+")
+                .Append(increasedValue * 100f)
+                .Append("% ")
+                .Append(increasedModifierType.ToPrettyString());
+            if (moreValue != 0) builder.Append("+")
+                .Append(moreValue * 100f)
+                .Append("% ")
+                .Append(moreModifierType.ToPrettyString());
+            
+            return builder.ToString();
+        }
+        
     }
 }

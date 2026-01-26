@@ -31,6 +31,11 @@ namespace Battle
             health.TakeDamage(damageInstance);
         }
 
+        public void OnEvaded(DamageInstance damageInstance)
+        {
+            
+        }
+
         private void Death()
         {
             Destroy(gameObject);

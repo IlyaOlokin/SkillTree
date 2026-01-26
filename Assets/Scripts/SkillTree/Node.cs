@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using Unity.Collections;
 using UnityEngine;
 
@@ -86,7 +87,8 @@ namespace SkillTree
         }
         
         
-        private void OnMouseOver () {
+        private void OnMouseOver () 
+        {
             if (Input.GetMouseButtonDown(0))
             {
                 Allocate();
@@ -95,6 +97,26 @@ namespace SkillTree
             {
                 Deallocate();
             }
+        }
+
+        private void OnMouseEnter()
+        {
+            SkillTreeUI.instance.DisplayNodeDescription(this);
+        }
+
+        private void OnMouseExit()
+        {
+            SkillTreeUI.instance.HideNodeDescription();
+        }
+
+        public virtual string GetDescription()
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var modifier in Modifiers)
+            {
+                builder.Append(modifier.GetDescription()).AppendLine();
+            }
+            return builder.ToString();
         }
     }
 }
