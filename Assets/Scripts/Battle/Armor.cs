@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SkillTree;
 using UnityEngine;
 
@@ -5,32 +6,14 @@ namespace Battle
 {
     public static class Armor
     {
-        public static float GetCurrentArmor(Unit unit)
-        {
-            BaseUnitModifiers statModifiers = new BaseUnitModifiers(unit.baseUnitModifiers);
-
-            if (unit is PlayerUnit playerUnit)
-            {
-                foreach (var mod in playerUnit.GetAllModifiersOfType<SpecialModifier>())
-                {
-                    if (mod.IsApplicable(unit)) mod.ApplyEffect(statModifiers);
-                }
-            }
-            
-            float result = unit.baseUnitModifiers.addedStatModifiers[StatModifierAddedType.AddedArmor].Value;
-            result *= 1 + unit.baseUnitModifiers.increasedStatModifiers[StatModifierIncreasedType.IncreasedArmor].Value;
-            foreach (var mod in statModifiers.moreStatModifiers[StatModifierMoreType.MoreArmor])
-            {
-                result *= 1 + mod;
-            }
-            
-            return result;
-        }
-
         public static void ApplyArmorMitigation(DamageInstance damage, Unit defender, Unit attacker)
         {
-            float armor = GetCurrentArmor(defender);
-            float K = 100; // attacker level
+            float armor = StatCalculator.GetStat(defender,
+                new List<StatModifierAddedType>() {StatModifierAddedType.AddedArmor}, 
+                new List<StatModifierIncreasedType>() {StatModifierIncreasedType.IncreasedArmor}, 
+                new List<StatModifierMoreType>() {StatModifierMoreType.MoreArmor});
+            
+            float K = damage.Damage[DamageType.Physical];
             damage.Damage[DamageType.Physical] *= K / (armor + K);
         }
     }

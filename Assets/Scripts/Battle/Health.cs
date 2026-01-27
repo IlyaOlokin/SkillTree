@@ -1,21 +1,26 @@
 using System;
+using System.Collections.Generic;
+using SkillTree;
 using UnityEngine;
 
 namespace Battle
 {
     public class Health : MonoBehaviour
     {
-        private BaseUnitModifiers _baseUnitModifiers;
+        private Unit _owner;
 
-        [field: SerializeField] public float MaxHealth { get; private set; } = 100f;
+        public float MaxHealth { get; private set; } = 100f;
         public float CurrentHealth { get; private set; } = 100f;
         
-        public event Action<float> OnHealthChange;
+        public event Action<float> OnHealthChangedDelta;
+        public event Action OnHealthChanged;
+        public event Action OnMaximumHealthChanged;
         public event Action OnHealthZero;
 
-        public void Init(BaseUnitModifiers baseUnitModifiers)
+        public void Init(Unit owner)
         {
-            _baseUnitModifiers = baseUnitModifiers;
+            _owner = owner;
+            _owner.OnStatsChanged += UpdateMaximumHealth;
         }
 
         public float TakeDamage(DamageInstance damageInstance)
@@ -25,12 +30,24 @@ namespace Battle
             {
                 CurrentHealth -= damageValue;
             }
-            OnHealthChange?.Invoke(previousHealth - CurrentHealth);
+            OnHealthChangedDelta?.Invoke(previousHealth - CurrentHealth);
+            OnHealthChanged?.Invoke();
             if (CurrentHealth <= 0f)
             {
                 OnHealthZero?.Invoke();
             }
             return CurrentHealth;
+        }
+
+        private void UpdateMaximumHealth()
+        {
+            float currentHealthPercentage = CurrentHealth / MaxHealth;
+            MaxHealth = StatCalculator.GetStat(_owner,
+                new List<StatModifierAddedType>() {StatModifierAddedType.AddedMaximumHealth}, 
+                new List<StatModifierIncreasedType>() {StatModifierIncreasedType.IncreasedMaximumHealth}, 
+                new List<StatModifierMoreType>() {StatModifierMoreType.MoreMaximumHealth});
+            CurrentHealth = MaxHealth * currentHealthPercentage;
+            OnMaximumHealthChanged?.Invoke();
         }
     }
 }

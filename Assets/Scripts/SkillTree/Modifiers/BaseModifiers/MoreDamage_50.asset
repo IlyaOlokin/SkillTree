@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ae2ce54539276c4fa2012760a983831, type: 3}
   m_Name: MoreDamage_50
   m_EditorClassIdentifier: 
-  addedModifierType: 0
-  addedValue: 0
-  increasedModifierType: 0
-  increasedValue: 0
-  moreModifierType: 0
-  moreValue: 0.5
+  addedModifier:
+    modifierType: 0
+    value: 0
+  increasedModifier:
+    modifierType: 0
+    value: 0.5
+  moreModifier:
+    modifierType: 0
+    value: 0

@@ -32,4 +32,11 @@ namespace SkillTree
         public StatModifierIncreasedType modifierType;
         public float value;
     }
+    
+    [Serializable]
+    public class MoreBaseModifierContainer
+    {
+        public StatModifierMoreType modifierType;
+        public float value;
+    }
 }

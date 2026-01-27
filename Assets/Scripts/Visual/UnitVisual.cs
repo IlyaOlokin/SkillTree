@@ -9,10 +9,10 @@ namespace Visual
         [SerializeField] private UnitNotificationEffect unitNotificationEffect;
         void Awake()
         {
-            unit.health.OnHealthChange += DisplayHealthChangeNotification;
+            unit.health.OnHealthChangedDelta += DisplayHealthChangedNotification;
         }
 
-        private void DisplayHealthChangeNotification(float deltaHealth)
+        private void DisplayHealthChangedNotification(float deltaHealth)
         {
             var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
             newEffect.WriteDamage(Mathf.Abs(deltaHealth));

@@ -1,5 +1,6 @@
 using System;
 using Battle;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,21 +9,24 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
     [SerializeField] private Health health;
+    [SerializeField] private TMP_Text text;
     private Slider slider;
 
     private void Awake()
     {
         slider = GetComponent<Slider>();
-        health.OnHealthChange += UpdateHealthBar;
+        health.OnHealthChanged += UpdateHealthBar;
+        health.OnMaximumHealthChanged += UpdateHealthBar;
     }
 
     private void Start()
     {
-        UpdateHealthBar(health.CurrentHealth);
+        UpdateHealthBar();
     }
 
-    private void UpdateHealthBar(float delta)
+    private void UpdateHealthBar()
     {
         slider.value = health.CurrentHealth / health.MaxHealth;
+        text.text = health.CurrentHealth + "/" + health.MaxHealth;
     }
 }

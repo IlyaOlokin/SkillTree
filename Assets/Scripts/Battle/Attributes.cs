@@ -2,13 +2,9 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class UnitAttributes : MonoBehaviour
+    public class Attributes : MonoBehaviour
     {
         [SerializeField] private BaseAttributeModifiers baseAttributeModifiers;
-        
-        public int Strength;
-        public int Dexterity;
-        public int Intelligence;
         
         public BaseUnitModifiers StrengthModifiers;
         public BaseUnitModifiers DexterityModifiers;
@@ -45,7 +41,6 @@ namespace Battle
             {
                 IntelligenceModifiers.ChangeAddedValue(mod.modifierType, mod.value);
             }
-            
         }
     }
 }

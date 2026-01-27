@@ -13,10 +13,12 @@ public enum StatModifierAddedType
     AddedBaseLightDamage = 7,
     AddedBaseDarknessDamage = 8,
     
+    AddedAttackSpeed = 15,
     AddedBaseCritChance = 9,
     AddedBaseCritDamageBonus = 10,
     
     AddedArmor = 11,
     AddedEvasion = 12,
-    AddedAccuracy = 13
+    AddedAccuracy = 13,
+    AddedMaximumHealth = 14,
 }

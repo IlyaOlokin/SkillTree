@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284b0eb4edb7b1241801c6ac7aff1002, type: 3}
   m_Name: BaseAttributeModifier
   m_EditorClassIdentifier: 
-  addedBaseModifiersStrength: []
+  addedBaseModifiersStrength:
+  - modifierType: 14
+    value: 2
   increasedBaseModifiersStrength:
   - modifierType: 3
     value: 0.01

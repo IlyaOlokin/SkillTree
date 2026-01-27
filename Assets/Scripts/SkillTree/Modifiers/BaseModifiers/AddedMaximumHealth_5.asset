@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9827369a2b5c8694991e538fd86cecf7, type: 3}
-  m_Name: Sword
+  m_Script: {fileID: 11500000, guid: 4ae2ce54539276c4fa2012760a983831, type: 3}
+  m_Name: AddedMaximumHealth_5
   m_EditorClassIdentifier: 
-  weaponType: 1
-  damageInfo:
-    damages:
-    - damageType: 0
-      damage: 5
-    criticalChance: 0.05
-    criticalDamageBonus: 0.5
-    isCritical: 0
-  attacksSpeed: 1
+  addedModifier:
+    modifierType: 14
+    value: 5
+  increasedModifier:
+    modifierType: 9999
+    value: 0
+  moreModifier:
+    modifierType: 0
+    value: 0

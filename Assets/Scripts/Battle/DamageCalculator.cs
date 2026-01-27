@@ -1,6 +1,7 @@
+using System;
 using System.Collections.Generic;
 using SkillTree;
-using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Battle
 {
@@ -37,9 +38,17 @@ namespace Battle
 
         private static void AddFlatDamage(DamageInfo damageInfo)
         {
-            foreach (BaseDamage baseDamage in damageInfo.damages)
+            foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
             {
-                baseDamage.damage += damageInfo.BaseStatModifier.addedStatModifiers[GetCorespondingAddedDamageType(baseDamage.damageType)].Value;
+                if (damageInfo.BaseStatModifier.addedStatModifiers[GetCorespondingAddedDamageType(damageType)].Value > 0)
+                {
+                    damageInfo.damages.Add(new BaseDamage
+                    {
+                        damage = damageInfo.BaseStatModifier
+                            .addedStatModifiers[GetCorespondingAddedDamageType(damageType)].Value,
+                        damageType = damageType
+                    });
+                }
             }
         }
 
@@ -61,21 +70,16 @@ namespace Battle
 
         private static void CalculateCrit(DamageInfo damageInfo)
         {
-            float critChance = damageInfo.criticalChance;
-            critChance += damageInfo.BaseStatModifier.addedStatModifiers[StatModifierAddedType.AddedBaseCritChance].Value;
-            critChance *= damageInfo.BaseStatModifier.increasedStatModifiers[StatModifierIncreasedType.IncreasedCritChance].Value;
-            foreach (var mod in damageInfo.BaseStatModifier.moreStatModifiers[StatModifierMoreType.MoreCritChance])
-            {
-                critChance *= 1 + mod;
-            }
+            float critChance = StatCalculator.GetStat(damageInfo.owner,
+                new List<StatModifierAddedType>() { StatModifierAddedType.AddedBaseCritChance },
+                new List<StatModifierIncreasedType>() { StatModifierIncreasedType.IncreasedCritChance },
+                new List<StatModifierMoreType>() { StatModifierMoreType.MoreCritChance });
             
-            float critBonus = damageInfo.criticalDamageBonus;
-            critBonus += damageInfo.BaseStatModifier.addedStatModifiers[StatModifierAddedType.AddedBaseCritDamageBonus].Value;
-            critBonus *= damageInfo.BaseStatModifier.increasedStatModifiers[StatModifierIncreasedType.IncreasedCritDamageBonus].Value;
-            foreach (var mod in damageInfo.BaseStatModifier.moreStatModifiers[StatModifierMoreType.MoreCritDamageBonus])
-            {
-                critBonus *= 1 + mod;
-            }
+            
+            float critBonus = StatCalculator.GetStat(damageInfo.owner,
+                new List<StatModifierAddedType>() { StatModifierAddedType.AddedBaseCritDamageBonus },
+                new List<StatModifierIncreasedType>() { StatModifierIncreasedType.IncreasedCritDamageBonus },
+                new List<StatModifierMoreType>() { StatModifierMoreType.MoreCritDamageBonus });
 
             if (critChance >= Random.Range(0, 1))
             {

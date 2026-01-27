@@ -12,7 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ae2ce54539276c4fa2012760a983831, type: 3}
   m_Name: AddedArmor_10
   m_EditorClassIdentifier: 
-  addedModifierType: 11
-  addedValue: 10
-  increasedModifierType: 0
-  increasedValue: 0
+  addedModifier:
+    modifierType: 11
+    value: 5
+  increasedModifier:
+    modifierType: 0
+    value: 0
+  moreModifier:
+    modifierType: 0
+    value: 0

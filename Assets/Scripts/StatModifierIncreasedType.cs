@@ -35,6 +35,7 @@ public enum StatModifierIncreasedType
     // Defence
     IncreasedArmor = 18,
     IncreasedEvasion = 19,
-    IncreasedAccuracy = 20
+    IncreasedAccuracy = 20,
+    IncreasedMaximumHealth = 21,
 }
 

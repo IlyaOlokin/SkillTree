@@ -9,13 +9,12 @@ namespace Battle
     [Serializable]
     public class DamageInfo
     {
+        public Unit owner;
         public BaseUnitModifiers BaseStatModifier;
         public List<BaseDamage> damages = new List<BaseDamage>();
-        public float criticalChance;
-        public float criticalDamageBonus;
         [HideInInspector] public bool isCritical = false;
-        
-        public DamageInfo(){}
+
+        public DamageInfo() { }
 
         public DamageInfo(DamageInfo other)
         {
@@ -24,8 +23,6 @@ namespace Battle
             {
                 damages.Add(damage.Clone());
             }
-            criticalChance = other.criticalChance;
-            criticalDamageBonus = other.criticalDamageBonus;
         }
     }
 

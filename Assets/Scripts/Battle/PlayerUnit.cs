@@ -9,7 +9,6 @@ namespace Battle
     {
         public static PlayerUnit instance;
         
-        [SerializeField] public UnitAttributes attributes;
         [SerializeField] private List<BaseSkillTree> skillTrees = new List<BaseSkillTree>();
 
         protected override void Awake()
@@ -42,11 +41,17 @@ namespace Battle
             }
 
             ApplyAttributes();
+
+            RaiseOnStatChanged();
         }
 
         private void ApplyAttributes()
         {
-            baseUnitModifiers.MergeModifiers(attributes.StrengthModifiers * attributes.Strength);
+            float str = StatCalculator.GetStat(this,
+                new List<StatModifierAddedType>() {StatModifierAddedType.AddedStrength}, 
+                new List<StatModifierIncreasedType>() {}, 
+                new List<StatModifierMoreType>() {});
+            baseUnitModifiers.MergeModifiers(attributes.StrengthModifiers * str);
         }
 
         public List<T> GetAllModifiersOfType<T>()
@@ -64,6 +69,7 @@ namespace Battle
         private void ResetUnit()
         {
             baseUnitModifiers.Reset();
+            baseInnateModifiers.ApplyEffect(baseUnitModifiers);
         }
 
         
