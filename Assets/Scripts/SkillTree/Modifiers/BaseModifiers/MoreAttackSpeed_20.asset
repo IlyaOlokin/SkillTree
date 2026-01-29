@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ae2ce54539276c4fa2012760a983831, type: 3}
-  m_Name: MoreDamage_50
+  m_Name: MoreAttackSpeed_20
   m_EditorClassIdentifier: 
   addedModifier:
     modifierType: 0
     value: 0
   increasedModifier:
-    modifierType: 9999
+    modifierType: 0
     value: 0
   moreModifier:
-    modifierType: 0
-    value: 0.5
+    modifierType: 17
+    value: 0.2

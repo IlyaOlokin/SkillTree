@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Splines;
 using SkillTree;
+using Unity.Mathematics;
 using UnityEngine.Serialization;
 
 namespace SkillTree
@@ -51,7 +53,20 @@ namespace SkillTree
             foreach (var pair in pairs)
             {
                 if (nodeConnections.Exists(x => x.pair.Equals(pair)))
+                {
+                    /*NodeConnectionData NodeConnectionData = nodeConnections.Find(x => x.pair.Equals(pair));
+                    BezierKnot knot11 = NodeConnectionData.spline.Splines[0][0];
+                    BezierKnot knot22 = NodeConnectionData.spline.Splines[0][1];
+                    
+                    knot11.Position = new float3(pair.A.transform.position);
+                    knot22.Position = new float3(pair.B.transform.position);
+                    
+                    NodeConnectionData.spline.Splines[0][0] = knot11;
+                    NodeConnectionData.spline.Splines[0][1] = knot22;*/
+                    
+                    //??????????????????????????????????????
                     continue;
+                }
                 SplineContainer spline =
                     (SplineContainer)PrefabUtility.InstantiatePrefab(
                         connectionPrefab, transform);
@@ -272,92 +287,6 @@ namespace SkillTree
             _stateTexture.Apply(false);
         }
     }
-    
-    
-
-    /*public void BuildMesh()
-    {
-        if (generatedMesh == null)
-        {
-            Debug.LogError("Mesh asset not created");
-            return;
-        }
-
-        var vertices = new List<Vector3>();
-        var triangles = new List<int>();
-        var uvs = new List<Vector2>();
-        var colors = new List<Color>();
-
-        int vertIndex = 0;
-
-        foreach (var nodeConnection in nodeConnections)
-        {
-            var spline = nodeConnection.spline;
-
-            bool isAllocated = nodeConnection.pair.A.IsAllocated && nodeConnection.pair.B.IsAllocated ;
-
-            Color lineColor = isAllocated ? allocatedColor : defaultColor;
-
-            Vector3 prevPos = spline.EvaluatePosition(0f);
-
-            for (int i = 1; i < resolutionPerSpline; i++)
-            {
-                float t = i / (float)(resolutionPerSpline - 1);
-                Vector3 currPos = spline.EvaluatePosition(t);
-
-                Vector3 dir = (currPos - prevPos).normalized;
-                Vector3 normal = Vector3.Cross(dir, Vector3.forward);
-
-                Vector3 offset = normal * ((isAllocated ? allocatedLineWidth : defaultLineWidth) * 0.5f);
-
-                Vector3 v0 = prevPos + offset;
-                Vector3 v1 = prevPos - offset;
-                Vector3 v2 = currPos + offset;
-                Vector3 v3 = currPos - offset;
-
-                vertices.Add(v0);
-                vertices.Add(v1);
-                vertices.Add(v2);
-                vertices.Add(v3);
-
-                colors.Add(lineColor);
-                colors.Add(lineColor);
-                colors.Add(lineColor);
-                colors.Add(lineColor);
-
-                triangles.Add(vertIndex + 0);
-                triangles.Add(vertIndex + 2);
-                triangles.Add(vertIndex + 1);
-
-                triangles.Add(vertIndex + 2);
-                triangles.Add(vertIndex + 3);
-                triangles.Add(vertIndex + 1);
-
-                uvs.Add(Vector2.zero);
-                uvs.Add(Vector2.right);
-                uvs.Add(Vector2.up);
-                uvs.Add(Vector2.one);
-
-                vertIndex += 4;
-                prevPos = currPos;
-            }
-        }
-
-        generatedMesh.Clear();
-        generatedMesh.SetVertices(vertices);
-        generatedMesh.SetTriangles(triangles, 0);
-        generatedMesh.SetUVs(0, uvs);
-        generatedMesh.SetColors(colors);
-
-        generatedMesh.RecalculateBounds();
-        generatedMesh.RecalculateNormals();
-
-#if UNITY_EDITOR
-        EditorUtility.SetDirty(generatedMesh);
-        AssetDatabase.SaveAssets();
-#endif
-    }
-}*/
 
     [Serializable]
     public struct NodePair : IEquatable<NodePair>
