@@ -21,15 +21,18 @@ namespace SkillTree
         public event Action<Node> OnAllocatedChanged;
         public static event Action<Node> OnAnyNodeAllocatedChanged;
 
+        public Func<bool> AdditionalAllocatedCondition;
+
         public bool CanBeAllocated()
         {
-            return !IsAllocated && HasRootConnection();
+            return !IsAllocated && HasRootConnection() && (AdditionalAllocatedCondition == null || AdditionalAllocatedCondition());
         }
 
         protected virtual bool HasRootConnection()
         {
             var visited = new HashSet<Node>();
             return DFS(this, visited);
+            
         }
 
         bool DFS(Node current, HashSet<Node> visited)
