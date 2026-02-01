@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Splines;
 using SkillTree;
 using Unity.Mathematics;
+using UnityEditor.SceneManagement;
 using UnityEngine.Serialization;
 
 namespace SkillTree
@@ -54,7 +55,7 @@ namespace SkillTree
             {
                 if (nodeConnections.Exists(x => x.pair.Equals(pair)))
                 {
-                    /*NodeConnectionData NodeConnectionData = nodeConnections.Find(x => x.pair.Equals(pair));
+                    NodeConnectionData NodeConnectionData = nodeConnections.Find(x => x.pair.Equals(pair));
                     BezierKnot knot11 = NodeConnectionData.spline.Splines[0][0];
                     BezierKnot knot22 = NodeConnectionData.spline.Splines[0][1];
                     
@@ -62,9 +63,9 @@ namespace SkillTree
                     knot22.Position = new float3(pair.B.transform.position);
                     
                     NodeConnectionData.spline.Splines[0][0] = knot11;
-                    NodeConnectionData.spline.Splines[0][1] = knot22;*/
+                    NodeConnectionData.spline.Splines[0][1] = knot22;
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(NodeConnectionData.spline);
                     
-                    //??????????????????????????????????????
                     continue;
                 }
                 SplineContainer spline =
