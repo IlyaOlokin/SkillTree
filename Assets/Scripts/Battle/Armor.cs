@@ -8,12 +8,10 @@ namespace Battle
     {
         public static void ApplyArmorMitigation(DamageInstance damage, Unit defender, Unit attacker)
         {
-            float armor = StatCalculator.GetStat(defender,
-                new List<StatModifierAddedType>() {StatModifierAddedType.AddedArmor}, 
-                new List<StatModifierIncreasedType>() {StatModifierIncreasedType.IncreasedArmor}, 
-                new List<StatModifierMoreType>() {StatModifierMoreType.MoreArmor});
+            float armor = defender.baseUnitModifiers.StatValues[StatType.Armor];
             
             float K = damage.Damage[DamageType.Physical];
+            if (armor == 0 || K == 0) return;
             damage.Damage[DamageType.Physical] *= K / (armor + K);
         }
     }

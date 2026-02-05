@@ -20,7 +20,7 @@ namespace Battle
         public void Init(Unit owner)
         {
             _owner = owner;
-            _owner.OnStatsChanged += UpdateMaximumHealth;
+            _owner.OnStatsRecalculated += UpdateMaximumHealth;
         }
 
         public float TakeDamage(DamageInstance damageInstance)
@@ -42,10 +42,7 @@ namespace Battle
         private void UpdateMaximumHealth()
         {
             float currentHealthPercentage = CurrentHealth / MaxHealth;
-            MaxHealth = StatCalculator.GetStat(_owner,
-                new List<StatModifierAddedType>() {StatModifierAddedType.AddedMaximumHealth}, 
-                new List<StatModifierIncreasedType>() {StatModifierIncreasedType.IncreasedMaximumHealth}, 
-                new List<StatModifierMoreType>() {StatModifierMoreType.MoreMaximumHealth});
+            MaxHealth = _owner.baseUnitModifiers.StatValues[StatType.MaximumHealth];
             CurrentHealth = MaxHealth * currentHealthPercentage;
             OnMaximumHealthChanged?.Invoke();
         }

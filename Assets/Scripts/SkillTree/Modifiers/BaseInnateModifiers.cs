@@ -10,23 +10,13 @@ namespace SkillTree
 
     public class BaseInnateModifiers : Modifier
     {
-        [SerializeField] public List<AddedBaseModifierContainer> addedBaseModifiers = new List<AddedBaseModifierContainer>();
-        [SerializeField] public List<IncreasedBaseModifierContainer> increasedBaseModifiers = new List<IncreasedBaseModifierContainer>();
-        [SerializeField] public List<MoreBaseModifierContainer> moreBaseModifiers = new List<MoreBaseModifierContainer>();
+        [SerializeField] public List<ModifierContainer> baseModifiers = new List<ModifierContainer>();
 
-        public override void ApplyEffect(BaseUnitModifiers baseUnitModifiers)
+        public override void ApplyEffect(Unit unit)
         {
-            foreach (var modifier in addedBaseModifiers)
+            foreach (var modifier in baseModifiers)
             {
-                baseUnitModifiers.ChangeAddedValue(modifier.modifierType, modifier.value);
-            }
-            foreach (var modifier in increasedBaseModifiers)
-            {
-                baseUnitModifiers.ChangeIncreasedValue(modifier.modifierType, modifier.value);
-            }
-            foreach (var modifier in moreBaseModifiers)
-            {
-                baseUnitModifiers.AddMoreStatModifier(modifier.modifierType, modifier.value);
+                unit.baseUnitModifiers.SetModifierValue(modifier);
             }
         }
     }

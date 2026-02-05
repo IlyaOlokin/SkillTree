@@ -7,7 +7,7 @@ namespace Battle
     {
         private void Start()
         {
-            attacker.SetTarget(PlayerUnit.instance);
+            attacker.SetTarget(PlayerUnit.Instance);
         }
     }
 }

@@ -13,8 +13,7 @@ namespace SkillTree
         
         [SerializeField] protected Node root;
         
-        public abstract void ApplySkillTree(Unit unit);
-        public abstract List<T> CollectAllModifiersOfType<T>();
+        public abstract List<Modifier> CollectAllModifiers();
         
         protected void RaiseOnSkillTreeChanged()
         {

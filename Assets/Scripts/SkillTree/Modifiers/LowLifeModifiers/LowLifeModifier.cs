@@ -1,20 +1,22 @@
 using Battle;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SkillTree
 {
     [CreateAssetMenu(menuName = "Modifiers/LowLifeModifier", fileName = "New LowLifeModifier")]
     public class LowLifeModifier : SpecialModifier
     {
-        [SerializeField] public StatModifierIncreasedType increasedModifierType;
-        [SerializeField] public float increasedValue;
+        [SerializeField] public ModifierContainer modifierContainer;
         
         public override bool IsApplicable(Unit unit) => unit.IsOnLowLife();
         
-        public override void ApplyEffect(DamageInfo damageInfo)
+
+        public override void ApplyEffect(Unit unit)
         {
-            damageInfo.BaseStatModifier.ChangeIncreasedValue(increasedModifierType, increasedValue);
+            unit.baseUnitModifiers.ChangeModifierValue(modifierContainer);
         }
+
     }
 }
 

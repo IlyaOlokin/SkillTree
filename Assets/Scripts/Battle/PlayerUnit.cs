@@ -7,71 +7,29 @@ namespace Battle
 {
     public class PlayerUnit : Unit
     {
-        public static PlayerUnit instance;
-        
-        [SerializeField] private List<BaseSkillTree> skillTrees = new List<BaseSkillTree>();
+        public static PlayerUnit Instance;
+
+        [field: SerializeField] public BaseSkillTree SkillTree {get; private set; }
 
         protected override void Awake()
         {
             base.Awake();
-            if (instance == null)
+            if (Instance == null)
             {
-                instance = this;
+                Instance = this;
             }
-            
-            foreach (var skillTree in skillTrees)
-            {
-                skillTree.OnSkillTreeChanged += RecalculateStats;
-            }
+
+            SkillTree.OnSkillTreeChanged += RaiseOnStatsChanged;
+            // on dbuffed/debuffed
+            // on status changed
+            // on lowlife changed
+            // ...
         }
         
         private void Start()
         {
             attacker.SetTarget(AttackResolver.instance);
-            RecalculateStats();
         }
-        
-        private void RecalculateStats()
-        {
-            ResetUnit();
-            
-            foreach (var skillTree in skillTrees)
-            {
-                skillTree.ApplySkillTree(this);
-            }
-
-            ApplyAttributes();
-
-            RaiseOnStatChanged();
-        }
-
-        private void ApplyAttributes()
-        {
-            float str = StatCalculator.GetStat(this,
-                new List<StatModifierAddedType>() {StatModifierAddedType.AddedStrength}, 
-                new List<StatModifierIncreasedType>() {}, 
-                new List<StatModifierMoreType>() {});
-            baseUnitModifiers.MergeModifiers(attributes.StrengthModifiers * str);
-        }
-
-        public List<T> GetAllModifiersOfType<T>()
-        {
-            List<T> result = new List<T>();
-            
-            foreach (var skillTree in skillTrees)
-            {
-                result.AddRange(skillTree.CollectAllModifiersOfType<T>());
-            }
-            
-            return result;
-        }
-
-        private void ResetUnit()
-        {
-            baseUnitModifiers.Reset();
-            baseInnateModifiers.ApplyEffect(baseUnitModifiers);
-        }
-
         
     }
 }

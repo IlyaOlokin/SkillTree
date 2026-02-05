@@ -1,150 +1,162 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using SkillTree;
 using UnityEngine;
 
 namespace Battle
 {
     public class BaseUnitModifiers
     {
-        public Dictionary<StatModifierAddedType, BaseStatModifier> addedStatModifiers =
-            new Dictionary<StatModifierAddedType, BaseStatModifier>();
-
-        public Dictionary<StatModifierIncreasedType, BaseStatModifier> increasedStatModifiers =
-            new Dictionary<StatModifierIncreasedType, BaseStatModifier>();
         
-        public Dictionary<StatModifierMoreType, List<float>> moreStatModifiers =
-            new Dictionary<StatModifierMoreType, List<float>>();
+        public Dictionary<StatType, StatModifier> StatModifiers =
+            new Dictionary<StatType, StatModifier>();
+        public Dictionary<StatType, float> StatValues =
+            new Dictionary<StatType, float>();
 
         public BaseUnitModifiers()
         {
             Reset();
         }
 
-        public BaseUnitModifiers(BaseUnitModifiers baseUnitModifiers)
+        public BaseUnitModifiers(BaseUnitModifiers other)
         {
-            addedStatModifiers =
-                new Dictionary<StatModifierAddedType, BaseStatModifier>(baseUnitModifiers.addedStatModifiers);
-            increasedStatModifiers =
-                new Dictionary<StatModifierIncreasedType, BaseStatModifier>(baseUnitModifiers.increasedStatModifiers);
-            moreStatModifiers = new Dictionary<StatModifierMoreType, List<float>>(baseUnitModifiers.moreStatModifiers);
+            StatValues = new Dictionary<StatType, float>(other.StatValues);
+            
+            StatModifiers = new Dictionary<StatType, StatModifier>();
+            foreach (var pair in other.StatModifiers)
+            {
+                StatModifiers[pair.Key] = pair.Value.DeepCopy();
+            }
         }
 
         public void Reset()
         {
-            addedStatModifiers.Clear();
-            increasedStatModifiers.Clear();
-            moreStatModifiers.Clear();
-            foreach (StatModifierAddedType type in Enum.GetValues(typeof(StatModifierAddedType)))
+            StatModifiers.Clear();
+            StatValues.Clear();
+            
+            foreach (StatType type in Enum.GetValues(typeof(StatType)))
             {
-                addedStatModifiers.Add(type, new BaseStatModifier(0));
+                StatModifiers.Add(type, new StatModifier(new List<float>()));
             }
-
-            foreach (StatModifierIncreasedType type in Enum.GetValues(typeof(StatModifierIncreasedType)))
+            foreach (StatType type in Enum.GetValues(typeof(StatType)))
             {
-                increasedStatModifiers.Add(type, new BaseStatModifier(0));
+                StatValues.Add(type, 0);
+            }
+        }
+        
+        public void ChangeModifierValue(ModifierContainer modifierContainer)
+        {
+            ModifierValue modifier;
+            var statModifierBucket = StatModifiers[modifierContainer.statType];
+            switch (modifierContainer.modifierType)
+            {
+                case ModifierType.Added:
+                    modifier = statModifierBucket.Added;
+                    modifier.ChangeValue(modifierContainer.value);
+                    statModifierBucket.Added = modifier;
+                    break;
+                case ModifierType.Increased:
+                    modifier = statModifierBucket.Increased;
+                    modifier.ChangeValue(modifierContainer.value);
+                    statModifierBucket.Increased = modifier;
+                    break;
+                case ModifierType.More:
+                    StatModifiers[modifierContainer.statType].More.Add(modifierContainer.value);
+                    // remove????
+                    break;
             }
             
-            foreach (StatModifierMoreType type in Enum.GetValues(typeof(StatModifierMoreType)))
+            StatModifiers[modifierContainer.statType] = statModifierBucket;
+        }
+        
+        public void SetModifierValue(ModifierContainer modifierContainer)
+        {
+            ModifierValue modifier;
+            var statModifierBucket = StatModifiers[modifierContainer.statType];
+            switch (modifierContainer.modifierType)
             {
-                moreStatModifiers.Add(type, new List<float>());
+                case ModifierType.Added:
+                    modifier = statModifierBucket.Added;
+                    modifier.SetValue(modifierContainer.value);
+                    statModifierBucket.Added = modifier;
+                    break;
+                case ModifierType.Increased:
+                    modifier = statModifierBucket.Increased;
+                    modifier.SetValue(modifierContainer.value);
+                    statModifierBucket.Increased = modifier;
+                    break;
+                case ModifierType.More:
+                    StatModifiers[modifierContainer.statType].More.Clear();
+                    StatModifiers[modifierContainer.statType].More.Add(modifierContainer.value);
+                    break;
             }
+            StatModifiers[modifierContainer.statType] = statModifierBucket;
+
         }
         
-        public void ChangeAddedValue(StatModifierAddedType type, float value)
+        public void SetModifierValue(ModifierType modifierType, StatType StatType, List<float> value)
         {
-            var modifier = addedStatModifiers[type];
-            modifier.ChangeValue(value);
-            addedStatModifiers[type] = modifier;
-        }
-
-        public void ChangeIncreasedValue(StatModifierIncreasedType type, float value)
-        {
-            var modifier = increasedStatModifiers[type];
-            modifier.ChangeValue(value);
-            increasedStatModifiers[type] = modifier;
-        }
-        
-        public void SetAddedValue(StatModifierAddedType type, float value)
-        {
-            var modifier = addedStatModifiers[type];
-            modifier.SetValue(value);
-            addedStatModifiers[type] = modifier;
-        }
-
-        public void SetIncreasedValue(StatModifierIncreasedType type, float value)
-        {
-            var modifier = increasedStatModifiers[type];
-            modifier.SetValue(value);
-            increasedStatModifiers[type] = modifier;
-        }
-
-        public void AddMoreStatModifier(StatModifierMoreType type, float value)
-        {
-            moreStatModifiers[type].Add(value);
-        }
-        
-        public void SetMoreStatModifier(StatModifierMoreType type, List<float> value)
-        {
-            moreStatModifiers[type] = value;
-        }
-        
-        public void RemoveMoreStatModifier(StatModifierMoreType type, float value)
-        {
-            moreStatModifiers[type].Remove(value);
-        }
-
-
-        public void MergeModifiers(BaseUnitModifiers baseUnitModifiers)
-        {
-            foreach (var modifier in baseUnitModifiers.addedStatModifiers)
+            ModifierValue modifier;
+            var statModifierBucket = StatModifiers[StatType];
+            switch (modifierType)
             {
-                ChangeAddedValue(modifier.Key,modifier.Value.Value);
+                case ModifierType.Added:
+                    modifier = statModifierBucket.Added;
+                    modifier.SetValue(value.Sum());
+                    statModifierBucket.Added = modifier;
+                    break;
+                case ModifierType.Increased:
+                    modifier = statModifierBucket.Increased;
+                    modifier.SetValue(value.Sum());
+                    statModifierBucket.Increased = modifier;
+                    break;
+                case ModifierType.More:
+                    StatModifiers[StatType].More.Clear();
+                    StatModifiers[StatType].More.AddRange(value);
+                    break;
             }
-            foreach (var modifier in baseUnitModifiers.increasedStatModifiers)
-            {
-                ChangeIncreasedValue(modifier.Key,modifier.Value.Value);
-            }
+            StatModifiers[StatType] = statModifierBucket;
+        }
 
-            foreach (var modifier in baseUnitModifiers.moreStatModifiers)
+
+        /*public void MergeModifiers(BaseUnitModifiers baseUnitModifiers)
+        {
+            foreach (var stat in baseUnitModifiers.StatModifiers)
             {
-                foreach (var mod in modifier.Value)
+                ChangeModifierValue(ModifierType.Added, stat.Key, stat.Value.Added.Value);
+                ChangeModifierValue(ModifierType.Increased, stat.Key, stat.Value.Increased.Value);
+                foreach (var multiplier in stat.Value.More)
                 {
-                    AddMoreStatModifier(modifier.Key, mod);
+                    ChangeModifierValue(ModifierType.More, stat.Key, multiplier);
                 }
+                
             }
-        }
+        }*/
         
-        public static BaseUnitModifiers operator * (BaseUnitModifiers src, float value)
+        /*public static BaseUnitModifiers operator * (BaseUnitModifiers src, float value)
         {
             var result = new BaseUnitModifiers(src);
-            
-            foreach (var modifier in src.addedStatModifiers)
+
+            foreach (var stat in src.StatModifiers)
             {
-                result.SetAddedValue(modifier.Key, modifier.Value.Value * value);
-            }
-            foreach (var modifier in src.increasedStatModifiers)
-            {
-                result.SetIncreasedValue(modifier.Key,modifier.Value.Value * value);
-            }
-            foreach (var modifier in src.moreStatModifiers)
-            {
-                List<float> modifiers = new List<float>();
-                foreach (var mod in modifier.Value)
-                {
-                    modifiers.Add(mod * value);
-                }
-                result.SetMoreStatModifier(modifier.Key, modifiers);
+                result.SetModifierValue(ModifierType.Added, stat.Key, stat.Value.Added.Value * value);
+                result.SetModifierValue(ModifierType.Increased, stat.Key, stat.Value.Increased.Value * value);
+                List<float> newMore = stat.Value.More
+                    .Select(x => x * value)
+                    .ToList();
+                result.SetModifierValue(ModifierType.More, stat.Key, newMore);
             }
 
             return result;
-        }
+        }*/
     }
 
-    public struct BaseStatModifier
+    public struct ModifierValue
     {
         public float Value { get; private set; }
         
-        public BaseStatModifier(float value)
+        public ModifierValue(float value)
         {
             Value = value;
         }
@@ -159,6 +171,39 @@ namespace Battle
             Value += value;
         }
     }
+    
+    public struct StatModifier // or class
+    {
+        public ModifierValue Added;
+        public ModifierValue Increased;
+        public List<float> More;
+
+        public StatModifier(List<float> more)
+        {
+            More = more;
+            Added = default;
+            Increased = default;
+        }
+        
+        public StatModifier DeepCopy()
+        {
+            return new StatModifier
+            {
+                Added = Added,
+                Increased = Increased,
+                More = More != null
+                    ? new List<float>(More)
+                    : new List<float>()
+            };
+        }
+        
+        public void Merge(StatModifier other)
+        {
+            Added.ChangeValue(other.Added.Value);
+            Increased.ChangeValue(other.Increased.Value);
+            More.AddRange(other.More);
+        }
+    };
     
 }
 

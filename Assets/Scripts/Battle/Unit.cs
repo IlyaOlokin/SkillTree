@@ -15,6 +15,7 @@ namespace Battle
         [SerializeField] protected BaseInnateModifiers baseInnateModifiers;
         
         public event Action OnStatsChanged;
+        public event Action OnStatsRecalculated;
         
         public Unit UnitObject
         {
@@ -25,11 +26,12 @@ namespace Battle
         protected virtual void Awake()
         {
             health.OnHealthZero += Death;
+            OnStatsChanged += RecalculateStats;
+
             baseUnitModifiers = new BaseUnitModifiers();
-            baseInnateModifiers.ApplyEffect(baseUnitModifiers);
             health.Init(this);
             attacker.Init(this);
-            RaiseOnStatChanged();
+            RecalculateStats();
         }
 
         public void ReceiveDamage(DamageInstance damageInstance)
@@ -41,10 +43,42 @@ namespace Battle
         {
             
         }
-
-        protected void RaiseOnStatChanged()
+        
+        protected void RaiseOnStatsChanged()
         {
             OnStatsChanged?.Invoke();
+        }
+        
+        protected void RaiseOnStatsRecalculated()
+        {
+            OnStatsRecalculated?.Invoke();
+        }
+        
+        private void RecalculateStats()
+        {
+            ResetUnit();
+
+            StatCalculator.RecalculateStats(this);
+            
+            RaiseOnStatsRecalculated();
+        }
+        
+        private void ResetUnit()
+        {
+            baseUnitModifiers.Reset();
+            baseInnateModifiers.ApplyEffect(this);
+        }
+
+        public List<Modifier> GetAllModifiers()
+        {
+            List<Modifier> mods = new List<Modifier>();
+            if (this is PlayerUnit playerUnit)
+            {
+                mods.AddRange(playerUnit.SkillTree.CollectAllModifiers());
+            }
+            // mods += buffs/debuffs
+            
+            return mods;
         }
 
         private void Death()

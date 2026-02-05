@@ -8,17 +8,12 @@ namespace Battle
     {
         public static bool ApplyEvasion(DamageInstance damage, Unit defender, Unit attacker)
         {
-            float evasion = StatCalculator.GetStat(defender,
-                new List<StatModifierAddedType>() {StatModifierAddedType.AddedEvasion}, 
-                new List<StatModifierIncreasedType>() {StatModifierIncreasedType.IncreasedEvasion}, 
-                new List<StatModifierMoreType>() {StatModifierMoreType.MoreEvasion});
+            float evasion = defender.baseUnitModifiers.StatValues[StatType.Evasion];
             
-            float accuracy = StatCalculator.GetStat(defender,
-                new List<StatModifierAddedType>() {StatModifierAddedType.AddedAccuracy}, 
-                new List<StatModifierIncreasedType>() {StatModifierIncreasedType.IncreasedAccuracy}, 
-                new List<StatModifierMoreType>() {StatModifierMoreType.MoreAccuracy});
-            float chance = accuracy / (evasion + accuracy);
-            return Random.Range(0f,1f) > chance;
+            float accuracy = attacker.baseUnitModifiers.StatValues[StatType.Accuracy];
+            
+            float hitChance = accuracy / (evasion + accuracy);
+            return Random.Range(0f,1f) > hitChance;
         }
     }
 }

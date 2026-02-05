@@ -14,15 +14,6 @@ namespace SkillTree
             SubscribeAllFromRoot(root, RaiseAnyNodeChanged);
             OnAnyNodeChanged += ProcessNodeAllocation;
         }
-        
-        public override void ApplySkillTree(Unit unit)
-        {
-            List<BaseModifier> mods = CollectAllModifiersOfType<BaseModifier>();
-            foreach (var mod in mods)
-            {
-                mod.ApplyEffect(unit);
-            }
-        }
 
         private void UpdateTree()
         {
@@ -36,18 +27,15 @@ namespace SkillTree
             UpdateTree();
         }
 
-        public override List<T> CollectAllModifiersOfType<T>()
+        public override List<Modifier> CollectAllModifiers()
         {
-            List<T> modifiers = new List<T>();
+            List<Modifier> modifiers = new List<Modifier>();
 
             foreach (var allocatedNode in _allocatedNodes)
             {
                 foreach (var modifier in allocatedNode.Modifiers)
                 {
-                    if (modifier is T baseModifier)
-                    {
-                        modifiers.Add(baseModifier);
-                    }
+                    modifiers.Add(modifier);
                 }
             }
             

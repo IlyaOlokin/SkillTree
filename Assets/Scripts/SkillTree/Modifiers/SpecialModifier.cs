@@ -6,7 +6,6 @@ namespace SkillTree
 {
     public class SpecialModifier : Modifier
     {
-        public override void ApplyEffect(DamageInfo damageInfo) { }
     }
 }
 

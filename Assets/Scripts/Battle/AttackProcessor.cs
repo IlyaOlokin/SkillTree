@@ -1,26 +1,32 @@
+using System.Collections.Generic;
+using SkillTree;
+
 namespace Battle
 {
     public static class AttackProcessor
     {
         public static void HandleAttack(Unit attackerUnit, DamageInfo damageInfo, ITarget defender)
         {
-            // Base Modifiers are applied on skill tree update
+            // All Modifiers are applied on unit update
+
+            List<Modifier> mods = attackerUnit.GetAllModifiers();
+            foreach (Modifier mod in mods)
+            {
+                if (mod.Priority == ModifierPriority.OnAttack && mod.IsApplicable(attackerUnit)) mod.ApplyEffect(damageInfo);
+            }
             
-            if (attackerUnit is PlayerUnit unit) DamageCalculator.ApplySpecialModifiers(unit, damageInfo);
-            
-            // defence with specific mods Defence(DamageInfo damageInfo)
-            
-            DamageInstance damageInstance = DamageCalculator.CalculateAttackDamage(damageInfo);
+            DamageCalculator.CalculateAttackDamage(damageInfo);
             
             // defence with Defences Defence(DamageInstance damageInfo)
-            if (Evasion.ApplyEvasion(damageInstance, defender.UnitObject, attackerUnit))
+            if (Evasion.ApplyEvasion(damageInfo.DamageInstance, defender.UnitObject, attackerUnit))
             {
-                defender.OnEvaded(damageInstance);
+                defender.OnEvaded(damageInfo.DamageInstance);
                 return;
             }
-            Armor.ApplyArmorMitigation(damageInstance, defender.UnitObject, attackerUnit);
+            Armor.ApplyArmorMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);
+            Resistance.ApplyResistanceMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);
             
-            defender.ReceiveDamage(damageInstance);
+            defender.ReceiveDamage(damageInfo.DamageInstance);
         }
     }
 }

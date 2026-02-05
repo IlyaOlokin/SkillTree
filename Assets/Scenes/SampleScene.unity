@@ -341,7 +341,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _StateTex:
-        m_Texture: {fileID: 1365602996}
+        m_Texture: {fileID: 1793567186}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -3266,6 +3266,10 @@ PrefabInstance:
       propertyPath: 'skillTrees.Array.data[0]'
       value: 
       objectReference: {fileID: 846788284}
+    - target: {fileID: 5186857671638254335, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: <SkillTree>k__BackingField
+      value: 
+      objectReference: {fileID: 846788284}
     - target: {fileID: 6247231225684122429, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
       propertyPath: m_Name
       value: PlayerUnit
@@ -3273,6 +3277,70 @@ PrefabInstance:
     - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
       propertyPath: Strength
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersStrength.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersDexterity.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersIntelligence.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersStrength.Array.data[0].value
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersStrength.Array.data[1].value
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersDexterity.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersDexterity.Array.data[1].value
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersStrength.Array.data[0].statType
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersStrength.Array.data[1].statType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersDexterity.Array.data[0].statType
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersDexterity.Array.data[1].statType
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersIntelligence.Array.data[0].value
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersIntelligence.Array.data[0].statType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersStrength.Array.data[1].modifierType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersDexterity.Array.data[1].modifierType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersIntelligence.Array.data[0].modifierType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
       propertyPath: baseAttributeModifiers.increasedBaseModifiersStrength.Array.size
@@ -3331,52 +3399,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
---- !u!28 &1365602996
-Texture2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 3
-  m_Width: 14
-  m_Height: 1
-  m_CompleteImageSize: 224
-  m_MipsStripped: 0
-  m_TextureFormat: 20
-  m_MipCount: 1
-  m_IsReadable: 1
-  m_IsPreProcessed: 0
-  m_IgnoreMipmapLimit: 1
-  m_MipmapLimitGroupName: 
-  m_StreamingMipmaps: 0
-  m_StreamingMipmapsPriority: 0
-  m_VTOnly: 0
-  m_AlphaIsTransparency: 0
-  m_ImageCount: 1
-  m_TextureDimension: 2
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_LightmapFormat: 0
-  m_ColorSpace: 0
-  m_PlatformBlob: 
-  image data: 224
-  _typelessdata: 0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
 --- !u!1 &1410233851 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1966638709148332189, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
@@ -3944,6 +3966,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1985643871}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!28 &1793567186
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 3
+  m_Width: 14
+  m_Height: 1
+  m_CompleteImageSize: 224
+  m_MipsStripped: 0
+  m_TextureFormat: 20
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_IsPreProcessed: 0
+  m_IgnoreMipmapLimit: 1
+  m_MipmapLimitGroupName: 
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_LightmapFormat: 0
+  m_ColorSpace: 0
+  m_PlatformBlob: 
+  image data: 224
+  _typelessdata: 0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
 --- !u!1001 &1814280434
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4555,12 +4623,16 @@ PrefabInstance:
       objectReference: {fileID: 2037181416}
     - target: {fileID: 3041048277598826952, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
       propertyPath: <Modifiers>k__BackingField.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3041048277598826952, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
       propertyPath: '<Modifiers>k__BackingField.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: 64e97bd21d070aa45be9487c87904073, type: 2}
+    - target: {fileID: 3041048277598826952, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
+      propertyPath: '<Modifiers>k__BackingField.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: e89d55d6d5bb4744e9d5729e5ca7e5ad, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

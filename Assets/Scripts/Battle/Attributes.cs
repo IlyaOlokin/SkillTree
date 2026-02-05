@@ -1,47 +1,21 @@
+using System.Collections.Generic;
+using SkillTree;
 using UnityEngine;
 
 namespace Battle
 {
     public class Attributes : MonoBehaviour
     {
-        [SerializeField] private BaseAttributeModifiers baseAttributeModifiers;
+        [Header("Strength")]
+        [SerializeField] public List<ModifierContainer> baseModifiersStrength = new List<ModifierContainer>();
         
-        public BaseUnitModifiers StrengthModifiers;
-        public BaseUnitModifiers DexterityModifiers;
-        public BaseUnitModifiers IntelligenceModifiers;
+        
+        [Header("Dexterity")]
+        [SerializeField] public List<ModifierContainer> baseModifiersDexterity= new List<ModifierContainer>();
 
-        public void Awake()
-        {
-            StrengthModifiers = new BaseUnitModifiers();
-            foreach (var mod in baseAttributeModifiers.increasedBaseModifiersStrength)
-            {
-                StrengthModifiers.ChangeIncreasedValue(mod.modifierType, mod.value);
-            }
-            foreach (var mod in baseAttributeModifiers.addedBaseModifiersStrength)
-            {
-                StrengthModifiers.ChangeAddedValue(mod.modifierType, mod.value);
-            }
-            
-            DexterityModifiers = new BaseUnitModifiers();
-            foreach (var mod in baseAttributeModifiers.increasedBaseModifiersDexterity)
-            {
-                DexterityModifiers.ChangeIncreasedValue(mod.modifierType, mod.value);
-            }
-            foreach (var mod in baseAttributeModifiers.addedBaseModifiersStrength)
-            {
-                DexterityModifiers.ChangeAddedValue(mod.modifierType, mod.value);
-            }
-            
-            IntelligenceModifiers = new BaseUnitModifiers();
-            foreach (var mod in baseAttributeModifiers.increasedBaseModifiersIntelligence)
-            {
-                IntelligenceModifiers.ChangeIncreasedValue(mod.modifierType, mod.value);
-            }
-            foreach (var mod in baseAttributeModifiers.addedBaseModifiersIntelligence)
-            {
-                IntelligenceModifiers.ChangeAddedValue(mod.modifierType, mod.value);
-            }
-        }
+        
+        [Header("Intelligence")]
+        [SerializeField] public List<ModifierContainer> baseModifiersIntelligence = new List<ModifierContainer>();
     }
 }
 

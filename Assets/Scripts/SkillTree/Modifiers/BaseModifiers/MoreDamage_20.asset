@@ -12,12 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ae2ce54539276c4fa2012760a983831, type: 3}
   m_Name: MoreDamage_20
   m_EditorClassIdentifier: 
-  addedModifier:
-    modifierType: 9999
-    value: 0
-  increasedModifier:
-    modifierType: 9999
-    value: 0
-  moreModifier:
-    modifierType: 0
+  <Priority>k__BackingField: 0
+  modifierContainer:
+    modifierType: 2
+    statType: 1
     value: 0.2
