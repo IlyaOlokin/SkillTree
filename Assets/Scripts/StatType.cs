@@ -3,43 +3,49 @@ using UnityEngine;
 
 public enum StatType
 {
-    Empty = 9999,
+    Empty = 0,
     // Damage
-    Damage = 0,
-    ElementalDamage = 1,
-    MysticDamage = 2,
+    Damage = 1,
+    ElementalDamage = 2,
+    MysticDamage = 3,
     
-    PhysicalDamage = 3,
-    FireDamage = 4,
-    ColdDamage = 5,
-    LightningDamage = 6,
-    LightDamage = 7,
-    DarknessDamage  = 8,
-    PoisonDamage = 9,
+    PhysicalDamage = 4,
+    FireDamage = 5,
+    ColdDamage = 6,
+    LightningDamage = 7,
+    LightDamage = 8,
+    DarknessDamage  = 9,
+    PoisonDamage = 10,
     
     // Negative Effects
-    NegativeEffectMagnitude  = 10,
+    NegativeEffectMagnitude  = 11,
     
-    IgniteMagnitude = 11,
-    ChillMagnitude = 12,
-    OverchargeMagnitude = 13,
-    BleedMagnitude = 14,
+    IgniteMagnitude = 12,
+    ChillMagnitude = 13,
+    OverchargeMagnitude = 14,
+    BleedMagnitude = 15,
     
     // Crit
-    CritChance = 15,
-    CritDamageBonus = 16,
+    CritChance = 16,
+    CritDamageBonus = 17,
     
     // AttackSpeed
-    AttackSpeed = 17,
+    AttackSpeed = 18,
     
     // Defence
-    Armor = 18,
-    Evasion = 19,
-    Accuracy = 20,
-    MaximumHealth = 21,
+    Armor = 19,
+    Evasion = 20,
+    Defence = 26,
+    Accuracy = 21,
+    MaximumHealth = 22,
+    
+    ElementalResistance = 27,
+    FireResistance = 28,
+    ColdResistance = 29,
+    LightningResistance = 30,
     
     // Attributes
-    Strength = 22,
-    Dexterity = 23,
-    Intelligence = 24,
+    Strength = 23,
+    Dexterity = 24,
+    Intelligence = 25,
 }

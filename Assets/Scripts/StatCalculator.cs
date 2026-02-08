@@ -37,21 +37,25 @@ public static class StatCalculator
     {
         foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
         {
-            baseUnitModifiers.StatModifiers[GetCorespondingDamageStat(damageType)].Merge(baseUnitModifiers.StatModifiers[StatType.Damage]);
+            baseUnitModifiers.MergeModifier(GetCorespondingDamageStat(damageType), baseUnitModifiers.StatModifiers[StatType.Damage]);
         }
             
-        baseUnitModifiers.StatModifiers[StatType.FireDamage].Merge(baseUnitModifiers.StatModifiers[StatType.ElementalDamage]);
-        baseUnitModifiers.StatModifiers[StatType.ColdDamage].Merge(baseUnitModifiers.StatModifiers[StatType.ElementalDamage]);
-        baseUnitModifiers.StatModifiers[StatType.LightningDamage].Merge(baseUnitModifiers.StatModifiers[StatType.ElementalDamage]);
-            
-        baseUnitModifiers.StatModifiers[StatType.LightDamage].Merge(baseUnitModifiers.StatModifiers[StatType.MysticDamage]);
-        baseUnitModifiers.StatModifiers[StatType.DarknessDamage].Merge(baseUnitModifiers.StatModifiers[StatType.MysticDamage]);
+        baseUnitModifiers.MergeModifier(StatType.FireDamage, baseUnitModifiers.StatModifiers[StatType.ElementalDamage]);
+        baseUnitModifiers.MergeModifier(StatType.ColdDamage, baseUnitModifiers.StatModifiers[StatType.ElementalDamage]);
+        baseUnitModifiers.MergeModifier(StatType.LightningDamage, baseUnitModifiers.StatModifiers[StatType.ElementalDamage]);
+        
+        baseUnitModifiers.MergeModifier(StatType.LightDamage, baseUnitModifiers.StatModifiers[StatType.MysticDamage]);
+        baseUnitModifiers.MergeModifier(StatType.DarknessDamage, baseUnitModifiers.StatModifiers[StatType.MysticDamage]);
+        
+        baseUnitModifiers.ClearModifier(StatType.Damage);
     }
     
     public static void MergeDefenceModifiers(BaseUnitModifiers baseUnitModifiers)
     {
-        baseUnitModifiers.StatModifiers[StatType.Armor].Merge(baseUnitModifiers.StatModifiers[StatType.Defence]);
-        baseUnitModifiers.StatModifiers[StatType.Evasion].Merge(baseUnitModifiers.StatModifiers[StatType.Defence]);
+        baseUnitModifiers.MergeModifier(StatType.Armor, baseUnitModifiers.StatModifiers[StatType.Defence]);
+        baseUnitModifiers.MergeModifier(StatType.Evasion, baseUnitModifiers.StatModifiers[StatType.Defence]);
+        
+        baseUnitModifiers.ClearModifier(StatType.Defence);
     }
     
     public static float GetStat(BaseUnitModifiers baseUnitModifiers, StatType statType)

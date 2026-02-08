@@ -14,7 +14,7 @@ namespace Battle
         [SerializeField] public BaseUnitModifiers baseUnitModifiers;
         [SerializeField] protected BaseInnateModifiers baseInnateModifiers;
         
-        public event Action OnStatsChanged;
+        public event Action OnModsChanged;
         public event Action OnStatsRecalculated;
         
         public Unit UnitObject
@@ -26,12 +26,12 @@ namespace Battle
         protected virtual void Awake()
         {
             health.OnHealthZero += Death;
-            OnStatsChanged += RecalculateStats;
+            OnModsChanged += RecalculateMods;
 
             baseUnitModifiers = new BaseUnitModifiers();
             health.Init(this);
             attacker.Init(this);
-            RecalculateStats();
+            RecalculateMods();
         }
 
         public void ReceiveDamage(DamageInstance damageInstance)
@@ -46,7 +46,7 @@ namespace Battle
         
         protected void RaiseOnStatsChanged()
         {
-            OnStatsChanged?.Invoke();
+            OnModsChanged?.Invoke();
         }
         
         protected void RaiseOnStatsRecalculated()
@@ -54,7 +54,7 @@ namespace Battle
             OnStatsRecalculated?.Invoke();
         }
         
-        private void RecalculateStats()
+        private void RecalculateMods()
         {
             ResetUnit();
 

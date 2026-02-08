@@ -27,6 +27,6 @@ public class HealthBar : MonoBehaviour
     private void UpdateHealthBar()
     {
         slider.value = health.CurrentHealth / health.MaxHealth;
-        text.text = health.CurrentHealth + "/" + health.MaxHealth;
+        text.text = Math.Ceiling(health.CurrentHealth) + "/" + Math.Round(health.MaxHealth);
     }
 }

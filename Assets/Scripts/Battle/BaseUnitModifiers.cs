@@ -119,37 +119,48 @@ namespace Battle
             StatModifiers[StatType] = statModifierBucket;
         }
 
-
-        /*public void MergeModifiers(BaseUnitModifiers baseUnitModifiers)
+        public void MergeModifier(StatType statType, StatModifier other)
         {
-            foreach (var stat in baseUnitModifiers.StatModifiers)
+            ChangeModifierValue(new ModifierContainer()
             {
-                ChangeModifierValue(ModifierType.Added, stat.Key, stat.Value.Added.Value);
-                ChangeModifierValue(ModifierType.Increased, stat.Key, stat.Value.Increased.Value);
-                foreach (var multiplier in stat.Value.More)
+                modifierType = ModifierType.Added,
+                statType = statType,
+                value = other.Added.Value
+            });
+            ChangeModifierValue(new ModifierContainer()
+            {
+                modifierType = ModifierType.Increased,
+                statType = statType,
+                value = other.Increased.Value
+            });
+
+            foreach (var modValue in other.More)
+            {
+                ChangeModifierValue(new ModifierContainer()
                 {
-                    ChangeModifierValue(ModifierType.More, stat.Key, multiplier);
-                }
-                
+                    modifierType = ModifierType.More,
+                    statType = statType,
+                    value = modValue
+                });
             }
-        }*/
+        }
         
-        /*public static BaseUnitModifiers operator * (BaseUnitModifiers src, float value)
+        public void ClearModifier(StatType statType)
         {
-            var result = new BaseUnitModifiers(src);
-
-            foreach (var stat in src.StatModifiers)
+            SetModifierValue(new ModifierContainer()
             {
-                result.SetModifierValue(ModifierType.Added, stat.Key, stat.Value.Added.Value * value);
-                result.SetModifierValue(ModifierType.Increased, stat.Key, stat.Value.Increased.Value * value);
-                List<float> newMore = stat.Value.More
-                    .Select(x => x * value)
-                    .ToList();
-                result.SetModifierValue(ModifierType.More, stat.Key, newMore);
-            }
-
-            return result;
-        }*/
+                modifierType = ModifierType.Added,
+                statType = statType,
+                value = 0
+            });
+            SetModifierValue(new ModifierContainer()
+            {
+                modifierType = ModifierType.Increased,
+                statType = statType,
+                value = 0
+            });
+            SetModifierValue(ModifierType.More, statType, new List<float>());
+        }
     }
 
     public struct ModifierValue
@@ -195,13 +206,6 @@ namespace Battle
                     ? new List<float>(More)
                     : new List<float>()
             };
-        }
-        
-        public void Merge(StatModifier other)
-        {
-            Added.ChangeValue(other.Added.Value);
-            Increased.ChangeValue(other.Increased.Value);
-            More.AddRange(other.More);
         }
     };
     
