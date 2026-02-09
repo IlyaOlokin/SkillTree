@@ -23,7 +23,7 @@ public class PlayerStatsWindow : MonoBehaviour
         var minLength = Math.Min(statTexts.Count, stats.Count);
         for (int i = 0; i < minLength; i++)
         {
-            statTexts[i].text = stats[i].ToPrettyString() + ": " + Math.Round(_player.baseUnitModifiers.StatValues[stats[i]]);
+            statTexts[i].text = "<b>" + stats[i].ToPrettyString() + ":</b> " + Math.Round(_player.baseUnitModifiers.StatValues[stats[i]]);
         }
     }
 }

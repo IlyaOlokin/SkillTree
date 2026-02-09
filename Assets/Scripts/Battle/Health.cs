@@ -10,8 +10,14 @@ namespace Battle
         private Unit _owner;
 
         public float MaxHealth { get; private set; } = 100f;
-        public float CurrentHealth { get; private set; } = 100f;
-        
+
+        private float _currentHealth = 100f;
+        public float CurrentHealth
+        {
+            get => _currentHealth;
+            private set => _currentHealth = value > MaxHealth ? MaxHealth : value;
+        }
+
         public event Action<float> OnHealthChangedDelta;
         public event Action OnHealthChanged;
         public event Action OnMaximumHealthChanged;
@@ -21,6 +27,17 @@ namespace Battle
         {
             _owner = owner;
             _owner.OnStatsRecalculated += UpdateMaximumHealth;
+        }
+
+        private void Update()
+        {
+            Regen();
+        }
+
+        private void Regen()
+        {
+            CurrentHealth += _owner.baseUnitModifiers.StatValues[StatType.HealthRegenerationPerSecond] * Time.deltaTime;
+            OnHealthChanged?.Invoke();
         }
 
         public float TakeDamage(DamageInstance damageInstance)

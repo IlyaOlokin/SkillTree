@@ -38,6 +38,7 @@ public enum StatType
     Defence = 26,
     Accuracy = 21,
     MaximumHealth = 22,
+    HealthRegenerationPerSecond = 31,
     
     ElementalResistance = 27,
     FireResistance = 28,

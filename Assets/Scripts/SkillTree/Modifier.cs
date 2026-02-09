@@ -28,6 +28,13 @@ namespace SkillTree
         public StatType statType;
         public float value;
 
+        public ModifierContainer(ModifierType modifierType, StatType statType, float value)
+        {
+            this.modifierType = modifierType;
+            this.statType = statType;
+            this.value = value;
+        }
+
         public static ModifierContainer operator *(ModifierContainer src, float value)
         {
             src.value *= value;
@@ -49,13 +56,13 @@ namespace SkillTree
                 case ModifierType.Increased:
                     builder.Append("+")
                         .Append(value * 100f)
-                        .Append("% Increased")
+                        .Append("% Increased ")
                         .Append(statType.ToPrettyString());
                     break;
                 case ModifierType.More:
                     builder.Append("+")
                         .Append(value * 100f)
-                        .Append("% More")
+                        .Append("% More ")
                         .Append(statType.ToPrettyString());
                     break;
             }
