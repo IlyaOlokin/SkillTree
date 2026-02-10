@@ -119,6 +119,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!28 &3183820
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 3
+  m_Width: 17
+  m_Height: 1
+  m_CompleteImageSize: 272
+  m_MipsStripped: 0
+  m_TextureFormat: 20
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_IsPreProcessed: 0
+  m_IgnoreMipmapLimit: 1
+  m_MipmapLimitGroupName: 
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_LightmapFormat: 0
+  m_ColorSpace: 0
+  m_PlatformBlob: 
+  image data: 272
+  _typelessdata: 0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
 --- !u!1001 &12554889
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -195,6 +241,10 @@ PrefabInstance:
       propertyPath: '<Modifiers>k__BackingField.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: cb96b29a23d61c24d9b061d1f463f7b0, type: 2}
+    - target: {fileID: 3041048277598826952, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
+      propertyPath: '<Modifiers>k__BackingField.Array.data[1]'
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -613,7 +663,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _StateTex:
-        m_Texture: {fileID: 1660762609}
+        m_Texture: {fileID: 3183820}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -1031,8 +1081,12 @@ PrefabInstance:
       objectReference: {fileID: 1410233853}
     - target: {fileID: 3041048277598826952, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
       propertyPath: <Modifiers>k__BackingField.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3041048277598826952, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
+      propertyPath: '<Modifiers>k__BackingField.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 64fa6adb13f14cb41a868eb5a1a1c92f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1386,7 +1440,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1683733140072250463, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
       propertyPath: m_Pivot.y
-      value: 0.5
+      value: 0.5000008
       objectReference: {fileID: 0}
     - target: {fileID: 1683733140072250463, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2634,6 +2688,7 @@ MonoBehaviour:
   - {fileID: 1636451664}
   - {fileID: 147717984}
   stats: 170000001800000019000000160000001f00000013000000140000001b0000001c0000001d0000001e00000015000000120000000400000005000000060000000700000008000000090000001000000011000000
+  percentStats: 10000000110000001b0000001c0000001d0000001e000000
 --- !u!114 &658333571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4844,6 +4899,14 @@ PrefabInstance:
       propertyPath: 'connectedNodes.Array.data[0]'
       value: 
       objectReference: {fileID: 1410233853}
+    - target: {fileID: 3041048277598826952, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
+      propertyPath: <Modifiers>k__BackingField.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041048277598826952, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
+      propertyPath: '<Modifiers>k__BackingField.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 5d98a730ea371a847a8daf8a4288d5d0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5472,10 +5535,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5186857671638254335, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
-      propertyPath: baseInnateModifiers
-      value: 
-      objectReference: {fileID: 11400000, guid: 1a46b3c2f5406c24ea26f911fd14b6a4, type: 2}
-    - target: {fileID: 5186857671638254335, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
       propertyPath: skillTrees.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -5501,7 +5560,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
       propertyPath: baseModifiersDexterity.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
       propertyPath: baseModifiersIntelligence.Array.size
@@ -5517,11 +5576,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
       propertyPath: baseModifiersDexterity.Array.data[0].value
-      value: 1
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
       propertyPath: baseModifiersDexterity.Array.data[1].value
       value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersDexterity.Array.data[2].value
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
       propertyPath: baseModifiersStrength.Array.data[0].statType
@@ -5540,6 +5603,10 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersDexterity.Array.data[2].statType
+      value: 21
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
       propertyPath: baseModifiersIntelligence.Array.data[0].value
       value: 0.02
       objectReference: {fileID: 0}
@@ -5552,8 +5619,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersDexterity.Array.data[0].modifierType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
       propertyPath: baseModifiersDexterity.Array.data[1].modifierType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
+      propertyPath: baseModifiersDexterity.Array.data[2].modifierType
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8523740330438659201, guid: 7e7344ac096545f46bffd9db4015d859, type: 3}
       propertyPath: baseModifiersIntelligence.Array.data[0].modifierType
@@ -6998,8 +7073,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 674485367}
   m_HandleRect: {fileID: 674485366}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.577451
+  m_Value: 0.99999976
+  m_Size: 0.57745093
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7042,52 +7117,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1651815653}
   m_CullTransparentMesh: 1
---- !u!28 &1660762609
-Texture2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 3
-  m_Width: 17
-  m_Height: 1
-  m_CompleteImageSize: 272
-  m_MipsStripped: 0
-  m_TextureFormat: 20
-  m_MipCount: 1
-  m_IsReadable: 1
-  m_IsPreProcessed: 0
-  m_IgnoreMipmapLimit: 1
-  m_MipmapLimitGroupName: 
-  m_StreamingMipmaps: 0
-  m_StreamingMipmapsPriority: 0
-  m_VTOnly: 0
-  m_AlphaIsTransparency: 0
-  m_ImageCount: 1
-  m_TextureDimension: 2
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_LightmapFormat: 0
-  m_ColorSpace: 0
-  m_PlatformBlob: 
-  image data: 272
-  _typelessdata: 0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
 --- !u!1001 &1666484026
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7491,6 +7520,18 @@ PrefabInstance:
       propertyPath: 'connectedNodes.Array.data[0]'
       value: 
       objectReference: {fileID: 1410233853}
+    - target: {fileID: 3041048277598826952, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
+      propertyPath: <Modifiers>k__BackingField.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041048277598826952, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
+      propertyPath: '<Modifiers>k__BackingField.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: c58d661876cf20c4e9df5e046fa8d3a6, type: 2}
+    - target: {fileID: 3041048277598826952, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
+      propertyPath: '<Modifiers>k__BackingField.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: c58d661876cf20c4e9df5e046fa8d3a6, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

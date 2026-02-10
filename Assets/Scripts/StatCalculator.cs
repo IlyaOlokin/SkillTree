@@ -12,19 +12,19 @@ public static class StatCalculator
         
         foreach (var mod in mods)
         {
-            if (mod.Priority == ModifierPriority.PreAttribute && mod.IsApplicable(unit)) mod.ApplyEffect(unit);
+            if (mod.IsInPriority(ModifierPriority.PreAttribute) && mod.IsApplicable(unit)) mod.ApplyEffect(unit);
         }
             
         ApplyAttributes(unit);
             
         foreach (var mod in mods)
         {
-            if (mod.Priority == ModifierPriority.Secondary && mod.IsApplicable(unit)) mod.ApplyEffect(unit);
+            if (mod.IsInPriority(ModifierPriority.Secondary) && mod.IsApplicable(unit)) mod.ApplyEffect(unit);
         }
             
         foreach (var mod in mods)
         {
-            if (mod.Priority == ModifierPriority.Special && mod.IsApplicable(unit)) mod.ApplyEffect(unit);
+            if (mod.IsInPriority(ModifierPriority.Special) && mod.IsApplicable(unit)) mod.ApplyEffect(unit);
         }
         
         MergeDamageModifiers(unit.baseUnitModifiers);
@@ -48,6 +48,8 @@ public static class StatCalculator
         baseUnitModifiers.MergeModifier(StatType.DarknessDamage, baseUnitModifiers.StatModifiers[StatType.MysticDamage]);
         
         baseUnitModifiers.ClearModifier(StatType.Damage);
+        baseUnitModifiers.ClearModifier(StatType.ElementalDamage);
+        baseUnitModifiers.ClearModifier(StatType.MysticDamage);
     }
     
     public static void MergeDefenceModifiers(BaseUnitModifiers baseUnitModifiers)

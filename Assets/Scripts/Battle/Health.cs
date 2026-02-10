@@ -40,14 +40,14 @@ namespace Battle
             OnHealthChanged?.Invoke();
         }
 
-        public float TakeDamage(DamageInstance damageInstance)
+        public float TakeDamage(DamageInstance damageInstance, bool displayDamage = true)
         {
             float previousHealth = CurrentHealth;
             foreach (var damageValue in damageInstance.Damage.Values)
             {
                 CurrentHealth -= damageValue;
             }
-            OnHealthChangedDelta?.Invoke(previousHealth - CurrentHealth);
+            if (displayDamage) OnHealthChangedDelta?.Invoke(previousHealth - CurrentHealth);
             OnHealthChanged?.Invoke();
             if (CurrentHealth <= 0f)
             {

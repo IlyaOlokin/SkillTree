@@ -11,8 +11,11 @@ namespace Battle
         [SerializeField] public Health health;
         [SerializeField] public Attacker attacker;
         [SerializeField] public Attributes attributes;
+        [SerializeField] public EffectController effectController;
         [SerializeField] public BaseUnitModifiers baseUnitModifiers;
         [SerializeField] protected BaseInnateModifiers baseInnateModifiers;
+        
+        private List<Modifier> _outerModifiers = new List<Modifier>();
         
         public event Action OnModsChanged;
         public event Action OnStatsRecalculated;
@@ -31,6 +34,7 @@ namespace Battle
             baseUnitModifiers = new BaseUnitModifiers();
             health.Init(this);
             attacker.Init(this);
+            effectController.Init(this);
             RecalculateMods();
         }
 
@@ -39,12 +43,17 @@ namespace Battle
             health.TakeDamage(damageInstance);
         }
 
+        public void ReceiveDoT(DamageInstance damageInstance)
+        {
+            health.TakeDamage(damageInstance, false);
+        }
+
         public void OnEvaded(DamageInstance damageInstance)
         {
             
         }
         
-        protected void RaiseOnStatsChanged()
+        protected void RaiseOnModsChanged()
         {
             OnModsChanged?.Invoke();
         }
@@ -78,8 +87,23 @@ namespace Battle
             }
             // mods += buffs/debuffs
             
+            mods.AddRange(_outerModifiers);
+            
             return mods;
         }
+
+        public void AddOuterModifier(Modifier mod)
+        {
+            _outerModifiers.Add(mod);
+            RaiseOnModsChanged();
+        }
+        
+        public void RemoveOuterModifier(Modifier mod)
+        {
+            _outerModifiers.Remove(mod);
+            RaiseOnModsChanged();
+        }
+
 
         private void Death()
         {
@@ -95,6 +119,7 @@ namespace Battle
         {
             health.OnHealthZero -= Death;
         }
+        
     }
 }
 

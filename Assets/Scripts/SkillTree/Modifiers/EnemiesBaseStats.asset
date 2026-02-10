@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae2c76a44cd46b4fb774aef2b8bbcf2, type: 3}
   m_Name: EnemiesBaseStats
   m_EditorClassIdentifier: 
-  <Priority>k__BackingField: 0
+  <Priorities>k__BackingField: 00000000
   baseModifiers:
   - modifierType: 0
     statType: 22
     value: 100
   - modifierType: 0
     statType: 18
-    value: 0.5
+    value: 0.25
   - modifierType: 0
     statType: 5
-    value: 2
+    value: 1
   - modifierType: 0
     statType: 23
     value: 1
@@ -33,5 +33,8 @@ MonoBehaviour:
     statType: 25
     value: 1
   - modifierType: 0
-    statType: 21
-    value: 100
+    statType: 16
+    value: 0.05
+  - modifierType: 0
+    statType: 17
+    value: 0.2

@@ -9,7 +9,7 @@ namespace Battle
         private Unit _owner;
         public ITarget Target { get; private set; }
 
-        public float AttackProgress => 1 - _attackTimer / GetCalculatedAttackSpeed();
+        public float AttackProgress => _attackTimer;
 
         private float _attackTimer;
 
@@ -30,9 +30,9 @@ namespace Battle
 
         private void Update()
         {
-            if (_attackTimer > 0)
+            if (_attackTimer < 1)
             {
-                _attackTimer -= Time.deltaTime;
+                _attackTimer += GetCalculatedAttackSpeed() * Time.deltaTime;
             }
             else if (Target != null)
             {
@@ -43,12 +43,12 @@ namespace Battle
 
         private float GetCalculatedAttackSpeed()
         {
-            return 1f / _owner.baseUnitModifiers.StatValues[StatType.AttackSpeed];
+            return _owner.baseUnitModifiers.StatValues[StatType.AttackSpeed];
         }
 
         private void ResetAttackCooldown()
         {
-            _attackTimer = GetCalculatedAttackSpeed();
+            _attackTimer = 0;
         }
 
         private void AttackTarget()

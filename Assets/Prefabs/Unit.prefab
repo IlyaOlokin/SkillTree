@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 956679600491400372}
   - component: {fileID: 8280504164276382073}
   - component: {fileID: 5751231110311033075}
+  - component: {fileID: 1764322668812889385}
+  - component: {fileID: 3882105937609844107}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -102,7 +104,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9eefa3c3e8f12542b7971e661c10dd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MaxHealth>k__BackingField: 100
 --- !u!114 &8280504164276382073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,7 +116,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14f21ff87f467724b88976e82849bb97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 11400000, guid: 306b9b6096676c14d941243c9a464dc7, type: 2}
 --- !u!114 &5751231110311033075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,3 +130,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unit: {fileID: 0}
   unitNotificationEffect: {fileID: 9209489120575824937, guid: 0c417aa8158cbe848842fce85c460f55, type: 3}
+--- !u!114 &1764322668812889385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4884718464874992480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f93b89c9d3cc83c408489d22280d214d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3882105937609844107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4884718464874992480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c8a96caa916edd43a198bfc3bbccc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseModifiersStrength:
+  - modifierType: 0
+    statType: 22
+    value: 2
+  - modifierType: 1
+    statType: 4
+    value: 0.01
+  baseModifiersDexterity:
+  - modifierType: 1
+    statType: 20
+    value: 0.01
+  - modifierType: 1
+    statType: 16
+    value: 0.02
+  - modifierType: 0
+    statType: 21
+    value: 5
+  baseModifiersIntelligence:
+  - modifierType: 1
+    statType: 2
+    value: 0.02

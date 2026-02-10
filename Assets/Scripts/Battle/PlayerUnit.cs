@@ -19,7 +19,7 @@ namespace Battle
                 Instance = this;
             }
 
-            SkillTree.OnSkillTreeChanged += RaiseOnStatsChanged;
+            SkillTree.OnSkillTreeChanged += RaiseOnModsChanged;
             // on dbuffed/debuffed
             // on status changed
             // on lowlife changed

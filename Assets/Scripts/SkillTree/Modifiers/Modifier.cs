@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using Battle;
 using UnityEngine;
@@ -8,9 +9,14 @@ namespace SkillTree
 {
     public abstract class Modifier : ScriptableObject
     {
-        [field:SerializeField] public ModifierPriority Priority { get; private set; }
+        [field: SerializeField]
+        public List<ModifierPriority> Priorities { get; private set; } = new List<ModifierPriority>()
+        {
+            ModifierPriority.PreAttribute
+        };
         
         public virtual bool IsApplicable(Unit unit) => true;
+        public virtual bool IsInPriority(ModifierPriority priority) => Priorities.Contains(priority);
 
         public virtual void ApplyEffect(Unit unit) { }
         public virtual void ApplyEffect(DamageInfo damageInfo) { }
@@ -18,6 +24,11 @@ namespace SkillTree
         public virtual string GetDescription()
         {
             return "Empty description";
+        }
+
+        public void SetPriorities(List<ModifierPriority> priorities)
+        {
+            Priorities = priorities;
         }
     }
 

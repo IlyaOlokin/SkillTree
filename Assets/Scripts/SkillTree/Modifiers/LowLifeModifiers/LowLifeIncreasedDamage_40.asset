@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b76a8a47afd3694a95072e1001d99df, type: 3}
   m_Name: LowLifeIncreasedDamage_40
   m_EditorClassIdentifier: 
-  increasedModifierType: 0
-  increasedValue: 0.4
+  <Priorities>k__BackingField: 00000000
+  modifierContainer:
+    modifierType: 0
+    statType: 0
+    value: 0

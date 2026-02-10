@@ -41,7 +41,7 @@ namespace Battle
             
             float critBonus = damageInfo.BaseUnitModifiers.StatValues[StatType.CritDamageBonus];
 
-            if (critChance >= Random.Range(0, 1))
+            if (critChance >= Random.Range(0f, 1f))
             {
                 var keys = damageInfo.DamageInstance.Damage.Keys.ToList();
                 foreach (var damageType in keys)

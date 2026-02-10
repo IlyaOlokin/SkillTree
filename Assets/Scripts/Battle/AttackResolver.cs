@@ -38,6 +38,11 @@ namespace Battle
             UnitObject.ReceiveDamage(damageInstance);
         }
 
+        public void ReceiveDoT(DamageInstance damageInstance)
+        {
+            UnitObject.ReceiveDoT(damageInstance);
+        }
+
         public void OnEvaded(DamageInstance damageInstance)
         {
             

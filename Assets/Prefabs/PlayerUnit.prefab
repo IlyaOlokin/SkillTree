@@ -68,10 +68,18 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4884718464874992480, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
       insertIndex: 2
       addedObject: {fileID: 5186857671638254335}
-    - targetCorrespondingSourceObject: {fileID: 4884718464874992480, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8523740330438659201}
   m_SourcePrefab: {fileID: 100100000, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+--- !u!114 &938081596836799860 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1764322668812889385, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+  m_PrefabInstance: {fileID: 1547160346941917277}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6247231225684122429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f93b89c9d3cc83c408489d22280d214d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1746922921821734121 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 956679600491400372, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
@@ -81,6 +89,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9eefa3c3e8f12542b7971e661c10dd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2348799739973103062 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+  m_PrefabInstance: {fileID: 1547160346941917277}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6247231225684122429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c8a96caa916edd43a198bfc3bbccc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6247231225684122429 stripped
@@ -102,24 +121,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: {fileID: 1746922921821734121}
   attacker: {fileID: 7463270014328316196}
-  attributes: {fileID: 8523740330438659201}
-  skillTrees: []
---- !u!114 &8523740330438659201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6247231225684122429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c8a96caa916edd43a198bfc3bbccc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseAttributeModifiers: {fileID: 11400000, guid: 08f5d0b3db26af6499e879706e505263, type: 2}
-  Strength: 1
-  Dexterity: 1
-  Intelligence: 1
+  attributes: {fileID: 2348799739973103062}
+  effectController: {fileID: 938081596836799860}
+  baseInnateModifiers: {fileID: 11400000, guid: 1a46b3c2f5406c24ea26f911fd14b6a4, type: 2}
+  <SkillTree>k__BackingField: {fileID: 0}
 --- !u!114 &7463270014328316196 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8280504164276382073, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}

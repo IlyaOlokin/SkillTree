@@ -67,6 +67,7 @@ public class SkillTreeCameraController : MonoBehaviour
     
     void HandleZoom()
     {
+        
         float scroll = Input.mouseScrollDelta.y;
 
         if (Mathf.Abs(scroll) < 0.01f)
@@ -76,6 +77,9 @@ public class SkillTreeCameraController : MonoBehaviour
             return;
 
         if (!cam.orthographic)
+            return;
+        
+        if (IsPointerBlocked())
             return;
 
         cam.orthographicSize -= scroll * zoomSpeed;

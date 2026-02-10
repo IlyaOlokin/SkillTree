@@ -121,7 +121,7 @@ namespace Battle
 
         public void MergeModifier(StatType statType, StatModifier other)
         {
-            ChangeModifierValue(new ModifierContainer(ModifierType.More, statType, other.Increased.Value));
+            ChangeModifierValue(new ModifierContainer(ModifierType.Added, statType, other.Added.Value));
             ChangeModifierValue(new ModifierContainer(ModifierType.Increased, statType, other.Increased.Value));
 
             foreach (var modValue in other.More)

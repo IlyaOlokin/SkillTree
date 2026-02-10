@@ -68,6 +68,8 @@ namespace SkillTree
 
         public void Deallocate()
         {
+            if (!IsAllocated) return;
+            
             IsAllocated = false;
             bool allowDeallocation = true;
             foreach (var node in ConnectedNodes)
