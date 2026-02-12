@@ -4,17 +4,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Slider))]
-
 public class HealthBar : MonoBehaviour
 {
     [SerializeField] private Health health;
-    [SerializeField] private TMP_Text text;
-    private Slider slider;
+    [SerializeField] private GSlider slider;
 
     private void Awake()
     {
-        slider = GetComponent<Slider>();
         health.OnHealthChanged += UpdateHealthBar;
         health.OnMaximumHealthChanged += UpdateHealthBar;
     }
@@ -26,7 +22,7 @@ public class HealthBar : MonoBehaviour
 
     private void UpdateHealthBar()
     {
-        slider.value = health.CurrentHealth / health.MaxHealth;
-        text.text = Math.Ceiling(health.CurrentHealth) + "/" + Math.Round(health.MaxHealth);
+        slider.UpdateBar(health.CurrentHealth / health.MaxHealth);
+        slider.UpdateText(Math.Ceiling(health.CurrentHealth) + "/" + Math.Round(health.MaxHealth));
     }
 }

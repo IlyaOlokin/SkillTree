@@ -22,3 +22,4 @@ namespace Battle
         public Dictionary<DamageType, float> Damage = new Dictionary<DamageType, float>();
     }
 }
+

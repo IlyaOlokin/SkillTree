@@ -10,6 +10,7 @@ namespace Battle
         public static PlayerUnit Instance;
 
         [field: SerializeField] public BaseSkillTree SkillTree {get; private set; }
+        [field: SerializeField] public UnitLevel UnitLevel {get; private set; }
 
         protected override void Awake()
         {
@@ -18,6 +19,7 @@ namespace Battle
             {
                 Instance = this;
             }
+            UnitLevel.Init(this);
 
             SkillTree.OnSkillTreeChanged += RaiseOnModsChanged;
             // on dbuffed/debuffed

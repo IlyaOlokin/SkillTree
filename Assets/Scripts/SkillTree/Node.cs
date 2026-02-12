@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using Battle;
 using Unity.Collections;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace SkillTree
     public class Node : MonoBehaviour
     { 
         public virtual bool IsAllocated { get; private set; }
-        
+        [SerializeField] private int nodeCost = 1;
         [SerializeField] private List<Node> connectedNodes = new List<Node>();
         public IReadOnlyList<Node> ConnectedNodes => connectedNodes;
 
@@ -59,6 +60,8 @@ namespace SkillTree
         public void Allocate()
         {
             if (!CanBeAllocated()) return;
+            if (!PlayerUnit.Instance.UnitLevel.TrySpendSkillPoints(nodeCost))
+                return;
             
             IsAllocated = true;
             
@@ -86,6 +89,8 @@ namespace SkillTree
                 IsAllocated = true;
                 return;
             }
+
+            PlayerUnit.Instance.UnitLevel.RefundSkillPoints(nodeCost);
             
             OnAllocatedChanged?.Invoke(this);
             OnAnyNodeAllocatedChanged?.Invoke(this);

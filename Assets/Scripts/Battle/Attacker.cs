@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class Attacker : MonoBehaviour
+    public class Attacker : MonoBehaviour, IUnitComponent
     {
         private Unit _owner;
         public ITarget Target { get; private set; }

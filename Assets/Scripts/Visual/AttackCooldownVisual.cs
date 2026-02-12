@@ -8,13 +8,8 @@ namespace Visual
     public class AttackCooldownVisual : MonoBehaviour
     {
         [SerializeField] private Attacker attacker;
-        private Slider slider;
-
-        private void Awake()
-        {
-            slider = GetComponent<Slider>();
-        }
-
+        [SerializeField] private GSlider slider;
+        
         private void Start()
         {
             UpdateSlider();
@@ -27,7 +22,7 @@ namespace Visual
 
         private void UpdateSlider()
         {
-            slider.value = attacker.AttackProgress;
+            slider.UpdateBar(attacker.AttackProgress);
         }
     }
 

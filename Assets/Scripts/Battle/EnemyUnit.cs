@@ -9,6 +9,12 @@ namespace Battle
         {
             attacker.SetTarget(PlayerUnit.Instance);
         }
+
+        protected override void Death()
+        {
+            base.Death();
+            PlayerUnit.Instance.UnitLevel.AddExperience(40);
+        }
     }
 }
 

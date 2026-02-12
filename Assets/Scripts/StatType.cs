@@ -39,6 +39,9 @@ public enum StatType
     Accuracy = 21,
     MaximumHealth = 22,
     HealthRegenerationPerSecond = 31,
+    BarrierCount = 32,
+    BarrierPower = 33,
+    BarrierRegenerationSpeed = 34,
     
     ElementalResistance = 27,
     FireResistance = 28,

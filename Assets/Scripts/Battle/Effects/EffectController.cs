@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class EffectController : MonoBehaviour
+    public class EffectController : MonoBehaviour, IUnitComponent
     {
         private Unit _owner;
 

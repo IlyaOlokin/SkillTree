@@ -5,13 +5,14 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class Health : MonoBehaviour
+    public class Health : MonoBehaviour, IUnitComponent
     {
         private Unit _owner;
 
         public float MaxHealth { get; private set; } = 100f;
 
         private float _currentHealth = 100f;
+        private float _cachedRegenerationSpeed;
         public float CurrentHealth
         {
             get => _currentHealth;
@@ -26,7 +27,7 @@ namespace Battle
         public void Init(Unit owner)
         {
             _owner = owner;
-            _owner.OnStatsRecalculated += UpdateMaximumHealth;
+            _owner.OnStatsRecalculated += UpdateHealthValues;
         }
 
         private void Update()
@@ -36,7 +37,7 @@ namespace Battle
 
         private void Regen()
         {
-            CurrentHealth += _owner.baseUnitModifiers.StatValues[StatType.HealthRegenerationPerSecond] * Time.deltaTime;
+            CurrentHealth += _cachedRegenerationSpeed * Time.deltaTime;
             OnHealthChanged?.Invoke();
         }
 
@@ -56,8 +57,10 @@ namespace Battle
             return CurrentHealth;
         }
 
-        private void UpdateMaximumHealth()
+        private void UpdateHealthValues()
         {
+            _cachedRegenerationSpeed = _owner.baseUnitModifiers.StatValues[StatType.HealthRegenerationPerSecond];
+            
             float currentHealthPercentage = CurrentHealth / MaxHealth;
             MaxHealth = _owner.baseUnitModifiers.StatValues[StatType.MaximumHealth];
             CurrentHealth = MaxHealth * currentHealthPercentage;

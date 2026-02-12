@@ -9,6 +9,7 @@ namespace Battle
     public class Unit : MonoBehaviour, ITarget
     {
         [SerializeField] public Health health;
+        [SerializeField] public EnergyBarrier barrier;
         [SerializeField] public Attacker attacker;
         [SerializeField] public Attributes attributes;
         [SerializeField] public EffectController effectController;
@@ -18,7 +19,10 @@ namespace Battle
         private List<Modifier> _outerModifiers = new List<Modifier>();
         
         public event Action OnModsChanged;
+        public event Action OnOuterModsChanged;
         public event Action OnStatsRecalculated;
+        
+        public event Action<Unit> OnDeath;
         
         public Unit UnitObject
         {
@@ -30,9 +34,11 @@ namespace Battle
         {
             health.OnHealthZero += Death;
             OnModsChanged += RecalculateMods;
+            OnOuterModsChanged += RaiseOnModsChanged;
 
             baseUnitModifiers = new BaseUnitModifiers();
             health.Init(this);
+            barrier.Init(this);
             attacker.Init(this);
             effectController.Init(this);
             RecalculateMods();
@@ -40,6 +46,7 @@ namespace Battle
 
         public void ReceiveDamage(DamageInstance damageInstance)
         {
+            barrier.TakeDamage(damageInstance);
             health.TakeDamage(damageInstance);
         }
 
@@ -95,18 +102,19 @@ namespace Battle
         public void AddOuterModifier(Modifier mod)
         {
             _outerModifiers.Add(mod);
-            RaiseOnModsChanged();
+            OnOuterModsChanged?.Invoke();
         }
         
         public void RemoveOuterModifier(Modifier mod)
         {
             _outerModifiers.Remove(mod);
-            RaiseOnModsChanged();
+            OnOuterModsChanged?.Invoke();
         }
 
 
-        private void Death()
+        protected virtual void Death()
         {
+            OnDeath?.Invoke(this);
             Destroy(gameObject);
         }
 

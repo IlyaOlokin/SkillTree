@@ -16,12 +16,12 @@ MonoBehaviour:
   baseModifiers:
   - modifierType: 0
     statType: 22
-    value: 100
+    value: 10
   - modifierType: 0
     statType: 18
     value: 0.25
   - modifierType: 0
-    statType: 5
+    statType: 4
     value: 1
   - modifierType: 0
     statType: 23

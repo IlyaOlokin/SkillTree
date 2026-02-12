@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae1f51100ecafc144b31813065a5776c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nodeCost: 1
   connectedNodes: []
   <Modifiers>k__BackingField: []
 --- !u!58 &4119631117331947586
