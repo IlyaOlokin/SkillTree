@@ -33,9 +33,9 @@ namespace Battle
             }
         }
         
-        public void ReceiveDamage(DamageInstance damageInstance)
+        public DamageInstance ReceiveDamage(DamageInstance damageInstance)
         {
-            UnitObject.ReceiveDamage(damageInstance);
+            return UnitObject.ReceiveDamage(damageInstance);
         }
 
         public void ReceiveDoT(DamageInstance damageInstance)

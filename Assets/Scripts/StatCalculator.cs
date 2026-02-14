@@ -27,8 +27,8 @@ public static class StatCalculator
             if (mod.IsInPriority(ModifierPriority.Special) && mod.IsApplicable(unit)) mod.ApplyEffect(unit);
         }
         
-        MergeDamageModifiers(unit.baseUnitModifiers);
-        MergeDefenceModifiers(unit.baseUnitModifiers);
+        MergeDamageModifiers(unit.BaseUnitModifiers);
+        MergeDefenceModifiers(unit.BaseUnitModifiers);
 
         CacheStatValues(unit);
     }
@@ -78,29 +78,29 @@ public static class StatCalculator
 
     private static void CacheStatValues(Unit unit)
     {
-        foreach (var statType in unit.baseUnitModifiers.StatModifiers.Keys)
+        foreach (var statType in unit.BaseUnitModifiers.StatModifiers.Keys)
         {
-            unit.baseUnitModifiers.StatValues[statType] = GetStat(unit.baseUnitModifiers, statType);
+            unit.BaseUnitModifiers.StatValues[statType] = GetStat(unit.BaseUnitModifiers, statType);
         }
     }
 
     private static void ApplyAttributes(Unit unit)
     {
-        float str = GetStat(unit.baseUnitModifiers, StatType.Strength);
-        float dex = GetStat(unit.baseUnitModifiers, StatType.Dexterity);
-        float intl = GetStat(unit.baseUnitModifiers, StatType.Intelligence);
+        float str = GetStat(unit.BaseUnitModifiers, StatType.Strength);
+        float dex = GetStat(unit.BaseUnitModifiers, StatType.Dexterity);
+        float intl = GetStat(unit.BaseUnitModifiers, StatType.Intelligence);
 
         foreach (var modifierContainer in unit.attributes.baseModifiersStrength)
         {
-            unit.baseUnitModifiers.ChangeModifierValue(modifierContainer * str);
+            unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer * str);
         }
         foreach (var modifierContainer in unit.attributes.baseModifiersDexterity)
         {
-            unit.baseUnitModifiers.ChangeModifierValue(modifierContainer * dex);
+            unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer * dex);
         }
         foreach (var modifierContainer in unit.attributes.baseModifiersIntelligence)
         {
-            unit.baseUnitModifiers.ChangeModifierValue(modifierContainer * intl);
+            unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer * intl);
         }
     }
     

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ae2c76a44cd46b4fb774aef2b8bbcf2, type: 3}
+  m_Name: PlayerInnateStats
+  m_EditorClassIdentifier: 
+  <Priorities>k__BackingField: 00000000
+  baseModifiers:
+  - modifierType: 0
+    statType: 22
+    value: 90
+  - modifierType: 0
+    statType: 18
+    value: 0.2
+  - modifierType: 0
+    statType: 4
+    value: 1
+  - modifierType: 0
+    statType: 23
+    value: 1
+  - modifierType: 0
+    statType: 24
+    value: 1
+  - modifierType: 0
+    statType: 25
+    value: 1
+  - modifierType: 0
+    statType: 16
+    value: 0.05
+  - modifierType: 0
+    statType: 17
+    value: 0.5

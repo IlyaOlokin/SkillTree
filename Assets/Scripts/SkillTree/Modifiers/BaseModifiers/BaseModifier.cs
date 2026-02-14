@@ -12,7 +12,7 @@ namespace SkillTree
 
         public override void ApplyEffect(Unit unit)
         {
-            unit.baseUnitModifiers.ChangeModifierValue(modifierContainer);
+            unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer);
         }
         
         public override void ApplyEffect(DamageInfo damageInfo)

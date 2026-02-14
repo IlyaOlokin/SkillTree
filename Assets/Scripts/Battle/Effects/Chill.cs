@@ -41,10 +41,10 @@ namespace Battle
 
         public void CalculateChillPower(Unit unit)
         {
-            _chillPower = CHILL_BASE_SLOW * (1 + unit.baseUnitModifiers.StatValues[StatType.ChillMagnitude]);
+            _chillPower = CHILL_BASE_SLOW * (1 + unit.BaseUnitModifiers.StatValues[StatType.ChillMagnitude]);
         }
         
-        public static void ApplyChill(Unit attacker, DamageInstance damageInstance, Unit defender)
+        public static void Apply(Unit attacker, DamageInstance damageInstance, Unit defender)
         {
             if (damageInstance.Damage[DamageType.Cold] <= 0) return;
             float damagePercentOfMaxHealth = damageInstance.Damage[DamageType.Cold] / defender.health.MaxHealth;

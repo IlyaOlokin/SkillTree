@@ -24,7 +24,7 @@ public class PlayerStatsWindow : MonoBehaviour
             Debug.LogWarning("Stat text count mismatch");
         int min = Mathf.Min(stats.Count, statTexts.Count);
 
-        var statValues = _player.baseUnitModifiers.StatValues;
+        var statValues = _player.BaseUnitModifiers.StatValues;
 
         for (int i = 0; i < min; i++)
         {

@@ -13,8 +13,10 @@ namespace Battle
         [SerializeField] public Attacker attacker;
         [SerializeField] public Attributes attributes;
         [SerializeField] public EffectController effectController;
-        [SerializeField] public BaseUnitModifiers baseUnitModifiers;
         [SerializeField] protected BaseInnateModifiers baseInnateModifiers;
+        [SerializeField] protected BaseInnateModifiers innateModifiers;
+
+        public BaseUnitModifiers BaseUnitModifiers;
         
         private List<Modifier> _outerModifiers = new List<Modifier>();
         
@@ -40,7 +42,7 @@ namespace Battle
             // on lowlife changed
             // ...
 
-            baseUnitModifiers = new BaseUnitModifiers();
+            BaseUnitModifiers = new BaseUnitModifiers();
             health.Init(this);
             barrier.Init(this);
             attacker.Init(this);
@@ -52,15 +54,25 @@ namespace Battle
             RecalculateMods();
         }
 
-        public void ReceiveDamage(DamageInstance damageInstance)
+        public DamageInstance ReceiveDamage(DamageInstance damageInstance)
         {
             barrier.TakeDamage(damageInstance);
-            health.TakeDamage(damageInstance);
+            return health.TakeDamage(damageInstance);
+        }
+
+        public void DamageDealt(DamageInstance damageInstance)
+        {
+            
         }
 
         public void ReceiveDoT(DamageInstance damageInstance)
         {
             health.TakeDamage(damageInstance, false);
+        }
+
+        public void ReceiveHeal(float amount)
+        {
+            health.TakeHeal(amount);
         }
 
         public void OnEvaded(DamageInstance damageInstance)
@@ -89,8 +101,9 @@ namespace Battle
         
         private void ResetUnit()
         {
-            baseUnitModifiers.Reset();
+            BaseUnitModifiers.Reset();
             baseInnateModifiers.ApplyEffect(this);
+            innateModifiers.ApplyEffect(this);
         }
 
         public List<Modifier> GetAllModifiers()

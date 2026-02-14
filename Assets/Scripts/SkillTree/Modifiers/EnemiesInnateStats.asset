@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ae2c76a44cd46b4fb774aef2b8bbcf2, type: 3}
-  m_Name: PlayerBaseStats
+  m_Name: EnemiesInnateStats
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 00000000
   baseModifiers:
   - modifierType: 0
     statType: 22
-    value: 100
+    value: 10
   - modifierType: 0
     statType: 18
-    value: 0.2
+    value: 0.25
   - modifierType: 0
     statType: 4
     value: 1
@@ -37,4 +37,7 @@ MonoBehaviour:
     value: 0.05
   - modifierType: 0
     statType: 17
-    value: 0.5
+    value: 0.2
+  - modifierType: 0
+    statType: 32
+    value: 1

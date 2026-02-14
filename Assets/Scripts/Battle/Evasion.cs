@@ -8,9 +8,9 @@ namespace Battle
     {
         public static bool ApplyEvasion(DamageInstance damage, Unit defender, Unit attacker)
         {
-            float evasion = defender.baseUnitModifiers.StatValues[StatType.Evasion];
+            float evasion = defender.BaseUnitModifiers.StatValues[StatType.Evasion];
             
-            float accuracy = attacker.baseUnitModifiers.StatValues[StatType.Accuracy];
+            float accuracy = attacker.BaseUnitModifiers.StatValues[StatType.Accuracy];
             
             float hitChance = accuracy / (evasion + accuracy);
             return Random.Range(0f,1f) > hitChance;

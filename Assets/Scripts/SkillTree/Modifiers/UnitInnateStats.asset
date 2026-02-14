@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ae2c76a44cd46b4fb774aef2b8bbcf2, type: 3}
-  m_Name: EnemiesBaseStats
+  m_Name: UnitInnateStats
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 00000000
   baseModifiers:
@@ -18,26 +18,8 @@ MonoBehaviour:
     statType: 22
     value: 10
   - modifierType: 0
-    statType: 18
-    value: 0.25
-  - modifierType: 0
-    statType: 4
+    statType: 35
     value: 1
   - modifierType: 0
-    statType: 23
-    value: 1
-  - modifierType: 0
-    statType: 24
-    value: 1
-  - modifierType: 0
-    statType: 25
-    value: 1
-  - modifierType: 0
-    statType: 16
-    value: 0.05
-  - modifierType: 0
-    statType: 17
-    value: 0.2
-  - modifierType: 0
-    statType: 32
+    statType: 37
     value: 1

@@ -31,12 +31,14 @@ namespace Battle
             Resistance.ApplyResistanceMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);
             
             // Ailments
-            Bleed.ApplyBleed(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
-            Ignite.ApplyIgnite(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
-            Chill.ApplyChill(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
-            Overcharge.ApplyOvercharge(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
+            Bleed.Apply(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
+            Ignite.Apply(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
+            Chill.Apply(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
+            Overcharge.Apply(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
             
-            defender.ReceiveDamage(damageInfo.DamageInstance);
+            DamageInstance damageDealt = defender.ReceiveDamage(damageInfo.DamageInstance);
+            LifeSteel.Apply(attackerUnit, damageDealt);
+            attackerUnit.DamageDealt(damageDealt);
         }
     }
 }

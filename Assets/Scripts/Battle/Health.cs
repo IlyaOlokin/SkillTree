@@ -37,11 +37,19 @@ namespace Battle
 
         private void Regen()
         {
-            CurrentHealth += _cachedRegenerationSpeed * Time.deltaTime;
+            TakeHeal(_cachedRegenerationSpeed * Time.deltaTime, false);
             OnHealthChanged?.Invoke();
         }
 
-        public float TakeDamage(DamageInstance damageInstance, bool displayDamage = true)
+        public void TakeHeal(float amount, bool displayHeal = true)
+        {
+            float previousHealth = CurrentHealth;
+            CurrentHealth += amount;
+            if (displayHeal) OnHealthChangedDelta?.Invoke(previousHealth - CurrentHealth);
+            OnHealthChanged?.Invoke();
+        }
+
+        public DamageInstance TakeDamage(DamageInstance damageInstance, bool displayDamage = true)
         {
             float previousHealth = CurrentHealth;
             foreach (var damageValue in damageInstance.Damage.Values)
@@ -54,15 +62,15 @@ namespace Battle
             {
                 OnHealthZero?.Invoke();
             }
-            return CurrentHealth;
+            return damageInstance;
         }
 
         private void UpdateHealthValues()
         {
-            _cachedRegenerationSpeed = _owner.baseUnitModifiers.StatValues[StatType.HealthRegenerationPerSecond];
+            _cachedRegenerationSpeed = _owner.BaseUnitModifiers.StatValues[StatType.HealthRegenerationPerSecond];
             
             float currentHealthPercentage = CurrentHealth / MaxHealth;
-            MaxHealth = _owner.baseUnitModifiers.StatValues[StatType.MaximumHealth];
+            MaxHealth = _owner.BaseUnitModifiers.StatValues[StatType.MaximumHealth];
             CurrentHealth = MaxHealth * currentHealthPercentage;
             OnMaximumHealthChanged?.Invoke();
         }

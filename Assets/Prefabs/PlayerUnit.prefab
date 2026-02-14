@@ -138,7 +138,8 @@ MonoBehaviour:
   attacker: {fileID: 7463270014328316196}
   attributes: {fileID: 2348799739973103062}
   effectController: {fileID: 938081596836799860}
-  baseInnateModifiers: {fileID: 11400000, guid: 1a46b3c2f5406c24ea26f911fd14b6a4, type: 2}
+  baseInnateModifiers: {fileID: 11400000, guid: b6defa9947d3b4448be5e8d11b6147e7, type: 2}
+  innateModifiers: {fileID: 11400000, guid: 1a46b3c2f5406c24ea26f911fd14b6a4, type: 2}
   <SkillTree>k__BackingField: {fileID: 0}
   <UnitLevel>k__BackingField: {fileID: 2317438460122470787}
 --- !u!114 &2317438460122470787

@@ -43,7 +43,7 @@ namespace Battle
 
         private float GetCalculatedAttackSpeed()
         {
-            return _owner.baseUnitModifiers.StatValues[StatType.AttackSpeed];
+            return _owner.BaseUnitModifiers.StatValues[StatType.AttackSpeed];
         }
 
         private void ResetAttackCooldown()
@@ -56,7 +56,7 @@ namespace Battle
             DamageInfo damageInfo = new DamageInfo()
             {
                 owner = _owner,
-                BaseUnitModifiers = new BaseUnitModifiers(_owner.baseUnitModifiers)
+                BaseUnitModifiers = new BaseUnitModifiers(_owner.BaseUnitModifiers)
             };
             
             AttackProcessor.HandleAttack(_owner, damageInfo, Target);

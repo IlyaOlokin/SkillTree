@@ -15,7 +15,9 @@ namespace Visual
         private void DisplayHealthChangedNotification(float deltaHealth)
         {
             var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
-            newEffect.WriteDamage(Mathf.Abs(deltaHealth));
+            
+            if (deltaHealth > 0) newEffect.WriteDamage(Mathf.Abs(deltaHealth));
+            else if (deltaHealth < 0) newEffect.WriteHeal(Mathf.Abs(deltaHealth));
         }
     }
 }

@@ -11,8 +11,8 @@ namespace SkillTree
         
         public override void ApplyEffect(Unit unit)
         {
-            float regen = StatCalculator.GetStat(unit.baseUnitModifiers, StatType.MaximumHealth) * healthRegenerationPercentage;
-            unit.baseUnitModifiers.ChangeModifierValue(new ModifierContainer(ModifierType.Added, StatType.HealthRegenerationPerSecond, regen));
+            float regen = StatCalculator.GetStat(unit.BaseUnitModifiers, StatType.MaximumHealth) * healthRegenerationPercentage;
+            unit.BaseUnitModifiers.ChangeModifierValue(new ModifierContainer(ModifierType.Added, StatType.HealthRegenerationPerSecond, regen));
         }
 
         public override string GetDescription()

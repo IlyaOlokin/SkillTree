@@ -16,7 +16,7 @@ namespace SkillTree
         {
             foreach (var modifier in baseModifiers)
             {
-                unit.baseUnitModifiers.SetModifierValue(modifier);
+                unit.BaseUnitModifiers.ChangeModifierValue(modifier);
             }
         }
     }

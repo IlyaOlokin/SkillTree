@@ -22,11 +22,11 @@ namespace Battle
         private void CalculateBonuses(Unit unit)
         {
             MoreDamage = ScriptableObject.CreateInstance<BaseModifier>();
-            MoreDamage.modifierContainer = new ModifierContainer(ModifierType.More, StatType.Damage, BASE_MORE_DAMAGE_BONUS * (1 + unit.baseUnitModifiers.StatValues[StatType.OverchargeMagnitude]));
+            MoreDamage.modifierContainer = new ModifierContainer(ModifierType.More, StatType.Damage, BASE_MORE_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.StatValues[StatType.OverchargeMagnitude]));
             MoreDamage.SetPriorities(new List<ModifierPriority>() { ModifierPriority.OnAttack });
             
             MoreCritDamageBonus = ScriptableObject.CreateInstance<BaseModifier>();
-            MoreCritDamageBonus.modifierContainer = new ModifierContainer(ModifierType.More, StatType.CritDamageBonus, BASE_MORE_CRIT_DAMAGE_BONUS * (1 + unit.baseUnitModifiers.StatValues[StatType.OverchargeMagnitude]));
+            MoreCritDamageBonus.modifierContainer = new ModifierContainer(ModifierType.More, StatType.CritDamageBonus, BASE_MORE_CRIT_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.StatValues[StatType.OverchargeMagnitude]));
             MoreCritDamageBonus.SetPriorities(new List<ModifierPriority>() { ModifierPriority.OnAttack });
         }
 
@@ -35,7 +35,7 @@ namespace Battle
             return IsUsed;
         }
 
-        public static void ApplyOvercharge(Unit attacker, DamageInstance damageInstance, Unit defender)
+        public static void Apply(Unit attacker, DamageInstance damageInstance, Unit defender)
         {
             if (damageInstance.Damage[DamageType.Lightning] <= 0) return;
             float damagePercentOfMaxHealth = damageInstance.Damage[DamageType.Lightning] / defender.health.MaxHealth;

@@ -258,7 +258,8 @@ MonoBehaviour:
   attacker: {fileID: 8755844548079378974}
   attributes: {fileID: 4506205863650963180}
   effectController: {fileID: 1375113619294594638}
-  baseInnateModifiers: {fileID: 11400000, guid: 2a5c90cf58293c7409b2e72c4f4f6c5d, type: 2}
+  baseInnateModifiers: {fileID: 11400000, guid: b6defa9947d3b4448be5e8d11b6147e7, type: 2}
+  innateModifiers: {fileID: 11400000, guid: 2a5c90cf58293c7409b2e72c4f4f6c5d, type: 2}
 --- !u!4 &7142852372494476733 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7514751793277906650, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}

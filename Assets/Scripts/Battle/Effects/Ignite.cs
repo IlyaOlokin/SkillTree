@@ -43,11 +43,11 @@ namespace Battle
         private float CalculateTotalDamage(Unit unit, float fireDamageDealt)
         {
             float magnitude = BASE_DAMAGE_PERCENTAGE *
-                              (1 + unit.baseUnitModifiers.StatValues[StatType.IgniteMagnitude]);
+                              (1 + unit.BaseUnitModifiers.StatValues[StatType.IgniteMagnitude]);
             return fireDamageDealt * (1 + magnitude);
         }
 
-        public static void ApplyIgnite(Unit attacker, DamageInstance damageInstance, Unit defender)
+        public static void Apply(Unit attacker, DamageInstance damageInstance, Unit defender)
         {
             if (damageInstance.Damage[DamageType.Fire] <= 0) return;
             float damagePercentOfMaxHealth = damageInstance.Damage[DamageType.Fire] / defender.health.MaxHealth;
