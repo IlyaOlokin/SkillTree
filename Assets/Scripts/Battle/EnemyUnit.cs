@@ -5,8 +5,9 @@ namespace Battle
 {
     public class EnemyUnit : Unit
     {
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             attacker.SetTarget(PlayerUnit.Instance);
         }
 

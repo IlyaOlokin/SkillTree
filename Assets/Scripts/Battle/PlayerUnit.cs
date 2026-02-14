@@ -22,14 +22,11 @@ namespace Battle
             UnitLevel.Init(this);
 
             SkillTree.OnSkillTreeChanged += RaiseOnModsChanged;
-            // on dbuffed/debuffed
-            // on status changed
-            // on lowlife changed
-            // ...
         }
         
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             attacker.SetTarget(AttackResolver.instance);
         }
         

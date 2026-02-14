@@ -42,6 +42,7 @@ public enum StatType
     BarrierCount = 32,
     BarrierPower = 33,
     BarrierRegenerationSpeed = 34,
+    BarrierDamageTypeMask = 35,
     
     ElementalResistance = 27,
     FireResistance = 28,

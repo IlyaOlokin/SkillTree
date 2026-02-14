@@ -35,12 +35,20 @@ namespace Battle
             health.OnHealthZero += Death;
             OnModsChanged += RecalculateMods;
             OnOuterModsChanged += RaiseOnModsChanged;
+            // on dbuffed/debuffed
+            // on status changed
+            // on lowlife changed
+            // ...
 
             baseUnitModifiers = new BaseUnitModifiers();
             health.Init(this);
             barrier.Init(this);
             attacker.Init(this);
             effectController.Init(this);
+        }
+
+        protected virtual void Start()
+        {
             RecalculateMods();
         }
 
