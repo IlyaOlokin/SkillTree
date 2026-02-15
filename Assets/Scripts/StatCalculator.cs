@@ -29,6 +29,7 @@ public static class StatCalculator
         
         MergeDamageModifiers(unit.BaseUnitModifiers);
         MergeDefenceModifiers(unit.BaseUnitModifiers);
+        MergeNegativeEffectModifiers(unit.BaseUnitModifiers);
 
         CacheStatValues(unit);
     }
@@ -58,6 +59,16 @@ public static class StatCalculator
         baseUnitModifiers.MergeModifier(StatType.Evasion, baseUnitModifiers.StatModifiers[StatType.Defence]);
         
         baseUnitModifiers.ClearModifier(StatType.Defence);
+    }
+    
+    public static void MergeNegativeEffectModifiers(BaseUnitModifiers baseUnitModifiers)
+    {
+        baseUnitModifiers.MergeModifier(StatType.IgniteMagnitude, baseUnitModifiers.StatModifiers[StatType.NegativeEffectMagnitude]);
+        baseUnitModifiers.MergeModifier(StatType.ChillMagnitude, baseUnitModifiers.StatModifiers[StatType.NegativeEffectMagnitude]);
+        baseUnitModifiers.MergeModifier(StatType.OverchargeMagnitude, baseUnitModifiers.StatModifiers[StatType.NegativeEffectMagnitude]);
+        baseUnitModifiers.MergeModifier(StatType.BleedMagnitude, baseUnitModifiers.StatModifiers[StatType.NegativeEffectMagnitude]);
+        
+        baseUnitModifiers.ClearModifier(StatType.NegativeEffectMagnitude);
     }
     
     public static float GetStat(BaseUnitModifiers baseUnitModifiers, StatType statType)

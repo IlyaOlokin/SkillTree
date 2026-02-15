@@ -19,5 +19,24 @@ namespace SkillTree
                 unit.BaseUnitModifiers.ChangeModifierValue(modifier);
             }
         }
+        
+        public void Clear()
+        {
+            baseModifiers.Clear();
+        }
+
+        public void AddModifier(ModifierContainer modifier)
+        {
+            baseModifiers.Add(new ModifierContainer(
+                modifier.modifierType,
+                modifier.statType,
+                modifier.value));
+        }
+
+        public void AddRange(IEnumerable<ModifierContainer> modifiers)
+        {
+            foreach (var mod in modifiers)
+                AddModifier(mod);
+        }
     }
 }

@@ -6,6 +6,9 @@ namespace Battle
     {
         public static void Apply(Unit attacker, DamageInstance damageInstance)
         {
+            float lifeSteel = attacker.BaseUnitModifiers.StatValues[StatType.LifeSteel];
+            if (lifeSteel <= 0) return;
+            
             DamageType damageType = (DamageType) attacker.BaseUnitModifiers.StatValues[StatType.LifeSteelTypeMask];
 
             float totalValidDamage = 0;
@@ -16,7 +19,9 @@ namespace Battle
                     totalValidDamage += damage.Value;
                 }
             }
-            attacker.ReceiveHeal(totalValidDamage * attacker.BaseUnitModifiers.StatValues[StatType.LifeSteel]);
+
+            
+            attacker.ReceiveHeal(totalValidDamage * lifeSteel);
         }
     }
 }

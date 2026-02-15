@@ -136,7 +136,7 @@ namespace Battle
         protected virtual void Death()
         {
             OnDeath?.Invoke(this);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
 
         public bool IsOnLowLife()

@@ -7,7 +7,7 @@ namespace Battle
     {
         public static AttackResolver instance;
         
-        private List<EnemyUnit> enemies;
+        private List<Unit> enemies;
 
         public Unit UnitObject
         {
@@ -16,6 +16,8 @@ namespace Battle
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     if (enemies[i] == null)
+                        continue;
+                    if (enemies[i].gameObject.activeSelf == false)
                         continue;
                     return enemies[i];
                 }
@@ -48,9 +50,9 @@ namespace Battle
             
         }
 
-        public void SetNewEnemies(List<EnemyUnit> enemyUnits)
+        public void SetNewEnemies(List<Unit> enemyUnits)
         {
-            enemies = new List<EnemyUnit>(enemyUnits);
+            enemies = new List<Unit>(enemyUnits);
         }
 
         

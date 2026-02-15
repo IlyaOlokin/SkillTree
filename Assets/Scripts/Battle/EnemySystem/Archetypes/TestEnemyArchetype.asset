@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfff9238fe22d774e9c6f626c2244278, type: 3}
+  m_Name: TestEnemyArchetype
+  m_EditorClassIdentifier: 
+  healthWeight: 0.195
+  damageWeight: 0.3912517
+  defenseWeight: 0.41374826
+  barrierWeight: 0
+  baseAttackSpeed: 0.2
+  damageTypes:
+  - statType: 4
+    weight: 0.5
+  defenseTypes: []
+  possibleAffixes:
+  - {fileID: 11400000, guid: c2bdd953a1ec2154d927e63e023d1378, type: 2}

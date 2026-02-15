@@ -48,8 +48,10 @@ namespace SkillTree
 
         public static ModifierContainer operator *(ModifierContainer src, float value)
         {
-            src.value *= value;
-            return src;
+            return new ModifierContainer(
+                src.modifierType,
+                src.statType,
+                src.value * value);
         }
 
         public string GetDescription()
