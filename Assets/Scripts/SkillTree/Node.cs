@@ -6,12 +6,16 @@ using System.Text;
 using Battle;
 using Unity.Collections;
 using UnityEngine;
+using Zenject;
 
 namespace SkillTree
 {
     [Serializable]
     public class Node : MonoBehaviour
     { 
+        [Inject] private UnitLevel _unitLevel;
+        [Inject] private SkillTreeUI _skillTreeUI;
+        
         public virtual bool IsAllocated { get; private set; }
         [SerializeField] private int nodeCost = 1;
         [SerializeField] private List<Node> connectedNodes = new List<Node>();
@@ -60,7 +64,7 @@ namespace SkillTree
         public void Allocate()
         {
             if (!CanBeAllocated()) return;
-            if (!PlayerUnit.Instance.UnitLevel.TrySpendSkillPoints(nodeCost))
+            if (!_unitLevel.TrySpendSkillPoints(nodeCost))
                 return;
             
             IsAllocated = true;
@@ -90,7 +94,7 @@ namespace SkillTree
                 return;
             }
 
-            PlayerUnit.Instance.UnitLevel.RefundSkillPoints(nodeCost);
+            _unitLevel.RefundSkillPoints(nodeCost);
             
             OnAllocatedChanged?.Invoke(this);
             OnAnyNodeAllocatedChanged?.Invoke(this);
@@ -111,12 +115,12 @@ namespace SkillTree
 
         private void OnMouseEnter()
         {
-            SkillTreeUI.instance.DisplayNodeDescription(this);
+            _skillTreeUI.DisplayNodeDescription(this);
         }
 
         private void OnMouseExit()
         {
-            SkillTreeUI.instance.HideNodeDescription();
+            _skillTreeUI.HideNodeDescription();
         }
 
         public virtual string GetDescription()

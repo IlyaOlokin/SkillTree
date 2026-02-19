@@ -42,6 +42,25 @@ namespace SkillTree
 
             DFS(root);
         }
+
+        protected void UnsubscribeAllFromRoot(Node root, Action<Node> action)
+        {
+            var visited = new HashSet<Node>();
+
+            void DFS(Node current)
+            {
+                if (current == null || !visited.Add(current))
+                    return;
+
+                current.OnAllocatedChanged -= action;
+                foreach (var next in current.ConnectedNodes)
+                {
+                    DFS(next);
+                }
+            }
+
+            DFS(root);
+        }
     }
 }
 

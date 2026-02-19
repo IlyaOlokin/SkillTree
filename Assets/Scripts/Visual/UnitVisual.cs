@@ -12,6 +12,12 @@ namespace Visual
             unit.health.OnHealthChangedDelta += DisplayHealthChangedNotification;
         }
 
+        private void OnDestroy()
+        {
+            if (unit != null && unit.health != null)
+                unit.health.OnHealthChangedDelta -= DisplayHealthChangedNotification;
+        }
+
         private void DisplayHealthChangedNotification(float deltaHealth)
         {
             var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);

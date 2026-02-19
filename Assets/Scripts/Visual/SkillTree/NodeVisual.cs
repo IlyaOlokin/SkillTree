@@ -23,6 +23,12 @@ namespace Visual
             node.OnAllocatedChanged += UpdateVisual;
         }
 
+        private void OnDestroy()
+        {
+            if (node != null)
+                node.OnAllocatedChanged -= UpdateVisual;
+        }
+
         private void Start()
         {
             UpdateVisual(node);

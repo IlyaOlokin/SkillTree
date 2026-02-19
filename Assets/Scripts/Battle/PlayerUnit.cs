@@ -2,23 +2,20 @@ using System;
 using System.Collections.Generic;
 using SkillTree;
 using UnityEngine;
+using Zenject;
 
 namespace Battle
 {
     public class PlayerUnit : Unit
     {
-        public static PlayerUnit Instance;
-
         [field: SerializeField] public BaseSkillTree SkillTree {get; private set; }
         [field: SerializeField] public UnitLevel UnitLevel {get; private set; }
+        
+        [Inject(Id = TargetIds.Enemies)] private ITarget _enemyTarget;
 
         protected override void Awake()
         {
             base.Awake();
-            if (Instance == null)
-            {
-                Instance = this;
-            }
             UnitLevel.Init(this);
 
             SkillTree.OnSkillTreeChanged += RaiseOnModsChanged;
@@ -27,9 +24,15 @@ namespace Battle
         protected override void Start()
         {
             base.Start();
-            attacker.SetTarget(AttackResolver.instance);
+            attacker.SetTarget(_enemyTarget);
         }
-        
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            if (SkillTree != null)
+                SkillTree.OnSkillTreeChanged -= RaiseOnModsChanged;
+        }
     }
 }
 

@@ -4,9 +4,12 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class SkillPointVisual : MonoBehaviour
 {
+    [Inject] private UnitLevel _unitLevel;
+    
     [SerializeField] private TMP_Text skillPointCount;
     [SerializeField] private Image backgroundImage;
     [SerializeField] private Color defaultColor;
@@ -19,9 +22,7 @@ public class SkillPointVisual : MonoBehaviour
     [SerializeField] private float idlePulseScaleAmount = 1.05f;
     [SerializeField] private float idlePulseDuration = 0.8f;
     [SerializeField] private float returnToOneDuration = 0.25f;
-
-    private UnitLevel _unitLevel;
-
+    
     private Tween _idlePulseTween;
     private Tween _colorTween;
     private Tween _returnTween;
@@ -31,7 +32,6 @@ public class SkillPointVisual : MonoBehaviour
 
     private void Start()
     {
-        _unitLevel = PlayerUnit.Instance.UnitLevel;
         _unitLevel.OnSkillPointsChanged += UpdateCount;
 
         UpdateCount(_unitLevel.SkillPoints);

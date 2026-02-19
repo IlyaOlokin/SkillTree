@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Battle
@@ -15,7 +16,10 @@ namespace Battle
         {
             var enemyFactory = new EnemyFactory(database);
             _waveFactory = new WaveFactory(enemyFactory);
-            
+        }
+
+        private void Start()
+        {
             // attackResolver.SetNewEnemies ???
             Spawn(level);
         }

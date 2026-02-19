@@ -3,16 +3,8 @@ using UnityEngine;
 
 public class SkillTreeUI : MonoBehaviour
 {
-    public static SkillTreeUI instance;
     [SerializeField] protected NodeDescription NodeDescriptionPrefab;
     private NodeDescription NodeDescriptionInstance;
-    protected void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-    }
 
     public void DisplayNodeDescription(Node node)
     {

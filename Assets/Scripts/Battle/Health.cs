@@ -30,6 +30,12 @@ namespace Battle
             _owner.OnStatsRecalculated += UpdateHealthValues;
         }
 
+        private void OnDestroy()
+        {
+            if (_owner != null)
+                _owner.OnStatsRecalculated -= UpdateHealthValues;
+        }
+
         private void Update()
         {
             Regen();

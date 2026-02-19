@@ -15,6 +15,12 @@ namespace SkillTree
             OnAnyNodeChanged += ProcessNodeAllocation;
         }
 
+        private void OnDestroy()
+        {
+            UnsubscribeAllFromRoot(root, RaiseAnyNodeChanged);
+            OnAnyNodeChanged -= ProcessNodeAllocation;
+        }
+
         private void UpdateTree()
         {
             RaiseOnSkillTreeChanged();

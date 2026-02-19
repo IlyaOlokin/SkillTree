@@ -1,10 +1,13 @@
 using System;
 using UnityEngine;
+using Zenject;
 
 namespace Battle
 {
     public class EnemyUnit : Unit
     {
+        [Inject(Id = TargetIds.Player)] private ITarget _playerTarget;
+        [Inject] private UnitLevel _playerLevel;
         public EnemySpawnData SpawnData { get; private set; }
 
         public event Action OnInitialized; 
@@ -12,7 +15,7 @@ namespace Battle
         protected override void Start()
         {
             base.Start();
-            attacker.SetTarget(PlayerUnit.Instance);
+            attacker.SetTarget(_playerTarget);
         }
         
         public void Initialize(EnemySpawnData data)
@@ -25,7 +28,7 @@ namespace Battle
         protected override void Death()
         {
             base.Death();
-            PlayerUnit.Instance.UnitLevel.AddExperience(40);
+            _playerLevel.AddExperience(40);
         }
     }
 }

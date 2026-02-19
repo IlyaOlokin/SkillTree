@@ -16,6 +16,12 @@ namespace Visual
             UpdateText();
         }
 
+        private void OnDestroy()
+        {
+            if (limitedZone != null)
+                limitedZone.OnAllocatedCountChanged -= UpdateText;
+        }
+
         private void UpdateText()
         {
             text.text = limitedZone.CurrentAllocatedCount + "/" + limitedZone.MaxAllocatedNode;

@@ -23,6 +23,19 @@ namespace SkillTree
             }
         }
 
+        private void OnDestroy()
+        {
+            foreach (var node in nodes)
+            {
+                if (node == null)
+                    continue;
+
+                node.OnAllocatedChanged -= OnNodeChanged;
+                if (node.AdditionalAllocatedCondition == AllocationCondition)
+                    node.AdditionalAllocatedCondition = null;
+            }
+        }
+
         private bool AllocationCondition()
         {
             return CurrentAllocatedCount < MaxAllocatedNode;

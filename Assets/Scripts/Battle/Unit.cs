@@ -144,7 +144,7 @@ namespace Battle
             return health.CurrentHealth <= health.MaxHealth * 0.5f;
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             health.OnHealthZero -= Death;
         }

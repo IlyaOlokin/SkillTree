@@ -15,6 +15,15 @@ public class HealthBar : MonoBehaviour
         health.OnMaximumHealthChanged += UpdateHealthBar;
     }
 
+    private void OnDestroy()
+    {
+        if (health == null)
+            return;
+
+        health.OnHealthChanged -= UpdateHealthBar;
+        health.OnMaximumHealthChanged -= UpdateHealthBar;
+    }
+
     private void Start()
     {
         UpdateHealthBar();

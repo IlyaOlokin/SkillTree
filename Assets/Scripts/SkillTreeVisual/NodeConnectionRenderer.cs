@@ -40,6 +40,12 @@ namespace SkillTree
             skillTree.OnAnyNodeChanged += ChangeNodeConnection;
         }
 
+        private void OnDestroy()
+        {
+            if (skillTree != null)
+                skillTree.OnAnyNodeChanged -= ChangeNodeConnection;
+        }
+
         private void Start()
         {
             BuildMesh();

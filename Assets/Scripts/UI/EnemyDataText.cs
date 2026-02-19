@@ -13,6 +13,12 @@ public class EnemyDataText : MonoBehaviour
         unit.OnInitialized += UpdateText;
     }
 
+    private void OnDestroy()
+    {
+        if (unit != null)
+            unit.OnInitialized -= UpdateText;
+    }
+
     private void UpdateText()
     {
         text.text = Math.Round(unit.SpawnData.Power) + "\n" + unit.SpawnData.Rarity;
