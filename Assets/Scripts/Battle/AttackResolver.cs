@@ -5,8 +5,6 @@ namespace Battle
 {
     public class AttackResolver : MonoBehaviour, ITarget
     {
-        public static AttackResolver instance;
-        
         private List<Unit> enemies;
 
         public Unit UnitObject
@@ -25,14 +23,6 @@ namespace Battle
                 return null;
             }
             set{}
-        }
-
-        private void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
         }
         
         public DamageInstance ReceiveDamage(DamageInstance damageInstance)

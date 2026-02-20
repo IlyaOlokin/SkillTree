@@ -9,7 +9,7 @@ namespace Battle
         public static void HandleAttack(Unit attackerUnit, DamageInfo damageInfo, ITarget defender)
         {
             // All Modifiers are applied on unit update
-
+            
             List<Modifier> mods = attackerUnit.GetAllModifiers();
             
             Overcharge.ApplyOverchargeEffect(defender, mods);

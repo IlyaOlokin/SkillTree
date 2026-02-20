@@ -99,7 +99,8 @@ namespace Battle
             RaiseOnStatsRecalculated();
         }
         
-        private void ResetUnit()
+        
+        protected void ResetUnit()
         {
             BaseUnitModifiers.Reset();
             baseInnateModifiers.ApplyEffect(this);

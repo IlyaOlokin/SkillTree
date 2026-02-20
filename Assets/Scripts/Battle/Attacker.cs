@@ -34,7 +34,7 @@ namespace Battle
             {
                 _attackTimer += GetCalculatedAttackSpeed() * Time.deltaTime;
             }
-            else if (Target != null)
+            else if (Target.UnitObject != null)
             {
                 AttackTarget();
                 ResetAttackCooldown();
@@ -46,7 +46,7 @@ namespace Battle
             return _owner.BaseUnitModifiers.StatValues[StatType.AttackSpeed];
         }
 
-        private void ResetAttackCooldown()
+        public void ResetAttackCooldown()
         {
             _attackTimer = 0;
         }

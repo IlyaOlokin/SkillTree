@@ -617,7 +617,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _StateTex:
-        m_Texture: {fileID: 398290858}
+        m_Texture: {fileID: 1714408532}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -1940,52 +1940,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9eefa3c3e8f12542b7971e661c10dd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!28 &398290858
-Texture2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 3
-  m_Width: 22
-  m_Height: 1
-  m_CompleteImageSize: 352
-  m_MipsStripped: 0
-  m_TextureFormat: 20
-  m_MipCount: 1
-  m_IsReadable: 1
-  m_IsPreProcessed: 0
-  m_IgnoreMipmapLimit: 1
-  m_MipmapLimitGroupName: 
-  m_StreamingMipmaps: 0
-  m_StreamingMipmapsPriority: 0
-  m_VTOnly: 0
-  m_AlphaIsTransparency: 0
-  m_ImageCount: 1
-  m_TextureDimension: 2
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_LightmapFormat: 0
-  m_ColorSpace: 0
-  m_PlatformBlob: 
-  image data: 352
-  _typelessdata: 0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
 --- !u!4 &415793010 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7914629936765169120, guid: 338a6eda77d16fe43840b420c6cab6f9, type: 3}
@@ -8547,6 +8501,52 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!28 &1714408532
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 3
+  m_Width: 22
+  m_Height: 1
+  m_CompleteImageSize: 352
+  m_MipsStripped: 0
+  m_TextureFormat: 20
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_IsPreProcessed: 0
+  m_IgnoreMipmapLimit: 1
+  m_MipmapLimitGroupName: 
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_LightmapFormat: 0
+  m_ColorSpace: 0
+  m_PlatformBlob: 
+  image data: 352
+  _typelessdata: 0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e0000803ff639a43ef639a43ef639a43e
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
 --- !u!4 &1737930031 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7914629936765169120, guid: 338a6eda77d16fe43840b420c6cab6f9, type: 3}
@@ -9710,7 +9710,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pool: {fileID: 1985643874}
   database: {fileID: 11400000, guid: 50846ac0286e5b9428d5953602917acc, type: 2}
-  level: 10
+  startingLevel: 1
+  wavesToUnlockNextLevel: 1
+  maxWaveLevel: 100
+  respawnDelay: 2
 --- !u!114 &1985643873
 MonoBehaviour:
   m_ObjectHideFlags: 0

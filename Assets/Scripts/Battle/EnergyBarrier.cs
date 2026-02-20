@@ -112,5 +112,12 @@ namespace Battle
                 OnBarrierCountChanged?.Invoke();
             }
         }
+
+        public void RestoreFull()
+        {
+            _barrierCount = _maxBarrierCount;
+            _cooldownProgress = 0f;
+            OnBarrierCountChanged?.Invoke();
+        }
     }
 }

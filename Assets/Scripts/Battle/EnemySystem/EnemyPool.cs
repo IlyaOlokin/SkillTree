@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Zenject;
 
 namespace Battle
 {
@@ -8,8 +9,9 @@ namespace Battle
     {
         [SerializeField] private Unit enemyPrefab;
         [SerializeField] private int poolSize = 3;
-        [SerializeField] private AttackResolver attackResolver;
+        [SerializeField] public AttackResolver attackResolver;
         [SerializeField] private List<Transform> spawnPositions;
+        [Inject] private DiContainer _container;
 
         private List<Unit> _units = new();
         public List<Unit> Units => _units;
@@ -18,7 +20,7 @@ namespace Battle
         {
             for (int i = 0; i < poolSize; i++)
             {
-                var unit = Instantiate(enemyPrefab, transform);
+                var unit = _container.InstantiatePrefabForComponent<Unit>(enemyPrefab, transform);
                 unit.gameObject.SetActive(false);
                 unit.gameObject.transform.position = spawnPositions[i].position;
                 _units.Add(unit);

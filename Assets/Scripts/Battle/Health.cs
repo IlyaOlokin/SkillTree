@@ -71,6 +71,12 @@ namespace Battle
             return damageInstance;
         }
 
+        public void RestoreToFull()
+        {
+            CurrentHealth = MaxHealth;
+            OnHealthChanged?.Invoke();
+        }
+
         private void UpdateHealthValues()
         {
             _cachedRegenerationSpeed = _owner.BaseUnitModifiers.StatValues[StatType.HealthRegenerationPerSecond];

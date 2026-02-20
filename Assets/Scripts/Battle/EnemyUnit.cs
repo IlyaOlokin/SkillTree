@@ -22,6 +22,12 @@ namespace Battle
         {
             SpawnData = data;
             innateModifiers = data.Modifiers;
+           
+            RaiseOnModsChanged();
+            health.RestoreToFull();
+            barrier.RestoreFull();
+            attacker.ResetAttackCooldown();
+            
             OnInitialized?.Invoke();
         }
 
