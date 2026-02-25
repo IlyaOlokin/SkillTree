@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Camera))]
 public class SkillTreeCameraController : MonoBehaviour
@@ -14,6 +15,8 @@ public class SkillTreeCameraController : MonoBehaviour
     public float zoomSpeed = 5f;
     public float minZoom = 3f;
     public float maxZoom = 15f;
+    public LayerMask zoomBlockLayers;
+    
 
     [Header("Bounds")] 
     public Vector2 minBounds; // left bottom
@@ -21,7 +24,6 @@ public class SkillTreeCameraController : MonoBehaviour
 
     [Header("Drag Block")]
     public LayerMask dragBlockLayers;
-    public bool blockOnUI = true;
 
     private bool dragging;
     private Vector3 dragStartWorldPos;
@@ -40,26 +42,26 @@ public class SkillTreeCameraController : MonoBehaviour
     
     void HandleDrag()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0))
         {
             if (!IsMouseOverThisCamera())
                 return;
             
-            if (IsPointerBlocked())
+            if (IsPointerBlocked(dragBlockLayers))
                 return;
 
             dragging = true;
             dragStartWorldPos = GetMouseWorldPosition();
         }
 
-        if (Input.GetMouseButton(1) && dragging)
+        if (Input.GetMouseButton(0) && dragging)
         {
             Vector3 currentWorldPos = GetMouseWorldPosition();
             Vector3 delta = dragStartWorldPos - currentWorldPos;
             Move(delta);
         }
 
-        if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(0))
         {
             dragging = false;
         }
@@ -67,7 +69,6 @@ public class SkillTreeCameraController : MonoBehaviour
     
     void HandleZoom()
     {
-        
         float scroll = Input.mouseScrollDelta.y;
 
         if (Mathf.Abs(scroll) < 0.01f)
@@ -79,11 +80,17 @@ public class SkillTreeCameraController : MonoBehaviour
         if (!cam.orthographic)
             return;
         
-        if (IsPointerBlocked())
+        if (IsPointerBlocked(zoomBlockLayers))
             return;
 
-        cam.orthographicSize -= scroll * zoomSpeed;
-        cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, minZoom, maxZoom);
+        Vector3 mouseWorldBeforeZoom = GetMouseWorldPosition();
+
+        float targetSize = cam.orthographicSize - scroll * zoomSpeed;
+        cam.orthographicSize = Mathf.Clamp(targetSize, minZoom, maxZoom);
+
+        Vector3 mouseWorldAfterZoom = GetMouseWorldPosition();
+        Vector3 compensationDelta = mouseWorldBeforeZoom - mouseWorldAfterZoom;
+        transform.position += compensationDelta;
 
         ClampPosition();
     }
@@ -115,19 +122,18 @@ public class SkillTreeCameraController : MonoBehaviour
                vp.y >= 0 && vp.y <= 1;
     }
 
-    bool IsPointerBlocked()
+    bool IsPointerBlocked(LayerMask layerMask)
     {
-        if (blockOnUI && EventSystem.current != null)
+        if (EventSystem.current.IsPointerOverGameObject())
         {
-            if (EventSystem.current.IsPointerOverGameObject())
-                return true;
-        }
-        
-        Vector2 worldPos = cam.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, dragBlockLayers);
-
-        if (hit.collider != null)
             return true;
+        }
+        Vector2 worldPos = cam.ScreenToWorldPoint(Input.mousePosition);
+        Collider2D hit = Physics2D.OverlapPoint(worldPos, layerMask);
+        if (hit != null)
+            return true;
+        
+        
 
         return false;
     }
