@@ -27,39 +27,18 @@ namespace SkillTree
         
         protected void SubscribeAllFromRoot(Node root, Action<Node> action)
         {
-            var visited = new HashSet<Node>();
-
-            void DFS(Node current)
+            NodeGraphTraversalService.Traverse(root, node =>
             {
-                if (!visited.Add(current))
-                    return;
-                current.OnAllocatedChanged += action;
-                foreach (var next in current.ConnectedNodes)
-                {
-                    DFS(next);
-                }
-            }
-
-            DFS(root);
+                node.OnAllocatedChanged += action;
+            });
         }
 
         protected void UnsubscribeAllFromRoot(Node root, Action<Node> action)
         {
-            var visited = new HashSet<Node>();
-
-            void DFS(Node current)
+            NodeGraphTraversalService.Traverse(root, node =>
             {
-                if (current == null || !visited.Add(current))
-                    return;
-
-                current.OnAllocatedChanged -= action;
-                foreach (var next in current.ConnectedNodes)
-                {
-                    DFS(next);
-                }
-            }
-
-            DFS(root);
+                node.OnAllocatedChanged -= action;
+            });
         }
     }
 }

@@ -55,7 +55,7 @@ namespace SkillTree
 #if UNITY_EDITOR
         public void ConstructNodeConnections()
         {
-            var pairs = CollectPairs(rootNode);
+            var pairs = NodeGraphTraversalService.CollectUniquePairs(rootNode);
 
             foreach (var pair in pairs)
             {
@@ -126,40 +126,6 @@ namespace SkillTree
             Debug.Log($"Mesh asset created at {path}");
         }
 #endif
-
-        private static List<NodePair> CollectPairs(Node root)
-        {
-            var result = new List<NodePair>();
-            var visited = new HashSet<Node>();
-
-            DFS(root, visited, result);
-            return result;
-        }
-
-        //Depth First Search
-        private static void DFS(
-            Node node,
-            HashSet<Node> visited,
-            List<NodePair> pairs)
-        {
-            if (!visited.Add(node))
-                return;
-
-            foreach (var linked in node.ConnectedNodes)
-            {
-                if (linked is null || linked == node)
-                    continue;
-
-                var pair = new NodePair(node, linked);
-
-                if (!pairs.Contains(pair))
-                {
-                    pairs.Add(pair);
-                }
-
-                DFS(linked, visited, pairs);
-            }
-        }
 
     public void BuildMesh()
     {

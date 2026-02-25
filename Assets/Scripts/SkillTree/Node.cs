@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Text;
 using Battle;
-using Unity.Collections;
 using UnityEngine;
 using Zenject;
 
@@ -14,7 +11,6 @@ namespace SkillTree
     public class Node : MonoBehaviour
     { 
         [Inject] private UnitLevel _unitLevel;
-        [Inject] private SkillTreeUI _skillTreeUI;
         
         public virtual bool IsAllocated { get; private set; }
         [SerializeField] private int nodeCost = 1;
@@ -35,29 +31,7 @@ namespace SkillTree
 
         protected virtual bool HasRootConnection()
         {
-            var visited = new HashSet<Node>();
-            return DFS(this, visited);
-            
-        }
-
-        bool DFS(Node current, HashSet<Node> visited)
-        {
-            if (current == null)
-                return false;
-
-            if (current is RootNode)
-                return true;
-
-            if (!visited.Add(current))
-                return false;
-
-            foreach (var next in current.ConnectedNodes)
-            {
-                if (next.IsAllocated && DFS(next, visited))
-                    return true;
-            }
-
-            return false;
+            return NodeGraphTraversalService.HasAllocatedPathToRoot(this);
         }
 
 
@@ -99,30 +73,6 @@ namespace SkillTree
             OnAllocatedChanged?.Invoke(this);
             OnAnyNodeAllocatedChanged?.Invoke(this);
         }
-        
-        
-        private void OnMouseOver () 
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Allocate();
-            }
-            else if (Input.GetMouseButtonDown(1))
-            {
-                Deallocate();
-            }
-        }
-
-        private void OnMouseEnter()
-        {
-            _skillTreeUI.DisplayNodeDescription(this);
-        }
-
-        private void OnMouseExit()
-        {
-            _skillTreeUI.HideNodeDescription();
-        }
-
         public virtual string GetDescription()
         {
             StringBuilder builder = new StringBuilder();
