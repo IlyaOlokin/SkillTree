@@ -8,10 +8,9 @@ namespace Battle
 {
     public class BaseUnitModifiers
     {
-        
-        public Dictionary<StatType, StatModifier> StatModifiers =
+        private readonly Dictionary<StatType, StatModifier> _statModifiers =
             new Dictionary<StatType, StatModifier>();
-        public Dictionary<StatType, float> StatValues =
+        private readonly Dictionary<StatType, float> _statValues =
             new Dictionary<StatType, float>();
 
         public BaseUnitModifiers()
@@ -21,34 +20,77 @@ namespace Battle
 
         public BaseUnitModifiers(BaseUnitModifiers other)
         {
-            StatValues = new Dictionary<StatType, float>(other.StatValues);
-            
-            StatModifiers = new Dictionary<StatType, StatModifier>();
-            foreach (var pair in other.StatModifiers)
-            {
-                StatModifiers[pair.Key] = pair.Value.DeepCopy();
-            }
+            Reset();
+            CopyFrom(other);
         }
 
         public void Reset()
         {
-            StatModifiers.Clear();
-            StatValues.Clear();
+            _statModifiers.Clear();
+            _statValues.Clear();
             
             foreach (StatType type in Enum.GetValues(typeof(StatType)))
             {
-                StatModifiers.Add(type, new StatModifier(new List<float>()));
+                _statModifiers.Add(type, new StatModifier(new List<float>()));
             }
             foreach (StatType type in Enum.GetValues(typeof(StatType)))
             {
-                StatValues.Add(type, 0);
+                _statValues.Add(type, 0);
             }
+        }
+
+        public IEnumerable<StatType> GetStatTypes()
+        {
+            return _statModifiers.Keys;
+        }
+
+        public void CopyFrom(BaseUnitModifiers other)
+        {
+            if (_statModifiers.Count == 0 || _statValues.Count == 0)
+            {
+                Reset();
+            }
+
+            foreach (StatType statType in Enum.GetValues(typeof(StatType)))
+            {
+                var sourceModifier = other.GetModifier(statType);
+                var targetModifier = _statModifiers[statType];
+
+                targetModifier.Added = sourceModifier.Added;
+                targetModifier.Increased = sourceModifier.Increased;
+
+                targetModifier.More.Clear();
+                targetModifier.More.AddRange(sourceModifier.More);
+
+                _statModifiers[statType] = targetModifier;
+                _statValues[statType] = other.GetStatValue(statType);
+            }
+        }
+
+        public float GetStatValue(StatType statType)
+        {
+            return _statValues[statType];
+        }
+
+        public bool TryGetStatValue(StatType statType, out float value)
+        {
+            return _statValues.TryGetValue(statType, out value);
+        }
+
+        public void SetStatValue(StatType statType, float value)
+        {
+            _statValues[statType] = value;
+        }
+        
+        public StatModifier GetModifier(StatType statType)
+        {
+            return _statModifiers[statType];
         }
         
         public void ChangeModifierValue(ModifierContainer modifierContainer)
         {
             ModifierValue modifier;
-            var statModifierBucket = StatModifiers[modifierContainer.statType];
+            var statModifierBucket = _statModifiers[modifierContainer.statType];
             switch (modifierContainer.modifierType)
             {
                 case ModifierType.Added:
@@ -62,18 +104,17 @@ namespace Battle
                     statModifierBucket.Increased = modifier;
                     break;
                 case ModifierType.More:
-                    StatModifiers[modifierContainer.statType].More.Add(modifierContainer.value);
-                    // remove????
+                    statModifierBucket.More.Add(modifierContainer.value);
                     break;
             }
             
-            StatModifiers[modifierContainer.statType] = statModifierBucket;
+            _statModifiers[modifierContainer.statType] = statModifierBucket;
         }
         
         public void SetModifierValue(ModifierContainer modifierContainer)
         {
             ModifierValue modifier;
-            var statModifierBucket = StatModifiers[modifierContainer.statType];
+            var statModifierBucket = _statModifiers[modifierContainer.statType];
             switch (modifierContainer.modifierType)
             {
                 case ModifierType.Added:
@@ -87,18 +128,18 @@ namespace Battle
                     statModifierBucket.Increased = modifier;
                     break;
                 case ModifierType.More:
-                    StatModifiers[modifierContainer.statType].More.Clear();
-                    StatModifiers[modifierContainer.statType].More.Add(modifierContainer.value);
+                    statModifierBucket.More.Clear();
+                    statModifierBucket.More.Add(modifierContainer.value);
                     break;
             }
-            StatModifiers[modifierContainer.statType] = statModifierBucket;
+            _statModifiers[modifierContainer.statType] = statModifierBucket;
 
         }
         
         public void SetModifierValue(ModifierType modifierType, StatType StatType, List<float> value)
         {
             ModifierValue modifier;
-            var statModifierBucket = StatModifiers[StatType];
+            var statModifierBucket = _statModifiers[StatType];
             switch (modifierType)
             {
                 case ModifierType.Added:
@@ -112,11 +153,11 @@ namespace Battle
                     statModifierBucket.Increased = modifier;
                     break;
                 case ModifierType.More:
-                    StatModifiers[StatType].More.Clear();
-                    StatModifiers[StatType].More.AddRange(value);
+                    statModifierBucket.More.Clear();
+                    statModifierBucket.More.AddRange(value);
                     break;
             }
-            StatModifiers[StatType] = statModifierBucket;
+            _statModifiers[StatType] = statModifierBucket;
         }
 
         public void MergeModifier(StatType statType, StatModifier other)
@@ -135,6 +176,35 @@ namespace Battle
             SetModifierValue(new ModifierContainer(ModifierType.Added, statType, 0));
             SetModifierValue(new ModifierContainer(ModifierType.Increased, statType, 0));
             SetModifierValue(ModifierType.More, statType, new List<float>());
+        }
+        
+        public int ComputeDeterministicHash()
+        {
+            unchecked
+            {
+                int hash = 17;
+                foreach (StatType statType in Enum.GetValues(typeof(StatType)))
+                {
+                    hash = hash * 31 + (int)statType;
+                    hash = hash * 31 + ToIntBits(GetStatValue(statType));
+
+                    var modifier = GetModifier(statType);
+                    hash = hash * 31 + ToIntBits(modifier.Added.Value);
+                    hash = hash * 31 + ToIntBits(modifier.Increased.Value);
+
+                    foreach (var moreValue in modifier.More)
+                    {
+                        hash = hash * 31 + ToIntBits(moreValue);
+                    }
+                }
+
+                return hash;
+            }
+        }
+
+        private static int ToIntBits(float value)
+        {
+            return BitConverter.ToInt32(BitConverter.GetBytes(value), 0);
         }
     }
 
@@ -158,7 +228,7 @@ namespace Battle
         }
     }
     
-    public struct StatModifier // or class
+    public struct StatModifier
     {
         public ModifierValue Added;
         public ModifierValue Increased;
@@ -185,4 +255,3 @@ namespace Battle
     };
     
 }
-

@@ -30,13 +30,11 @@ public class PlayerStatsWindow : MonoBehaviour
             Debug.LogWarning("Stat text count mismatch");
         int min = Mathf.Min(stats.Count, statTexts.Count);
 
-        var statValues = _player.BaseUnitModifiers.StatValues;
-
         for (int i = 0; i < min; i++)
         {
             var stat = stats[i];
 
-            if (!statValues.TryGetValue(stat, out float rawValue))
+            if (!_player.BaseUnitModifiers.TryGetStatValue(stat, out float rawValue))
                 continue;
 
             bool isPercent = percentStats.Contains(stat);

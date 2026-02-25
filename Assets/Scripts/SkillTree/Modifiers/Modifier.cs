@@ -19,6 +19,8 @@ namespace SkillTree
         public virtual bool IsInPriority(ModifierPriority priority) => Priorities.Contains(priority);
 
         public virtual void ApplyEffect(Unit unit) { }
+        // Attack modifiers must mutate only damageInfo.BaseUnitModifiers snapshot.
+        // Do not mutate damageInfo.Owner.BaseUnitModifiers here.
         public virtual void ApplyEffect(DamageInfo damageInfo) { }
 
         public virtual string GetDescription()

@@ -29,7 +29,7 @@ namespace Battle
         private float CalculateTotalDamage(Unit unit, float physicalDamageDealt)
         {
             float magnitude = BASE_DAMAGE_PERCENTAGE *
-                              (1 + unit.BaseUnitModifiers.StatValues[StatType.BleedMagnitude]);
+                              (1 + unit.BaseUnitModifiers.GetStatValue(StatType.BleedMagnitude));
             return physicalDamageDealt * (1 + magnitude);
         }
         

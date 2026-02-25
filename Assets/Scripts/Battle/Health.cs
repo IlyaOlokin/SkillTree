@@ -79,10 +79,10 @@ namespace Battle
 
         private void UpdateHealthValues()
         {
-            _cachedRegenerationSpeed = _owner.BaseUnitModifiers.StatValues[StatType.HealthRegenerationPerSecond];
+            _cachedRegenerationSpeed = _owner.BaseUnitModifiers.GetStatValue(StatType.HealthRegenerationPerSecond);
             
             float currentHealthPercentage = CurrentHealth / MaxHealth;
-            MaxHealth = _owner.BaseUnitModifiers.StatValues[StatType.MaximumHealth];
+            MaxHealth = _owner.BaseUnitModifiers.GetStatValue(StatType.MaximumHealth);
             CurrentHealth = MaxHealth * currentHealthPercentage;
             OnMaximumHealthChanged?.Invoke();
         }

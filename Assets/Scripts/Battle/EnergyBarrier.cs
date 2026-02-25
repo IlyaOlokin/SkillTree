@@ -87,11 +87,11 @@ namespace Battle
         
         private void UpdateBarrierValues()
         {
-            _maxBarrierCount = (int)_owner.BaseUnitModifiers.StatValues[StatType.BarrierCount];
+            _maxBarrierCount = (int)_owner.BaseUnitModifiers.GetStatValue(StatType.BarrierCount);
             _barrierCount = Mathf.Min(_barrierCount, _maxBarrierCount);
-            _barrierPower = Mathf.Max(1f, _owner.BaseUnitModifiers.StatValues[StatType.BarrierPower]);
-            _regenSpeed = _owner.BaseUnitModifiers.StatValues[StatType.BarrierRegenerationSpeed];
-            _blockedTypes = (DamageType) _owner.BaseUnitModifiers.StatValues[StatType.BarrierDamageTypeMask];
+            _barrierPower = Mathf.Max(1f, _owner.BaseUnitModifiers.GetStatValue(StatType.BarrierPower));
+            _regenSpeed = _owner.BaseUnitModifiers.GetStatValue(StatType.BarrierRegenerationSpeed);
+            _blockedTypes = (DamageType) _owner.BaseUnitModifiers.GetStatValue(StatType.BarrierDamageTypeMask);
 
             OnMaxBarrierChanged?.Invoke();
             OnBarrierCountChanged?.Invoke();

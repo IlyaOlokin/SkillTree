@@ -38,15 +38,15 @@ public static class StatCalculator
     {
         foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
         {
-            baseUnitModifiers.MergeModifier(GetCorespondingDamageStat(damageType), baseUnitModifiers.StatModifiers[StatType.Damage]);
+            baseUnitModifiers.MergeModifier(GetCorespondingDamageStat(damageType), baseUnitModifiers.GetModifier(StatType.Damage));
         }
             
-        baseUnitModifiers.MergeModifier(StatType.FireDamage, baseUnitModifiers.StatModifiers[StatType.ElementalDamage]);
-        baseUnitModifiers.MergeModifier(StatType.ColdDamage, baseUnitModifiers.StatModifiers[StatType.ElementalDamage]);
-        baseUnitModifiers.MergeModifier(StatType.LightningDamage, baseUnitModifiers.StatModifiers[StatType.ElementalDamage]);
+        baseUnitModifiers.MergeModifier(StatType.FireDamage, baseUnitModifiers.GetModifier(StatType.ElementalDamage));
+        baseUnitModifiers.MergeModifier(StatType.ColdDamage, baseUnitModifiers.GetModifier(StatType.ElementalDamage));
+        baseUnitModifiers.MergeModifier(StatType.LightningDamage, baseUnitModifiers.GetModifier(StatType.ElementalDamage));
         
-        baseUnitModifiers.MergeModifier(StatType.LightDamage, baseUnitModifiers.StatModifiers[StatType.MysticDamage]);
-        baseUnitModifiers.MergeModifier(StatType.DarknessDamage, baseUnitModifiers.StatModifiers[StatType.MysticDamage]);
+        baseUnitModifiers.MergeModifier(StatType.LightDamage, baseUnitModifiers.GetModifier(StatType.MysticDamage));
+        baseUnitModifiers.MergeModifier(StatType.DarknessDamage, baseUnitModifiers.GetModifier(StatType.MysticDamage));
         
         baseUnitModifiers.ClearModifier(StatType.Damage);
         baseUnitModifiers.ClearModifier(StatType.ElementalDamage);
@@ -55,18 +55,18 @@ public static class StatCalculator
     
     public static void MergeDefenceModifiers(BaseUnitModifiers baseUnitModifiers)
     {
-        baseUnitModifiers.MergeModifier(StatType.Armor, baseUnitModifiers.StatModifiers[StatType.Defence]);
-        baseUnitModifiers.MergeModifier(StatType.Evasion, baseUnitModifiers.StatModifiers[StatType.Defence]);
+        baseUnitModifiers.MergeModifier(StatType.Armor, baseUnitModifiers.GetModifier(StatType.Defence));
+        baseUnitModifiers.MergeModifier(StatType.Evasion, baseUnitModifiers.GetModifier(StatType.Defence));
         
         baseUnitModifiers.ClearModifier(StatType.Defence);
     }
     
     public static void MergeNegativeEffectModifiers(BaseUnitModifiers baseUnitModifiers)
     {
-        baseUnitModifiers.MergeModifier(StatType.IgniteMagnitude, baseUnitModifiers.StatModifiers[StatType.NegativeEffectMagnitude]);
-        baseUnitModifiers.MergeModifier(StatType.ChillMagnitude, baseUnitModifiers.StatModifiers[StatType.NegativeEffectMagnitude]);
-        baseUnitModifiers.MergeModifier(StatType.OverchargeMagnitude, baseUnitModifiers.StatModifiers[StatType.NegativeEffectMagnitude]);
-        baseUnitModifiers.MergeModifier(StatType.BleedMagnitude, baseUnitModifiers.StatModifiers[StatType.NegativeEffectMagnitude]);
+        baseUnitModifiers.MergeModifier(StatType.IgniteMagnitude, baseUnitModifiers.GetModifier(StatType.NegativeEffectMagnitude));
+        baseUnitModifiers.MergeModifier(StatType.ChillMagnitude, baseUnitModifiers.GetModifier(StatType.NegativeEffectMagnitude));
+        baseUnitModifiers.MergeModifier(StatType.OverchargeMagnitude, baseUnitModifiers.GetModifier(StatType.NegativeEffectMagnitude));
+        baseUnitModifiers.MergeModifier(StatType.BleedMagnitude, baseUnitModifiers.GetModifier(StatType.NegativeEffectMagnitude));
         
         baseUnitModifiers.ClearModifier(StatType.NegativeEffectMagnitude);
     }
@@ -74,11 +74,12 @@ public static class StatCalculator
     public static float GetStat(BaseUnitModifiers baseUnitModifiers, StatType statType)
     {
         float result = 0f;
+        var modifier = baseUnitModifiers.GetModifier(statType);
         
-        result += baseUnitModifiers.StatModifiers[statType].Added.Value;
-        result *= 1 + baseUnitModifiers.StatModifiers[statType].Increased.Value;
+        result += modifier.Added.Value;
+        result *= 1 + modifier.Increased.Value;
         
-        foreach (var multiplier in baseUnitModifiers.StatModifiers[statType].More)
+        foreach (var multiplier in modifier.More)
         {
             result *= 1 + multiplier;
         }
@@ -89,9 +90,9 @@ public static class StatCalculator
 
     private static void CacheStatValues(Unit unit)
     {
-        foreach (var statType in unit.BaseUnitModifiers.StatModifiers.Keys)
+        foreach (var statType in unit.BaseUnitModifiers.GetStatTypes())
         {
-            unit.BaseUnitModifiers.StatValues[statType] = GetStat(unit.BaseUnitModifiers, statType);
+            unit.BaseUnitModifiers.SetStatValue(statType, GetStat(unit.BaseUnitModifiers, statType));
         }
     }
 

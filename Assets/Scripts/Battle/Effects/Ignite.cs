@@ -43,7 +43,7 @@ namespace Battle
         private float CalculateTotalDamage(Unit unit, float fireDamageDealt)
         {
             float magnitude = BASE_DAMAGE_PERCENTAGE *
-                              (1 + unit.BaseUnitModifiers.StatValues[StatType.IgniteMagnitude]);
+                              (1 + unit.BaseUnitModifiers.GetStatValue(StatType.IgniteMagnitude));
             return fireDamageDealt * (1 + magnitude);
         }
 

@@ -15,7 +15,8 @@ namespace Battle
             
             foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
             {
-                damageInfo.DamageInstance.Damage.Add(damageType, damageInfo.BaseUnitModifiers.StatValues[StatCalculator.GetCorespondingDamageStat(damageType)]);
+                damageInfo.DamageInstance.Damage[damageType] =
+                    damageInfo.BaseUnitModifiers.GetStatValue(StatCalculator.GetCorespondingDamageStat(damageType));
             }            
             
             CalculateCrit(damageInfo);
@@ -25,21 +26,21 @@ namespace Battle
         {
             StatCalculator.MergeDamageModifiers(damageInfo.BaseUnitModifiers);
             
-            damageInfo.BaseUnitModifiers.StatValues[StatType.PhysicalDamage] = StatCalculator.GetStat(damageInfo.BaseUnitModifiers, StatType.PhysicalDamage);
-            damageInfo.BaseUnitModifiers.StatValues[StatType.FireDamage] = StatCalculator.GetStat(damageInfo.BaseUnitModifiers, StatType.FireDamage);
-            damageInfo.BaseUnitModifiers.StatValues[StatType.ColdDamage] = StatCalculator.GetStat(damageInfo.BaseUnitModifiers, StatType.ColdDamage);
-            damageInfo.BaseUnitModifiers.StatValues[StatType.LightningDamage] = StatCalculator.GetStat(damageInfo.BaseUnitModifiers, StatType.LightningDamage);
-            damageInfo.BaseUnitModifiers.StatValues[StatType.LightDamage] = StatCalculator.GetStat(damageInfo.BaseUnitModifiers, StatType.LightDamage);
-            damageInfo.BaseUnitModifiers.StatValues[StatType.DarknessDamage] = StatCalculator.GetStat(damageInfo.BaseUnitModifiers, StatType.DarknessDamage);
-            damageInfo.BaseUnitModifiers.StatValues[StatType.PoisonDamage] = StatCalculator.GetStat(damageInfo.BaseUnitModifiers, StatType.PoisonDamage);
+            damageInfo.BaseUnitModifiers.SetStatValue(StatType.PhysicalDamage, StatCalculator.GetStat(damageInfo.BaseUnitModifiers, StatType.PhysicalDamage));
+            damageInfo.BaseUnitModifiers.SetStatValue(StatType.FireDamage, StatCalculator.GetStat(damageInfo.BaseUnitModifiers, StatType.FireDamage));
+            damageInfo.BaseUnitModifiers.SetStatValue(StatType.ColdDamage, StatCalculator.GetStat(damageInfo.BaseUnitModifiers, StatType.ColdDamage));
+            damageInfo.BaseUnitModifiers.SetStatValue(StatType.LightningDamage, StatCalculator.GetStat(damageInfo.BaseUnitModifiers, StatType.LightningDamage));
+            damageInfo.BaseUnitModifiers.SetStatValue(StatType.LightDamage, StatCalculator.GetStat(damageInfo.BaseUnitModifiers, StatType.LightDamage));
+            damageInfo.BaseUnitModifiers.SetStatValue(StatType.DarknessDamage, StatCalculator.GetStat(damageInfo.BaseUnitModifiers, StatType.DarknessDamage));
+            damageInfo.BaseUnitModifiers.SetStatValue(StatType.PoisonDamage, StatCalculator.GetStat(damageInfo.BaseUnitModifiers, StatType.PoisonDamage));
         }
 
         private static void CalculateCrit(DamageInfo damageInfo)
         {
-            float critChance = damageInfo.BaseUnitModifiers.StatValues[StatType.CritChance];
+            float critChance = damageInfo.BaseUnitModifiers.GetStatValue(StatType.CritChance);
             
             
-            float critBonus = damageInfo.BaseUnitModifiers.StatValues[StatType.CritDamageBonus];
+            float critBonus = damageInfo.BaseUnitModifiers.GetStatValue(StatType.CritDamageBonus);
 
             if (critChance >= Random.Range(0f, 1f))
             {
@@ -48,7 +49,7 @@ namespace Battle
                 {
                     damageInfo.DamageInstance.Damage[damageType] *= 1 + critBonus;
                 }
-                damageInfo.isCritical = true;
+                damageInfo.IsCritical = true;
             }
         }
     }

@@ -9,6 +9,7 @@ namespace Battle
         public static void HandleAttack(Unit attackerUnit, DamageInfo damageInfo, ITarget defender)
         {
             // All Modifiers are applied on unit update
+            int attackerStateHashBefore = attackerUnit.BaseUnitModifiers.ComputeDeterministicHash(); // Diagnostics
             
             List<Modifier> mods = attackerUnit.GetAllModifiers();
             
@@ -25,6 +26,7 @@ namespace Battle
             if (Evasion.ApplyEvasion(damageInfo.DamageInstance, defender.UnitObject, attackerUnit))
             {
                 defender.OnEvaded(damageInfo.DamageInstance);
+                AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore);
                 return;
             }
             Armor.ApplyArmorMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);
@@ -39,6 +41,16 @@ namespace Battle
             DamageInstance damageDealt = defender.ReceiveDamage(damageInfo.DamageInstance);
             LifeSteel.Apply(attackerUnit, damageDealt);
             attackerUnit.DamageDealt(damageDealt);
+            AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics
+        }
+
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        private static void AssertAttackerSnapshotIntegrity(Unit attackerUnit, int attackerStateHashBefore)
+        {
+            int attackerStateHashAfter = attackerUnit.BaseUnitModifiers.ComputeDeterministicHash();
+            Debug.Assert(
+                attackerStateHashBefore == attackerStateHashAfter,
+                "Attack pipeline mutated attacker BaseUnitModifiers. Mutate DamageInfo snapshot instead.");
         }
     }
 }

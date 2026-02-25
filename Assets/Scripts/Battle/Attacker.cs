@@ -7,6 +7,8 @@ namespace Battle
     public class Attacker : MonoBehaviour, IUnitComponent
     {
         private Unit _owner;
+        private BaseUnitModifiers _attackSnapshot;
+        private DamageInfo _attackDamageInfo;
         public ITarget Target { get; private set; }
 
         public float AttackProgress => _attackTimer;
@@ -21,6 +23,8 @@ namespace Battle
         public void Init(Unit owner)
         {
             _owner = owner;
+            _attackSnapshot = new BaseUnitModifiers();
+            _attackDamageInfo = new DamageInfo(_owner, _attackSnapshot);
         }
 
         public void SetTarget(ITarget target)
@@ -43,7 +47,7 @@ namespace Battle
 
         private float GetCalculatedAttackSpeed()
         {
-            return _owner.BaseUnitModifiers.StatValues[StatType.AttackSpeed];
+            return _owner.BaseUnitModifiers.GetStatValue(StatType.AttackSpeed);
         }
 
         public void ResetAttackCooldown()
@@ -53,13 +57,10 @@ namespace Battle
 
         private void AttackTarget()
         {
-            DamageInfo damageInfo = new DamageInfo()
-            {
-                owner = _owner,
-                BaseUnitModifiers = new BaseUnitModifiers(_owner.BaseUnitModifiers)
-            };
+            _attackSnapshot.CopyFrom(_owner.BaseUnitModifiers);
+            _attackDamageInfo.Reset(_owner, _attackSnapshot);
             
-            AttackProcessor.HandleAttack(_owner, damageInfo, Target);
+            AttackProcessor.HandleAttack(_owner, _attackDamageInfo, Target);
         }
     }
 }
