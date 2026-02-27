@@ -25,6 +25,11 @@ public enum StatType
     OverchargeMagnitude = 14,
     BleedMagnitude = 15,
     
+    IgniteChance = 38,
+    ChillChance = 39,
+    OverchargeChance = 40,
+    BleedChance = 41,
+    
     // Crit
     CritChance = 16,
     CritDamageBonus = 17,

@@ -48,7 +48,7 @@ namespace Battle
         {
             if (damageInstance.Damage[DamageType.Cold] <= 0) return;
             float damagePercentOfMaxHealth = damageInstance.Damage[DamageType.Cold] / defender.health.MaxHealth;
-            //damagePercentOfMaxHealth *= 1 + attacker.baseUnitModifiers.StatValues[StatType.IgniteChance];
+            damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.IgniteChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
                 defender.effectController.AddEffect(new Chill(attacker, BASE_DURATION));
