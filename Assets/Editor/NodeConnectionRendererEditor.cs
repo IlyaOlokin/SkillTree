@@ -46,6 +46,13 @@ public class NodeConnectionRendererEditor : Editor
             comp.CreateMeshAsset();
             GUIUtility.ExitGUI();
         }
+
+        if (GUILayout.Button("Remove Empty Connections"))
+        {
+            int removed = comp.RemoveEmptyNodeConnections();
+            Debug.Log($"Removed {removed} empty node connections.");
+            GUIUtility.ExitGUI();
+        }
     }
     
     void OnPlayModeChanged(PlayModeStateChange state)

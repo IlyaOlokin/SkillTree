@@ -125,6 +125,37 @@ namespace SkillTree
             EditorUtility.SetDirty(this);
             Debug.Log($"Mesh asset created at {path}");
         }
+
+        public int RemoveEmptyNodeConnections()
+        {
+            Undo.RecordObject(this, "Remove Empty Node Connections");
+
+            int removedCount = 0;
+            for (int i = nodeConnections.Count - 1; i >= 0; i--)
+            {
+                NodeConnectionData connection = nodeConnections[i];
+                bool isEmpty = connection == null ||
+                               connection.spline == null ||
+                               connection.pair.A == null ||
+                               connection.pair.B == null;
+                if (!isEmpty)
+                    continue;
+
+                if (connection != null && connection.spline != null)
+                    Undo.DestroyObjectImmediate(connection.spline.gameObject);
+
+                nodeConnections.RemoveAt(i);
+                removedCount++;
+            }
+
+            if (removedCount > 0)
+            {
+                PrefabUtility.RecordPrefabInstancePropertyModifications(this);
+                EditorUtility.SetDirty(this);
+            }
+
+            return removedCount;
+        }
 #endif
 
     public void BuildMesh()

@@ -8,6 +8,8 @@ using UnityEngine;
 [EditorTool("Skill Tree Tool")]
 public class SkillTreeTool : EditorTool
 {
+    private const float SnapThreshold = 0.5f;
+
     public SkillTreeToolConfig config;
 
     private Node selectedNode;
@@ -20,7 +22,7 @@ public class SkillTreeTool : EditorTool
     private readonly List<(Vector3 a, Vector3 b)> asymmetricLines = new();
     private readonly HashSet<Node> asymmetricNodes = new();
     
-    void OnEnable()
+    private void OnEnable()
     {
         config = FindConfig();
     }
@@ -32,7 +34,7 @@ public class SkillTreeTool : EditorTool
         SceneView.RepaintAll();
     }
 
-    SkillTreeToolConfig FindConfig()
+    private SkillTreeToolConfig FindConfig()
     {
         string[] guids = AssetDatabase.FindAssets("t:SkillTreeToolConfig");
         if (guids.Length == 0)
@@ -59,12 +61,27 @@ public class SkillTreeTool : EditorTool
         DrawAsymmetricNodeHighlights();    // orange
         DrawSelectedNodeHighlight();       // yellow
 
-        DrawPrefabSwitcher();
+        DrawPrefabSwitch();
     }
 
-    void HandleInput()
+    private void HandleInput()
     {
         Event e = Event.current;
+
+        if (HandlePrefabSwitchInput(e))
+        {
+            e.Use();
+            return;
+        }
+
+        if (e.type == EventType.KeyDown &&
+            (e.keyCode == KeyCode.Delete || e.keyCode == KeyCode.Backspace))
+        {
+            if (DeleteSelectedNode())
+                e.Use();
+            return;
+        }
+
         if (e.type != EventType.MouseDown || e.button != 0)
             return;
 
@@ -78,13 +95,47 @@ public class SkillTreeTool : EditorTool
         else
         {
             bool clone = e.control || e.command;
-            CreateNode(worldPos, clone);
+            bool snapToSelected = e.alt;
+            CreateNode(worldPos, clone, snapToSelected);
         }
 
         e.Use();
     }
+
+    private bool DeleteSelectedNode()
+    {
+        if (selectedNode == null)
+            return false;
+
+        Node nodeToDelete = selectedNode;
+        selectedNode = null;
+
+        Node[] nodes = FindObjectsByType<Node>(FindObjectsSortMode.None);
+        foreach (Node node in nodes)
+        {
+            if (node == null || node == nodeToDelete)
+                continue;
+
+            Disconnect(node, nodeToDelete);
+        }
+
+        SerializedObject so = new SerializedObject(nodeToDelete);
+        SerializedProperty list = so.FindProperty("connectedNodes");
+        if (list != null && list.arraySize > 0)
+        {
+            Undo.RecordObject(nodeToDelete, "Clear Node Connections");
+            list.ClearArray();
+            so.ApplyModifiedProperties();
+        }
+
+        Undo.DestroyObjectImmediate(nodeToDelete.gameObject);
+
+        MarkCacheDirty();
+        SceneView.RepaintAll();
+        return true;
+    }
     
-    Vector3 GetMouseWorldPosition(Vector2 mousePosition)
+    private Vector3 GetMouseWorldPosition(Vector2 mousePosition)
     {
         Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
         
@@ -96,7 +147,7 @@ public class SkillTreeTool : EditorTool
         return Vector3.zero;
     }
     
-    Node GetNodeUnderMouse(Vector2 mousePosition)
+    private Node GetNodeUnderMouse(Vector2 mousePosition)
     {
         Vector3 worldPos = GetMouseWorldPosition(mousePosition);
 
@@ -113,8 +164,11 @@ public class SkillTreeTool : EditorTool
         return null;
     }
     
-    void CreateNode(Vector3 position, bool copyFromSelected)
+    private void CreateNode(Vector3 position, bool copyFromSelected, bool snapToSelected)
     {
+        if (snapToSelected)
+            position = SnapToSelectedNode(position);
+
         Node newNode = CreateNodeFromPrefab(position);
 
         if (copyFromSelected && selectedNode != null)
@@ -126,13 +180,60 @@ public class SkillTreeTool : EditorTool
         selectedNode = newNode;
         MarkCacheDirty();
     }
+
+    private Vector3 SnapToSelectedNode(Vector3 position)
+    {
+        if (selectedNode == null)
+            return position;
+
+        Vector2 selected = selectedNode.transform.position;
+        Vector2 point = position;
+        Vector2 delta = point - selected;
+
+        var candidates = new List<(Vector2 position, float score)>
+        {
+            (point, float.MaxValue)
+        };
+
+        float axisDeltaX = Mathf.Abs(delta.x);
+        if (axisDeltaX <= SnapThreshold)
+            candidates.Add((new Vector2(selected.x, point.y), axisDeltaX));
+
+        float axisDeltaY = Mathf.Abs(delta.y);
+        if (axisDeltaY <= SnapThreshold)
+            candidates.Add((new Vector2(point.x, selected.y), axisDeltaY));
+
+        if (axisDeltaX <= SnapThreshold && axisDeltaY <= SnapThreshold)
+            candidates.Add((selected, Mathf.Max(axisDeltaX, axisDeltaY)));
+
+        Vector2 diagonalA = new Vector2(1f, 1f).normalized;
+        Vector2 projectedA = selected + Vector2.Dot(delta, diagonalA) * diagonalA;
+        float distanceToDiagonalA = Vector2.Distance(point, projectedA);
+        if (distanceToDiagonalA <= SnapThreshold)
+            candidates.Add((projectedA, distanceToDiagonalA));
+
+        Vector2 diagonalB = new Vector2(1f, -1f).normalized;
+        Vector2 projectedB = selected + Vector2.Dot(delta, diagonalB) * diagonalB;
+        float distanceToDiagonalB = Vector2.Distance(point, projectedB);
+        if (distanceToDiagonalB <= SnapThreshold)
+            candidates.Add((projectedB, distanceToDiagonalB));
+
+        (Vector2 position, float score) best = candidates[0];
+        for (int i = 1; i < candidates.Count; i++)
+        {
+            if (candidates[i].score < best.score)
+                best = candidates[i];
+        }
+
+        return new Vector3(best.position.x, best.position.y, position.z);
+    }
     
-    void CopyNodeData(Node source, Node target)
+    private void CopyNodeData(Node source, Node target)
     {
         CopyModifiers(source, target);
     }
     
-    void CopyModifiers(Node source, Node target)
+    private void CopyModifiers(Node source, Node target)
     {
         Undo.RecordObject(target, "Copy Modifiers");
 
@@ -148,18 +249,44 @@ public class SkillTreeTool : EditorTool
         EditorUtility.SetDirty(target);
     }
     
-    Node CreateNodeFromPrefab(Vector3 position)
+    private Node CreateNodeFromPrefab(Vector3 position)
     {
         GameObject prefab = config.nodePrefabs[config.currentPrefabIndex];
         GameObject go = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
 
         Undo.RegisterCreatedObjectUndo(go, "Create Node");
+        Transform nodeParent = FindNodeParent();
+        if (nodeParent != null)
+        {
+            Undo.SetTransformParent(go.transform, nodeParent, "Parent Node");
+        }
+        else
+        {
+            Debug.LogWarning("SkillTreeTool: Parent object \"Nodes\" was not found. Node created without parent.");
+        }
         go.transform.position = position;
 
         return go.GetComponent<Node>();
     }
 
-    void HandleNodeClick(Node node)
+    private Transform FindNodeParent()
+    {
+        Transform[] transforms = Resources.FindObjectsOfTypeAll<Transform>();
+        foreach (Transform t in transforms)
+        {
+            if (t == null || t.name != "Nodes")
+                continue;
+            if (!t.gameObject.scene.IsValid())
+                continue;
+            if (EditorUtility.IsPersistent(t))
+                continue;
+            return t;
+        }
+
+        return null;
+    }
+
+    private void HandleNodeClick(Node node)
     {
         if (selectedNode == null)
             selectedNode = node;
@@ -180,19 +307,19 @@ public class SkillTreeTool : EditorTool
         MarkCacheDirty();
     }
 
-    void Connect(Node a, Node b)
+    private void Connect(Node a, Node b)
     {
         AddConnection(a, b);
         AddConnection(b, a);
     }
     
-    bool AreConnected(Node a, Node b)
+    private bool AreConnected(Node a, Node b)
     {
         return a.ConnectedNodes.Contains(b)
                || b.ConnectedNodes.Contains(a);
     }
 
-    void AddConnection(Node from, Node to)
+    private void AddConnection(Node from, Node to)
     {
         SerializedObject so = new SerializedObject(from);
         SerializedProperty list = so.FindProperty("connectedNodes");
@@ -209,16 +336,17 @@ public class SkillTreeTool : EditorTool
         MarkCacheDirty();
     }
     
-    void Disconnect(Node a, Node b)
+    private void Disconnect(Node a, Node b)
     {
         RemoveConnection(a, b);
         RemoveConnection(b, a);
     }
 
-    void RemoveConnection(Node from, Node to)
+    private void RemoveConnection(Node from, Node to)
     {
         SerializedObject so = new SerializedObject(from);
         SerializedProperty list = so.FindProperty("connectedNodes");
+        bool removed = false;
 
         for (int i = list.arraySize - 1; i >= 0; i--)
         {
@@ -226,36 +354,55 @@ public class SkillTreeTool : EditorTool
             {
                 Undo.RecordObject(from, "Disconnect Nodes");
                 list.DeleteArrayElementAtIndex(i);
-                so.ApplyModifiedProperties();
-                break;
+                if (i < list.arraySize &&
+                    list.GetArrayElementAtIndex(i).objectReferenceValue == null)
+                {
+                    list.DeleteArrayElementAtIndex(i);
+                }
+                removed = true;
             }
         }
 
-        MarkCacheDirty();
+        if (removed)
+        {
+            so.ApplyModifiedProperties();
+            MarkCacheDirty();
+        }
     }
-
-    void DrawPrefabSwitcher()
+    private bool HandlePrefabSwitchInput(Event e)
     {
-        Handles.BeginGUI();
-        GUILayout.BeginArea(new Rect(10, 10, 220, 40), GUI.skin.box);
-        GUILayout.BeginHorizontal();
+        if (e.type != EventType.KeyDown || config == null || config.nodePrefabs.Count == 0)
+            return false;
 
-        if (GUILayout.Button("◀", GUILayout.Width(30)))
+        if (e.keyCode == KeyCode.LeftArrow)
+        {
             config.currentPrefabIndex =
                 (config.currentPrefabIndex - 1 + config.nodePrefabs.Count) % config.nodePrefabs.Count;
+            SceneView.RepaintAll();
+            return true;
+        }
 
-        GUILayout.Label(config.nodePrefabs[config.currentPrefabIndex].name);
-
-        if (GUILayout.Button("▶", GUILayout.Width(30)))
+        if (e.keyCode == KeyCode.RightArrow)
+        {
             config.currentPrefabIndex =
                 (config.currentPrefabIndex + 1) % config.nodePrefabs.Count;
+            SceneView.RepaintAll();
+            return true;
+        }
 
-        GUILayout.EndHorizontal();
+        return false;
+    }
+
+    private void DrawPrefabSwitch()
+    {
+        Handles.BeginGUI();
+        GUILayout.BeginArea(new Rect(10, 10, 260, 40), GUI.skin.box);
+        GUILayout.Label(config.nodePrefabs[config.currentPrefabIndex].name);
         GUILayout.EndArea();
         Handles.EndGUI();
     }
     
-    void DrawSelectedNodeHighlight()
+    private void DrawSelectedNodeHighlight()
     {
         if (selectedNode == null) return;
 
@@ -265,7 +412,7 @@ public class SkillTreeTool : EditorTool
         Handles.DrawWireDisc(pos, Vector3.forward, radius);
     }
     
-    void DrawConnections()
+    private void DrawConnections()
     {
         Handles.color = Color.white;
 
@@ -273,7 +420,7 @@ public class SkillTreeTool : EditorTool
             Handles.DrawLine(line.a, line.b);
     }
     
-    void DrawCorruptedNodeHighlights()
+    private void DrawCorruptedNodeHighlights()
     {
         Handles.color = Color.red;
         float radius = 0.8f;
@@ -289,7 +436,7 @@ public class SkillTreeTool : EditorTool
         }
     }
     
-    void DrawAsymmetricConnections()
+    private void DrawAsymmetricConnections()
     {
         Handles.color = new Color(1f, 0.5f, 0f); // оранжевый
 
@@ -297,7 +444,7 @@ public class SkillTreeTool : EditorTool
             Handles.DrawDottedLine(line.a, line.b, 5f);
     }
     
-    void DrawAsymmetricNodeHighlights()
+    private void DrawAsymmetricNodeHighlights()
     {
         Handles.color = new Color(1f, 0.5f, 0f);
         float radius = 0.65f;
@@ -313,7 +460,7 @@ public class SkillTreeTool : EditorTool
         }
     }
     
-    void RebuildCache()
+    private void RebuildCache()
     {
         connectionLines.Clear();
         asymmetricLines.Clear();
@@ -369,8 +516,9 @@ public class SkillTreeTool : EditorTool
         cacheDirty = false;
     }
     
-    void MarkCacheDirty()
+    private void MarkCacheDirty()
     {
         cacheDirty = true;
     }
 }
+
