@@ -28,6 +28,11 @@ namespace SkillTree
         {
             return !IsAllocated && HasRootConnection() && (AdditionalAllocatedCondition == null || AdditionalAllocatedCondition());
         }
+        
+        public bool HasEnoughSkillPoints()
+        {
+            return _unitLevel != null && _unitLevel.SkillPoints >= nodeCost;
+        }
 
         protected virtual bool HasRootConnection()
         {

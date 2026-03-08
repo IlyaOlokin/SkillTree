@@ -4,12 +4,11 @@ using SkillTree;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEngine;
+using Visual;
 
 [EditorTool("Skill Tree Tool")]
 public class SkillTreeTool : EditorTool
 {
-    private const float SnapThreshold = 0.5f;
-
     public SkillTreeToolConfig config;
 
     private Node selectedNode;
@@ -95,8 +94,8 @@ public class SkillTreeTool : EditorTool
         else
         {
             bool clone = e.control || e.command;
-            bool snapToSelected = e.alt;
-            CreateNode(worldPos, clone, snapToSelected);
+            bool snapToGrid = e.alt;
+            CreateNode(worldPos, clone, snapToGrid);
         }
 
         e.Use();
@@ -164,10 +163,10 @@ public class SkillTreeTool : EditorTool
         return null;
     }
     
-    private void CreateNode(Vector3 position, bool copyFromSelected, bool snapToSelected)
+    private void CreateNode(Vector3 position, bool copyFromSelected, bool snapToGrid)
     {
-        if (snapToSelected)
-            position = SnapToSelectedNode(position);
+        if (snapToGrid)
+            position = SnapPosition(position);
 
         Node newNode = CreateNodeFromPrefab(position);
 
@@ -181,56 +180,19 @@ public class SkillTreeTool : EditorTool
         MarkCacheDirty();
     }
 
-    private Vector3 SnapToSelectedNode(Vector3 position)
+    private Vector3 SnapPosition(Vector3 position)
     {
-        if (selectedNode == null)
-            return position;
-
-        Vector2 selected = selectedNode.transform.position;
-        Vector2 point = position;
-        Vector2 delta = point - selected;
-
-        var candidates = new List<(Vector2 position, float score)>
-        {
-            (point, float.MaxValue)
-        };
-
-        float axisDeltaX = Mathf.Abs(delta.x);
-        if (axisDeltaX <= SnapThreshold)
-            candidates.Add((new Vector2(selected.x, point.y), axisDeltaX));
-
-        float axisDeltaY = Mathf.Abs(delta.y);
-        if (axisDeltaY <= SnapThreshold)
-            candidates.Add((new Vector2(point.x, selected.y), axisDeltaY));
-
-        if (axisDeltaX <= SnapThreshold && axisDeltaY <= SnapThreshold)
-            candidates.Add((selected, Mathf.Max(axisDeltaX, axisDeltaY)));
-
-        Vector2 diagonalA = new Vector2(1f, 1f).normalized;
-        Vector2 projectedA = selected + Vector2.Dot(delta, diagonalA) * diagonalA;
-        float distanceToDiagonalA = Vector2.Distance(point, projectedA);
-        if (distanceToDiagonalA <= SnapThreshold)
-            candidates.Add((projectedA, distanceToDiagonalA));
-
-        Vector2 diagonalB = new Vector2(1f, -1f).normalized;
-        Vector2 projectedB = selected + Vector2.Dot(delta, diagonalB) * diagonalB;
-        float distanceToDiagonalB = Vector2.Distance(point, projectedB);
-        if (distanceToDiagonalB <= SnapThreshold)
-            candidates.Add((projectedB, distanceToDiagonalB));
-
-        (Vector2 position, float score) best = candidates[0];
-        for (int i = 1; i < candidates.Count; i++)
-        {
-            if (candidates[i].score < best.score)
-                best = candidates[i];
-        }
-
-        return new Vector3(best.position.x, best.position.y, position.z);
+        return new Vector3(
+            Mathf.Round(position.x),
+            Mathf.Round(position.y),
+            position.z
+        );
     }
     
     private void CopyNodeData(Node source, Node target)
     {
         CopyModifiers(source, target);
+        CopyIcon(source, target);
     }
     
     private void CopyModifiers(Node source, Node target)
@@ -247,6 +209,22 @@ public class SkillTreeTool : EditorTool
         }
 
         EditorUtility.SetDirty(target);
+    }
+
+    private void CopyIcon(Node source, Node target)
+    {
+        if (source == null || target == null)
+            return;
+
+        NodeVisual sourceVisual = source.GetComponentInChildren<NodeVisual>(true);
+        NodeVisual targetVisual = target.GetComponentInChildren<NodeVisual>(true);
+
+        if (sourceVisual == null || targetVisual == null)
+            return;
+
+        Undo.RecordObject(targetVisual, "Copy Node Icon");
+        targetVisual.NodeIcon = sourceVisual.NodeIcon;
+        EditorUtility.SetDirty(targetVisual);
     }
     
     private Node CreateNodeFromPrefab(Vector3 position)
@@ -521,4 +499,3 @@ public class SkillTreeTool : EditorTool
         cacheDirty = true;
     }
 }
-
