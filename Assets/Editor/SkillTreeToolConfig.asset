@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: SkillTreeToolConfig
   m_EditorClassIdentifier: 
   nodePrefabs:
+  - {fileID: 1966638709148332189, guid: d6352896d4a7e8546a6d5be90b48d93a, type: 3}
   - {fileID: 1966638709148332189, guid: 15201284882f4da4f8cd46b26e3432bf, type: 3}
-  currentPrefabIndex: 0
+  - {fileID: 1966638709148332189, guid: 0275e33f0cbc0ee469f7b9338c898546, type: 3}
+  currentPrefabIndex: 1
