@@ -19,6 +19,7 @@ namespace Battle
             DistributePrimaryStats(package.Modifiers, finalPower, archetype);
             ApplyBarrier(package.Modifiers, finalPower, archetype);
             ApplyAttackSpeed(package.Modifiers, archetype);
+            ApplyAccuracy(package.Modifiers, finalPower);
             ApplyRarityScaling(package.Modifiers, rarity);
             ApplyAffixes(package.Modifiers, archetype, rarity);
             
@@ -33,7 +34,7 @@ namespace Battle
             float hp = power * archetype.healthWeight * 6f;
             Add(package, ModifierType.Added, StatType.MaximumHealth, hp);
             
-            float damageBudget = power * archetype.damageWeight;
+            float damageBudget = power * archetype.damageWeight * 3f;
 
             foreach (var damageType in archetype.damageTypes)
             {
@@ -74,6 +75,13 @@ namespace Battle
             EnemyArchetype archetype)
         {
             Add(package, ModifierType.Added, StatType.AttackSpeed, archetype.baseAttackSpeed);
+        }
+        
+        private void ApplyAccuracy(
+            BaseInnateModifiers package,
+            float power)
+        {
+            Add(package, ModifierType.Added, StatType.Accuracy, power);
         }
         
         private void ApplyRarityScaling(

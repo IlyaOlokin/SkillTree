@@ -24,6 +24,7 @@ namespace Battle
         public event Action OnOuterModsChanged;
         public event Action OnStatsRecalculated;
         
+        public event Action OnEvade;
         public event Action<Unit> OnDeath;
         
         public Unit UnitObject
@@ -77,7 +78,7 @@ namespace Battle
 
         public void OnEvaded(DamageInstance damageInstance)
         {
-            
+            OnEvade?.Invoke();
         }
         
         protected void RaiseOnModsChanged()

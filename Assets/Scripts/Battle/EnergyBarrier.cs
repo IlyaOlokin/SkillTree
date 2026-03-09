@@ -76,7 +76,8 @@ namespace Battle
                 ? remainingDamage / blockedDamage
                 : 0f;
 
-            foreach (var damageType in damage.Damage.Keys)
+            var damageTypes = new List<DamageType>(damage.Damage.Keys);
+            foreach (var damageType in damageTypes)
             {
                 if (_blockedTypes.HasFlag(damageType))
                 {
