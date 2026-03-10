@@ -37,7 +37,7 @@ namespace Battle
             }
         }
 
-        public void AddExperience(int amount)
+        public void AddExperience(float amount)
         {
             if (amount <= 0)
                 return;
