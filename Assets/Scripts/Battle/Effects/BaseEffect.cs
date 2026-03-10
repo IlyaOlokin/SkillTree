@@ -6,6 +6,7 @@ namespace Battle
     public abstract class BaseEffect
     {
         public abstract bool IsStackable { get; set; }
+        public virtual EffectVisualType VisualType => EffectVisualType.None;
         public float Duration = -1;
 
         public virtual void OnApply(Unit unit){}

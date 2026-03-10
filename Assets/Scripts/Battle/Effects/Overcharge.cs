@@ -13,6 +13,7 @@ namespace Battle
         public bool IsUsed = false;
 
         public override bool IsStackable { get; set; } = false;
+        public override EffectVisualType VisualType => EffectVisualType.Overcharge;
 
         public Overcharge(Unit owner)
         {

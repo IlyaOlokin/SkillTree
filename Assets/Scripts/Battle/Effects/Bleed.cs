@@ -9,6 +9,7 @@ namespace Battle
         private readonly float _totalDamage;
 
         public override bool IsStackable { get; set; } = false;
+        public override EffectVisualType VisualType => EffectVisualType.Bleed;
 
         private Bleed(Unit owner, float physicalDamageDealt, float duration)
         {
@@ -21,7 +22,10 @@ namespace Battle
             float bleedDamage = _totalDamage * (1 / BASE_DURATION) * dt;
 
             DamageInstance damage = new DamageInstance();
-            damage.Damage.Add(DamageType.Physical, bleedDamage);
+            if (!damage.Damage.TryAdd(DamageType.Physical, bleedDamage))
+            {
+                damage.Damage[DamageType.Physical] += bleedDamage;
+            }
 
             unit.ReceiveDoT(damage);
         }

@@ -9,6 +9,7 @@ namespace Battle
         private float _totalDamage;
 
         public override bool IsStackable { get; set; } = true;
+        public override EffectVisualType VisualType => EffectVisualType.Ignite;
 
         public Ignite(Unit owner, float fireDamageDealt)
         {
@@ -29,7 +30,10 @@ namespace Battle
             if (_totalDamage < 1) igniteDamage = 1 * dt; // ?????????
 
             DamageInstance damage = new DamageInstance();
-            damage.Damage.Add(DamageType.Fire, igniteDamage);
+            if (!damage.Damage.TryAdd(DamageType.Fire, igniteDamage))
+            {
+                damage.Damage[DamageType.Fire] += igniteDamage;
+            }
             _totalDamage -= igniteDamage;
 
             unit.ReceiveDoT(damage);

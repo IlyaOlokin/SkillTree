@@ -9,6 +9,7 @@ namespace Battle
         public const float BASE_DURATION = 5f;
         public const float CHILL_BASE_SLOW = -0.5f;
         public override bool IsStackable { get; set; } = true;
+        public override EffectVisualType VisualType => EffectVisualType.Chill;
         
         private float _chillPower;
 

@@ -129,9 +129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfbf68076724c3e4290c939751d3278a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  barrierPower: 0
-  barrierCount: 0
-  maxBarrierCount: 0
 --- !u!114 &5751231110311033075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,6 +143,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unit: {fileID: 0}
   unitNotificationEffect: {fileID: 9209489120575824937, guid: 0c417aa8158cbe848842fce85c460f55, type: 3}
+  effectIconsRoot: {fileID: 0}
+  effectIconPrefab: {fileID: 5220694204394177579, guid: a5a6431faa1da874ea2a0b39d82b21d5, type: 3}
+  effectsIconsStartOffset: {x: 0, y: 0}
+  effectIconsStep: {x: 72, y: 0}
+  effectIconsConfig: {fileID: 11400000, guid: 032a2fbbad446f9418c5b0a9e9c88b68, type: 2}
 --- !u!114 &1764322668812889385
 MonoBehaviour:
   m_ObjectHideFlags: 0
