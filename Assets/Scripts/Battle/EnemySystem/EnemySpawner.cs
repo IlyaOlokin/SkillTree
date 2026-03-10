@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,17 +18,23 @@ namespace Battle
         [SerializeField, Min(1)] private int wavesToUnlockNextLevel = 10;
         [SerializeField, Min(1)] private int maxWaveLevel = 100;
         [SerializeField, Min(0f)] private float respawnDelay = 2f;
-
+        private int _currentClearedWaves;
+        
         private WaveFactory _waveFactory;
         private readonly List<EnemyUnit> _activeEnemies = new();
-        private readonly Dictionary<int, int> _clearedWavesPerLevel = new();
         private Coroutine _respawnCoroutine;
 
         private int _selectedLevel;
         private int _maxUnlockedLevel;
+        private bool _autoProgressionEnabled = true;
 
         public int SelectedLevel => _selectedLevel;
         public int MaxUnlockedLevel => _maxUnlockedLevel;
+        public int WavesToUnlockNextLevel => wavesToUnlockNextLevel;
+        public int CurrentClearedWaves => _currentClearedWaves;
+        
+        public event Action OnLevelChanged;
+        public event Action OnWaveCleared;
 
         private void Awake()
         {
@@ -43,19 +50,6 @@ namespace Battle
             SpawnCurrentLevel();
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                SelectPreviousLevel();
-            }
-
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                SelectNextLevel();
-            }
-        }
-
         public void Spawn(int level)
         {
             SetSelectedLevel(level);
@@ -65,21 +59,25 @@ namespace Battle
         public void SelectPreviousLevel()
         {
             SetSelectedLevel(_selectedLevel - 1);
+            DeactivatePool();
+            ScheduleRespawn(respawnDelay);
         }
 
         public void SelectNextLevel()
         {
             SetSelectedLevel(_selectedLevel + 1);
+            DeactivatePool();
+            ScheduleRespawn(respawnDelay);
         }
 
         private void SetSelectedLevel(int level)
         {
             _selectedLevel = Mathf.Clamp(level, 1, _maxUnlockedLevel);
             _autoProgressionEnabled = _selectedLevel >= _maxUnlockedLevel;
+            _currentClearedWaves = 0;
+            OnLevelChanged?.Invoke();
         }
-
-        private bool _autoProgressionEnabled = true;
-
+        
         private void SpawnCurrentLevel()
         {
             if (_respawnCoroutine != null)
@@ -123,35 +121,20 @@ namespace Battle
             if (_activeEnemies.Count > 0)
                 return;
 
-            RegisterWaveClear(_selectedLevel);
+            RegisterWaveClear();
             ScheduleRespawn(respawnDelay);
         }
 
-        private void RegisterWaveClear(int level)
+        private void RegisterWaveClear()
         {
-            if (_clearedWavesPerLevel.TryGetValue(level, out int clearedWaves) == false)
-                clearedWaves = 0;
+            _currentClearedWaves++;
 
-            clearedWaves += 1;
-
-            while (clearedWaves >= wavesToUnlockNextLevel)
+            if (_currentClearedWaves >= wavesToUnlockNextLevel && _autoProgressionEnabled)
             {
-                clearedWaves -= wavesToUnlockNextLevel;
-
-                int nextLevel = Mathf.Min(level + 1, maxWaveLevel);
-                if (nextLevel > _maxUnlockedLevel)
-                {
-                    bool shouldAutoAdvance = _autoProgressionEnabled && _selectedLevel >= _maxUnlockedLevel;
-                    _maxUnlockedLevel = nextLevel;
-
-                    if (shouldAutoAdvance)
-                    {
-                        _selectedLevel = _maxUnlockedLevel;
-                    }
-                }
+                _maxUnlockedLevel++;
+                SelectNextLevel();
             }
-
-            _clearedWavesPerLevel[level] = clearedWaves;
+            OnWaveCleared?.Invoke();
         }
 
         private void ScheduleRespawn(float delay)
