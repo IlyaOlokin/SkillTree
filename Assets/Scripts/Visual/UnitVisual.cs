@@ -11,6 +11,7 @@ namespace Visual
         {
             unit.health.OnHealthChangedDelta += DisplayHealthChangedNotification;
             unit.OnEvade += DisplayEvadeNotification;
+            unit.OnBlock += DisplayBlockNotification;
         }
 
         private void OnDestroy()
@@ -19,6 +20,7 @@ namespace Visual
             {
                 unit.health.OnHealthChangedDelta -= DisplayHealthChangedNotification;
                 unit.OnEvade -= DisplayEvadeNotification;
+                unit.OnBlock -= DisplayBlockNotification;
             }
         }
 
@@ -35,7 +37,13 @@ namespace Visual
             var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
             
             newEffect.WriteMessage("Evade");
+        }
+        
+        private void DisplayBlockNotification()
+        {
+            var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
             
+            newEffect.WriteMessage("Block");
         }
     }
 }

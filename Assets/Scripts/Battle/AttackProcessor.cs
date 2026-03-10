@@ -22,13 +22,15 @@ namespace Battle
             
             DamageCalculator.CalculateAttackDamage(damageInfo);
             
-            // defence with Defences Defence(DamageInstance damageInfo)
+            //Evasion
             if (Evasion.ApplyEvasion(damageInfo.DamageInstance, defender.UnitObject, attackerUnit))
             {
-                defender.OnEvaded(damageInfo.DamageInstance);
-                AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore);
+                defender.OnHitEvaded(damageInfo.DamageInstance);
+                AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics
                 return;
             }
+            
+            //Mitigation
             Armor.ApplyArmorMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);
             Resistance.ApplyResistanceMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);
             
@@ -37,7 +39,16 @@ namespace Battle
             Ignite.Apply(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
             Chill.Apply(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
             Overcharge.Apply(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
+
+            //Block
+            if (Block.ApplyBlock(defender.UnitObject))
+            {
+                defender.OnHitBlock(damageInfo.DamageInstance);
+                AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics
+                return;
+            }
             
+            //Damage
             DamageInstance damageDealt = defender.ReceiveDamage(damageInfo.DamageInstance);
             LifeSteel.Apply(attackerUnit, damageDealt);
             attackerUnit.DamageDealt(damageDealt);

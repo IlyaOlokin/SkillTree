@@ -8,7 +8,8 @@ namespace Battle
 
         public DamageInstance ReceiveDamage(DamageInstance damageInstance);
         public void ReceiveDoT(DamageInstance damageInstance);
-        public void OnEvaded(DamageInstance damageInstance);
+        public void OnHitEvaded(DamageInstance damageInstance);
+        public void OnHitBlock(DamageInstance damageInstance);
     }
 }
 

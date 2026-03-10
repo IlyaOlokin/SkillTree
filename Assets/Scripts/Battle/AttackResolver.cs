@@ -35,7 +35,12 @@ namespace Battle
             UnitObject.ReceiveDoT(damageInstance);
         }
 
-        public void OnEvaded(DamageInstance damageInstance)
+        public void OnHitEvaded(DamageInstance damageInstance)
+        {
+            
+        }
+
+        public void OnHitBlock(DamageInstance damageInstance)
         {
             
         }

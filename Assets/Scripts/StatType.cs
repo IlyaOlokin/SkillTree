@@ -40,6 +40,7 @@ public enum StatType
     // Defence
     Armor = 19,
     Evasion = 20,
+    BlockChance = 42,
     Defence = 26,
     Accuracy = 21,
     MaximumHealth = 22,

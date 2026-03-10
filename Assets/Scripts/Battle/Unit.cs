@@ -25,6 +25,7 @@ namespace Battle
         public event Action OnStatsRecalculated;
         
         public event Action OnEvade;
+        public event Action OnBlock;
         public event Action<Unit> OnDeath;
         
         public Unit UnitObject
@@ -76,9 +77,14 @@ namespace Battle
             health.TakeHeal(amount);
         }
 
-        public void OnEvaded(DamageInstance damageInstance)
+        public void OnHitEvaded(DamageInstance damageInstance)
         {
             OnEvade?.Invoke();
+        }
+        
+        public void OnHitBlock(DamageInstance damageInstance)
+        {
+            OnBlock?.Invoke();
         }
         
         protected void RaiseOnModsChanged()
