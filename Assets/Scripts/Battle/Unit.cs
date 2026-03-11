@@ -24,6 +24,7 @@ namespace Battle
         public event Action OnOuterModsChanged;
         public event Action OnStatsRecalculated;
         
+        public event Action<DamageInstance> OnHit;
         public event Action OnEvade;
         public event Action OnBlock;
         public event Action<Unit> OnDeath;
@@ -59,7 +60,9 @@ namespace Battle
         public DamageInstance ReceiveDamage(DamageInstance damageInstance)
         {
             barrier.TakeDamage(damageInstance);
-            return health.TakeDamage(damageInstance);
+            DamageInstance receivedDamage = health.TakeDamage(damageInstance);
+            OnHit?.Invoke(receivedDamage);
+            return receivedDamage;
         }
 
         public void DamageDealt(DamageInstance damageInstance)

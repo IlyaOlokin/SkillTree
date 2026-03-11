@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2034453496676864404, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: m_Color.b
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2034453496676864404, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: m_Color.g
+      value: 0.81960785
+      objectReference: {fileID: 0}
     - target: {fileID: 4884718464874992480, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
       propertyPath: m_Name
       value: PlayerUnit
@@ -16,6 +24,10 @@ PrefabInstance:
       propertyPath: unit
       value: 
       objectReference: {fileID: 5186857671638254335}
+    - target: {fileID: 5751231110311033075, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: effectsController.effectIconsStep.x
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 7052957071513661914, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -59,6 +71,18 @@ PrefabInstance:
     - target: {fileID: 7514751793277906650, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9140746461347518866, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: m_Color.b
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9140746461347518866, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: m_Color.g
+      value: 0.81960785
+      objectReference: {fileID: 0}
+    - target: {fileID: 9140746461347518866, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7052957071513661914, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}

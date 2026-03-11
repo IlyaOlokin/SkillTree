@@ -1,13 +1,14 @@
 using Battle;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Visual
 {
-    public class UnitVisual : MonoBehaviour
+    [Serializable]
+    public class UnitVisualEffectsController
     {
-        [SerializeField] private Unit unit;
-        [SerializeField] private UnitNotificationEffect unitNotificationEffect;
         [SerializeField] private RectTransform effectIconsRoot;
         [SerializeField] private UnitEffectIconView effectIconPrefab;
         [SerializeField] private Vector2 effectsIconsStartOffset;
@@ -17,53 +18,7 @@ namespace Visual
         private readonly Dictionary<ActiveEffect, UnitEffectIconView> _effectIcons = new Dictionary<ActiveEffect, UnitEffectIconView>();
         private readonly List<ActiveEffect> _iconsToRemove = new List<ActiveEffect>();
 
-        void Awake()
-        {
-            unit.health.OnHealthChangedDelta += DisplayHealthChangedNotification;
-            unit.OnEvade += DisplayEvadeNotification;
-            unit.OnBlock += DisplayBlockNotification;
-        }
-
-        private void OnDestroy()
-        {
-            if (unit != null && unit.health != null)
-            {
-                unit.health.OnHealthChangedDelta -= DisplayHealthChangedNotification;
-                unit.OnEvade -= DisplayEvadeNotification;
-                unit.OnBlock -= DisplayBlockNotification;
-            }
-
-            ClearAllEffectIcons();
-        }
-
-        private void Update()
-        {
-            UpdateEffectIcons();
-        }
-
-        private void DisplayHealthChangedNotification(float deltaHealth)
-        {
-            var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
-            
-            if (deltaHealth > 0) newEffect.WriteDamage(Mathf.Abs(deltaHealth));
-            else if (deltaHealth < 0) newEffect.WriteHeal(Mathf.Abs(deltaHealth));
-        }
-        
-        private void DisplayEvadeNotification()
-        {
-            var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
-            
-            newEffect.WriteMessage("Evade");
-        }
-        
-        private void DisplayBlockNotification()
-        {
-            var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
-            
-            newEffect.WriteMessage("Block");
-        }
-
-        private void UpdateEffectIcons()
+        public void UpdateEffectIcons(Unit unit)
         {
             if (unit == null || unit.effectController == null || effectIconsRoot == null || effectIconPrefab == null)
             {
@@ -106,9 +61,23 @@ namespace Visual
             }
         }
 
+        public void ClearAllEffectIcons()
+        {
+            foreach (var pair in _effectIcons)
+            {
+                if (pair.Value != null)
+                {
+                    Object.Destroy(pair.Value.gameObject);
+                }
+            }
+
+            _effectIcons.Clear();
+            _iconsToRemove.Clear();
+        }
+
         private UnitEffectIconView CreateEffectIcon(ActiveEffect activeEffect)
         {
-            var iconView = Instantiate(effectIconPrefab, effectIconsRoot);
+            var iconView = Object.Instantiate(effectIconPrefab, effectIconsRoot);
             iconView.RectTransform.localScale = effectIconsRoot.localScale;
             iconView.SetIcon(ResolveEffectIcon(activeEffect.Effect));
             return iconView;
@@ -124,7 +93,7 @@ namespace Visual
             iconView.RectTransform.anchoredPosition = effectsIconsStartOffset + effectIconsStep * index;
         }
 
-        private void UpdateIconTimer(ActiveEffect activeEffect, UnitEffectIconView iconView)
+        private static void UpdateIconTimer(ActiveEffect activeEffect, UnitEffectIconView iconView)
         {
             float duration = activeEffect.Effect.Duration;
             if (duration > 0f)
@@ -155,25 +124,10 @@ namespace Visual
 
             if (iconView != null)
             {
-                Destroy(iconView.gameObject);
+                Object.Destroy(iconView.gameObject);
             }
 
             _effectIcons.Remove(activeEffect);
         }
-
-        private void ClearAllEffectIcons()
-        {
-            foreach (var pair in _effectIcons)
-            {
-                if (pair.Value != null)
-                {
-                    Destroy(pair.Value.gameObject);
-                }
-            }
-
-            _effectIcons.Clear();
-            _iconsToRemove.Clear();
-        }
     }
 }
-
