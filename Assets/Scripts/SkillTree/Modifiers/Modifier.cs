@@ -17,6 +17,7 @@ namespace SkillTree
 
         public virtual void OnCollected(){}
         public virtual void OnReset(){}
+        public virtual IModifierRuntimeBinding CreateRuntimeBinding(Unit unit) => null;
         
         public virtual bool IsApplicable(Unit unit) => true;
         public virtual bool IsInPriority(ModifierPriority priority) => Priorities.Contains(priority);

@@ -6,6 +6,7 @@ namespace Battle
         Bleed = 1,
         Ignite = 2,
         Chill = 3,
-        Overcharge = 4
+        Overcharge = 4,
+        NextHitDamageMitigation = 5,
     }
 }

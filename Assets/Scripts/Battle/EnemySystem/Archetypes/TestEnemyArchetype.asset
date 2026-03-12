@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfff9238fe22d774e9c6f626c2244278, type: 3}
   m_Name: TestEnemyArchetype
   m_EditorClassIdentifier: 
-  healthWeight: 0.195
-  damageWeight: 0.3912517
-  defenseWeight: 0.41374826
+  healthWeight: 0.32666314
+  damageWeight: 0.34033686
+  defenseWeight: 0.333
   barrierWeight: 0
   baseAttackSpeed: 0.2
   damageTypes:

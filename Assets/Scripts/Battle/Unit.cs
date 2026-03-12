@@ -19,6 +19,7 @@ namespace Battle
         public BaseUnitModifiers BaseUnitModifiers;
         
         private List<Modifier> _outerModifiers = new List<Modifier>();
+        private readonly List<IModifierRuntimeBinding> _modifierRuntimeBindings = new List<IModifierRuntimeBinding>();
         
         public event Action OnModsChanged;
         public event Action OnOuterModsChanged;
@@ -103,8 +104,10 @@ namespace Battle
         private void RecalculateMods()
         {
             ResetUnit();
-
-            StatCalculator.RecalculateStats(this);
+            
+            List<Modifier> mods = GetAllModifiers();
+            StatCalculator.RecalculateStats(this, mods);
+            BindModifierRuntimes(mods);
             
             RaiseOnStatsRecalculated();
         }
@@ -112,9 +115,31 @@ namespace Battle
         
         protected void ResetUnit()
         {
+            UnbindModifierRuntimes();
             BaseUnitModifiers.Reset();
             baseInnateModifiers.ApplyEffect(this);
             innateModifiers.ApplyEffect(this);
+        }
+
+        private void BindModifierRuntimes(List<Modifier> mods)
+        {
+            foreach (var mod in mods)
+            {
+                var runtimeBinding = mod.CreateRuntimeBinding(this);
+                if (runtimeBinding == null) continue;
+
+                runtimeBinding.Bind();
+                _modifierRuntimeBindings.Add(runtimeBinding);
+            }
+        }
+
+        private void UnbindModifierRuntimes()
+        {
+            for (int i = _modifierRuntimeBindings.Count - 1; i >= 0; i--)
+            {
+                _modifierRuntimeBindings[i].Unbind();
+            }
+            _modifierRuntimeBindings.Clear();
         }
 
         public List<Modifier> GetAllModifiers()
@@ -124,7 +149,6 @@ namespace Battle
             {
                 mods.AddRange(playerUnit.SkillTree.CollectAllModifiers());
             }
-            // mods += buffs/debuffs
             
             mods.AddRange(_outerModifiers);
             
@@ -158,6 +182,7 @@ namespace Battle
         protected virtual void OnDestroy()
         {
             health.OnHealthZero -= Death;
+            UnbindModifierRuntimes();
         }
         
     }

@@ -18,7 +18,7 @@ namespace Battle
         {
             float totalPower = _powerCalculator.Calculate(level);
 
-            int enemyCount = Random.Range(1, 4);
+            int enemyCount = Random.Range(1, 1); // 1 4
             float powerPerEnemy = totalPower / enemyCount; // change it later
 
             var result = new List<EnemySpawnData>();

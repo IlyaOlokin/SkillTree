@@ -6,10 +6,8 @@ using UnityEngine;
 
 public static class StatCalculator
 {
-    public static void RecalculateStats(Unit unit)
+    public static void RecalculateStats(Unit unit, List<Modifier> mods)
     {
-        List<Modifier> mods = unit.GetAllModifiers();
-        
         foreach (var mod in mods)
         {
             if (mod.IsInPriority(ModifierPriority.PreAttribute) && mod.IsApplicable(unit)) mod.ApplyEffect(unit);

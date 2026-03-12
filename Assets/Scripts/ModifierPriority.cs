@@ -5,5 +5,6 @@ public enum ModifierPriority
     PreAttribute,
     Secondary,
     Special,
-    OnAttack
+    OnAttack,
+    OnGettingHit
 }

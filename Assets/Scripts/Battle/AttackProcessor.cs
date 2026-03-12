@@ -11,6 +11,14 @@ namespace Battle
             // All Modifiers are applied on unit update
             int attackerStateHashBefore = attackerUnit.BaseUnitModifiers.ComputeDeterministicHash(); // Diagnostics
             
+            //Evasion
+            if (Evasion.ApplyEvasion(defender.UnitObject, attackerUnit))
+            {
+                defender.OnHitEvaded(damageInfo.DamageInstance);
+                AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics
+                return;
+            }
+            
             List<Modifier> mods = attackerUnit.GetAllModifiers();
             
             Overcharge.ApplyOverchargeEffect(defender, mods);
@@ -22,17 +30,15 @@ namespace Battle
             
             DamageCalculator.CalculateAttackDamage(damageInfo);
             
-            //Evasion
-            if (Evasion.ApplyEvasion(damageInfo.DamageInstance, defender.UnitObject, attackerUnit))
-            {
-                defender.OnHitEvaded(damageInfo.DamageInstance);
-                AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics
-                return;
-            }
             
             //Mitigation
             Armor.ApplyArmorMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);
             Resistance.ApplyResistanceMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);
+            
+            foreach (Modifier mod in defender.UnitObject.GetAllModifiers())
+            {
+                if (mod.IsInPriority(ModifierPriority.OnGettingHit) && mod.IsApplicable(defender.UnitObject)) mod.ApplyEffect(damageInfo);
+            }
             
             // Ailments
             Bleed.Apply(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);

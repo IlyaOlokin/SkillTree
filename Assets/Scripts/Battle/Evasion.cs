@@ -6,7 +6,7 @@ namespace Battle
 {
     public static class Evasion
     {
-        public static bool ApplyEvasion(DamageInstance damage, Unit defender, Unit attacker)
+        public static bool ApplyEvasion(Unit defender, Unit attacker)
         {
             float evasion = defender.BaseUnitModifiers.GetStatValue(StatType.Evasion);
             
