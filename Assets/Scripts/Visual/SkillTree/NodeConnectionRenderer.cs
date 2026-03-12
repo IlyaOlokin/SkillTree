@@ -15,7 +15,7 @@ namespace SkillTree
     [ExecuteAlways]
     public class NodeConnectionRenderer : MonoBehaviour
     {
-        [SerializeField] private BaseSkillTree skillTree;
+        [SerializeField] private MainSkillTree skillTree;
         [SerializeField] private Node rootNode;
         [SerializeField] private List<NodeConnectionData> nodeConnections = new();
         [SerializeField] private SplineContainer connectionPrefab;

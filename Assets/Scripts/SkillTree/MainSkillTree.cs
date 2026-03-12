@@ -1,12 +1,18 @@
 using System;
 using System.Collections.Generic;
 using Battle;
+using UnityEngine;
 
 
 namespace SkillTree
 {
-    public class MainSkillTree : BaseSkillTree
+    public class MainSkillTree : MonoBehaviour
     {
+        public event Action OnSkillTreeChanged;
+        public event Action<Node> OnAnyNodeChanged;
+
+        [SerializeField] private Node root;
+        [SerializeField] private List<BonusZone> bonusZones;
         private List<Node> _allocatedNodes = new List<Node>();
 
         private void Awake()
@@ -33,7 +39,7 @@ namespace SkillTree
             UpdateTree();
         }
 
-        public override List<Modifier> CollectAllModifiers()
+        public List<Modifier> CollectAllModifiers()
         {
             List<Modifier> modifiers = new List<Modifier>();
 
@@ -44,10 +50,40 @@ namespace SkillTree
                     modifiers.Add(modifier);
                 }
             }
+
+            foreach (var bonusZone in bonusZones)
+            {
+                modifiers.Add(bonusZone.CollectModifier());
+            }
             
             return modifiers;
         }
 
+        private void RaiseOnSkillTreeChanged()
+        {
+            OnSkillTreeChanged?.Invoke();
+        }
+
+        private void RaiseAnyNodeChanged(Node node)
+        {
+            OnAnyNodeChanged?.Invoke(node);
+        }
+
+        private void SubscribeAllFromRoot(Node rootNode, Action<Node> action)
+        {
+            NodeGraphTraversalService.Traverse(rootNode, node =>
+            {
+                node.OnAllocatedChanged += action;
+            });
+        }
+
+        private void UnsubscribeAllFromRoot(Node rootNode, Action<Node> action)
+        {
+            NodeGraphTraversalService.Traverse(rootNode, node =>
+            {
+                node.OnAllocatedChanged -= action;
+            });
+        }
     }
 }
 

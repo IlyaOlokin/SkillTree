@@ -8,7 +8,7 @@ namespace Battle
 {
     public class PlayerUnit : Unit
     {
-        [field: SerializeField] public BaseSkillTree SkillTree {get; private set; }
+        [field: SerializeField] public MainSkillTree SkillTree {get; private set; }
         [field: SerializeField] public UnitLevel UnitLevel {get; private set; }
         
         [Inject(Id = TargetIds.Enemies)] private ITarget _enemyTarget;

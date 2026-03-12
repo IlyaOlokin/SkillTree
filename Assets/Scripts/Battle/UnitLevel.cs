@@ -33,7 +33,7 @@ namespace Battle
         {
             if (Input.GetKeyDown(KeyCode.T))
             {
-                AddExperience(100);
+                AddExperience(expToNextLevel);
             }
         }
 
