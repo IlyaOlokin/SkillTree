@@ -14,6 +14,9 @@ namespace SkillTree
         {
             ModifierPriority.PreAttribute
         };
+
+        public virtual void OnCollected(){}
+        public virtual void OnReset(){}
         
         public virtual bool IsApplicable(Unit unit) => true;
         public virtual bool IsInPriority(ModifierPriority priority) => Priorities.Contains(priority);

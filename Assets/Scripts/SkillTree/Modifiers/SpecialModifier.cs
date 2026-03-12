@@ -4,8 +4,13 @@ using UnityEngine;
 
 namespace SkillTree
 {
-    public class SpecialModifier : Modifier
+    public class EvadeToMitigationCharges : Modifier
     {
+        
+        public override void ApplyEffect(Unit unit)
+        {
+            unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer);
+        }
     }
 }
 
