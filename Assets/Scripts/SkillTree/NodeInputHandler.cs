@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Zenject;
 
 namespace SkillTree
@@ -17,6 +18,12 @@ namespace SkillTree
 
         private void OnMouseOver()
         {
+            if (IsPointerOverUI())
+            {
+                _skillTreeUI.HideNodeDescription();
+                return;
+            }
+
             if (Input.GetMouseButtonDown(0))
             {
                 _node.Allocate();
@@ -29,12 +36,22 @@ namespace SkillTree
 
         private void OnMouseEnter()
         {
+            if (IsPointerOverUI())
+            {
+                return;
+            }
+
             _skillTreeUI.DisplayNodeDescription(_node);
         }
 
         private void OnMouseExit()
         {
             _skillTreeUI.HideNodeDescription();
+        }
+
+        private static bool IsPointerOverUI()
+        {
+            return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
         }
     }
 }

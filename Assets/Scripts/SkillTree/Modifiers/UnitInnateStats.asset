@@ -26,3 +26,6 @@ MonoBehaviour:
   - modifierType: 0
     statType: 31
     value: 0.1
+  - modifierType: 0
+    statType: 34
+    value: 1

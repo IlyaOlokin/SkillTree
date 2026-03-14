@@ -55,6 +55,8 @@ public static class StatCalculator
     {
         baseUnitModifiers.MergeModifier(StatType.Armor, baseUnitModifiers.GetModifier(StatType.Defence));
         baseUnitModifiers.MergeModifier(StatType.Evasion, baseUnitModifiers.GetModifier(StatType.Defence));
+        baseUnitModifiers.MergeModifier(StatType.BarrierPower, baseUnitModifiers.GetModifier(StatType.Defence));
+        baseUnitModifiers.MergeModifier(StatType.BlockChance, baseUnitModifiers.GetModifier(StatType.Defence));
         
         baseUnitModifiers.ClearModifier(StatType.Defence);
     }
