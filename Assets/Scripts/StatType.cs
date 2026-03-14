@@ -18,7 +18,7 @@ public enum StatType
     PoisonDamage = 10,
     
     // Negative Effects
-    NegativeEffectMagnitude  = 11,
+    AilmentMagnitude  = 11,
     
     IgniteMagnitude = 12,
     ChillMagnitude = 13,
@@ -29,6 +29,12 @@ public enum StatType
     ChillChance = 39,
     OverchargeChance = 40,
     BleedChance = 41,
+    
+    AilmentMitigation = 47,
+    IgniteMitigation = 48,
+    ChillMitigation = 49,
+    OverchargeMitigation = 50,
+    BleedMitigation = 51,
     
     // Crit
     CritChance = 16,

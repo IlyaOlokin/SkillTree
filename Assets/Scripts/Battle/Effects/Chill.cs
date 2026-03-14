@@ -15,10 +15,10 @@ namespace Battle
 
         private BaseModifier _cachedModifier;
         
-        private Chill(Unit owner, float duration)
+        private Chill(Unit owner, Unit defender, float duration)
         {
             Duration = duration;
-            CalculateChillPower(owner);
+            CalculateChillPower(owner, defender);
         }
         
         public override void OnApply(Unit unit)
@@ -32,7 +32,10 @@ namespace Battle
         public override void OnStack(Unit unit, BaseEffect newEffect, ActiveEffect existing)
         {
             existing.TimeLeft = Mathf.Max(newEffect.Duration, existing.TimeLeft);
-            CalculateChillPower(unit);
+            if (newEffect is Chill chill)
+            {
+                _chillPower = chill._chillPower;
+            }
         }
 
         public override void OnRemove(Unit unit)
@@ -40,9 +43,9 @@ namespace Battle
             unit.RemoveOuterModifier(_cachedModifier);
         }
 
-        public void CalculateChillPower(Unit unit)
+        public void CalculateChillPower(Unit unit, Unit defender)
         {
-            _chillPower = CHILL_BASE_SLOW * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.ChillMagnitude));
+            _chillPower = CHILL_BASE_SLOW * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.ChillMagnitude)) * defender.BaseUnitModifiers.GetStatValue(StatType.ChillMitigation);
         }
         
         public static void Apply(Unit attacker, DamageInstance damageInstance, Unit defender)
@@ -52,7 +55,7 @@ namespace Battle
             damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.ChillChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
-                defender.effectController.AddEffect(new Chill(attacker, BASE_DURATION));
+                defender.effectController.AddEffect(new Chill(attacker, defender, BASE_DURATION));
             }
         }
     }

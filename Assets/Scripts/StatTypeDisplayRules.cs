@@ -7,6 +7,8 @@ public static class StatTypeDisplayRules
         StatType.CritChance,
         StatType.CritDamageBonus,
         StatType.LifeSteel,
+        StatType.BleedChance,
+        StatType.BlockChance,
         StatType.ElementalResistance,
         StatType.FireResistance,
         StatType.ColdResistance,
@@ -15,6 +17,16 @@ public static class StatTypeDisplayRules
         StatType.MaxFireResistance,
         StatType.MaxColdResistance,
         StatType.MaxLightningResistance,
+        StatType.AilmentMagnitude,
+        StatType.BleedMagnitude,
+        StatType.IgniteMagnitude,
+        StatType.ChillMagnitude,
+        StatType.OverchargeMagnitude,
+        StatType.AilmentMitigation,
+        StatType.BleedMitigation,
+        StatType.IgniteMitigation,
+        StatType.ChillMitigation,
+        StatType.OverchargeMitigation,
     };
 
     public static bool IsPercentStat(StatType statType)

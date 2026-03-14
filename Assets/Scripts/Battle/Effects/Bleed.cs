@@ -11,9 +11,9 @@ namespace Battle
         public override bool IsStackable { get; set; } = false;
         public override EffectVisualType VisualType => EffectVisualType.Bleed;
 
-        private Bleed(Unit owner, float physicalDamageDealt, float duration)
+        private Bleed(Unit owner, Unit defender, float physicalDamageDealt, float duration)
         {
-            _totalDamage = CalculateTotalDamage(owner, physicalDamageDealt);
+            _totalDamage = CalculateTotalDamage(owner, defender, physicalDamageDealt);
             Duration = duration;
         }
 
@@ -30,11 +30,11 @@ namespace Battle
             unit.ReceiveDoT(damage);
         }
         
-        private float CalculateTotalDamage(Unit unit, float physicalDamageDealt)
+        private float CalculateTotalDamage(Unit unit, Unit defender, float physicalDamageDealt)
         {
             float magnitude = BASE_DAMAGE_PERCENTAGE *
                               (1 + unit.BaseUnitModifiers.GetStatValue(StatType.BleedMagnitude));
-            return physicalDamageDealt * (1 + magnitude);
+            return physicalDamageDealt * (1 + magnitude) * defender.BaseUnitModifiers.GetStatValue(StatType.BleedMitigation);
         }
         
         public static void Apply(Unit attacker, DamageInstance damageInstance, Unit defender)
@@ -43,7 +43,7 @@ namespace Battle
             float chanceToApplyBleed = attacker.BaseUnitModifiers.GetStatValue(StatType.BleedChance);
             if (Random.Range(0f, 1f) < chanceToApplyBleed)
             {
-                defender.effectController.AddEffect(new Bleed(attacker, damageInstance.Damage[DamageType.Physical], BASE_DURATION));
+                defender.effectController.AddEffect(new Bleed(attacker, defender,damageInstance.Damage[DamageType.Physical], BASE_DURATION));
             }
         }
 

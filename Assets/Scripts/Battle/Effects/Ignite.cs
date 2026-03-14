@@ -11,9 +11,9 @@ namespace Battle
         public override bool IsStackable { get; set; } = true;
         public override EffectVisualType VisualType => EffectVisualType.Ignite;
 
-        public Ignite(Unit owner, float fireDamageDealt)
+        public Ignite(Unit owner, Unit defender, float fireDamageDealt)
         {
-            _totalDamage = CalculateTotalDamage(owner, fireDamageDealt);
+            _totalDamage = CalculateTotalDamage(owner, defender, fireDamageDealt);
         }
 
         public override void OnStack(Unit unit, BaseEffect newEffect, ActiveEffect existing)
@@ -44,11 +44,11 @@ namespace Battle
             return _totalDamage <= 0;
         }
 
-        private float CalculateTotalDamage(Unit unit, float fireDamageDealt)
+        private float CalculateTotalDamage(Unit unit, Unit defender, float fireDamageDealt)
         {
             float magnitude = BASE_DAMAGE_PERCENTAGE *
                               (1 + unit.BaseUnitModifiers.GetStatValue(StatType.IgniteMagnitude));
-            return fireDamageDealt * (1 + magnitude);
+            return fireDamageDealt * (1 + magnitude) * defender.BaseUnitModifiers.GetStatValue(StatType.IgniteMitigation);
         }
 
         public static void Apply(Unit attacker, DamageInstance damageInstance, Unit defender)
@@ -58,7 +58,7 @@ namespace Battle
             damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.IgniteChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
-                defender.effectController.AddEffect(new Ignite(attacker, damageInstance.Damage[DamageType.Fire]));
+                defender.effectController.AddEffect(new Ignite(attacker, defender, damageInstance.Damage[DamageType.Fire]));
             }
         }
     }

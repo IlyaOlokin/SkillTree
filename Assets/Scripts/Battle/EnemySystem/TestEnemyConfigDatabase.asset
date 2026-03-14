@@ -17,7 +17,7 @@ MonoBehaviour:
   basePower: 10
   powerGrowthRate: 1.12
   startingLevel: 1
-  wavesToUnlockNextLevel: 10
+  wavesToUnlockNextLevel: 2
   maxWaveLevel: 100
   respawnDelay: 2
   maxEnemiesPerWave: 3

@@ -153,7 +153,7 @@ public class SkillTreeTool : EditorTool
         
         Node[] nodes = FindObjectsByType<Node>(FindObjectsSortMode.None);
 
-        float pickRadius = 0.5f; 
+        float pickRadius = 0.3f; 
         foreach (Node node in nodes)
         {
             if (Vector2.Distance(worldPos, node.transform.position) <= pickRadius)
@@ -183,8 +183,8 @@ public class SkillTreeTool : EditorTool
     private Vector3 SnapPosition(Vector3 position)
     {
         return new Vector3(
-            Mathf.Round(position.x),
-            Mathf.Round(position.y),
+            Mathf.Round(position.x * 2f) / 2f,
+            Mathf.Round(position.y * 2f) / 2f,
             position.z
         );
     }

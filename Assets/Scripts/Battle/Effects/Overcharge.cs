@@ -15,19 +15,21 @@ namespace Battle
         public override bool IsStackable { get; set; } = false;
         public override EffectVisualType VisualType => EffectVisualType.Overcharge;
 
-        public Overcharge(Unit owner)
+        public Overcharge(Unit owner, Unit defender)
         {
-            CalculateBonuses(owner);
+            CalculateBonuses(owner, defender);
         }
         
-        private void CalculateBonuses(Unit unit)
+        private void CalculateBonuses(Unit unit, Unit defender)
         {
+            float mitigation = defender.BaseUnitModifiers.GetStatValue(StatType.OverchargeMitigation);
+
             MoreDamage = ScriptableObject.CreateInstance<BaseModifier>();
-            MoreDamage.modifierContainer = new ModifierContainer(ModifierType.More, StatType.Damage, BASE_MORE_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)));
+            MoreDamage.modifierContainer = new ModifierContainer(ModifierType.More, StatType.Damage, BASE_MORE_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)) * mitigation);
             MoreDamage.SetPriorities(new List<ModifierPriority>() { ModifierPriority.OnAttack });
             
             MoreCritDamageBonus = ScriptableObject.CreateInstance<BaseModifier>();
-            MoreCritDamageBonus.modifierContainer = new ModifierContainer(ModifierType.More, StatType.CritDamageBonus, BASE_MORE_CRIT_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)));
+            MoreCritDamageBonus.modifierContainer = new ModifierContainer(ModifierType.More, StatType.CritDamageBonus, BASE_MORE_CRIT_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)) * mitigation);
             MoreCritDamageBonus.SetPriorities(new List<ModifierPriority>() { ModifierPriority.OnAttack });
         }
 
@@ -43,7 +45,7 @@ namespace Battle
             damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.OverchargeChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
-                defender.effectController.AddEffect(new Overcharge(attacker));
+                defender.effectController.AddEffect(new Overcharge(attacker, defender));
             }
         }
         

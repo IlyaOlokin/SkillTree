@@ -27,11 +27,12 @@ public static class StatCalculator
         
         MergeDamageModifiers(unit.BaseUnitModifiers);
         MergeDefenceModifiers(unit.BaseUnitModifiers);
-        MergeNegativeEffectModifiers(unit.BaseUnitModifiers);
+        MergeAilmentModifiers(unit.BaseUnitModifiers);
+        MergeAilmentMitigationModifiers(unit.BaseUnitModifiers);
 
         CacheStatValues(unit);
     }
-    
+
     public static void MergeDamageModifiers(BaseUnitModifiers baseUnitModifiers)
     {
         foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
@@ -61,14 +62,24 @@ public static class StatCalculator
         baseUnitModifiers.ClearModifier(StatType.Defence);
     }
     
-    public static void MergeNegativeEffectModifiers(BaseUnitModifiers baseUnitModifiers)
+    public static void MergeAilmentModifiers(BaseUnitModifiers baseUnitModifiers)
     {
-        baseUnitModifiers.MergeModifier(StatType.IgniteMagnitude, baseUnitModifiers.GetModifier(StatType.NegativeEffectMagnitude));
-        baseUnitModifiers.MergeModifier(StatType.ChillMagnitude, baseUnitModifiers.GetModifier(StatType.NegativeEffectMagnitude));
-        baseUnitModifiers.MergeModifier(StatType.OverchargeMagnitude, baseUnitModifiers.GetModifier(StatType.NegativeEffectMagnitude));
-        baseUnitModifiers.MergeModifier(StatType.BleedMagnitude, baseUnitModifiers.GetModifier(StatType.NegativeEffectMagnitude));
+        baseUnitModifiers.MergeModifier(StatType.IgniteMagnitude, baseUnitModifiers.GetModifier(StatType.AilmentMagnitude));
+        baseUnitModifiers.MergeModifier(StatType.ChillMagnitude, baseUnitModifiers.GetModifier(StatType.AilmentMagnitude));
+        baseUnitModifiers.MergeModifier(StatType.OverchargeMagnitude, baseUnitModifiers.GetModifier(StatType.AilmentMagnitude));
+        baseUnitModifiers.MergeModifier(StatType.BleedMagnitude, baseUnitModifiers.GetModifier(StatType.AilmentMagnitude));
         
-        baseUnitModifiers.ClearModifier(StatType.NegativeEffectMagnitude);
+        baseUnitModifiers.ClearModifier(StatType.AilmentMagnitude);
+    }
+    
+    public static void MergeAilmentMitigationModifiers(BaseUnitModifiers baseUnitModifiers)
+    {
+        baseUnitModifiers.MergeModifier(StatType.IgniteMitigation, baseUnitModifiers.GetModifier(StatType.AilmentMitigation));
+        baseUnitModifiers.MergeModifier(StatType.ChillMitigation, baseUnitModifiers.GetModifier(StatType.AilmentMitigation));
+        baseUnitModifiers.MergeModifier(StatType.OverchargeMitigation, baseUnitModifiers.GetModifier(StatType.AilmentMitigation));
+        baseUnitModifiers.MergeModifier(StatType.BleedMitigation, baseUnitModifiers.GetModifier(StatType.AilmentMitigation));
+        
+        baseUnitModifiers.ClearModifier(StatType.AilmentMitigation);
     }
     
     public static float GetStat(BaseUnitModifiers baseUnitModifiers, StatType statType)
