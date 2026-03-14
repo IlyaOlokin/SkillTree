@@ -4,12 +4,18 @@ namespace Battle
 {
     public class LevelPowerCalculator
     {
-        private const float BasePower = 10f;
-        private const float GrowthRate = 1.12f;
+        private readonly float _basePower;
+        private readonly float _growthRate;
+
+        public LevelPowerCalculator(float basePower, float growthRate)
+        {
+            _basePower = Mathf.Max(0.01f, basePower);
+            _growthRate = Mathf.Max(1f, growthRate);
+        }
 
         public float Calculate(int level)
         {
-            return Mathf.Pow(GrowthRate, level) * BasePower;
+            return Mathf.Pow(_growthRate, level) * _basePower;
         }
     }
 }

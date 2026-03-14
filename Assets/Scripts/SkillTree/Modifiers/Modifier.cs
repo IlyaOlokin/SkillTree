@@ -63,12 +63,14 @@ namespace SkillTree
         public string GetDescription()
         {
             StringBuilder builder = new StringBuilder();
+            var forcePercentForAdded = StatTypeDisplayRules.IsPercentStat(statType);
 
             switch (modifierType)
             {
                 case ModifierType.Added:
                     builder.Append("+")
-                        .Append(value)
+                        .Append(forcePercentForAdded ? value * 100f : value)
+                        .Append(forcePercentForAdded ? "%" : "")
                         .Append(" to ")
                         .Append(statType.ToPrettyString().Replace("Added", ""));
                     break;

@@ -6,7 +6,6 @@ namespace Battle
     {
         private readonly EnemyStatPackageBuilder _builder = new();
         private readonly EnemyConfigDatabase _database;
-        private readonly LevelPowerCalculator _powerCalculator = new();
 
         public EnemyFactory(EnemyConfigDatabase database)
         {
@@ -16,12 +15,23 @@ namespace Battle
         public EnemySpawnData CreateEnemyStats(int level, float power)
         {
             var archetype = _database.GetRandomArchetype();
+            if (archetype == null)
+                return null;
+
             var rarity = EnemyRarityHelper.Roll(level);
 
-            return _builder.Build(
+            var spawnData = _builder.Build(
                 power,
                 archetype,
                 rarity);
+
+            var globalModifiers = _database.GlobalModifiers;
+            if (globalModifiers != null && globalModifiers.Count > 0)
+            {
+                spawnData.Modifiers.AddRange(globalModifiers);
+            }
+
+            return spawnData;
         }
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 namespace Battle
@@ -11,13 +10,7 @@ namespace Battle
     {
         [SerializeField] private EnemyPool pool;
         [SerializeField] private EnemyConfigDatabase database;
-        
-        [Header("Wave progression")]
-        [FormerlySerializedAs("level")]
-        [SerializeField, Min(1)] private int startingLevel = 1;
-        [SerializeField, Min(1)] private int wavesToUnlockNextLevel = 10;
-        [SerializeField, Min(1)] private int maxWaveLevel = 100;
-        [SerializeField, Min(0f)] private float respawnDelay = 2f;
+
         private int _currentClearedWaves;
         
         private WaveFactory _waveFactory;
@@ -28,9 +21,14 @@ namespace Battle
         private int _maxUnlockedLevel;
         private bool _autoProgressionEnabled = true;
 
+        private int StartingLevel => database != null ? database.StartingLevel : 1;
+        private int WavesToUnlockNextLevelInternal => database != null ? database.WavesToUnlockNextLevel : 10;
+        private int MaxWaveLevel => database != null ? database.MaxWaveLevel : 100;
+        private float RespawnDelay => database != null ? database.RespawnDelay : 2f;
+
         public int SelectedLevel => _selectedLevel;
         public int MaxUnlockedLevel => _maxUnlockedLevel;
-        public int WavesToUnlockNextLevel => wavesToUnlockNextLevel;
+        public int WavesToUnlockNextLevel => WavesToUnlockNextLevelInternal;
         public int CurrentClearedWaves => _currentClearedWaves;
         
         public event Action OnLevelChanged;
@@ -38,10 +36,17 @@ namespace Battle
 
         private void Awake()
         {
-            var enemyFactory = new EnemyFactory(database);
-            _waveFactory = new WaveFactory(enemyFactory);
+            if (database == null)
+            {
+                Debug.LogError($"{nameof(EnemySpawner)} requires {nameof(EnemyConfigDatabase)} reference.", this);
+                enabled = false;
+                return;
+            }
 
-            _maxUnlockedLevel = Mathf.Clamp(startingLevel, 1, maxWaveLevel);
+            var enemyFactory = new EnemyFactory(database);
+            _waveFactory = new WaveFactory(enemyFactory, database);
+
+            _maxUnlockedLevel = Mathf.Clamp(StartingLevel, 1, MaxWaveLevel);
             _selectedLevel = _maxUnlockedLevel;
         }
 
@@ -60,14 +65,14 @@ namespace Battle
         {
             SetSelectedLevel(_selectedLevel - 1);
             DeactivatePool();
-            ScheduleRespawn(respawnDelay);
+            ScheduleRespawn(RespawnDelay);
         }
 
         public void SelectNextLevel()
         {
             SetSelectedLevel(_selectedLevel + 1);
             DeactivatePool();
-            ScheduleRespawn(respawnDelay);
+            ScheduleRespawn(RespawnDelay);
         }
 
         private void SetSelectedLevel(int level)
@@ -98,6 +103,9 @@ namespace Battle
                 if (pool.Units[i] is not EnemyUnit enemy)
                     continue;
 
+                if (packages[i] == null)
+                    continue;
+
                 enemy.Initialize(packages[i]);
                 enemy.OnDeath += HandleEnemyDeath;
                 enemy.gameObject.SetActive(true);
@@ -122,16 +130,16 @@ namespace Battle
                 return;
 
             RegisterWaveClear();
-            ScheduleRespawn(respawnDelay);
+            ScheduleRespawn(RespawnDelay);
         }
 
         private void RegisterWaveClear()
         {
             _currentClearedWaves++;
 
-            if (_currentClearedWaves >= wavesToUnlockNextLevel && _autoProgressionEnabled)
+            if (_currentClearedWaves >= WavesToUnlockNextLevelInternal && _autoProgressionEnabled)
             {
-                _maxUnlockedLevel++;
+                _maxUnlockedLevel = Mathf.Min(_maxUnlockedLevel + 1, MaxWaveLevel);
                 SelectNextLevel();
             }
             OnWaveCleared?.Invoke();

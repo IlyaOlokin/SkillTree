@@ -16,7 +16,6 @@ public class PlayerStatsWindow : MonoBehaviour
     [SerializeField] private TMP_Text CritChanceText;
     [SerializeField] private TMP_Text CritDamageBonusText;
     [SerializeField] private List<StatText> statTexts;
-    [SerializeField] private List<StatType> percentStats;
     
     void Start()
     {
@@ -51,7 +50,7 @@ public class PlayerStatsWindow : MonoBehaviour
             if (!_player.BaseUnitModifiers.TryGetStatValue(statText.stat, out float rawValue))
                 continue;
             
-            bool isPercent = percentStats.Contains(statText.stat);
+            bool isPercent = StatTypeDisplayRules.IsPercentStat(statText.stat);
             float displayValue = CalculateDisplayValue(statText.stat, rawValue, isPercent);
             string suffix = GetStatSuffix(statText.stat, rawValue);
             var label = statText.needToOverrideText ? statText.overrideText : statText.stat.ToPrettyString();

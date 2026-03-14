@@ -14,3 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   archetypes:
   - {fileID: 11400000, guid: 3eb85abf4551864498ca76ae65819ca3, type: 2}
+  basePower: 10
+  powerGrowthRate: 1.12
+  startingLevel: 1
+  wavesToUnlockNextLevel: 10
+  maxWaveLevel: 100
+  respawnDelay: 1
+  maxEnemiesPerWave: 3
+  globalModifiers: []
