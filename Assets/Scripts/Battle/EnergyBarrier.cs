@@ -11,7 +11,7 @@ namespace Battle
         private int _barrierCount;
         private int _maxBarrierCount;
 
-        private const float BarrierCooldown = 10f;
+        public static readonly float BarrierCooldown = 10f;
 
         private float _cooldownProgress;
         private float _regenSpeed;
@@ -103,7 +103,7 @@ namespace Battle
             if (IsFull)
                 return;
 
-            _cooldownProgress += (deltaTime / BarrierCooldown) * (1f + _regenSpeed);
+            _cooldownProgress += (deltaTime / BarrierCooldown) * _regenSpeed;
 
             if (_cooldownProgress >= 1f)
             {

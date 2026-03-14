@@ -134,21 +134,21 @@ MonoBehaviour:
     value: 2
   - modifierType: 1
     statType: 4
-    value: 0.01
+    value: 0.005
   baseModifiersDexterity:
   - modifierType: 1
     statType: 20
     value: 0.01
-  - modifierType: 1
-    statType: 16
-    value: 0.02
   - modifierType: 0
     statType: 21
     value: 5
   baseModifiersIntelligence:
   - modifierType: 1
     statType: 2
-    value: 0.02
+    value: 0.005
+  - modifierType: 1
+    statType: 33
+    value: 0.005
 --- !u!1 &4997412355767574011
 GameObject:
   m_ObjectHideFlags: 0

@@ -151,6 +151,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6515251342635352338, guid: b6747140051ac3142b6f80e68bf01487, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6773225018264500468, guid: b6747140051ac3142b6f80e68bf01487, type: 3}
       propertyPath: m_Name
       value: Slider
