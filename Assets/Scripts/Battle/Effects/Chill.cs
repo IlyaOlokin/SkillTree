@@ -45,7 +45,8 @@ namespace Battle
 
         public void CalculateChillPower(Unit unit, Unit defender)
         {
-            _chillPower = CHILL_BASE_SLOW * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.ChillMagnitude)) * defender.BaseUnitModifiers.GetStatValue(StatType.ChillMitigation);
+            float mitigation = Mathf.Min(1f, defender.BaseUnitModifiers.GetStatValue(StatType.ChillMitigation));
+            _chillPower = CHILL_BASE_SLOW * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.ChillMagnitude)) * (1f - mitigation);
         }
         
         public static void Apply(Unit attacker, DamageInstance damageInstance, Unit defender)

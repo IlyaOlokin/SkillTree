@@ -73,6 +73,15 @@ namespace Battle
             }
             return result;
         }
+
+        public void ClearAllEffects()
+        {
+            for (int i = Effects.Count - 1; i >= 0; i--)
+            {
+                Effects[i].Effect.OnRemove(_owner);
+            }
+            Effects.Clear();
+        }
     }
 }
 

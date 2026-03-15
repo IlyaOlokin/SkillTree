@@ -19,6 +19,7 @@ namespace Visual
         [SerializeField] private float wobbleRandomness = 40f;
 
         private Color _baseColor;
+        private Quaternion _baseWobbleLocalRotation;
         private bool _isInitialized;
 
         private Sequence _hitSequence;
@@ -31,6 +32,7 @@ namespace Visual
             }
 
             _baseColor = unitVisual != null ? unitVisual.color : Color.white;
+            _baseWobbleLocalRotation = wobbleTransform != null ? wobbleTransform.localRotation : Quaternion.identity;
             _isInitialized = true;
         }
 
@@ -45,6 +47,7 @@ namespace Visual
 
             _hitSequence?.Kill();
             unitVisual.color = _baseColor;
+            ResetWobbleRotation();
 
             _hitSequence = DOTween.Sequence();
 
@@ -60,6 +63,8 @@ namespace Visual
             }
 
             _hitSequence.Append(unitVisual.DOColor(_baseColor, flashOutDuration).SetEase(Ease.InQuad));
+            _hitSequence.OnComplete(ResetWobbleRotation);
+            _hitSequence.OnKill(ResetWobbleRotation);
         }
 
         public void Dispose()
@@ -69,6 +74,8 @@ namespace Visual
             {
                 unitVisual.color = _baseColor;
             }
+
+            ResetWobbleRotation();
         }
 
         private static bool HasDamage(DamageInstance damageInstance)
@@ -87,6 +94,16 @@ namespace Visual
             }
 
             return false;
+        }
+
+        private void ResetWobbleRotation()
+        {
+            if (wobbleTransform == null)
+            {
+                return;
+            }
+
+            wobbleTransform.localRotation = _baseWobbleLocalRotation;
         }
     }
 }

@@ -6,8 +6,11 @@ public static class StatTypeDisplayRules
     {
         StatType.CritChance,
         StatType.CritDamageBonus,
-        StatType.LifeSteel,
+        StatType.LifeSteal,
         StatType.BleedChance,
+        StatType.IgniteChance,
+        StatType.ChillChance,
+        StatType.OverchargeChance,
         StatType.BlockChance,
         StatType.ElementalResistance,
         StatType.FireResistance,

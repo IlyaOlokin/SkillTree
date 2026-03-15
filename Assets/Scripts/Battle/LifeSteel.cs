@@ -6,7 +6,7 @@ namespace Battle
     {
         public static void Apply(Unit attacker, DamageInstance damageInstance)
         {
-            float lifeSteel = attacker.BaseUnitModifiers.GetStatValue(StatType.LifeSteel);
+            float lifeSteel = attacker.BaseUnitModifiers.GetStatValue(StatType.LifeSteal);
             if (lifeSteel <= 0) return;
             
             DamageType damageType = (DamageType) attacker.BaseUnitModifiers.GetStatValue(StatType.LifeSteelTypeMask);

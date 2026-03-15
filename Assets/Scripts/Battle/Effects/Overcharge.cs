@@ -22,14 +22,15 @@ namespace Battle
         
         private void CalculateBonuses(Unit unit, Unit defender)
         {
-            float mitigation = defender.BaseUnitModifiers.GetStatValue(StatType.OverchargeMitigation);
+            float mitigation = Mathf.Min(1f, defender.BaseUnitModifiers.GetStatValue(StatType.OverchargeMitigation));
+            float mitigationMultiplier = 1f - mitigation;
 
             MoreDamage = ScriptableObject.CreateInstance<BaseModifier>();
-            MoreDamage.modifierContainer = new ModifierContainer(ModifierType.More, StatType.Damage, BASE_MORE_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)) * mitigation);
+            MoreDamage.modifierContainer = new ModifierContainer(ModifierType.More, StatType.Damage, BASE_MORE_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)) * mitigationMultiplier);
             MoreDamage.SetPriorities(new List<ModifierPriority>() { ModifierPriority.OnAttack });
             
             MoreCritDamageBonus = ScriptableObject.CreateInstance<BaseModifier>();
-            MoreCritDamageBonus.modifierContainer = new ModifierContainer(ModifierType.More, StatType.CritDamageBonus, BASE_MORE_CRIT_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)) * mitigation);
+            MoreCritDamageBonus.modifierContainer = new ModifierContainer(ModifierType.More, StatType.CritDamageBonus, BASE_MORE_CRIT_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)) * mitigationMultiplier);
             MoreCritDamageBonus.SetPriorities(new List<ModifierPriority>() { ModifierPriority.OnAttack });
         }
 

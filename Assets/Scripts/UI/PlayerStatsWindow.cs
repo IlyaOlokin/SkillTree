@@ -52,14 +52,15 @@ public class PlayerStatsWindow : MonoBehaviour
             
             bool isPercent = StatTypeDisplayRules.IsPercentStat(statText.stat);
             float displayValue = CalculateDisplayValue(statText.stat, rawValue, isPercent);
+            string prefix = GetStatPrefix(statText.stat, rawValue);
             string suffix = GetStatSuffix(statText.stat, rawValue);
             var label = statText.needToOverrideText ? statText.overrideText : statText.stat.ToPrettyString();
             statText.labelText.text = $"{label}:";
-            statText.valueText.text = FormatStatValue(displayValue, isPercent, suffix);
+            statText.valueText.text = FormatStatValue(displayValue, isPercent, prefix, suffix);
         }
     }
     
-    private string FormatStatValue(float value, bool isPercent, string suffix = "")
+    private string FormatStatValue(float value, bool isPercent, string prefix = "", string suffix = "")
     {
         bool isDoubleDigit = Mathf.Abs(value) >= 10f;
         float roundedValue = isDoubleDigit
@@ -70,7 +71,7 @@ public class PlayerStatsWindow : MonoBehaviour
             isDoubleDigit ? "0" : "0.#",
             CultureInfo.InvariantCulture);
 
-        return isPercent ? $"{numberText}%{suffix}" : $"{numberText}{suffix}";
+        return isPercent ? $"{prefix}{numberText}%{suffix}" : $"{prefix}{numberText}{suffix}";
     }
     
     private float CalculateDisplayValue(StatType stat, float rawValue, bool isPercent)
@@ -140,6 +141,30 @@ public class PlayerStatsWindow : MonoBehaviour
                 return GetUncappedResistanceSuffix(rawValue, StatType.MaxLightningResistance);
             case StatType.BarrierRegenerationSpeed: 
                 return "s";
+            default:
+                return string.Empty;
+        }
+    }
+
+    private string GetStatPrefix(StatType stat, float rawValue)
+    {
+        switch (stat)
+        {
+            case StatType.IgniteChance:
+                return "+";
+            case StatType.ChillChance:
+                return "+";
+            case StatType.OverchargeChance:
+                return "+";
+            case StatType.BleedMagnitude:
+                return "+";
+            case StatType.IgniteMagnitude:
+                return "+";
+            case StatType.ChillMagnitude:
+                return "+";
+            case StatType.OverchargeMagnitude:
+                return "+";
+            
             default:
                 return string.Empty;
         }

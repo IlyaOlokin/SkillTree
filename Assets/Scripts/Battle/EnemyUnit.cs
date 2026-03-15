@@ -26,6 +26,7 @@ namespace Battle
             RaiseOnModsChanged();
             health.RestoreToFull();
             barrier.RestoreFull();
+            effectController.ClearAllEffects();
             attacker.ResetAttackCooldown();
             
             OnInitialized?.Invoke();

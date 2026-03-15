@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 00000000
   modifierContainer:
-    modifierType: 0
-    statType: 29
-    value: 0.5
+    modifierType: 1
+    statType: 38
+    value: 4

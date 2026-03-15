@@ -28,7 +28,6 @@ public static class StatCalculator
         MergeDamageModifiers(unit.BaseUnitModifiers);
         MergeDefenceModifiers(unit.BaseUnitModifiers);
         MergeAilmentModifiers(unit.BaseUnitModifiers);
-        MergeAilmentMitigationModifiers(unit.BaseUnitModifiers);
 
         CacheStatValues(unit);
     }
@@ -70,10 +69,7 @@ public static class StatCalculator
         baseUnitModifiers.MergeModifier(StatType.BleedMagnitude, baseUnitModifiers.GetModifier(StatType.AilmentMagnitude));
         
         baseUnitModifiers.ClearModifier(StatType.AilmentMagnitude);
-    }
-    
-    public static void MergeAilmentMitigationModifiers(BaseUnitModifiers baseUnitModifiers)
-    {
+        
         baseUnitModifiers.MergeModifier(StatType.IgniteMitigation, baseUnitModifiers.GetModifier(StatType.AilmentMitigation));
         baseUnitModifiers.MergeModifier(StatType.ChillMitigation, baseUnitModifiers.GetModifier(StatType.AilmentMitigation));
         baseUnitModifiers.MergeModifier(StatType.OverchargeMitigation, baseUnitModifiers.GetModifier(StatType.AilmentMitigation));

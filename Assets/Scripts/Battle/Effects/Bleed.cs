@@ -32,9 +32,10 @@ namespace Battle
         
         private float CalculateTotalDamage(Unit unit, Unit defender, float physicalDamageDealt)
         {
+            float mitigation = Mathf.Min(1f, defender.BaseUnitModifiers.GetStatValue(StatType.BleedMitigation));
             float magnitude = BASE_DAMAGE_PERCENTAGE *
                               (1 + unit.BaseUnitModifiers.GetStatValue(StatType.BleedMagnitude));
-            return physicalDamageDealt * (1 + magnitude) * defender.BaseUnitModifiers.GetStatValue(StatType.BleedMitigation);
+            return physicalDamageDealt * (1 + magnitude) * (1f - mitigation);
         }
         
         public static void Apply(Unit attacker, DamageInstance damageInstance, Unit defender)
