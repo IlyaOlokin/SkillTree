@@ -8,5 +8,7 @@ namespace Battle
         Chill = 3,
         Overcharge = 4,
         NextHitDamageMitigation = 5,
+        LightAbsorptionDebuff = 6,
+        DarknessAbsorptionDebuff = 7,
     }
 }

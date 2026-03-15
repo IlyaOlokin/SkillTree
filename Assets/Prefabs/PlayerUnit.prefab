@@ -96,6 +96,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2317438460122470787}
   m_SourcePrefab: {fileID: 100100000, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+--- !u!114 &255852201035927066 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1654059232786679367, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+  m_PrefabInstance: {fileID: 1547160346941917277}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6247231225684122429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b49c69974dd2ca140a7f1adad33fd1e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &938081596836799860 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1764322668812889385, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
@@ -158,6 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: {fileID: 1746922921821734121}
+  healthAbsorption: {fileID: 255852201035927066}
   barrier: {fileID: 1018168663062469178}
   attacker: {fileID: 7463270014328316196}
   attributes: {fileID: 2348799739973103062}

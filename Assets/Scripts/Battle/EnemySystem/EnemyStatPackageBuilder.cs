@@ -118,6 +118,9 @@ namespace Battle
             if (rarity == EnemyRarity.Normal)
                 return;
 
+            if (archetype == null || archetype.possibleAffixes == null || archetype.possibleAffixes.Count == 0)
+                return;
+
             int affixCount = rarity switch
             {
                 EnemyRarity.Magic => 1,

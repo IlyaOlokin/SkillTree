@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 8280504164276382073}
   - component: {fileID: 956679600491400372}
   - component: {fileID: 1970849451145613927}
-  - component: {fileID: 5751231110311033075}
+  - component: {fileID: 1654059232786679367}
   - component: {fileID: 1764322668812889385}
   - component: {fileID: 3882105937609844107}
+  - component: {fileID: 5751231110311033075}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -74,7 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfbf68076724c3e4290c939751d3278a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5751231110311033075
+--- !u!114 &1654059232786679367
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -83,27 +84,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4884718464874992480}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd55a87c3d7252a4eac662ea6d18d565, type: 3}
+  m_Script: {fileID: 11500000, guid: b49c69974dd2ca140a7f1adad33fd1e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 0}
-  unitNotificationEffect: {fileID: 9209489120575824937, guid: 0c417aa8158cbe848842fce85c460f55, type: 3}
-  effectsController:
-    effectIconsRoot: {fileID: 0}
-    effectIconPrefab: {fileID: 5220694204394177579, guid: a5a6431faa1da874ea2a0b39d82b21d5, type: 3}
-    effectsIconsStartOffset: {x: 0, y: 0}
-    effectIconsStep: {x: 72, y: 0}
-    effectIconsConfig: {fileID: 11400000, guid: 032a2fbbad446f9418c5b0a9e9c88b68, type: 2}
-  hitEffectController:
-    unitVisual: {fileID: 2034453496676864404}
-    wobbleTransform: {fileID: 4898353647290124260}
-    flashColor: {r: 1, g: 1, b: 1, a: 1}
-    flashInDuration: 0.03
-    flashOutDuration: 0.06
-    wobbleDuration: 0.18
-    wobbleZStrength: 8
-    wobbleVibrato: 12
-    wobbleRandomness: 40
 --- !u!114 &1764322668812889385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,6 +132,36 @@ MonoBehaviour:
   - modifierType: 1
     statType: 33
     value: 0.005
+--- !u!114 &5751231110311033075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4884718464874992480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd55a87c3d7252a4eac662ea6d18d565, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unit: {fileID: 0}
+  unitNotificationEffect: {fileID: 9209489120575824937, guid: 0c417aa8158cbe848842fce85c460f55, type: 3}
+  effectsController:
+    effectIconsRoot: {fileID: 0}
+    effectIconPrefab: {fileID: 5220694204394177579, guid: a5a6431faa1da874ea2a0b39d82b21d5, type: 3}
+    effectsIconsStartOffset: {x: 0, y: 0}
+    effectIconsStep: {x: 72, y: 0}
+    effectIconsConfig: {fileID: 11400000, guid: 032a2fbbad446f9418c5b0a9e9c88b68, type: 2}
+  hitEffectController:
+    unitVisual: {fileID: 2034453496676864404}
+    wobbleTransform: {fileID: 4898353647290124260}
+    flashColor: {r: 1, g: 1, b: 1, a: 1}
+    flashInDuration: 0.03
+    flashOutDuration: 0.06
+    wobbleDuration: 0.18
+    wobbleZStrength: 8
+    wobbleVibrato: 12
+    wobbleRandomness: 40
 --- !u!1 &4997412355767574011
 GameObject:
   m_ObjectHideFlags: 0

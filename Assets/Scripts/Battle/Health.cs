@@ -13,6 +13,7 @@ namespace Battle
 
         private float _currentHealth = 100f;
         private float _cachedRegenerationSpeed;
+        public float CurrentHealth01 => MaxHealth > 0f ? CurrentHealth / MaxHealth : 0f;
         public float CurrentHealth
         {
             get => _currentHealth;
@@ -53,21 +54,24 @@ namespace Battle
             CurrentHealth += amount;
             if (displayHeal) OnHealthChangedDelta?.Invoke(previousHealth - CurrentHealth);
             OnHealthChanged?.Invoke();
+            ValidateAbsorptionDeathThreshold();
         }
 
         public DamageInstance TakeDamage(DamageInstance damageInstance, bool displayDamage = true)
         {
             float previousHealth = CurrentHealth;
-            foreach (var damageValue in damageInstance.Damage.Values)
+            foreach (var damagePair in damageInstance.Damage)
             {
-                CurrentHealth -= damageValue;
+                if (damagePair.Key == DamageType.Light || damagePair.Key == DamageType.Darkness)
+                    continue;
+                
+                CurrentHealth -= damagePair.Value;
             }
+            
             if (displayDamage) OnHealthChangedDelta?.Invoke(previousHealth - CurrentHealth);
             OnHealthChanged?.Invoke();
-            if (CurrentHealth <= 0f)
-            {
-                OnHealthZero?.Invoke();
-            }
+            if (CurrentHealth <= 0f) OnHealthZero?.Invoke();
+            ValidateAbsorptionDeathThreshold();
             return damageInstance;
         }
 
@@ -85,6 +89,15 @@ namespace Battle
             MaxHealth = _owner.BaseUnitModifiers.GetStatValue(StatType.MaximumHealth);
             CurrentHealth = MaxHealth * currentHealthPercentage;
             OnMaximumHealthChanged?.Invoke();
+            ValidateAbsorptionDeathThreshold();
+        }
+
+        public void ValidateAbsorptionDeathThreshold()
+        {
+            if (_owner.HealthAbsorption.IsHealthBelowDeathThreshold(CurrentHealth, MaxHealth))
+            {
+                OnHealthZero?.Invoke();
+            }
         }
     }
 }

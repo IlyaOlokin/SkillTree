@@ -68,6 +68,8 @@ public enum StatType
     MaxColdResistance = 45,
     MaxLightningResistance = 46,
     
+    MysticCleansePerSecond = 52,
+    
     // Attributes
     Strength = 23,
     Dexterity = 24,
