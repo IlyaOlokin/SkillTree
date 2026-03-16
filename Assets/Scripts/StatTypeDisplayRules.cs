@@ -25,11 +25,10 @@ public static class StatTypeDisplayRules
         StatType.IgniteMagnitude,
         StatType.ChillMagnitude,
         StatType.OverchargeMagnitude,
-        StatType.AilmentMitigation,
         StatType.BleedMitigation,
         StatType.IgniteMitigation,
-        StatType.ChillMitigation,
-        StatType.OverchargeMitigation,
+        StatType.ChillDurationReduction,
+        StatType.OverchargeAvoidanceChance,
     };
 
     public static bool IsPercentStat(StatType statType)

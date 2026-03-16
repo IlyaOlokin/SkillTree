@@ -69,13 +69,6 @@ public static class StatCalculator
         baseUnitModifiers.MergeModifier(StatType.BleedMagnitude, baseUnitModifiers.GetModifier(StatType.AilmentMagnitude));
         
         baseUnitModifiers.ClearModifier(StatType.AilmentMagnitude);
-        
-        baseUnitModifiers.MergeModifier(StatType.IgniteMitigation, baseUnitModifiers.GetModifier(StatType.AilmentMitigation));
-        baseUnitModifiers.MergeModifier(StatType.ChillMitigation, baseUnitModifiers.GetModifier(StatType.AilmentMitigation));
-        baseUnitModifiers.MergeModifier(StatType.OverchargeMitigation, baseUnitModifiers.GetModifier(StatType.AilmentMitigation));
-        baseUnitModifiers.MergeModifier(StatType.BleedMitigation, baseUnitModifiers.GetModifier(StatType.AilmentMitigation));
-        
-        baseUnitModifiers.ClearModifier(StatType.AilmentMitigation);
     }
     
     public static float GetStat(BaseUnitModifiers baseUnitModifiers, StatType statType)

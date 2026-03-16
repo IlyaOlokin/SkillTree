@@ -22,15 +22,14 @@ namespace Battle
         
         private void CalculateBonuses(Unit unit, Unit defender)
         {
-            float mitigation = Mathf.Min(1f, defender.BaseUnitModifiers.GetStatValue(StatType.OverchargeMitigation));
-            float mitigationMultiplier = 1f - mitigation;
-
             MoreDamage = ScriptableObject.CreateInstance<BaseModifier>();
-            MoreDamage.modifierContainer = new ModifierContainer(ModifierType.More, StatType.Damage, BASE_MORE_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)) * mitigationMultiplier);
+            MoreDamage.modifierContainer = new ModifierContainer(ModifierType.More, StatType.Damage, 
+                BASE_MORE_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)));
             MoreDamage.SetPriorities(new List<ModifierPriority>() { ModifierPriority.OnAttack });
             
             MoreCritDamageBonus = ScriptableObject.CreateInstance<BaseModifier>();
-            MoreCritDamageBonus.modifierContainer = new ModifierContainer(ModifierType.More, StatType.CritDamageBonus, BASE_MORE_CRIT_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)) * mitigationMultiplier);
+            MoreCritDamageBonus.modifierContainer = new ModifierContainer(ModifierType.More, StatType.CritDamageBonus, 
+                BASE_MORE_CRIT_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)));
             MoreCritDamageBonus.SetPriorities(new List<ModifierPriority>() { ModifierPriority.OnAttack });
         }
 
@@ -46,6 +45,8 @@ namespace Battle
             damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.OverchargeChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
+                if (Random.Range(0f, 1f) < defender.BaseUnitModifiers.GetStatValue(StatType.OverchargeAvoidanceChance))
+                    return;
                 defender.effectController.AddEffect(new Overcharge(attacker, defender));
             }
         }

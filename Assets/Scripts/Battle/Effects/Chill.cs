@@ -17,8 +17,8 @@ namespace Battle
         
         private Chill(Unit owner, Unit defender, float duration)
         {
-            Duration = duration;
-            CalculateChillPower(owner, defender);
+            Duration = duration * (1f - defender.BaseUnitModifiers.GetStatValue(StatType.ChillDurationReduction));
+            CalculateChillPower(owner);
         }
         
         public override void OnApply(Unit unit)
@@ -43,10 +43,9 @@ namespace Battle
             unit.RemoveOuterModifier(_cachedModifier);
         }
 
-        public void CalculateChillPower(Unit unit, Unit defender)
+        public void CalculateChillPower(Unit unit)
         {
-            float mitigation = Mathf.Min(1f, defender.BaseUnitModifiers.GetStatValue(StatType.ChillMitigation));
-            _chillPower = CHILL_BASE_SLOW * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.ChillMagnitude)) * (1f - mitigation);
+            _chillPower = CHILL_BASE_SLOW * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.ChillMagnitude));
         }
         
         public static void Apply(Unit attacker, DamageInstance damageInstance, Unit defender)

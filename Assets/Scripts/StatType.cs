@@ -30,11 +30,10 @@ public enum StatType
     OverchargeChance = 40,
     BleedChance = 41,
     
-    AilmentMitigation = 47,
-    IgniteMitigation = 48,
-    ChillMitigation = 49,
-    OverchargeMitigation = 50,
-    BleedMitigation = 51,
+    IgniteMitigation = 47,
+    ChillDurationReduction = 48,
+    OverchargeAvoidanceChance = 49,
+    BleedMitigation = 50,
     
     // Crit
     CritChance = 16,
