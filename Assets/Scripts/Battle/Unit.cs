@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using SkillTree;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Battle
 {
@@ -18,33 +17,34 @@ namespace Battle
         [SerializeField] protected BaseInnateModifiers innateModifiers;
 
         public BaseUnitModifiers BaseUnitModifiers;
-        
+
         private List<Modifier> _outerModifiers = new List<Modifier>();
         private readonly List<IModifierRuntimeBinding> _modifierRuntimeBindings = new List<IModifierRuntimeBinding>();
-        
+        private bool _modsChangedPending;
+
         public event Action OnModsChanged;
         public event Action OnOuterModsChanged;
         public event Action OnStatsRecalculated;
-        
+
         public event Action<DamageInstance> OnHit;
         public event Action OnEvade;
         public event Action OnBlock;
         public event Action<Unit> OnDeath;
 
         public HealthAbsorption HealthAbsorption => healthAbsorption;
-        
+
         public Unit UnitObject
         {
             get => this;
-            set{}
+            set { }
         }
-        
+
         protected virtual void Awake()
         {
             health.OnHealthZero += Death;
             OnModsChanged += RecalculateMods;
             OnOuterModsChanged += RaiseOnModsChanged;
-            // on dbuffed/debuffed
+            // on buffed/debuffed
             // on status changed
             // on lowlife changed
             // ...
@@ -62,6 +62,15 @@ namespace Battle
             RecalculateMods();
         }
 
+        protected virtual void LateUpdate()
+        {
+            if (!_modsChangedPending)
+                return;
+
+            _modsChangedPending = false;
+            OnModsChanged?.Invoke();
+        }
+
         public DamageInstance ReceiveDamage(DamageInstance damageInstance)
         {
             barrier.TakeDamage(damageInstance);
@@ -73,7 +82,6 @@ namespace Battle
 
         public void DamageDealt(DamageInstance damageInstance)
         {
-            
         }
 
         public void ReceiveDoT(DamageInstance damageInstance)
@@ -90,34 +98,32 @@ namespace Battle
         {
             OnEvade?.Invoke();
         }
-        
+
         public void OnHitBlock(DamageInstance damageInstance)
         {
             OnBlock?.Invoke();
         }
-        
+
         protected void RaiseOnModsChanged()
         {
-            OnModsChanged?.Invoke();
+            _modsChangedPending = true;
         }
-        
+
         protected void RaiseOnStatsRecalculated()
         {
             OnStatsRecalculated?.Invoke();
         }
-        
+
         private void RecalculateMods()
         {
             ResetUnit();
-            
             List<Modifier> mods = GetAllModifiers();
             StatCalculator.RecalculateStats(this, mods);
             BindModifierRuntimes(mods);
-            
+
             RaiseOnStatsRecalculated();
         }
-        
-        
+
         protected void ResetUnit()
         {
             UnbindModifierRuntimes();
@@ -154,9 +160,9 @@ namespace Battle
             {
                 mods.AddRange(playerUnit.SkillTree.CollectAllModifiers());
             }
-            
+
             mods.AddRange(_outerModifiers);
-            
+
             return mods;
         }
 
@@ -165,13 +171,12 @@ namespace Battle
             _outerModifiers.Add(mod);
             OnOuterModsChanged?.Invoke();
         }
-        
+
         public void RemoveOuterModifier(Modifier mod)
         {
             _outerModifiers.Remove(mod);
             OnOuterModsChanged?.Invoke();
         }
-
 
         protected virtual void Death()
         {
@@ -188,7 +193,12 @@ namespace Battle
         {
             health.OnHealthZero -= Death;
             UnbindModifierRuntimes();
+            _modsChangedPending = false;
+        }
+
+        protected virtual void OnDisable()
+        {
+            _modsChangedPending = false;
         }
     }
 }
-

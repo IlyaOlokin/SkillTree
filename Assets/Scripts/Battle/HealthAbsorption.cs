@@ -38,7 +38,6 @@ namespace Battle
             _owner.OnStatsRecalculated += HandleOwnerStatsRecalculated;
             OnAbsorptionStacksChanged += HandleAbsorptionStacksChanged;
             ClampToMaxHealth();
-            NotifyIfStateChanged(force: true);
         }
 
         private void OnDestroy()
@@ -160,7 +159,7 @@ namespace Battle
             float previous = _absorptionSigned;
             ClampToMaxHealth();
             bool changedByClamp = !Mathf.Approximately(previous, _absorptionSigned);
-            NotifyIfStateChanged(force: !changedByClamp);
+            NotifyIfStateChanged(force: changedByClamp);
         }
 
         private void HandleAbsorptionStacksChanged(MysticAbsorptionType type, int stacks)
@@ -168,30 +167,14 @@ namespace Battle
             int lightStacks = type == MysticAbsorptionType.Light ? stacks : 0;
             int darknessStacks = type == MysticAbsorptionType.Darkness ? stacks : 0;
 
-            SyncLightDebuff(lightStacks);
-            SyncDarknessDebuff(darknessStacks);
-        }
-
-        private void SyncLightDebuff(int stacks)
-        {
-            var existingEffects = _owner.effectController.GetAllEffectsOfType<LightAbsorptionDebuff>();
-            if (stacks <= 0 && existingEffects.Count == 0)
+            if (!(lightStacks <= 0 && _owner.effectController.GetAllEffectsOfType<LightAbsorptionDebuff>().Count == 0))
             {
-                return;
+                _owner.effectController.AddEffect(new LightAbsorptionDebuff(lightStacks));
             }
-
-            _owner.effectController.AddEffect(new LightAbsorptionDebuff(stacks));
-        }
-
-        private void SyncDarknessDebuff(int stacks)
-        {
-            var existingEffects = _owner.effectController.GetAllEffectsOfType<DarknessAbsorptionDebuff>();
-            if (stacks <= 0 && existingEffects.Count == 0)
+            if (!(darknessStacks <= 0 && _owner.effectController.GetAllEffectsOfType<DarknessAbsorptionDebuff>().Count == 0))
             {
-                return;
+                _owner.effectController.AddEffect(new DarknessAbsorptionDebuff(darknessStacks));
             }
-
-            _owner.effectController.AddEffect(new DarknessAbsorptionDebuff(stacks));
         }
 
         private void ClampToMaxHealth()
