@@ -11,7 +11,10 @@ namespace Battle
         public override EffectVisualType VisualType => EffectVisualType.DarknessAbsorptionDebuff;
         public int Stacks => _stacks;
 
-        private BaseModifier _cachedModifier;
+        private BaseModifier _cachedModifier1;
+        private readonly ModifierContainer _modifierContainer1 = new ModifierContainer(ModifierType.Added, StatType.AilmentGuard, -0.05f);
+        private BaseModifier _cachedModifier2;
+        private readonly ModifierContainer _modifierContainer2 = new ModifierContainer(ModifierType.More, StatType.Damage, -0.02f);
         
         private bool _isReadyToBeRemoved;
 
@@ -22,14 +25,20 @@ namespace Battle
 
         public override void OnApply(Unit unit)
         {
-            _cachedModifier = ScriptableObject.CreateInstance<BaseModifier>();
-            _cachedModifier.modifierContainer = new ModifierContainer(ModifierType.Increased, StatType.AttackSpeed, -0.05f * _stacks);
-            unit.AddOuterModifier(_cachedModifier);
+            _cachedModifier1 = ScriptableObject.CreateInstance<BaseModifier>();
+            _cachedModifier1.modifierContainer = new ModifierContainer(_modifierContainer1.modifierType, _modifierContainer1.statType, _modifierContainer1.value * _stacks);
+            unit.AddOuterModifier(_cachedModifier1);
+            
+            _cachedModifier2 = ScriptableObject.CreateInstance<BaseModifier>();
+            _cachedModifier2.modifierContainer = new ModifierContainer(_modifierContainer2.modifierType, _modifierContainer2.statType, _modifierContainer2.value * _stacks);
+            unit.AddOuterModifier(_cachedModifier2);
         }
 
         public override void OnStack(Unit unit, BaseEffect newEffect, ActiveEffect existing)
         {
-            unit.RemoveOuterModifier(_cachedModifier);
+            unit.RemoveOuterModifier(_cachedModifier1);
+            unit.RemoveOuterModifier(_cachedModifier2);
+            
             if (newEffect is DarknessAbsorptionDebuff debuff)
             {
                 if (debuff._stacks <= 0)
@@ -40,8 +49,11 @@ namespace Battle
                 _stacks = Mathf.Max(0, debuff._stacks);
             }
 
-            _cachedModifier.modifierContainer.value = -0.05f * _stacks;
-            unit.AddOuterModifier(_cachedModifier);
+            _cachedModifier1.modifierContainer.value = _modifierContainer1.value * _stacks;
+            unit.AddOuterModifier(_cachedModifier1);
+            
+            _cachedModifier1.modifierContainer.value = _modifierContainer2.value * _stacks;
+            unit.AddOuterModifier(_cachedModifier2);
         }
 
         public override bool IsReadyToBeRemoved(Unit unit) => _isReadyToBeRemoved;
