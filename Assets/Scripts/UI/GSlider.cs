@@ -41,4 +41,9 @@ public class GSlider : MonoBehaviour
         
         text.text = newText;
     }
+
+    public void SetFillColor(Color color)
+    {
+        fill.color = color;
+    }
 }

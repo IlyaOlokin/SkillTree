@@ -10,7 +10,7 @@ namespace Battle
         Darkness = 2
     }
 
-    public class HealthAbsorption : MonoBehaviour, IUnitComponent
+    public class MysticHealth : MonoBehaviour, IUnitComponent
     {
         private const float StackStepPercent01 = 0.05f;
 
@@ -84,14 +84,14 @@ namespace Battle
             ApplyMysticDamage(lightDamage, darknessDamage);
         }
 
-        public void TickCleanse(float deltaTime, float cleansePerSecond)
+        public void TickCleanse(float deltaTime, float cleansePercentPerSecond)
         {
-            if (deltaTime <= 0f || cleansePerSecond <= 0f || Mathf.Approximately(_absorptionSigned, 0f))
+            if (deltaTime <= 0f || cleansePercentPerSecond <= 0f || Mathf.Approximately(_absorptionSigned, 0f))
             {
                 return;
             }
 
-            float step = cleansePerSecond * deltaTime;
+            float step = cleansePercentPerSecond * _owner.health.MaxHealth * deltaTime;
             float nextValue = _absorptionSigned;
 
             if (_absorptionSigned > 0f)

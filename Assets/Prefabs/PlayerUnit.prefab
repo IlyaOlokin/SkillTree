@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: {fileID: 1746922921821734121}
-  healthAbsorption: {fileID: 255852201035927066}
+  mysticHealth: {fileID: 255852201035927066}
   barrier: {fileID: 1018168663062469178}
   attacker: {fileID: 7463270014328316196}
   attributes: {fileID: 2348799739973103062}

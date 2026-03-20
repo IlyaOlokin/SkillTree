@@ -59,7 +59,7 @@ public class NodeConnectionRendererEditor : Editor
     {
         if (state == PlayModeStateChange.ExitingEditMode)
         {
-            Selection.activeObject = null; // 💥 ключевая строка
+            Selection.activeObject = null;
         }
     }
 }

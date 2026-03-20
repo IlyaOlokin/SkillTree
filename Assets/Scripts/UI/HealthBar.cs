@@ -1,37 +1,67 @@
 using System;
 using Battle;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
     [SerializeField] private Health health;
-    [SerializeField] private GSlider slider;
+    [SerializeField] private MysticHealth mysticHealth;
+    [SerializeField] private GSlider healthSlider;
+    [SerializeField] private GSlider mysticHealthSlider;
+    [SerializeField] private Color mysticLightColor = Color.white;
+    [SerializeField] private Color mysticDarknessColor = Color.black;
 
     private void Awake()
     {
-        health.OnHealthChanged += UpdateHealthBar;
-        health.OnMaximumHealthChanged += UpdateHealthBar;
+        if (health != null)
+        {
+            health.OnHealthChanged += UpdateHealthBar;
+            health.OnMaximumHealthChanged += UpdateHealthBar;
+        }
+
+        if (mysticHealth != null)
+        {
+            mysticHealth.OnAbsorptionChanged += UpdateMysticHealthBar;
+        }
     }
 
     private void OnDestroy()
     {
-        if (health == null)
-            return;
+        if (health != null)
+        {
+            health.OnHealthChanged -= UpdateHealthBar;
+            health.OnMaximumHealthChanged -= UpdateHealthBar;
+        }
 
-        health.OnHealthChanged -= UpdateHealthBar;
-        health.OnMaximumHealthChanged -= UpdateHealthBar;
+        if (mysticHealth != null)
+        {
+            mysticHealth.OnAbsorptionChanged -= UpdateMysticHealthBar;
+        }
     }
 
     private void Start()
     {
         UpdateHealthBar();
+        UpdateMysticHealthBar(0f, 0f, mysticHealth != null ? mysticHealth.TotalAbsorption : 0f);
     }
 
     private void UpdateHealthBar()
     {
-        slider.UpdateBar(health.CurrentHealth / health.MaxHealth);
-        slider.UpdateText(Math.Ceiling(health.CurrentHealth) + "/" + Math.Ceiling(health.MaxHealth));
+        healthSlider.UpdateBar(health.CurrentHealth01);
+        healthSlider.UpdateText(Math.Ceiling(health.CurrentHealth) + "/" + Math.Ceiling(health.MaxHealth));
+    }
+
+    private void UpdateMysticHealthBar(float lightAbsorption, float darknessAbsorption, float totalAbsorption)
+    {
+        if (lightAbsorption > 0f)
+        {
+            mysticHealthSlider.SetFillColor(mysticLightColor);
+        }
+        else if (darknessAbsorption > 0f)
+        {
+            mysticHealthSlider.SetFillColor(mysticDarknessColor);
+        }
+
+        mysticHealthSlider.UpdateBar(mysticHealth.TotalAbsorptionPercent01);
     }
 }

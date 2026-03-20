@@ -94,7 +94,7 @@ namespace Battle
 
         public void ValidateAbsorptionDeathThreshold()
         {
-            if (_owner.HealthAbsorption.IsHealthBelowDeathThreshold(CurrentHealth, MaxHealth))
+            if (_owner.MysticHealth.IsHealthBelowDeathThreshold(CurrentHealth, MaxHealth))
             {
                 OnHealthZero?.Invoke();
             }

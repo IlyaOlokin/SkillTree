@@ -8,7 +8,7 @@ namespace Battle
     public class Unit : MonoBehaviour, ITarget
     {
         [SerializeField] public Health health;
-        [SerializeField] public HealthAbsorption healthAbsorption;
+        [SerializeField] public MysticHealth mysticHealth;
         [SerializeField] public EnergyBarrier barrier;
         [SerializeField] public Attacker attacker;
         [SerializeField] public Attributes attributes;
@@ -31,7 +31,7 @@ namespace Battle
         public event Action OnBlock;
         public event Action<Unit> OnDeath;
 
-        public HealthAbsorption HealthAbsorption => healthAbsorption;
+        public MysticHealth MysticHealth => mysticHealth;
 
         public Unit UnitObject
         {
@@ -52,7 +52,7 @@ namespace Battle
             BaseUnitModifiers = new BaseUnitModifiers();
             health.Init(this);
             effectController.Init(this);
-            healthAbsorption.Init(this);
+            mysticHealth.Init(this);
             barrier.Init(this);
             attacker.Init(this);
         }
@@ -74,7 +74,7 @@ namespace Battle
         public DamageInstance ReceiveDamage(DamageInstance damageInstance)
         {
             barrier.TakeDamage(damageInstance);
-            healthAbsorption.ApplyMysticDamageAsAbsorption(damageInstance);
+            mysticHealth.ApplyMysticDamageAsAbsorption(damageInstance);
             DamageInstance receivedDamage = health.TakeDamage(damageInstance);
             OnHit?.Invoke(receivedDamage);
             return receivedDamage;

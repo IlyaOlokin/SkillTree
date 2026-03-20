@@ -481,7 +481,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: {fileID: 445732756689700819}
-  healthAbsorption: {fileID: 2133904165270539552}
+  mysticHealth: {fileID: 2133904165270539552}
   barrier: {fileID: 1166605690334550272}
   attacker: {fileID: 8755844548079378974}
   attributes: {fileID: 4506205863650963180}
@@ -916,6 +916,10 @@ PrefabInstance:
       propertyPath: health
       value: 
       objectReference: {fileID: 445732756689700819}
+    - target: {fileID: 2394077961204432741, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
+      propertyPath: mysticHealth
+      value: 
+      objectReference: {fileID: 2133904165270539552}
     - target: {fileID: 3308023268698982117, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
       propertyPath: m_Color.b
       value: 0.9529412

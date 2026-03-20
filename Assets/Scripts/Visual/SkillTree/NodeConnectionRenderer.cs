@@ -6,8 +6,6 @@ using UnityEngine;
 using UnityEngine.Splines;
 using SkillTree;
 using Unity.Mathematics;
-using UnityEditor.SceneManagement;
-using UnityEngine.Serialization;
 
 namespace SkillTree
 {
