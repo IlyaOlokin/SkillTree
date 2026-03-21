@@ -53,8 +53,7 @@ MonoBehaviour:
   mysticHealth: {fileID: 0}
   healthSlider: {fileID: 6116439260654742426}
   mysticHealthSlider: {fileID: 428457199105340310}
-  mysticLightColor: {r: 1, g: 0.8448236, b: 0.6179246, a: 1}
-  mysticDarknessColor: {r: 0.30300993, g: 0, b: 0.3584906, a: 1}
+  mysticColorsConfig: {fileID: 11400000, guid: 5293deee444da194b9f0f23469b7a7c2, type: 2}
 --- !u!1001 &2327502372855723033
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -17,6 +17,11 @@ public class PlayerStatsWindow : MonoBehaviour
     [SerializeField] private TMP_Text CritDamageBonusText;
     [SerializeField] private List<StatText> statTexts;
     
+    [Header("Mystic")]
+    [SerializeField] private TMP_Text MysticLabelText;
+    [SerializeField] private TMP_Text MysticValueText;
+    [SerializeField] private MysticColorsConfig mysticColorsConfig;
+    
     void Start()
     {
         _player.OnStatsRecalculated += UpdateTexts;
@@ -43,6 +48,7 @@ public class PlayerStatsWindow : MonoBehaviour
     {
 
         UpdateDamageTexts();
+        UpdateMysticTexts();
         
 
         foreach (var statText in statTexts)
@@ -125,6 +131,34 @@ public class PlayerStatsWindow : MonoBehaviour
         float lightningDamage = _player.BaseUnitModifiers.GetStatValue(StatType.LightningDamage);
 
         return physicalDamage + fireDamage + coldDamage + lightningDamage;
+    }
+
+    private void UpdateMysticTexts()
+    {
+        float lightDamage = _player.BaseUnitModifiers.GetStatValue(StatType.LightDamage);
+        float darknessDamage = _player.BaseUnitModifiers.GetStatValue(StatType.DarknessDamage);
+        float signedMysticDamage = lightDamage - darknessDamage;
+        
+        MysticValueText.text = FormatStatValue(Mathf.Abs(signedMysticDamage), false);
+
+        Color textColor = GetMysticColor(signedMysticDamage);
+        MysticLabelText.color = textColor;
+        MysticValueText.color = textColor;
+    }
+
+    private Color GetMysticColor(float signedMysticDamage)
+    {
+        if (signedMysticDamage > 0f)
+        {
+            return mysticColorsConfig.LightColor;
+        }
+
+        if (signedMysticDamage < 0f)
+        {
+            return mysticColorsConfig.DarknessColor;
+        }
+
+        return mysticColorsConfig.NeutralColor;
     }
     
     private string GetStatSuffix(StatType stat, float rawValue)

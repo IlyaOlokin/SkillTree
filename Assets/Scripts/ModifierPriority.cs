@@ -2,9 +2,10 @@ using UnityEngine;
 
 public enum ModifierPriority
 {
-    PreAttribute,
-    Secondary,
-    Special,
-    OnAttack,
-    OnGettingHit
+    PreAttribute = 0,
+    Secondary = 1,
+    Special = 2,
+    OnAttack = 3,
+    OnGettingHit = 4,
+    PreAttribute2 = 5,
 }

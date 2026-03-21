@@ -8,8 +8,7 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private MysticHealth mysticHealth;
     [SerializeField] private GSlider healthSlider;
     [SerializeField] private GSlider mysticHealthSlider;
-    [SerializeField] private Color mysticLightColor = Color.white;
-    [SerializeField] private Color mysticDarknessColor = Color.black;
+    [SerializeField] private MysticColorsConfig mysticColorsConfig;
 
     private void Awake()
     {
@@ -55,11 +54,11 @@ public class HealthBar : MonoBehaviour
     {
         if (lightAbsorption > 0f)
         {
-            mysticHealthSlider.SetFillColor(mysticLightColor);
+            mysticHealthSlider.SetFillColor(mysticColorsConfig.LightColor);
         }
         else if (darknessAbsorption > 0f)
         {
-            mysticHealthSlider.SetFillColor(mysticDarknessColor);
+            mysticHealthSlider.SetFillColor(mysticColorsConfig.DarknessColor);
         }
 
         mysticHealthSlider.UpdateBar(mysticHealth.TotalAbsorptionPercent01);

@@ -29,7 +29,8 @@ public static class StatTypeDisplayRules
         StatType.IgniteMitigation,
         StatType.ChillDurationReduction,
         StatType.OverchargeAvoidanceChance,
-        StatType.AilmentGuard
+        StatType.AilmentGuard,
+        StatType.MysticCleansePerSecond
     };
 
     public static bool IsPercentStat(StatType statType)

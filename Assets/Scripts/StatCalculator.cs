@@ -12,6 +12,12 @@ public static class StatCalculator
         {
             if (mod.IsInPriority(ModifierPriority.PreAttribute) && mod.IsApplicable(unit)) mod.ApplyEffect(unit);
         }
+        
+        foreach (var mod in mods)
+        {
+            if (mod.IsInPriority(ModifierPriority.PreAttribute2) && mod.IsApplicable(unit)) mod.ApplyEffect(unit);
+        }
+
             
         ApplyAttributes(unit);
             
