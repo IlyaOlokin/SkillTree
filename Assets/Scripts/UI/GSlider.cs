@@ -31,7 +31,8 @@ public class GSlider : MonoBehaviour
             secondaryFill.fillAmount = fillAmount;
         }
         
-        fill.DOFillAmount(fillAmount, fillMoveDuration).SetLink(gameObject);;
+        fill.DOKill();
+        fill.DOFillAmount(fillAmount, fillMoveDuration).SetLink(gameObject);
     }
 
     public void UpdateText(String newText = "")

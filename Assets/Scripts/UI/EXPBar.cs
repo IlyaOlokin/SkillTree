@@ -23,6 +23,12 @@ public class EXPBar : MonoBehaviour
 
     private void UpdateSlider()
     {
-        slider.UpdateBar(_unitLevel.CurrentExp / _unitLevel.ExpToNextLevel);
+        if (_unitLevel.ExpToNextLevel <= 0d)
+        {
+            slider.UpdateBar(0f);
+            return;
+        }
+
+        slider.UpdateBar((float)(_unitLevel.CurrentExp / _unitLevel.ExpToNextLevel));
     }
 }

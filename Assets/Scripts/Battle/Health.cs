@@ -44,8 +44,10 @@ namespace Battle
 
         private void Regen()
         {
-            TakeHeal(_cachedRegenerationSpeed * Time.deltaTime, false);
-            OnHealthChanged?.Invoke();
+            float healAmount = _cachedRegenerationSpeed * Time.deltaTime;
+            if (healAmount <= 0f)
+                return;
+            TakeHeal(healAmount, false);
         }
 
         public void TakeHeal(float amount, bool displayHeal = true)

@@ -9,15 +9,17 @@ namespace Battle
     
         [Header("Level")]
         [SerializeField] private int level = 1;
-        [SerializeField] private float currentExp = 0;
-        [SerializeField] private float expToNextLevel = 100;
+        [SerializeField] private double currentExp = 0d;
+        [SerializeField] private double expToNextLevel = 100d;
+        [SerializeField] private double baseExpToNextLevel = 100d;
+        [SerializeField] private float expGrowthPerLevel = 1.12f;
 
         [Header("Skill Points")]
         [SerializeField] private int skillPoints = 1;
 
         public int Level => level;
-        public float CurrentExp => currentExp;
-        public float ExpToNextLevel => expToNextLevel;
+        public double CurrentExp => currentExp;
+        public double ExpToNextLevel => expToNextLevel;
         public int SkillPoints => skillPoints;
 
         public event Action OnExpChanged;
@@ -37,17 +39,30 @@ namespace Battle
             }
         }
 
-        public void AddExperience(float amount)
+        public void AddExperience(double amount)
         {
-            if (amount <= 0)
+            if (amount <= 0d)
                 return;
 
+            if (expToNextLevel <= 0d)
+            {
+                Debug.LogError($"{nameof(UnitLevel)} has invalid {nameof(expToNextLevel)}={expToNextLevel}. Resetting to 100.", this);
+                expToNextLevel = 100d;
+            }
+
             currentExp += amount;
-            
+
+            int safetyCounter = 0;
             while (currentExp >= expToNextLevel)
             {
                 currentExp -= expToNextLevel;
                 LevelUp();
+                
+                if (++safetyCounter > 1000)
+                {
+                    Debug.LogError($"{nameof(UnitLevel)} level-up loop exceeded safety threshold. Breaking out.", this);
+                    break;
+                }
             }
             OnExpChanged?.Invoke();
         }
@@ -65,7 +80,10 @@ namespace Battle
 
         private void RecalculateExpToNextLevel()
         {
-            expToNextLevel = Mathf.RoundToInt(100 * Mathf.Pow(1.25f, level - 1));
+            double clampedBaseExp = Math.Max(1d, baseExpToNextLevel);
+            double growth = Math.Max(1.001d, expGrowthPerLevel);
+            double scaled = clampedBaseExp * Math.Pow(growth, level - 1);
+            expToNextLevel = Math.Max(1d, Math.Round(scaled, MidpointRounding.AwayFromZero));
         }
         
         public bool TrySpendSkillPoints(int cost)
