@@ -21,11 +21,8 @@ MonoBehaviour:
     statType: 18
     value: 0.2
   - modifierType: 0
-    statType: 4
-    value: 1
-  - modifierType: 0
     statType: 23
-    value: 2
+    value: 1
   - modifierType: 0
     statType: 24
     value: 1

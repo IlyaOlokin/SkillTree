@@ -20,7 +20,7 @@ namespace Battle
             _owner = owner;
             _modifier = modifier;
             _onHitHandler = HandleOwnerHit;
-            _owner.OnHit += _onHitHandler;
+            _owner.OnGettingHit += _onHitHandler;
         }
 
         public override void OnApply(Unit unit)
@@ -40,7 +40,7 @@ namespace Battle
         public override void OnRemove(Unit unit)
         {
             if (_owner != null)
-                _owner.OnHit -= _onHitHandler;
+                _owner.OnGettingHit -= _onHitHandler;
 
             if (_isApplied)
             {

@@ -28,20 +28,23 @@ namespace Battle
         {
             float igniteDamage = _totalDamage * BASE_TOTAL_DAMAGE_PERCENTAGE_PER_SECOND * dt;
             if (_totalDamage < 1) igniteDamage = 1 * dt; // ?????????
-
-            DamageInstance damage = new DamageInstance();
-            if (!damage.Damage.TryAdd(DamageType.Fire, igniteDamage))
-            {
-                damage.Damage[DamageType.Fire] += igniteDamage;
-            }
-            _totalDamage -= igniteDamage;
-
-            unit.ReceiveDoT(damage);
+            ApplyIgniteDamage(unit, igniteDamage);
         }
 
         public override bool IsReadyToBeRemoved(Unit unit)
         {
             return _totalDamage <= 0;
+        }
+
+        public void TriggerBurst(Unit unit, float percent)
+        {
+            if (_totalDamage <= 0f) return;
+
+            float clampedPercent = Mathf.Clamp01(percent);
+            if (clampedPercent <= 0f) return;
+
+            float burstDamage = _totalDamage * clampedPercent;
+            ApplyIgniteDamage(unit, burstDamage);
         }
 
         private float CalculateTotalDamage(Unit unit, Unit defender, float fireDamageDealt)
@@ -61,6 +64,22 @@ namespace Battle
             {
                 defender.effectController.AddEffect(new Ignite(attacker, defender, damageInstance.Damage[DamageType.Fire]));
             }
+        }
+
+        private void ApplyIgniteDamage(Unit unit, float requestedDamage)
+        {
+            if (requestedDamage <= 0f || _totalDamage <= 0f) return;
+
+            float damageToDeal = Mathf.Min(requestedDamage, _totalDamage);
+
+            DamageInstance damage = new DamageInstance();
+            if (!damage.Damage.TryAdd(DamageType.Fire, damageToDeal))
+            {
+                damage.Damage[DamageType.Fire] += damageToDeal;
+            }
+
+            _totalDamage -= damageToDeal;
+            unit.ReceiveDoT(damage);
         }
     }
 }

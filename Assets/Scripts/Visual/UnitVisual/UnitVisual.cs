@@ -16,7 +16,7 @@ namespace Visual
 
             
             unit.health.OnHealthChangedDelta += DisplayHealthChangedNotification;
-            unit.OnHit += DisplayHitEffect;
+            unit.OnGettingHit += DisplayGettingHitEffect;
             unit.OnEvade += DisplayEvadeNotification;
             unit.OnBlock += DisplayBlockNotification;
             
@@ -26,7 +26,7 @@ namespace Visual
         {
             if (unit != null)
             {
-                unit.OnHit -= DisplayHitEffect;
+                unit.OnGettingHit -= DisplayGettingHitEffect;
                 unit.OnEvade -= DisplayEvadeNotification;
                 unit.OnBlock -= DisplayBlockNotification;
             }
@@ -70,7 +70,7 @@ namespace Visual
             newEffect.WriteMessage("Block");
         }
 
-        private void DisplayHitEffect(DamageInstance damageInstance)
+        private void DisplayGettingHitEffect(DamageInstance damageInstance)
         {
             hitEffectController?.PlayHitEffect(damageInstance);
         }

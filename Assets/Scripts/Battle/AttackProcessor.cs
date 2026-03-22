@@ -18,6 +18,8 @@ namespace Battle
                 AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics
                 return;
             }
+
+            attackerUnit.OnHitLanded(defender);
             
             List<Modifier> mods = attackerUnit.GetAllModifiers();
             
