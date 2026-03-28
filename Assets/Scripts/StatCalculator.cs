@@ -114,19 +114,9 @@ public static class StatCalculator
         float str = GetStat(unit.BaseUnitModifiers, StatType.Strength);
         float dex = GetStat(unit.BaseUnitModifiers, StatType.Dexterity);
         float intl = GetStat(unit.BaseUnitModifiers, StatType.Intelligence);
-
-        foreach (var modifierContainer in unit.attributes.baseModifiersStrength)
-        {
-            unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer * str);
-        }
-        foreach (var modifierContainer in unit.attributes.baseModifiersDexterity)
-        {
-            unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer * dex);
-        }
-        foreach (var modifierContainer in unit.attributes.baseModifiersIntelligence)
-        {
-            unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer * intl);
-        }
+        unit.attributes.ApplyAttributeModifiers(AttributeType.Strength, str, unit.BaseUnitModifiers);
+        unit.attributes.ApplyAttributeModifiers(AttributeType.Dexterity, dex, unit.BaseUnitModifiers);
+        unit.attributes.ApplyAttributeModifiers(AttributeType.Intelligence, intl, unit.BaseUnitModifiers);
     }
     
     public static StatType GetCorespondingDamageStat(DamageType damageType)

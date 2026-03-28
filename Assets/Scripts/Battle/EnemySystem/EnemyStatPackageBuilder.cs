@@ -8,18 +8,19 @@ namespace Battle
     {
         public EnemySpawnData Build(
             float power,
+            float totalPower,
             EnemyArchetype archetype,
             EnemyRarity rarity)
         {
             float finalPower = power * EnemyRarityHelper.GetMultiplier(rarity);
             finalPower *= Random.Range(0.9f, 1.1f);
             
-            var package =new EnemySpawnData(archetype, rarity, finalPower, ScriptableObject.CreateInstance<BaseInnateModifiers>());
+            var package = new EnemySpawnData(archetype, rarity, finalPower, ScriptableObject.CreateInstance<BaseInnateModifiers>());
 
             DistributePrimaryStats(package.Modifiers, finalPower, archetype);
             ApplyBarrier(package.Modifiers, finalPower, archetype);
             ApplyAttackSpeed(package.Modifiers, archetype);
-            ApplyAccuracy(package.Modifiers, finalPower);
+            ApplyAccuracy(package.Modifiers, totalPower);
             ApplyRarityScaling(package.Modifiers, rarity);
             ApplyAffixes(package.Modifiers, archetype, rarity);
             
@@ -31,7 +32,7 @@ namespace Battle
             float power,
             EnemyArchetype archetype)
         {
-            float hp = power * archetype.healthWeight * 6f;
+            float hp = power * archetype.healthWeight * 3f;
             Add(package, ModifierType.Added, StatType.MaximumHealth, hp);
             
             float damageBudget = power * archetype.damageWeight * 3f;

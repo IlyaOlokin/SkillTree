@@ -35,7 +35,7 @@ namespace Battle
         protected override void Death()
         {
             base.Death();
-            _playerLevel.AddExperience(SpawnData.Power * 10f);
+            _playerLevel.AddExperience(SpawnData.Power);
         }
     }
 }

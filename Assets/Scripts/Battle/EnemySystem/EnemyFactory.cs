@@ -12,7 +12,7 @@ namespace Battle
             _database = database;
         }
 
-        public EnemySpawnData CreateEnemyStats(int level, float power)
+        public EnemySpawnData CreateEnemyStats(int level, float power, float totalPower)
         {
             var archetype = _database.GetRandomArchetype();
             if (archetype == null)
@@ -22,6 +22,7 @@ namespace Battle
 
             var spawnData = _builder.Build(
                 power,
+                totalPower,
                 archetype,
                 rarity);
 

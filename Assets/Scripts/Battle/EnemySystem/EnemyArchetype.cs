@@ -32,7 +32,6 @@ namespace Battle
 
         private void OnValidate()
         {
-            // Определяем что изменилось
             if (!Mathf.Approximately(healthWeight, _prevHealth))
             {
                 Redistribute(WeightType.Health);

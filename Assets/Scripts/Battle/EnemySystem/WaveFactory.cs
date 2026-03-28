@@ -31,7 +31,7 @@ namespace Battle
 
             for (int i = 0; i < enemyCount; i++)
             {
-                var data = _enemyFactory.CreateEnemyStats(level, powerPerEnemy);
+                var data = _enemyFactory.CreateEnemyStats(level, powerPerEnemy, totalPower);
                 result.Add(data);
             }
 
