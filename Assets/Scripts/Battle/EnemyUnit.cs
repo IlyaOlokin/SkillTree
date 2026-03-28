@@ -27,7 +27,7 @@ namespace Battle
             health.RestoreToFull();
             barrier.RestoreFull();
             effectController.ClearAllEffects();
-            attacker.ResetAttackCooldown();
+            attacker.ResetAttackCooldownHard();
             
             OnInitialized?.Invoke();
         }

@@ -47,6 +47,7 @@ namespace Visual
 
         private void DisplayHealthChangedNotification(float deltaHealth)
         {
+            if (deltaHealth == 0f) return;
             var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
             if (deltaHealth > 0f)
             {

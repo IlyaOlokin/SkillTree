@@ -16,7 +16,7 @@ namespace Battle
 
         [Header("Skill Points")]
         [SerializeField] private int skillPoints = 1;
-
+        
         public int Level => level;
         public double CurrentExp => currentExp;
         public double ExpToNextLevel => expToNextLevel;

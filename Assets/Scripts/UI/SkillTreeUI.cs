@@ -14,6 +14,9 @@ public class SkillTreeUI : MonoBehaviour
     private NodeDescription NodeDescriptionInstance;
     private RectTransform canvasRectTransform;
     private RectTransform descriptionRectTransform;
+    
+    [Header("Windows")]
+    [SerializeField] private PlayerStatsWindow playerStatsWindow;
 
     private void Awake()
     {
@@ -57,5 +60,10 @@ public class SkillTreeUI : MonoBehaviour
             Vector2 totalOffset = descriptionOffset + new Vector2(0f, childHeightOffset);
             descriptionRectTransform.anchoredPosition = localPoint + totalOffset;
         }
+    }
+
+    public void TogglePlayerStatsWindow()
+    {
+        playerStatsWindow.gameObject.SetActive(!playerStatsWindow.gameObject.activeSelf);
     }
 }

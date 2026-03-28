@@ -75,15 +75,13 @@ namespace SkillTree
                         .Append(statType.ToPrettyString().Replace("Added", ""));
                     break;
                 case ModifierType.Increased:
-                    builder.Append("+")
-                        .Append(value * 100f)
-                        .Append("% Increased ")
+                    builder.Append(Mathf.Abs(value * 100f))
+                        .Append(value < 0 ? "% Decreased " : "% Increased ")
                         .Append(statType.ToPrettyString());
                     break;
                 case ModifierType.More:
-                    builder.Append("+")
-                        .Append(value * 100f)
-                        .Append("% More ")
+                    builder.Append(Mathf.Abs(value * 100f))
+                        .Append(value < 0 ? "% Less " : "% More ")
                         .Append(statType.ToPrettyString());
                     break;
             }
