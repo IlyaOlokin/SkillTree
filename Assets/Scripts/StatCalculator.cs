@@ -6,6 +6,17 @@ using UnityEngine;
 
 public static class StatCalculator
 {
+    private static readonly StatType[] AttackSnapshotDirectStats =
+    {
+        // All DamageTypes as well
+        StatType.CritChance,
+        StatType.CritDamageBonus,
+        StatType.IgniteMagnitude,
+        StatType.ChillMagnitude,
+        StatType.OverchargeMagnitude,
+        StatType.BleedMagnitude
+    };
+
     public static void RecalculateStats(Unit unit, List<Modifier> mods)
     {
         foreach (var mod in mods)
@@ -17,8 +28,7 @@ public static class StatCalculator
         {
             if (mod.IsInPriority(ModifierPriority.PreAttribute2) && mod.IsApplicable(unit)) mod.ApplyEffect(unit);
         }
-
-            
+        
         ApplyAttributes(unit);
             
         foreach (var mod in mods)
@@ -36,6 +46,23 @@ public static class StatCalculator
         MergeAilmentModifiers(unit.BaseUnitModifiers);
 
         CacheStatValues(unit);
+    }
+
+    public static void LightRecalculateAttackStats(BaseUnitModifiers baseUnitModifiers)
+    {
+        MergeDamageModifiers(baseUnitModifiers);
+        MergeAilmentModifiers(baseUnitModifiers);
+
+        foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
+        {
+            var damageStatType = GetCorespondingDamageStat(damageType);
+            baseUnitModifiers.SetStatValue(damageStatType, GetStat(baseUnitModifiers, damageStatType));
+        }
+
+        foreach (var statType in AttackSnapshotDirectStats)
+        {
+            baseUnitModifiers.SetStatValue(statType, GetStat(baseUnitModifiers, statType));
+        }
     }
 
     public static void MergeDamageModifiers(BaseUnitModifiers baseUnitModifiers)

@@ -10,6 +10,7 @@ namespace Battle
     public class DamageInfo
     {
         public Unit Owner { get; private set; }
+        public ITarget Target { get; private set; }
         public BaseUnitModifiers BaseUnitModifiers { get; private set; }
         public DamageInstance DamageInstance { get; } = new DamageInstance();
         [HideInInspector] public bool IsCritical { get; set; }
@@ -22,6 +23,7 @@ namespace Battle
         public void Reset(Unit owner, BaseUnitModifiers baseUnitModifiersSnapshot)
         {
             Owner = owner ?? throw new ArgumentNullException(nameof(owner));
+            Target = owner.attacker.Target;
             BaseUnitModifiers = baseUnitModifiersSnapshot ?? throw new ArgumentNullException(nameof(baseUnitModifiersSnapshot));
             DamageInstance.ResetValues();
             IsCritical = false;

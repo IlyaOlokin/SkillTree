@@ -11,9 +11,9 @@ namespace Battle
         public override bool IsStackable { get; set; } = true;
         public override EffectVisualType VisualType => EffectVisualType.Ignite;
 
-        public Ignite(Unit owner, Unit defender, float fireDamageDealt)
+        public Ignite(DamageInfo damageInfo, Unit defender, float fireDamageDealt)
         {
-            _totalDamage = CalculateTotalDamage(owner, defender, fireDamageDealt);
+            _totalDamage = CalculateTotalDamage(damageInfo, defender, fireDamageDealt);
         }
 
         public override void OnStack(Unit unit, BaseEffect newEffect, ActiveEffect existing)
@@ -47,22 +47,22 @@ namespace Battle
             ApplyIgniteDamage(unit, burstDamage);
         }
 
-        private float CalculateTotalDamage(Unit unit, Unit defender, float fireDamageDealt)
+        private float CalculateTotalDamage(DamageInfo damageInfo, Unit defender, float fireDamageDealt)
         {
             float mitigation = Mathf.Min(1f, defender.BaseUnitModifiers.GetStatValue(StatType.IgniteMitigation));
             float magnitude = BASE_DAMAGE_PERCENTAGE *
-                              (1 + unit.BaseUnitModifiers.GetStatValue(StatType.IgniteMagnitude));
+                              (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.IgniteMagnitude));
             return fireDamageDealt * (1 + magnitude) * (1f - mitigation);
         }
 
-        public static void Apply(Unit attacker, DamageInstance damageInstance, Unit defender)
+        public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)
         {
-            if (damageInstance.Damage[DamageType.Fire] <= 0) return;
-            float damagePercentOfMaxHealth = damageInstance.Damage[DamageType.Fire] / defender.health.MaxHealth;
+            if (damageInfo.DamageInstance.Damage[DamageType.Fire] <= 0) return;
+            float damagePercentOfMaxHealth = damageInfo.DamageInstance.Damage[DamageType.Fire] / defender.health.MaxHealth;
             damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.IgniteChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
-                defender.effectController.AddEffect(new Ignite(attacker, defender, damageInstance.Damage[DamageType.Fire]));
+                defender.effectController.AddEffect(new Ignite(damageInfo, defender, damageInfo.DamageInstance.Damage[DamageType.Fire]));
             }
         }
 

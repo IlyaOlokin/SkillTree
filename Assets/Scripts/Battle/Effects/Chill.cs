@@ -15,10 +15,10 @@ namespace Battle
 
         private BaseModifier _cachedModifier;
         
-        private Chill(Unit owner, Unit defender, float duration)
+        private Chill(DamageInfo damageInfo, Unit defender, float duration)
         {
             Duration = duration * (1f - defender.BaseUnitModifiers.GetStatValue(StatType.ChillDurationReduction));
-            CalculateChillPower(owner);
+            CalculateChillPower(damageInfo);
         }
         
         public override void OnApply(Unit unit)
@@ -43,19 +43,19 @@ namespace Battle
             unit.RemoveOuterModifier(_cachedModifier);
         }
 
-        public void CalculateChillPower(Unit unit)
+        public void CalculateChillPower(DamageInfo damageInfo)
         {
-            _chillPower = CHILL_BASE_SLOW * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.ChillMagnitude));
+            _chillPower = CHILL_BASE_SLOW * (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.ChillMagnitude));
         }
         
-        public static void Apply(Unit attacker, DamageInstance damageInstance, Unit defender)
+        public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)
         {
-            if (damageInstance.Damage[DamageType.Cold] <= 0) return;
-            float damagePercentOfMaxHealth = damageInstance.Damage[DamageType.Cold] / defender.health.MaxHealth;
+            if (damageInfo.DamageInstance.Damage[DamageType.Cold] <= 0) return;
+            float damagePercentOfMaxHealth = damageInfo.DamageInstance.Damage[DamageType.Cold] / defender.health.MaxHealth;
             damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.ChillChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
-                defender.effectController.AddEffect(new Chill(attacker, defender, BASE_DURATION));
+                defender.effectController.AddEffect(new Chill(damageInfo, defender, BASE_DURATION));
             }
         }
     }

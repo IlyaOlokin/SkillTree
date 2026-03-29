@@ -29,9 +29,9 @@ namespace Battle
             {
                 if (mod.IsInPriority(ModifierPriority.OnAttack) && mod.IsApplicable(attackerUnit)) mod.ApplyEffect(damageInfo);
             }
+            StatCalculator.LightRecalculateAttackStats(damageInfo.BaseUnitModifiers);
             
             DamageCalculator.CalculateAttackDamage(damageInfo);
-            
             
             //Mitigation
             Armor.ApplyArmorMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);
@@ -43,10 +43,10 @@ namespace Battle
             }
             
             // Ailments
-            Bleed.Apply(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
-            Ignite.Apply(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
-            Chill.Apply(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
-            Overcharge.Apply(attackerUnit, damageInfo.DamageInstance, defender.UnitObject);
+            Bleed.Apply(attackerUnit, damageInfo, defender.UnitObject);
+            Ignite.Apply(attackerUnit, damageInfo, defender.UnitObject);
+            Chill.Apply(attackerUnit, damageInfo, defender.UnitObject);
+            Overcharge.Apply(attackerUnit, damageInfo, defender.UnitObject);
 
             //Block
             if (Block.ApplyBlock(defender.UnitObject))

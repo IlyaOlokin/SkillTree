@@ -15,21 +15,21 @@ namespace Battle
         public override bool IsStackable { get; set; } = false;
         public override EffectVisualType VisualType => EffectVisualType.Overcharge;
 
-        public Overcharge(Unit owner, Unit defender)
+        public Overcharge(DamageInfo damageInfo, Unit defender)
         {
-            CalculateBonuses(owner, defender);
+            CalculateBonuses(damageInfo, defender);
         }
         
-        private void CalculateBonuses(Unit unit, Unit defender)
+        private void CalculateBonuses(DamageInfo damageInfo, Unit defender)
         {
             MoreDamage = ScriptableObject.CreateInstance<BaseModifier>();
             MoreDamage.modifierContainer = new ModifierContainer(ModifierType.More, StatType.Damage, 
-                BASE_MORE_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)));
+                BASE_MORE_DAMAGE_BONUS * (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)));
             MoreDamage.SetPriorities(new List<ModifierPriority>() { ModifierPriority.OnAttack });
             
             MoreCritDamageBonus = ScriptableObject.CreateInstance<BaseModifier>();
             MoreCritDamageBonus.modifierContainer = new ModifierContainer(ModifierType.More, StatType.CritDamageBonus, 
-                BASE_MORE_CRIT_DAMAGE_BONUS * (1 + unit.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)));
+                BASE_MORE_CRIT_DAMAGE_BONUS * (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)));
             MoreCritDamageBonus.SetPriorities(new List<ModifierPriority>() { ModifierPriority.OnAttack });
         }
 
@@ -38,16 +38,16 @@ namespace Battle
             return IsUsed;
         }
 
-        public static void Apply(Unit attacker, DamageInstance damageInstance, Unit defender)
+        public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)
         {
-            if (damageInstance.Damage[DamageType.Lightning] <= 0) return;
-            float damagePercentOfMaxHealth = damageInstance.Damage[DamageType.Lightning] / defender.health.MaxHealth;
+            if (damageInfo.DamageInstance.Damage[DamageType.Lightning] <= 0) return;
+            float damagePercentOfMaxHealth = damageInfo.DamageInstance.Damage[DamageType.Lightning] / defender.health.MaxHealth;
             damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.OverchargeChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
                 if (Random.Range(0f, 1f) < defender.BaseUnitModifiers.GetStatValue(StatType.OverchargeAvoidanceChance))
                     return;
-                defender.effectController.AddEffect(new Overcharge(attacker, defender));
+                defender.effectController.AddEffect(new Overcharge(damageInfo, defender));
             }
         }
         

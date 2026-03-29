@@ -11,9 +11,9 @@ namespace Battle
         public override bool IsStackable { get; set; } = false;
         public override EffectVisualType VisualType => EffectVisualType.Bleed;
 
-        private Bleed(Unit owner, Unit defender, float physicalDamageDealt, float duration)
+        private Bleed(DamageInfo damageInfo, Unit defender, float physicalDamageDealt, float duration)
         {
-            _totalDamage = CalculateTotalDamage(owner, defender, physicalDamageDealt);
+            _totalDamage = CalculateTotalDamage(damageInfo, defender, physicalDamageDealt);
             Duration = duration;
         }
 
@@ -30,21 +30,22 @@ namespace Battle
             unit.ReceiveDoT(damage);
         }
         
-        private float CalculateTotalDamage(Unit unit, Unit defender, float physicalDamageDealt)
+        private float CalculateTotalDamage(DamageInfo damageInfo, Unit defender, float physicalDamageDealt)
         {
             float mitigation = Mathf.Min(1f, defender.BaseUnitModifiers.GetStatValue(StatType.BleedMitigation));
             float magnitude = BASE_DAMAGE_PERCENTAGE *
-                              (1 + unit.BaseUnitModifiers.GetStatValue(StatType.BleedMagnitude));
+                              (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.BleedMagnitude));
             return physicalDamageDealt * (1 + magnitude) * (1f - mitigation);
         }
         
-        public static void Apply(Unit attacker, DamageInstance damageInstance, Unit defender)
+        public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)
         {
-            if (damageInstance.Damage[DamageType.Physical] <= 0) return;
-            float chanceToApplyBleed = attacker.BaseUnitModifiers.GetStatValue(StatType.BleedChance);
-            if (Random.Range(0f, 1f) < chanceToApplyBleed)
+            if (damageInfo.DamageInstance.Damage[DamageType.Physical] <= 0) return;
+            float damagePercentOfMaxHealth = damageInfo.DamageInstance.Damage[DamageType.Physical] / defender.health.MaxHealth;
+            damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.BleedChance);
+            if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
-                defender.effectController.AddEffect(new Bleed(attacker, defender,damageInstance.Damage[DamageType.Physical], BASE_DURATION));
+                defender.effectController.AddEffect(new Bleed(damageInfo, defender, damageInfo.DamageInstance.Damage[DamageType.Physical], BASE_DURATION));
             }
         }
 
