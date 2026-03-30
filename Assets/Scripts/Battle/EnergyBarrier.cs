@@ -14,7 +14,7 @@ namespace Battle
         public static readonly float BarrierCooldown = 10f;
 
         private float _cooldownProgress;
-        private float _regenSpeed;
+        private float _regenSpeedMult;
         private float _barrierPower;
 
         private DamageType _blockedTypes;
@@ -91,7 +91,7 @@ namespace Battle
             _maxBarrierCount = (int)_owner.BaseUnitModifiers.GetStatValue(StatType.BarrierCount);
             _barrierCount = Mathf.Min(_barrierCount, _maxBarrierCount);
             _barrierPower = Mathf.Max(1f, _owner.BaseUnitModifiers.GetStatValue(StatType.BarrierPower));
-            _regenSpeed = _owner.BaseUnitModifiers.GetStatValue(StatType.BarrierRegenerationSpeed);
+            _regenSpeedMult = _owner.BaseUnitModifiers.GetStatValue(StatType.BarrierRegenerationSpeed);
             _blockedTypes = (DamageType) _owner.BaseUnitModifiers.GetStatValue(StatType.BarrierDamageTypeMask);
 
             OnMaxBarrierChanged?.Invoke();
@@ -103,7 +103,7 @@ namespace Battle
             if (IsFull)
                 return;
 
-            _cooldownProgress += (deltaTime / BarrierCooldown) * _regenSpeed;
+            _cooldownProgress += (deltaTime / BarrierCooldown) * _regenSpeedMult;
 
             if (_cooldownProgress >= 1f)
             {

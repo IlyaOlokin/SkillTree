@@ -15,7 +15,7 @@ MonoBehaviour:
   defaultIcon: {fileID: 21300000, guid: 145ee4ceb3e1cfd468a64c3d119ed1ca, type: 3}
   icons:
   - effectType: 1
-    icon: {fileID: 21300000, guid: fc7d858ca5a182e4d80d339cf0b50df2, type: 3}
+    icon: {fileID: 21300000, guid: a75085037fd278148ab9bc1455cf53dc, type: 3}
   - effectType: 2
     icon: {fileID: 21300000, guid: 945dd38febb63974ebdc2ee411def911, type: 3}
   - effectType: 3
