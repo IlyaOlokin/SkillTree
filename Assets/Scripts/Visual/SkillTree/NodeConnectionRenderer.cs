@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Splines;
 using SkillTree;
 using Unity.Mathematics;
@@ -18,14 +19,15 @@ namespace SkillTree
         [SerializeField] private List<NodeConnectionData> nodeConnections = new();
         [SerializeField] private SplineContainer connectionPrefab;
         [SerializeField] private int resolutionPerSpline = 20;
+        [SerializeField] private int maxVerticesPerChunk = 60000;
         [SerializeField] private float allocatedLineWidth = 0.15f;
         [SerializeField] private float defaultLineWidth = 0.08f;
         [SerializeField] private Color allocatedColor;
         [SerializeField] private Color defaultColor;
-
-        [SerializeField] private Mesh generatedMesh;
+        
         private Texture2D _stateTexture;
         private Material _material;
+        private const string ChunkObjectPrefix = "__ConnectionChunk_";
 
 
         private void OnValidate()
@@ -35,6 +37,9 @@ namespace SkillTree
 
         private void Awake()
         {
+            if (_material == null)
+                _material = GetComponent<MeshRenderer>().sharedMaterial;
+
             skillTree.OnAnyNodeChanged += ChangeNodeConnection;
         }
 
@@ -95,35 +100,6 @@ namespace SkillTree
             EditorUtility.SetDirty(this);
         }
 
-        public void CreateMeshAsset()
-        {
-            if (generatedMesh != null)
-            {
-                Debug.LogWarning("Mesh asset already exists");
-                return;
-            }
-
-            generatedMesh = new Mesh();
-            generatedMesh.name = "SkillTreeLines_Mesh";
-
-            string folder = "Assets/Generated";
-            if (!AssetDatabase.IsValidFolder(folder))
-            {
-                AssetDatabase.CreateFolder("Assets", "Generated");
-            }
-
-            string path = AssetDatabase.GenerateUniqueAssetPath(
-                $"{folder}/SkillTreeLines_Mesh.asset");
-
-            AssetDatabase.CreateAsset(generatedMesh, path);
-            AssetDatabase.SaveAssets();
-
-            GetComponent<MeshFilter>().sharedMesh = generatedMesh;
-
-            EditorUtility.SetDirty(this);
-            Debug.Log($"Mesh asset created at {path}");
-        }
-
         public int RemoveEmptyNodeConnections()
         {
             Undo.RecordObject(this, "Remove Empty Node Connections");
@@ -158,42 +134,87 @@ namespace SkillTree
 
     public void BuildMesh()
     {
-        var vertices = new List<Vector3>();
-        var triangles = new List<int>();
-        var normals = new List<Vector3>();
-        var uvs = new List<Vector2>();
-        var uv2s = new List<Vector2>();
-        var colors = new List<Color>();
+        var rootFilter = GetComponent<MeshFilter>();
+        if (rootFilter != null)
+            rootFilter.sharedMesh = null;
+
+        if (resolutionPerSpline < 2)
+        {
+            RemoveUnusedChunkObjects(0);
+            return;
+        }
+
+        int maxVerts = Mathf.Clamp(maxVerticesPerChunk, 4, 65535);
+        var vertices = new List<Vector3>(maxVerts);
+        var triangles = new List<int>(maxVerts * 3 / 2);
+        var normals = new List<Vector3>(maxVerts);
+        var uvs = new List<Vector2>(maxVerts);
+        var uv2s = new List<Vector2>(maxVerts);
+        var colors = new List<Color>(maxVerts);
 
         int vertIndex = 0;
         int connectionId = 0;
-
-        float halfWidth = defaultLineWidth * 0.5f;
+        int chunkIndex = 0;
         Color baseColor = Color.white;
+
+        void FlushChunk()
+        {
+            if (vertices.Count == 0)
+                return;
+
+            Mesh chunkMesh = GetOrCreateChunkMesh(chunkIndex);
+            chunkMesh.Clear();
+            chunkMesh.indexFormat = IndexFormat.UInt16;
+            chunkMesh.SetVertices(vertices);
+            chunkMesh.SetTriangles(triangles, 0);
+            chunkMesh.SetUVs(0, uvs);
+            chunkMesh.SetUVs(1, uv2s);
+            chunkMesh.SetNormals(normals);
+            chunkMesh.SetColors(colors);
+            chunkMesh.RecalculateBounds();
+
+            chunkIndex++;
+            vertIndex = 0;
+            vertices.Clear();
+            triangles.Clear();
+            normals.Clear();
+            uvs.Clear();
+            uv2s.Clear();
+            colors.Clear();
+        }
 
         foreach (var nodeConnection in nodeConnections)
         {
             var spline = nodeConnection.spline;
+            if (spline == null || spline.Splines.Count == 0)
+            {
+                connectionId++;
+                continue;
+            }
+
             Vector3 prevPos = spline.EvaluatePosition(0f);
 
             for (int i = 1; i < resolutionPerSpline; i++)
             {
+                if (vertIndex + 4 > maxVerts)
+                    FlushChunk();
+
                 float t = i / (float)(resolutionPerSpline - 1);
                 Vector3 currPos = spline.EvaluatePosition(t);
-                
+
                 Vector3 dir = (currPos - prevPos).normalized;
                 Vector3 normal = Vector3.Cross(dir, Vector3.forward);
-                
+
                 normals.Add(-normal);
                 normals.Add(-normal);
                 normals.Add(-normal);
                 normals.Add(-normal);
-                
+
                 vertices.Add(prevPos);
                 vertices.Add(prevPos);
                 vertices.Add(currPos);
                 vertices.Add(currPos);
-                
+
                 triangles.Add(vertIndex + 0);
                 triangles.Add(vertIndex + 2);
                 triangles.Add(vertIndex + 1);
@@ -201,17 +222,17 @@ namespace SkillTree
                 triangles.Add(vertIndex + 2);
                 triangles.Add(vertIndex + 3);
                 triangles.Add(vertIndex + 1);
-                
-                uvs.Add(new Vector2(t,  1));
+
+                uvs.Add(new Vector2(t, 1));
                 uvs.Add(new Vector2(t, -1));
-                uvs.Add(new Vector2(t,  1));
+                uvs.Add(new Vector2(t, 1));
                 uvs.Add(new Vector2(t, -1));
-                
+
                 uv2s.Add(new Vector2(connectionId, 0));
                 uv2s.Add(new Vector2(connectionId, 0));
                 uv2s.Add(new Vector2(connectionId, 0));
                 uv2s.Add(new Vector2(connectionId, 0));
-                
+
                 colors.Add(baseColor);
                 colors.Add(baseColor);
                 colors.Add(baseColor);
@@ -224,18 +245,74 @@ namespace SkillTree
             connectionId++;
         }
 
-        generatedMesh.Clear();
-        generatedMesh.SetVertices(vertices);
-        generatedMesh.SetTriangles(triangles, 0);
-        generatedMesh.SetUVs(0, uvs);
-        generatedMesh.SetUVs(1, uv2s);
-        generatedMesh.SetNormals(normals);
-        generatedMesh.SetColors(colors);
-        generatedMesh.RecalculateBounds();
+        FlushChunk();
+        RemoveUnusedChunkObjects(chunkIndex);
+    }
+
+    private Mesh GetOrCreateChunkMesh(int chunkIndex)
+    {
+        if (_material == null)
+            _material = GetComponent<MeshRenderer>().sharedMaterial;
+
+        string chunkName = $"{ChunkObjectPrefix}{chunkIndex}";
+        Transform chunkTransform = transform.Find(chunkName);
+        if (chunkTransform == null)
+        {
+            var chunkObject = new GameObject(chunkName);
+            chunkObject.transform.SetParent(transform, false);
+            chunkObject.layer = gameObject.layer;
+            chunkTransform = chunkObject.transform;
+        }
+
+        var meshFilter = chunkTransform.GetComponent<MeshFilter>();
+        if (meshFilter == null)
+            meshFilter = chunkTransform.gameObject.AddComponent<MeshFilter>();
+
+        var meshRenderer = chunkTransform.GetComponent<MeshRenderer>();
+        if (meshRenderer == null)
+            meshRenderer = chunkTransform.gameObject.AddComponent<MeshRenderer>();
+
+        meshRenderer.sharedMaterial = _material;
+
+        if (meshFilter.sharedMesh == null)
+        {
+            var mesh = new Mesh { name = $"SkillTreeLines_Chunk_{chunkIndex}" };
+            meshFilter.sharedMesh = mesh;
+        }
+
+        return meshFilter.sharedMesh;
+    }
+
+    private void RemoveUnusedChunkObjects(int usedChunks)
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            if (!child.name.StartsWith(ChunkObjectPrefix, StringComparison.Ordinal))
+                continue;
+
+            if (!int.TryParse(child.name.Substring(ChunkObjectPrefix.Length), out int index))
+                continue;
+
+            if (index < usedChunks)
+                continue;
+
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                DestroyImmediate(child.gameObject);
+            else
+                Destroy(child.gameObject);
+#else
+            Destroy(child.gameObject);
+#endif
+        }
     }
         
         private void CreateStateTexture()
         {
+            if (_material == null)
+                _material = GetComponent<MeshRenderer>().sharedMaterial;
+
             _stateTexture = new Texture2D(
                 nodeConnections.Count,
                 1,
@@ -260,20 +337,16 @@ namespace SkillTree
 
         private void ChangeNodeConnection(Node node)
         {
-            List<int> ids = new List<int>();
             for (var i = 0; i < nodeConnections.Count; i++)
             {
                 var connection = nodeConnections[i];
                 if (connection.pair.Contains(node))
                 {
-                    ids.Add(i);
+                    SetConnectionState(i, nodeConnections[i].pair.IsAllocated());
                 }
             }
-
-            foreach (var id in ids)
-            {
-                SetConnectionState(id, nodeConnections[id].pair.IsAllocated());
-            }
+            
+            _stateTexture.Apply(false);
         }
         
         public void SetConnectionState(int id, bool isAllocated)
@@ -285,8 +358,6 @@ namespace SkillTree
                 0,
                 new Color(thicknessMul, color.r, color.g, color.b)
             );
-
-            _stateTexture.Apply(false);
         }
     }
 

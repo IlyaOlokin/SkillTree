@@ -41,12 +41,6 @@ public class NodeConnectionRendererEditor : Editor
             GUIUtility.ExitGUI();
         }
 
-        if (GUILayout.Button("Create Mesh Asset"))
-        {
-            comp.CreateMeshAsset();
-            GUIUtility.ExitGUI();
-        }
-
         if (GUILayout.Button("Remove Empty Connections"))
         {
             int removed = comp.RemoveEmptyNodeConnections();

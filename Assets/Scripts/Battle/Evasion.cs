@@ -11,9 +11,8 @@ namespace Battle
             float evasion = defender.BaseUnitModifiers.GetStatValue(StatType.Evasion);
             
             float accuracy = attacker.BaseUnitModifiers.GetStatValue(StatType.Accuracy);
-            
-            float hitChance = accuracy / (evasion + accuracy);
-            return Random.Range(0f,1f) > hitChance;
+            float dodgeChance = (0.6f * evasion) / (accuracy + 0.6f * evasion);
+            return Random.Range(0f,1f) < dodgeChance;
         }
     }
 }

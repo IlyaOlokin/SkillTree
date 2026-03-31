@@ -16,6 +16,106 @@ PrefabInstance:
       propertyPath: m_Color.g
       value: 0.81960785
       objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersStrength.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersDexterity.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersIntelligence.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersStrength.Array.data[0].attributesPerStack
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersStrength.Array.data[1].attributesPerStack
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersDexterity.Array.data[0].attributesPerStack
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersDexterity.Array.data[1].attributesPerStack
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersIntelligence.Array.data[0].attributesPerStack
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersIntelligence.Array.data[1].attributesPerStack
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersStrength.Array.data[0].modifierContainer.value
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersStrength.Array.data[1].modifierContainer.value
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersDexterity.Array.data[0].modifierContainer.value
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersDexterity.Array.data[1].modifierContainer.value
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersStrength.Array.data[0].modifierContainer.statType
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersStrength.Array.data[1].modifierContainer.statType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersDexterity.Array.data[0].modifierContainer.statType
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersDexterity.Array.data[1].modifierContainer.statType
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersIntelligence.Array.data[0].modifierContainer.value
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersIntelligence.Array.data[1].modifierContainer.value
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersIntelligence.Array.data[0].modifierContainer.statType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersIntelligence.Array.data[1].modifierContainer.statType
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersStrength.Array.data[1].modifierContainer.modifierType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersDexterity.Array.data[0].modifierContainer.modifierType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersIntelligence.Array.data[0].modifierContainer.modifierType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: scalingModifiersIntelligence.Array.data[1].modifierContainer.modifierType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4884718464874992480, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
       propertyPath: m_Name
       value: PlayerUnit

@@ -89,7 +89,8 @@ public class SkillTreeTool : EditorTool
 
         if (node != null)
         {
-            HandleNodeClick(node);
+            bool copyFromSelected = e.control || e.command;
+            HandleNodeClick(node, copyFromSelected);
         }
         else
         {
@@ -264,18 +265,25 @@ public class SkillTreeTool : EditorTool
         return null;
     }
 
-    private void HandleNodeClick(Node node)
+    private void HandleNodeClick(Node node, bool copyFromSelected)
     {
         if (selectedNode == null)
             selectedNode = node;
         else if (selectedNode != node)
         {
-            if (AreConnected(selectedNode, node)) 
-                Disconnect(selectedNode, node);
+            if (copyFromSelected)
+            {
+                CopyNodeData(selectedNode, node);
+            }
             else
-                Connect(selectedNode, node);
-            
-            selectedNode = null;
+            {
+                if (AreConnected(selectedNode, node))
+                    Disconnect(selectedNode, node);
+                else
+                    Connect(selectedNode, node);
+
+                selectedNode = null;
+            }
         }
         else
         {

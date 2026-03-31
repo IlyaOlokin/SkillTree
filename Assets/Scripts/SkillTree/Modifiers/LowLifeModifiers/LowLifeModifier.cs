@@ -17,6 +17,16 @@ namespace SkillTree
             unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer);
         }
 
+        public override string GetDescription()
+        {
+            if (modifierContainer == null)
+            {
+                return "While on Low Life, applies modifier";
+            }
+
+            return $"While on Low Life, {modifierContainer.GetDescription()}";
+        }
+
     }
 }
 
