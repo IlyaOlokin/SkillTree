@@ -10,5 +10,6 @@ namespace Battle
         NextHitDamageMitigation = 5,
         LightAbsorptionDebuff = 6,
         DarknessAbsorptionDebuff = 7,
+        NextAttackModifierEffect = 8,
     }
 }

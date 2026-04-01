@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3719168286b50be4fb6d80449fa22c29, type: 3}
-  m_Name: AttributeMagnitudeModifier_Str_2 1
+  m_Script: {fileID: 11500000, guid: 33f0e99c0cc8f014a81953f6f59ca599, type: 3}
+  m_Name: GainAttackProgressOnHit_20
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 00000000
-  attributeType: 1
-  multiplier: 0
+  attackProgressGain: 0.2

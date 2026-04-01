@@ -41,6 +41,13 @@ namespace Battle
         public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)
         {
             if (damageInfo.DamageInstance.Damage[DamageType.Physical] <= 0) return;
+
+            if (damageInfo.AttackEffectPayload.IsGuaranteed<Bleed>())
+            {
+                defender.effectController.AddEffect(new Bleed(damageInfo, defender, damageInfo.DamageInstance.Damage[DamageType.Physical], BASE_DURATION));
+                return;
+            }
+
             float damagePercentOfMaxHealth = damageInfo.DamageInstance.Damage[DamageType.Physical] / defender.health.MaxHealth;
             damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.BleedChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
