@@ -28,6 +28,7 @@ namespace Battle
 
         public event Action<DamageInstance> OnGettingHit;
         public event Action<ITarget> OnHit;
+        public event Action<ITarget> OnCrit;
         
         public event Action OnEvade;
         public event Action OnBlock;
@@ -89,6 +90,11 @@ namespace Battle
 
         public void DamageDealt(DamageInstance damageInstance)
         {
+        }
+
+        public void OnCritLanded(ITarget target)
+        {
+            OnCrit?.Invoke(target);
         }
 
         public void ReceiveDoT(DamageInstance damageInstance)

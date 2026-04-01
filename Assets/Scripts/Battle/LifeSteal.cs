@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public static class LifeSteel
+    public static class LifeSteal
     {
         public static void Apply(Unit attacker, DamageInstance damageInstance)
         {
@@ -19,7 +19,6 @@ namespace Battle
                     totalValidDamage += damage.Value;
                 }
             }
-
             
             attacker.ReceiveHeal(totalValidDamage * lifeSteel);
         }

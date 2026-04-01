@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ae2ce54539276c4fa2012760a983831, type: 3}
-  m_Name: IncreasedEvasion_0.12
+  m_Script: {fileID: 11500000, guid: 33f0e99c0cc8f014a81953f6f59ca599, type: 3}
+  m_Name: GainAttackProgressOnHit_0.2
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 00000000
-  modifierContainer:
-    modifierType: 1
-    statType: 20
-    value: 0.12
+  attackProgressGain: 0.2

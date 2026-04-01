@@ -17,21 +17,6 @@ namespace Battle
             _guaranteedEffects.Add(typeof(T));
         }
 
-        public void Guarantee(Type effectType)
-        {
-            if (effectType == null)
-            {
-                throw new ArgumentNullException(nameof(effectType));
-            }
-
-            if (!typeof(BaseEffect).IsAssignableFrom(effectType))
-            {
-                throw new ArgumentException("Effect type must inherit from BaseEffect.", nameof(effectType));
-            }
-
-            _guaranteedEffects.Add(effectType);
-        }
-
         public bool IsGuaranteed<T>() where T : BaseEffect
         {
             return IsGuaranteed(typeof(T));

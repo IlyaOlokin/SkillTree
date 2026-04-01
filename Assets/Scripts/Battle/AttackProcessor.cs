@@ -58,7 +58,11 @@ namespace Battle
             
             //Damage
             DamageInstance damageDealt = defender.ReceiveDamage(damageInfo.DamageInstance);
-            LifeSteel.Apply(attackerUnit, damageDealt);
+            LifeSteal.Apply(attackerUnit, damageDealt);
+            if (damageInfo.IsCritical)
+            {
+                attackerUnit.OnCritLanded(defender);
+            }
             attackerUnit.DamageDealt(damageDealt);
             AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics
         }
