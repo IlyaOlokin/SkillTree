@@ -7,6 +7,7 @@ namespace Battle
         Strength,
         Dexterity,
         Intelligence,
+        AllAttributes,
     }
 }
 

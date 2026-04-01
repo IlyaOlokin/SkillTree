@@ -24,7 +24,21 @@ namespace Battle
         [Header("Intelligence")]
         [SerializeField] public List<AttributeScalingModifier> scalingModifiersIntelligence = new List<AttributeScalingModifier>();
         private readonly List<AttributeScalingModifier> _runtimeModifiersIntelligence = new List<AttributeScalingModifier>();
+        
+        private float _attributeMagnitude = 1f; 
+        private float _strengthMagnitude = 1f; 
+        private float _dexterityMagnitude = 1f; 
+        private float _intelligenceMagnitude = 1f; 
 
+        public void Reset()
+        {
+            ClearRuntimeModifiers();
+            _attributeMagnitude = 1f;
+            _strengthMagnitude = 1f;
+            _dexterityMagnitude = 1f;
+            _intelligenceMagnitude = 1f;
+        }
+        
         public void ClearRuntimeModifiers()
         {
             _runtimeModifiersStrength.Clear();
@@ -85,17 +99,32 @@ namespace Battle
             for (int i = 0; i < baseModifiers.Count; i++)
             {
                 var scalingModifier = baseModifiers[i];
-                ApplyModifier(baseUnitModifiers, scalingModifier.modifierContainer, attributeValue, scalingModifier.attributesPerStack);
+                ApplyModifier(baseUnitModifiers, attributeType, scalingModifier.modifierContainer, attributeValue, scalingModifier.attributesPerStack);
             }
 
             for (int i = 0; i < runtimeModifiers.Count; i++)
             {
                 var scalingModifier = runtimeModifiers[i];
-                ApplyModifier(baseUnitModifiers, scalingModifier.modifierContainer, attributeValue, scalingModifier.attributesPerStack);
+                ApplyModifier(baseUnitModifiers, attributeType, scalingModifier.modifierContainer, attributeValue, scalingModifier.attributesPerStack);
             }
         }
 
-        private static void ApplyModifier(BaseUnitModifiers baseUnitModifiers, ModifierContainer modifierContainer, float attributeValue, int attributesPerStack)
+        public void ChangeAttributeMagnitude(AttributeType attributeType, float multiplier)
+        {
+            switch (attributeType)
+            {
+                case AttributeType.Strength: _strengthMagnitude *= multiplier;
+                    break;
+                case AttributeType.Dexterity: _dexterityMagnitude *= multiplier;
+                    break;
+                case AttributeType.Intelligence: _intelligenceMagnitude *= multiplier;
+                    break;
+                case AttributeType.AllAttributes: _attributeMagnitude *= multiplier;
+                    break;
+            }
+        }
+
+        private void ApplyModifier(BaseUnitModifiers baseUnitModifiers, AttributeType attributeType, ModifierContainer modifierContainer, float attributeValue, int attributesPerStack)
         {
             if (modifierContainer == null)
             {
@@ -111,7 +140,15 @@ namespace Battle
                 return;
             }
 
-            baseUnitModifiers.ChangeModifierValue(modifierContainer * stacks);
+            float localMagnitude = attributeType switch
+            {
+                AttributeType.Strength => _strengthMagnitude,
+                AttributeType.Dexterity => _dexterityMagnitude,
+                AttributeType.Intelligence => _intelligenceMagnitude,
+                _ => 1f
+            };
+            localMagnitude += _attributeMagnitude - 1f;
+            baseUnitModifiers.ChangeModifierValue(modifierContainer * stacks * localMagnitude);
         }
     }
 }

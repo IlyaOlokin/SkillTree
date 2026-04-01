@@ -134,7 +134,7 @@ namespace Battle
         protected void ResetUnit()
         {
             UnbindModifierRuntimes();
-            attributes.ClearRuntimeModifiers();
+            attributes.Reset();
             BaseUnitModifiers.Reset();
             baseInnateModifiers.ApplyEffect(this);
             innateModifiers.ApplyEffect(this);
