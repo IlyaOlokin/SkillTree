@@ -50,10 +50,10 @@ namespace Battle
             OnAbsorptionStacksChanged -= HandleAbsorptionStacksChanged;
         }
 
-        private void Update()
+        public void CombatTick(float deltaTime)
         {
             float cleansePerSecond = Mathf.Max(0f, _owner.BaseUnitModifiers.GetStatValue(StatType.MysticCleansePerSecond));
-            TickCleanse(Time.deltaTime, cleansePerSecond);
+            TickCleanse(deltaTime, cleansePerSecond);
         }
 
         public void ApplyMysticDamage(float lightDamage, float darknessDamage)

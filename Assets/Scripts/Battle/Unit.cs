@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using SkillTree;
 using UnityEngine;
+using Zenject;
 
 namespace Battle
 {
-    public class Unit : MonoBehaviour, ITarget
+    public class Unit : MonoBehaviour, ITarget, ICombatTickable
     {
         [SerializeField] public Health health;
         [SerializeField] public MysticHealth mysticHealth;
@@ -21,6 +22,8 @@ namespace Battle
         private List<Modifier> _outerModifiers = new List<Modifier>();
         private readonly List<IModifierRuntimeBinding> _modifierRuntimeBindings = new List<IModifierRuntimeBinding>();
         private bool _modsChangedPending;
+        private BattleTickSystem _battleTickSystem;
+        private bool _isRegisteredInBattleTickSystem;
 
         public event Action OnModsChanged;
         public event Action OnOuterModsChanged;
@@ -40,6 +43,13 @@ namespace Battle
         {
             get => this;
             set { }
+        }
+
+        [Inject]
+        private void Construct(BattleTickSystem battleTickSystem)
+        {
+            _battleTickSystem = battleTickSystem;
+            RegisterToBattleTickSystem();
         }
 
         protected virtual void Awake()
@@ -63,15 +73,12 @@ namespace Battle
         protected virtual void Start()
         {
             RecalculateMods();
+            RegisterToBattleTickSystem();
         }
 
-        protected virtual void LateUpdate()
+        protected virtual void OnEnable()
         {
-            if (!_modsChangedPending)
-                return;
-
-            _modsChangedPending = false;
-            OnModsChanged?.Invoke();
+            RegisterToBattleTickSystem();
         }
 
         public DamageInstance ReceiveDamage(DamageInfo damageInfo)
@@ -107,6 +114,14 @@ namespace Battle
             health.TakeHeal(amount);
         }
 
+        public virtual void ResetCombatState()
+        {
+            health.RestoreToFull();
+            barrier.RestoreFull();
+            effectController.ClearAllEffects();
+            attacker.ResetAttackCooldownHard();
+        }
+
         public void OnHitEvaded(DamageInstance damageInstance)
         {
             OnEvade?.Invoke();
@@ -119,12 +134,39 @@ namespace Battle
 
         protected void RaiseOnModsChanged()
         {
+            if (!_isRegisteredInBattleTickSystem)
+            {
+                OnModsChanged?.Invoke();
+                return;
+            }
+
             _modsChangedPending = true;
         }
 
         protected void RaiseOnStatsRecalculated()
         {
             OnStatsRecalculated?.Invoke();
+        }
+
+        public void CombatTick(float deltaTime, CombatTickPhase phase)
+        {
+            switch (phase)
+            {
+                case CombatTickPhase.Mods:
+                    ProcessPendingModRecalculation();
+                    break;
+                case CombatTickPhase.Resources:
+                    health?.CombatTick(deltaTime);
+                    barrier?.CombatTick(deltaTime);
+                    mysticHealth?.CombatTick(deltaTime);
+                    break;
+                case CombatTickPhase.Effects:
+                    effectController?.CombatTick(deltaTime);
+                    break;
+                case CombatTickPhase.Actions:
+                    attacker?.CombatTick(deltaTime);
+                    break;
+            }
         }
 
         private void RecalculateMods()
@@ -135,6 +177,17 @@ namespace Battle
             BindModifierRuntimes(mods);
 
             RaiseOnStatsRecalculated();
+        }
+
+        private void ProcessPendingModRecalculation()
+        {
+            if (!_modsChangedPending)
+            {
+                return;
+            }
+
+            _modsChangedPending = false;
+            OnModsChanged?.Invoke();
         }
 
         protected void ResetUnit()
@@ -207,12 +260,36 @@ namespace Battle
         {
             health.OnHealthZero -= Death;
             UnbindModifierRuntimes();
+            UnregisterFromBattleTickSystem();
             _modsChangedPending = false;
         }
 
         protected virtual void OnDisable()
         {
+            UnregisterFromBattleTickSystem();
             _modsChangedPending = false;
+        }
+
+        private void RegisterToBattleTickSystem()
+        {
+            if (_isRegisteredInBattleTickSystem || _battleTickSystem == null || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            _battleTickSystem.Register(this);
+            _isRegisteredInBattleTickSystem = true;
+        }
+
+        private void UnregisterFromBattleTickSystem()
+        {
+            if (!_isRegisteredInBattleTickSystem || _battleTickSystem == null)
+            {
+                return;
+            }
+
+            _battleTickSystem.Unregister(this);
+            _isRegisteredInBattleTickSystem = false;
         }
     }
 }

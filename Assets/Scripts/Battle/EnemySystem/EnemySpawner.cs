@@ -11,6 +11,8 @@ namespace Battle
         [SerializeField] private EnemyPool pool;
         [SerializeField] private EnemyConfigDatabase database;
 
+        [Inject] private PlayerUnit _player;
+
         private int _currentClearedWaves;
         
         private WaveFactory _waveFactory;
@@ -139,6 +141,7 @@ namespace Battle
 
             if (_currentClearedWaves >= WavesToUnlockNextLevelInternal && _autoProgressionEnabled)
             {
+                _player.ResetCombatState();
                 _maxUnlockedLevel = Mathf.Min(_maxUnlockedLevel + 1, MaxWaveLevel);
                 SelectNextLevel();
             }

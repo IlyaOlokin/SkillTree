@@ -35,11 +35,11 @@ namespace Battle
             Target = target;
         }
 
-        private void Update()
+        public void CombatTick(float deltaTime)
         {
             if (_attackTimer < 1)
             {
-                AddAttackProgress(GetCalculatedAttackSpeed() * Time.deltaTime);
+                AddAttackProgress(GetCalculatedAttackSpeed() * deltaTime);
             }
             else if (Target?.UnitObject != null)
             {

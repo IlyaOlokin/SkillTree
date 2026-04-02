@@ -44,9 +44,9 @@ namespace Battle
                 _owner.OnStatsRecalculated -= UpdateBarrierValues;
         }
 
-        private void Update()
+        public void CombatTick(float deltaTime)
         {
-            Regenerate(Time.deltaTime);
+            Regenerate(deltaTime);
         }
 
         public void TakeDamage(DamageInstance damage)

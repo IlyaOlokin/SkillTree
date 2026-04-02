@@ -32,15 +32,13 @@ namespace Battle
         }
 
 
-        private void Update()
+        public void CombatTick(float deltaTime)
         {
-            float dt = Time.deltaTime;
-
             for (int i = Effects.Count - 1; i >= 0; i--)
             {
                 var e = Effects[i];
 
-                e.Effect.OnTick(_owner, dt);
+                e.Effect.OnTick(_owner, deltaTime);
 
                 if (e.TimeLeft < 0)
                 {
@@ -52,7 +50,7 @@ namespace Battle
                     continue;
                 }
 
-                e.TimeLeft -= dt;
+                e.TimeLeft -= deltaTime;
                 if (e.TimeLeft <= 0)
                 {
                     e.Effect.OnRemove(_owner);

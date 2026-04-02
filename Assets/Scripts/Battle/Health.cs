@@ -37,14 +37,14 @@ namespace Battle
                 _owner.OnStatsRecalculated -= UpdateHealthValues;
         }
 
-        private void Update()
+        public void CombatTick(float deltaTime)
         {
-            Regen();
+            Regen(deltaTime);
         }
 
-        private void Regen()
+        private void Regen(float deltaTime)
         {
-            float healAmount = _cachedRegenerationSpeed * Time.deltaTime;
+            float healAmount = _cachedRegenerationSpeed * deltaTime;
             if (healAmount <= 0f)
                 return;
             TakeHeal(healAmount, false);

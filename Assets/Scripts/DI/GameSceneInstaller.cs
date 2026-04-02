@@ -12,6 +12,11 @@ public class GameSceneInstaller : MonoInstaller
 {
     public override void InstallBindings()
     {
+        Container.Bind<BattleTickSystem>()
+            .FromComponentInHierarchy()
+            .AsSingle()
+            .NonLazy();
+
         Container.Bind<PlayerUnit>().FromComponentInHierarchy().AsSingle();
         Container.Bind<UnitLevel>()
             .FromResolveGetter<PlayerUnit>(p => p.UnitLevel)

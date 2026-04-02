@@ -24,10 +24,7 @@ namespace Battle
             innateModifiers = data.Modifiers;
            
             RaiseOnModsChanged();
-            health.RestoreToFull();
-            barrier.RestoreFull();
-            effectController.ClearAllEffects();
-            attacker.ResetAttackCooldownHard();
+            ResetCombatState();
             
             OnInitialized?.Invoke();
         }
