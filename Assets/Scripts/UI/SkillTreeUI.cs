@@ -1,5 +1,5 @@
 using SkillTree;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillTreeUI : MonoBehaviour
@@ -29,7 +29,13 @@ public class SkillTreeUI : MonoBehaviour
 
     public void DisplayNodeDescription(Node node)
     {
-        NodeDescriptionInstance.SetText(node.GetDescription());
+        List<string> modifierDescriptions = new List<string>(node.Modifiers.Count);
+        foreach (var modifier in node.Modifiers)
+        {
+            modifierDescriptions.Add(modifier.GetDescription());
+        }
+
+        NodeDescriptionInstance.SetTexts(modifierDescriptions);
         
         NodeDescriptionInstance.gameObject.SetActive(true);
         Canvas.ForceUpdateCanvases();
