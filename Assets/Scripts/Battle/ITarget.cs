@@ -6,7 +6,7 @@ namespace Battle
     {
         public Unit UnitObject { get; set; }
 
-        public DamageInstance ReceiveDamage(DamageInstance damageInstance);
+        public DamageInstance ReceiveDamage(DamageInfo damageInfo);
         public void ReceiveDoT(DamageInstance damageInstance);
         public void OnHitEvaded(DamageInstance damageInstance);
         public void OnHitBlock(DamageInstance damageInstance);

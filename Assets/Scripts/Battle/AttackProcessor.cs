@@ -57,7 +57,7 @@ namespace Battle
             }
             
             //Damage
-            DamageInstance damageDealt = defender.ReceiveDamage(damageInfo.DamageInstance);
+            DamageInstance damageDealt = defender.ReceiveDamage(damageInfo);
             LifeSteal.Apply(attackerUnit, damageDealt);
             if (damageInfo.IsCritical)
             {

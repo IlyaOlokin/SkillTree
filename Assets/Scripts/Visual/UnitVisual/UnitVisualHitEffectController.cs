@@ -2,6 +2,7 @@ using Battle;
 using DG.Tweening;
 using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Visual
 {
@@ -9,6 +10,7 @@ namespace Visual
     public class UnitVisualHitEffectController
     {
         [SerializeField] private SpriteRenderer unitVisual;
+        [Header("Flash")]
         [SerializeField] private Transform wobbleTransform;
         [SerializeField] private Color flashColor = Color.white;
         [SerializeField] private float flashInDuration = 0.06f;
@@ -17,6 +19,11 @@ namespace Visual
         [SerializeField] private float wobbleZStrength = 8f;
         [SerializeField] private int wobbleVibrato = 12;
         [SerializeField] private float wobbleRandomness = 40f;
+
+        [Header("Hit")]
+        [SerializeField] private GameObject hitEffectPrefab;
+        [SerializeField] private float hitEffectLifetimeFallback = 1f;
+        [SerializeField] private float hitEffectDestroyCheckDelay = 0.2f;
 
         private Color _baseColor;
         private Quaternion _baseWobbleLocalRotation;
@@ -36,15 +43,41 @@ namespace Visual
             _isInitialized = true;
         }
 
-        public void PlayHitEffect(DamageInstance damageInstance)
+        public void PlayHitEffect(DamageInfo damageInfo)
         {
             Initialize();
 
-            if (unitVisual == null || !HasDamage(damageInstance))
+            if (unitVisual == null || !HasDamage(damageInfo.DamageInstance))
             {
                 return;
             }
 
+            UnitFlash();
+            HitEffect();
+        }
+
+        private void HitEffect()
+        {
+            if (hitEffectPrefab == null || unitVisual == null)
+            {
+                return;
+            }
+
+            var hitEffectInstance = Object.Instantiate(
+                hitEffectPrefab,
+                unitVisual.bounds.center,
+                hitEffectPrefab.transform.rotation);
+            var autoDestroy = hitEffectInstance.GetComponent<AutoDestroyVisualEffect>();
+            if (autoDestroy == null)
+            {
+                autoDestroy = hitEffectInstance.AddComponent<AutoDestroyVisualEffect>();
+            }
+
+            autoDestroy.Initialize(hitEffectLifetimeFallback, hitEffectDestroyCheckDelay);
+        }
+
+        private void UnitFlash()
+        {
             _hitSequence?.Kill();
             unitVisual.color = _baseColor;
             ResetWobbleRotation();

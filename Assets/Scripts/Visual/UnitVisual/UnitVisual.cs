@@ -71,9 +71,9 @@ namespace Visual
             newEffect.WriteMessage("Block");
         }
 
-        private void DisplayGettingHitEffect(DamageInstance damageInstance)
+        private void DisplayGettingHitEffect(DamageInfo damageInfo)
         {
-            hitEffectController?.PlayHitEffect(damageInstance);
+            hitEffectController?.PlayHitEffect(damageInfo);
         }
     }
 }

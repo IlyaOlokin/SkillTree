@@ -25,9 +25,9 @@ namespace Battle
             set{}
         }
         
-        public DamageInstance ReceiveDamage(DamageInstance damageInstance)
+        public DamageInstance ReceiveDamage(DamageInfo damageInfo)
         {
-            return UnitObject.ReceiveDamage(damageInstance);
+            return UnitObject.ReceiveDamage(damageInfo);
         }
 
         public void ReceiveDoT(DamageInstance damageInstance)

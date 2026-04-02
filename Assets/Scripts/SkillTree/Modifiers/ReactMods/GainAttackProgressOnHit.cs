@@ -16,7 +16,7 @@ namespace SkillTree
                 return null;
             }
 
-            void HandleGettingHit(DamageInstance _)
+            void HandleGettingHit(DamageInfo _)
             {
                 owner.ModifyAttackProgress(attackProgressGain);
             }

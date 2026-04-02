@@ -9,7 +9,7 @@ namespace Battle
         private readonly DamageMitigation _modifier;
         private bool _isUsed;
         private bool _isApplied;
-        private readonly System.Action<DamageInstance> _onHitHandler;
+        private readonly System.Action<DamageInfo> _onHitHandler;
 
         public override bool IsStackable { get; set; }
         public override EffectVisualType VisualType => EffectVisualType.NextHitDamageMitigation;
@@ -49,7 +49,7 @@ namespace Battle
             }
         }
 
-        private void HandleOwnerHit(DamageInstance _)
+        private void HandleOwnerHit(DamageInfo _)
         {
             _isUsed = true;
         }

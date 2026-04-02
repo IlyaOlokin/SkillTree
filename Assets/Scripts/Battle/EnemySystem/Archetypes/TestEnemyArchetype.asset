@@ -16,7 +16,7 @@ MonoBehaviour:
   damageWeight: 0.34033686
   defenseWeight: 0.333
   barrierWeight: 0
-  baseAttackSpeed: 0.2
+  baseAttackSpeed: 0.15
   damageTypes:
   - statType: 4
     weight: 0.5

@@ -26,7 +26,7 @@ namespace Battle
         public event Action OnOuterModsChanged;
         public event Action OnStatsRecalculated;
 
-        public event Action<DamageInstance> OnGettingHit;
+        public event Action<DamageInfo> OnGettingHit;
         public event Action<ITarget> OnHit;
         public event Action<ITarget> OnCrit;
         
@@ -74,12 +74,12 @@ namespace Battle
             OnModsChanged?.Invoke();
         }
 
-        public DamageInstance ReceiveDamage(DamageInstance damageInstance)
+        public DamageInstance ReceiveDamage(DamageInfo damageInfo)
         {
-            barrier.TakeDamage(damageInstance);
-            mysticHealth.ApplyMysticDamageAsAbsorption(damageInstance);
-            DamageInstance receivedDamage = health.TakeDamage(damageInstance);
-            OnGettingHit?.Invoke(receivedDamage);
+            barrier.TakeDamage(damageInfo.DamageInstance);
+            mysticHealth.ApplyMysticDamageAsAbsorption(damageInfo.DamageInstance);
+            DamageInstance receivedDamage = health.TakeDamage(damageInfo.DamageInstance);
+            OnGettingHit?.Invoke(damageInfo);
             return receivedDamage;
         }
 
