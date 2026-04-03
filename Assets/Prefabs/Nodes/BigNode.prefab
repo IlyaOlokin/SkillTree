@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4119631117331947586}
   - component: {fileID: 7357462243889916700}
   - component: {fileID: 4188905282137775919}
+  - component: {fileID: -9174836185465104663}
   m_Layer: 3
   m_Name: BigNode
   m_TagString: Untagged
@@ -121,6 +122,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1f90593a65c83c48968f08cd07c84b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-9174836185465104663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966638709148332189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ddd85c6dcb641f788a8f9429df111d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipSource: {fileID: 3041048277598826952}
 --- !u!1 &3204345449470436903
 GameObject:
   m_ObjectHideFlags: 0

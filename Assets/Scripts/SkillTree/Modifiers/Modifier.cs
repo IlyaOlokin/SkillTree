@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Battle;
+using TooltipSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -64,6 +65,7 @@ namespace SkillTree
         {
             StringBuilder builder = new StringBuilder();
             var forcePercentForAdded = StatTypeDisplayRules.IsPercentStat(statType);
+            string formattedStatName = StatTypeTooltipFormatter.Format(statType);
 
             switch (modifierType)
             {
@@ -72,17 +74,17 @@ namespace SkillTree
                         .Append(forcePercentForAdded ? value * 100f : value)
                         .Append(forcePercentForAdded ? "%" : "")
                         .Append(" to ")
-                        .Append(statType.ToPrettyString().Replace("Added", ""));
+                        .Append(formattedStatName.Replace("Added", ""));
                     break;
                 case ModifierType.Increased:
                     builder.Append(Mathf.Abs(value * 100f))
                         .Append(value < 0 ? "% Decreased " : "% Increased ")
-                        .Append(statType.ToPrettyString());
+                        .Append(formattedStatName);
                     break;
                 case ModifierType.More:
                     builder.Append(Mathf.Abs(value * 100f))
                         .Append(value < 0 ? "% Less " : "% More ")
-                        .Append(statType.ToPrettyString());
+                        .Append(formattedStatName);
                     break;
             }
 

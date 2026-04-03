@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Battle;
+using TooltipSystem;
 using UnityEngine;
 using Zenject;
 
 namespace SkillTree
 {
     [Serializable]
-    public class Node : MonoBehaviour
+    public class Node : MonoBehaviour, ITooltipDescriptionProvider, ITooltipTitleVisibilityProvider
     { 
         [Inject] private UnitLevel _unitLevel;
         
@@ -78,14 +79,21 @@ namespace SkillTree
             OnAllocatedChanged?.Invoke(this);
             OnAnyNodeAllocatedChanged?.Invoke(this);
         }
-        public virtual string GetDescription()
+        
+        public virtual IReadOnlyList<string> GetTooltipDescriptions()
         {
-            StringBuilder builder = new StringBuilder();
+            List<string> descriptions = new List<string>(Modifiers.Count);
             foreach (var modifier in Modifiers)
             {
-                builder.Append(modifier.GetDescription()).AppendLine();
+                descriptions.Add(modifier.GetDescription());
             }
-            return builder.ToString();
+
+            return descriptions;
+        }
+
+        public virtual bool ShouldShowTooltipTitle()
+        {
+            return true;
         }
     }
 }

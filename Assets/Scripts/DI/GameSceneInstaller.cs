@@ -1,4 +1,5 @@
 using Battle;
+using TooltipSystem;
 using UnityEngine;
 using Zenject;
 
@@ -24,6 +25,7 @@ public class GameSceneInstaller : MonoInstaller
 
         Container.Bind<AttackResolver>().FromComponentInHierarchy().AsSingle();
         Container.Bind<SkillTreeUI>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<TooltipUI>().FromComponentInHierarchy().AsSingle();
 
         Container.Bind<ITarget>().WithId(TargetIds.Player).To<PlayerUnit>().FromResolve();
         Container.Bind<ITarget>().WithId(TargetIds.Enemies).To<AttackResolver>().FromResolve();

@@ -1,26 +1,47 @@
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
+using TooltipSystem;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NodeDescription : MonoBehaviour
+public class TooltipWindow : MonoBehaviour
 {
     [SerializeField] private TMP_Text description;
     [SerializeField] private RectTransform heightOffsetSource;
     [SerializeField] private int maxCharactersPerLine = 32;
     private RectTransform selfRectTransform;
     private readonly List<TMP_Text> descriptionFields = new();
+    private TooltipUI tooltipUI;
+    private int tooltipLevel;
+    
+    [SerializeField] private GameObject title;
 
     private void Awake()
     {
         selfRectTransform = (RectTransform)transform;
+        ConfigureDescriptionField(description);
         descriptionFields.Add(description);
     }
 
-    public void SetTexts(IReadOnlyList<string> texts)
+    public void Initialize(TooltipUI ownerTooltipUI, int level)
+    {
+        tooltipUI = ownerTooltipUI;
+        tooltipLevel = level;
+
+        for (int i = 0; i < descriptionFields.Count; i++)
+        {
+            ConfigureDescriptionField(descriptionFields[i]);
+        }
+    }
+
+    public void SetTexts(IReadOnlyList<string> texts, bool shouldShowTitle)
     {
         EnsureDescriptionFieldCount(texts.Count);
+        if (title != null)
+        {
+            title.SetActive(shouldShowTitle);
+        }
 
         for (int i = 0; i < descriptionFields.Count; i++)
         {
@@ -30,7 +51,7 @@ public class NodeDescription : MonoBehaviour
 
             if (shouldBeActive)
             {
-                descriptionField.text = WrapText(texts[i]);
+                descriptionField.text = TooltipTextLinkFormatter.Format(WrapText(texts[i]));
             }
         }
     }
@@ -50,8 +71,22 @@ public class NodeDescription : MonoBehaviour
         for (int i = descriptionFields.Count; i < requiredCount; i++)
         {
             TMP_Text descriptionField = Instantiate(description, description.transform.parent);
+            ConfigureDescriptionField(descriptionField);
             descriptionFields.Add(descriptionField);
         }
+    }
+
+    private void ConfigureDescriptionField(TMP_Text descriptionField)
+    {
+        descriptionField.raycastTarget = true;
+
+        TooltipTextLinkHandler linkHandler = descriptionField.GetComponent<TooltipTextLinkHandler>();
+        if (linkHandler == null)
+        {
+            linkHandler = descriptionField.gameObject.AddComponent<TooltipTextLinkHandler>();
+        }
+
+        linkHandler.Initialize(tooltipUI, tooltipLevel);
     }
 
     private string WrapText(string text)
