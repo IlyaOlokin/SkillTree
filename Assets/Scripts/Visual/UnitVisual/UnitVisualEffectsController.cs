@@ -1,6 +1,7 @@
 using Battle;
 using System;
 using System.Collections.Generic;
+using TooltipSystem;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -17,6 +18,12 @@ namespace Visual
 
         private readonly Dictionary<ActiveEffect, UnitEffectIconView> _effectIcons = new Dictionary<ActiveEffect, UnitEffectIconView>();
         private readonly List<ActiveEffect> _iconsToRemove = new List<ActiveEffect>();
+        private TooltipUI _tooltipUI;
+
+        public void Initialize(TooltipUI tooltipUI)
+        {
+            _tooltipUI = tooltipUI;
+        }
 
         public void UpdateEffectIcons(Unit unit)
         {
@@ -79,7 +86,9 @@ namespace Visual
         {
             var iconView = Object.Instantiate(effectIconPrefab, effectIconsRoot);
             iconView.RectTransform.localScale = effectIconsRoot.localScale;
+            iconView.Initialize(_tooltipUI);
             iconView.SetIcon(ResolveEffectIcon(activeEffect.Effect));
+            iconView.SetEffect(activeEffect.Effect);
             return iconView;
         }
 

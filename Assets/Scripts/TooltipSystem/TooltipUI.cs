@@ -6,6 +6,15 @@ namespace TooltipSystem
 {
     public class TooltipUI : MonoBehaviour
     {
+        private class TooltipCanvasState
+        {
+            public Canvas Canvas;
+            public Camera WorldCamera;
+            public RectTransform CanvasRectTransform;
+            public readonly List<TooltipWindow> TooltipWindows = new();
+            public readonly List<RectTransform> TooltipWindowRects = new();
+        }
+
         [SerializeField] private int maxTooltipWindows = 5;
 
         [SerializeField] private TooltipWindow tooltipDescriptionPrefab;
@@ -14,21 +23,22 @@ namespace TooltipSystem
         [SerializeField] private Vector2 nestedDescriptionOffset = new Vector2(280f, 0f);
         [SerializeField] private float childHeightOffsetMultiplier = 1f;
         [SerializeField] private float childHeightOffsetPadding = 0f;
+        [SerializeField] private float viewportPadding = 8f;
         [SerializeField] private Canvas targetCanvas;
         [SerializeField] private Camera worldCamera;
+        [SerializeField] private Canvas battleCanvas;
+        [SerializeField] private Camera battleWorldCamera;
 
-        private RectTransform _canvasRectTransform;
         private bool _pendingHideRequest;
         private Object _currentOwner;
         private Object _pendingHideOwner;
-        private readonly List<TooltipWindow> _tooltipWindows = new();
-        private readonly List<RectTransform> _tooltipWindowRects = new();
+        private TooltipCanvasTarget _currentCanvasTarget = TooltipCanvasTarget.SkillTree;
+        private readonly Dictionary<TooltipCanvasTarget, TooltipCanvasState> _canvasStates = new();
 
         private void Awake()
         {
-            _canvasRectTransform = (RectTransform)targetCanvas.transform;
             tooltipTermDatabase?.SetAsActiveDatabase();
-            InitializeTooltipWindows();
+            InitializeCanvasStates();
         }
 
         private void Update()
@@ -42,21 +52,47 @@ namespace TooltipSystem
             HideTooltipInternal();
         }
 
-        public void DisplayTooltip(Object owner, ITooltipDescriptionProvider tooltipDescriptionProvider, Vector3 worldPosition)
+        public void DisplayTooltip(
+            Object owner,
+            ITooltipDescriptionProvider tooltipDescriptionProvider,
+            Vector3 worldPosition,
+            TooltipCanvasTarget canvasTarget = TooltipCanvasTarget.SkillTree)
         {
-            Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(worldCamera, worldPosition);
-            DisplayTooltip(owner, tooltipDescriptionProvider, screenPoint);
+            if (!TryGetCanvasState(canvasTarget, out TooltipCanvasState canvasState))
+            {
+                return;
+            }
+
+            Camera eventCamera = canvasState.WorldCamera;
+            if (eventCamera == null)
+            {
+                Debug.LogWarning($"Tooltip canvas target '{canvasTarget}' has no world camera assigned.", this);
+                return;
+            }
+
+            Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(eventCamera, worldPosition);
+            DisplayTooltip(owner, tooltipDescriptionProvider, screenPoint, canvasTarget);
         }
 
-        public void DisplayTooltip(Object owner, ITooltipDescriptionProvider tooltipDescriptionProvider, Vector2 screenPosition)
+        public void DisplayTooltip(
+            Object owner,
+            ITooltipDescriptionProvider tooltipDescriptionProvider,
+            Vector2 screenPosition,
+            TooltipCanvasTarget canvasTarget = TooltipCanvasTarget.SkillTree)
         {
+            if (!TryGetCanvasState(canvasTarget, out TooltipCanvasState canvasState))
+            {
+                return;
+            }
+
             _currentOwner = owner;
+            _currentCanvasTarget = canvasTarget;
             _pendingHideOwner = null;
             _pendingHideRequest = false;
-            HideTooltipWindowsFrom(1);
+            HideAllTooltipWindows();
             bool shouldShowTitle = tooltipDescriptionProvider is ITooltipTitleVisibilityProvider titleVisibilityProvider
                 && titleVisibilityProvider.ShouldShowTooltipTitle();
-            ShowTooltipWindow(0, tooltipDescriptionProvider.GetTooltipDescriptions(), screenPosition, shouldShowTitle);
+            ShowTooltipWindow(canvasState, 0, tooltipDescriptionProvider.GetTooltipDescriptions(), screenPosition, shouldShowTitle);
         }
 
         public void HideTooltip(Object owner)
@@ -78,11 +114,6 @@ namespace TooltipSystem
             HideTooltipInternal();
         }
 
-        private void SetDescriptionPosition(Vector2 screenPosition)
-        {
-            SetDescriptionPosition(0, screenPosition);
-        }
-
         public void DisplayLinkedTooltip(int tooltipLevel, string linkId, Vector2 screenPosition)
         {
             if (tooltipLevel <= 0 || tooltipLevel >= maxTooltipWindows)
@@ -90,7 +121,12 @@ namespace TooltipSystem
                 return;
             }
 
-            HideTooltipWindowsFrom(tooltipLevel);
+            if (!TryGetCanvasState(_currentCanvasTarget, out TooltipCanvasState canvasState))
+            {
+                return;
+            }
+
+            HideTooltipWindowsFrom(canvasState, tooltipLevel);
 
             if (tooltipTermDatabase == null)
             {
@@ -104,28 +140,29 @@ namespace TooltipSystem
                 return;
             }
 
-            ShowTooltipWindow(tooltipLevel, description.Descriptions, screenPosition, false);
+            ShowTooltipWindow(canvasState, tooltipLevel, description.Descriptions, screenPosition, false);
         }
 
-        private void SetDescriptionPosition(int tooltipLevel, Vector2 screenPosition)
+        private void SetDescriptionPosition(TooltipCanvasState canvasState, int tooltipLevel, Vector2 screenPosition)
         {
-            Camera uiCamera = targetCanvas.renderMode == RenderMode.ScreenSpaceOverlay
+            Camera uiCamera = canvasState.Canvas.renderMode == RenderMode.ScreenSpaceOverlay
                 ? null
-                : targetCanvas.worldCamera;
+                : canvasState.Canvas.worldCamera;
 
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    _canvasRectTransform,
+                    canvasState.CanvasRectTransform,
                     screenPosition,
                     uiCamera,
                     out Vector2 localPoint))
             {
-                TooltipWindow tooltipWindow = _tooltipWindows[tooltipLevel];
-                RectTransform tooltipWindowRect = _tooltipWindowRects[tooltipLevel];
+                TooltipWindow tooltipWindow = canvasState.TooltipWindows[tooltipLevel];
+                RectTransform tooltipWindowRect = canvasState.TooltipWindowRects[tooltipLevel];
                 float childHeightOffset = tooltipWindow.GetChildHeightOffset() * childHeightOffsetMultiplier
                     + childHeightOffsetPadding;
                 Vector2 totalOffset = descriptionOffset + new Vector2(0f, childHeightOffset)
                     + nestedDescriptionOffset * tooltipLevel;
                 tooltipWindowRect.anchoredPosition = localPoint + totalOffset;
+                ClampTooltipToCanvasBounds(canvasState.CanvasRectTransform, tooltipWindowRect);
             }
         }
 
@@ -143,41 +180,141 @@ namespace TooltipSystem
 
             _pendingHideOwner = null;
             _currentOwner = null;
-            HideTooltipWindowsFrom(0);
+            HideAllTooltipWindows();
         }
 
-        private void InitializeTooltipWindows()
+        private void InitializeCanvasStates()
         {
+            RegisterCanvasState(TooltipCanvasTarget.SkillTree, targetCanvas, worldCamera);
+            RegisterCanvasState(TooltipCanvasTarget.Battle, battleCanvas, battleWorldCamera);
+        }
+
+        private void RegisterCanvasState(TooltipCanvasTarget canvasTarget, Canvas canvas, Camera canvasWorldCamera)
+        {
+            Canvas resolvedCanvas = ResolveCanvas(canvasTarget, canvas);
+            if (resolvedCanvas == null)
+            {
+                return;
+            }
+
+            TooltipCanvasState canvasState = new TooltipCanvasState
+            {
+                Canvas = resolvedCanvas,
+                WorldCamera = canvasWorldCamera != null ? canvasWorldCamera : resolvedCanvas.worldCamera,
+                CanvasRectTransform = (RectTransform)resolvedCanvas.transform
+            };
+
             for (int i = 0; i < maxTooltipWindows; i++)
             {
-                TooltipWindow tooltipWindow = Instantiate(tooltipDescriptionPrefab, _canvasRectTransform, false);
+                TooltipWindow tooltipWindow = Instantiate(tooltipDescriptionPrefab, canvasState.CanvasRectTransform, false);
                 tooltipWindow.Initialize(this, i);
                 tooltipWindow.gameObject.SetActive(false);
-                _tooltipWindows.Add(tooltipWindow);
-                _tooltipWindowRects.Add((RectTransform)tooltipWindow.transform);
+                canvasState.TooltipWindows.Add(tooltipWindow);
+                canvasState.TooltipWindowRects.Add((RectTransform)tooltipWindow.transform);
             }
+
+            _canvasStates[canvasTarget] = canvasState;
         }
 
         private void ShowTooltipWindow(
+            TooltipCanvasState canvasState,
             int tooltipLevel,
             IReadOnlyList<string> descriptions,
             Vector2 screenPosition,
             bool shouldShowTitle)
         {
-            TooltipWindow tooltipWindow = _tooltipWindows[tooltipLevel];
+            TooltipWindow tooltipWindow = canvasState.TooltipWindows[tooltipLevel];
             tooltipWindow.SetTexts(descriptions, shouldShowTitle);
             tooltipWindow.gameObject.SetActive(true);
             Canvas.ForceUpdateCanvases();
             tooltipWindow.RefreshLayout();
-            SetDescriptionPosition(tooltipLevel, screenPosition);
+            SetDescriptionPosition(canvasState, tooltipLevel, screenPosition);
         }
 
-        private void HideTooltipWindowsFrom(int tooltipLevel)
+        private void HideTooltipWindowsFrom(TooltipCanvasState canvasState, int tooltipLevel)
         {
-            for (int i = tooltipLevel; i < _tooltipWindows.Count; i++)
+            for (int i = tooltipLevel; i < canvasState.TooltipWindows.Count; i++)
             {
-                _tooltipWindows[i].gameObject.SetActive(false);
+                canvasState.TooltipWindows[i].gameObject.SetActive(false);
             }
+        }
+
+        private void HideAllTooltipWindows()
+        {
+            foreach (TooltipCanvasState canvasState in _canvasStates.Values)
+            {
+                HideTooltipWindowsFrom(canvasState, 0);
+            }
+        }
+
+        private bool TryGetCanvasState(TooltipCanvasTarget canvasTarget, out TooltipCanvasState canvasState)
+        {
+            if (_canvasStates.TryGetValue(canvasTarget, out canvasState))
+            {
+                return true;
+            }
+
+            Debug.LogWarning($"Tooltip canvas target '{canvasTarget}' is not configured.", this);
+            return false;
+        }
+
+        private static Canvas ResolveCanvas(TooltipCanvasTarget canvasTarget, Canvas configuredCanvas)
+        {
+            if (configuredCanvas != null)
+            {
+                return configuredCanvas;
+            }
+
+            Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            string targetName = canvasTarget switch
+            {
+                TooltipCanvasTarget.Battle => "BattleCanvas",
+                _ => "SkillTreeUICanvas"
+            };
+
+            for (int i = 0; i < canvases.Length; i++)
+            {
+                if (canvases[i] != null && canvases[i].name == targetName)
+                {
+                    return canvases[i];
+                }
+            }
+
+            return null;
+        }
+
+        private void ClampTooltipToCanvasBounds(RectTransform canvasRectTransform, RectTransform tooltipWindowRect)
+        {
+            Rect canvasRect = canvasRectTransform.rect;
+            Bounds tooltipBounds = RectTransformUtility.CalculateRelativeRectTransformBounds(
+                canvasRectTransform,
+                tooltipWindowRect);
+
+            Vector2 positionOffset = Vector2.zero;
+            float paddedLeft = canvasRect.xMin + viewportPadding;
+            float paddedRight = canvasRect.xMax - viewportPadding;
+            float paddedBottom = canvasRect.yMin + viewportPadding;
+            float paddedTop = canvasRect.yMax - viewportPadding;
+
+            if (tooltipBounds.min.x < paddedLeft)
+            {
+                positionOffset.x += paddedLeft - tooltipBounds.min.x;
+            }
+            else if (tooltipBounds.max.x > paddedRight)
+            {
+                positionOffset.x -= tooltipBounds.max.x - paddedRight;
+            }
+
+            if (tooltipBounds.min.y < paddedBottom)
+            {
+                positionOffset.y += paddedBottom - tooltipBounds.min.y;
+            }
+            else if (tooltipBounds.max.y > paddedTop)
+            {
+                positionOffset.y -= tooltipBounds.max.y - paddedTop;
+            }
+
+            tooltipWindowRect.anchoredPosition += positionOffset;
         }
     }
 }

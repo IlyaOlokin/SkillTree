@@ -148,7 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: {fileID: 1757729011988527348}
   heightOffsetSource: {fileID: 5106124763460702447}
-  maxCharactersPerLine: 64
+  maxCharactersPerLine: 50
   title: {fileID: 707968010055807857}
 --- !u!1 &2152703825996826681
 GameObject:

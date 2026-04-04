@@ -21,4 +21,7 @@ MonoBehaviour:
   maxWaveLevel: 100
   respawnDelay: 2
   maxEnemiesPerWave: 3
-  globalModifiers: []
+  globalModifiers:
+  - modifierType: 0
+    statType: 41
+    value: 10

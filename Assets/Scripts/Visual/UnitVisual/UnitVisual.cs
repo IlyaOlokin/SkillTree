@@ -1,10 +1,13 @@
 using Battle;
+using TooltipSystem;
 using UnityEngine;
+using Zenject;
 
 namespace Visual
 {
     public class UnitVisual : MonoBehaviour
     {
+        [Inject] private TooltipUI _tooltipUI;
         [SerializeField] private Unit unit;
         [SerializeField] private UnitNotificationEffect unitNotificationEffect;
         [SerializeField] private UnitVisualEffectsController effectsController;
@@ -12,6 +15,8 @@ namespace Visual
 
         void Awake()
         {
+            AssignBattleCameraToWorldCanvases();
+            effectsController?.Initialize(_tooltipUI);
             hitEffectController?.Initialize();
 
             
@@ -74,6 +79,33 @@ namespace Visual
         private void DisplayGettingHitEffect(DamageInfo damageInfo)
         {
             hitEffectController?.PlayHitEffect(damageInfo);
+        }
+
+        private void AssignBattleCameraToWorldCanvases()
+        {
+            GameObject battleCameraObject = GameObject.FindWithTag("BattleCamera");
+            if (battleCameraObject == null)
+            {
+                return;
+            }
+
+            Camera battleCamera = battleCameraObject.GetComponent<Camera>();
+            if (battleCamera == null)
+            {
+                return;
+            }
+
+            Canvas[] canvases = GetComponentsInChildren<Canvas>(true);
+            for (int i = 0; i < canvases.Length; i++)
+            {
+                Canvas canvas = canvases[i];
+                if (canvas.renderMode != RenderMode.WorldSpace)
+                {
+                    continue;
+                }
+
+                canvas.worldCamera = battleCamera;
+            }
         }
     }
 }
