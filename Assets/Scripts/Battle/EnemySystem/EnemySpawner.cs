@@ -96,7 +96,8 @@ namespace Battle
             UnsubscribeFromActiveEnemies();
             DeactivatePool();
 
-            var packages = _waveFactory.CreateWave(_selectedLevel);
+            var context = BuildWaveContext();
+            var packages = _waveFactory.CreateWave(context);
             int spawnCount = Mathf.Min(packages.Count, pool.Units.Count);
             var enemiesForResolver = new List<Unit>(spawnCount);
 
@@ -116,6 +117,29 @@ namespace Battle
             }
 
             pool.attackResolver?.SetNewEnemies(enemiesForResolver);
+        }
+
+        private WaveContext BuildWaveContext()
+        {
+            int wavesInLevel = Mathf.Max(1, WavesToUnlockNextLevelInternal);
+            int waveIndex = Mathf.Clamp(_currentClearedWaves + 1, 1, wavesInLevel);
+            var draftContext = new WaveContext(_selectedLevel, waveIndex, wavesInLevel);
+
+            if (database != null &&
+                database.BossBalance != null &&
+                database.BossBalance.TryGetRule(draftContext, out var bossRule))
+            {
+                return new WaveContext(
+                    _selectedLevel,
+                    waveIndex,
+                    wavesInLevel,
+                    true,
+                    bossRule.BossCount,
+                    bossRule.TotalEnemiesInWave,
+                    bossRule.MaxBossAffixes);
+            }
+
+            return draftContext;
         }
 
         private void HandleEnemyDeath(Unit unit)

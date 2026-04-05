@@ -7,6 +7,12 @@ namespace Battle
     [CreateAssetMenu(menuName = "Enemies/Archetype")]
     public class EnemyArchetype : ScriptableObject
     {
+        [Header("Spawn Rules")]
+        [Min(1)] public int minLevel = 1;
+        [Min(0)] public int maxLevel = 0;
+        public bool bossOnly;
+        public List<EnemyRarity> allowedRarities = new();
+
         [Header("Power Weights")]
         [Range(0f, 1f)] public float healthWeight = 1f;
         [Range(0f, 1f)] public float damageWeight = 1f;
@@ -123,6 +129,26 @@ namespace Battle
             _prevDamage = damageWeight;
             _prevDefense = defenseWeight;
             _prevBarrier = barrierWeight;
+        }
+
+        public bool Matches(WaveContext context, EnemyRarity rarity)
+        {
+            if (context.Level < minLevel)
+                return false;
+
+            if (maxLevel > 0 && context.Level > maxLevel)
+                return false;
+
+            if (bossOnly && rarity != EnemyRarity.Boss)
+                return false;
+
+            if (context.IsBossWave == false && rarity == EnemyRarity.Boss)
+                return false;
+
+            if (allowedRarities != null && allowedRarities.Count > 0 && allowedRarities.Contains(rarity) == false)
+                return false;
+
+            return true;
         }
 
         private enum WeightType

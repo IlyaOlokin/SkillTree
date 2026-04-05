@@ -10,7 +10,8 @@ namespace Battle
             float power,
             float totalPower,
             EnemyArchetype archetype,
-            EnemyRarity rarity)
+            EnemyRarity rarity,
+            int? affixCountOverride = null)
         {
             float finalPower = power * EnemyRarityHelper.GetMultiplier(rarity);
             finalPower *= Random.Range(0.9f, 1.1f);
@@ -22,7 +23,7 @@ namespace Battle
             ApplyAttackSpeed(package.Modifiers, archetype);
             ApplyAccuracy(package.Modifiers, totalPower);
             ApplyRarityScaling(package.Modifiers, rarity);
-            ApplyAffixes(package.Modifiers, archetype, rarity);
+            ApplyAffixes(package.Modifiers, archetype, rarity, affixCountOverride);
             
             return package;
         }
@@ -101,12 +102,12 @@ namespace Battle
                     break;
 
                 case EnemyRarity.Elite:
-                    Add(package, ModifierType.More, StatType.Damage, 0.4f);
+                    Add(package, ModifierType.More, StatType.Damage, 0.3f);
                     break;
 
                 case EnemyRarity.Boss:
-                    Add(package, ModifierType.More, StatType.Damage, 0.6f);
-                    Add(package, ModifierType.More, StatType.MaximumHealth, 0.6f);
+                    Add(package, ModifierType.More, StatType.Damage, 0.4f);
+                    Add(package, ModifierType.More, StatType.MaximumHealth, 0.4f);
                     break;
             }
         }
@@ -114,7 +115,8 @@ namespace Battle
         private void ApplyAffixes(
             BaseInnateModifiers package,
             EnemyArchetype archetype,
-            EnemyRarity rarity)
+            EnemyRarity rarity,
+            int? affixCountOverride)
         {
             if (rarity == EnemyRarity.Normal)
                 return;
@@ -122,14 +124,14 @@ namespace Battle
             if (archetype == null || archetype.possibleAffixes == null || archetype.possibleAffixes.Count == 0)
                 return;
 
-            int affixCount = rarity switch
+            int affixCount = affixCountOverride ?? (rarity switch
             {
                 EnemyRarity.Magic => 1,
                 EnemyRarity.Rare => 2,
                 EnemyRarity.Elite => 4,
                 EnemyRarity.Boss => 6,
                 _ => 0
-            };
+            });
 
             for (int i = 0; i < affixCount; i++)
             {

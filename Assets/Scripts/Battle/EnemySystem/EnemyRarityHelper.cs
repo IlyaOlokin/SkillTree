@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Battle
 {
@@ -12,13 +13,24 @@ namespace Battle
                 EnemyRarity.Magic => 1.2f,
                 EnemyRarity.Rare => 1.5f,
                 EnemyRarity.Elite => 2f,
-                EnemyRarity.Boss => 4f,
+                EnemyRarity.Boss => 3f,
                 _ => 1f
             };
         }
 
-        public static EnemyRarity Roll(int level)
+        public static EnemyRarity Roll(
+            WaveContext context,
+            EnemyRarityBalanceConfig config,
+            IReadOnlyDictionary<EnemyRarity, int> countsInWave = null)
         {
+            if (config != null && config.Rules != null && config.Rules.Count > 0)
+            {
+                if (config.TryRoll(context, countsInWave, out var configuredRarity))
+                    return configuredRarity;
+
+                return EnemyRarity.Normal;
+            }
+
             float roll = Random.value;
 
             if (roll < 0.80f) return EnemyRarity.Normal;

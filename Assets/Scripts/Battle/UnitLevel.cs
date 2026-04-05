@@ -46,7 +46,6 @@ namespace Battle
 
             if (expToNextLevel <= 0d)
             {
-                Debug.LogError($"{nameof(UnitLevel)} has invalid {nameof(expToNextLevel)}={expToNextLevel}. Resetting to 100.", this);
                 expToNextLevel = 100d;
             }
 
@@ -60,7 +59,6 @@ namespace Battle
                 
                 if (++safetyCounter > 1000)
                 {
-                    Debug.LogError($"{nameof(UnitLevel)} level-up loop exceeded safety threshold. Breaking out.", this);
                     break;
                 }
             }

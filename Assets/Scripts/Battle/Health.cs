@@ -8,6 +8,7 @@ namespace Battle
     public class Health : MonoBehaviour, IUnitComponent
     {
         private Unit _owner;
+        private bool _deathNotified;
 
         public float MaxHealth { get; private set; } = 100f;
 
@@ -72,7 +73,10 @@ namespace Battle
             
             if (displayDamage) OnHealthChangedDelta?.Invoke(previousHealth - CurrentHealth);
             OnHealthChanged?.Invoke();
-            if (CurrentHealth <= 0f) OnHealthZero?.Invoke();
+            if (CurrentHealth <= 0f)
+            {
+                NotifyHealthZero();
+            }
             ValidateAbsorptionDeathThreshold();
             return damageInstance;
         }
@@ -80,6 +84,7 @@ namespace Battle
         public void RestoreToFull()
         {
             CurrentHealth = MaxHealth;
+            _deathNotified = false;
             OnHealthChanged?.Invoke();
         }
 
@@ -98,8 +103,19 @@ namespace Battle
         {
             if (_owner.MysticHealth.IsHealthBelowDeathThreshold(CurrentHealth, MaxHealth))
             {
-                OnHealthZero?.Invoke();
+                NotifyHealthZero();
             }
+        }
+
+        private void NotifyHealthZero()
+        {
+            if (_deathNotified)
+            {
+                return;
+            }
+
+            _deathNotified = true;
+            OnHealthZero?.Invoke();
         }
     }
 }

@@ -12,19 +12,22 @@ namespace Battle
             _database = database;
         }
 
-        public EnemySpawnData CreateEnemyStats(int level, float power, float totalPower)
+        public EnemySpawnData CreateEnemyStats(
+            WaveContext context,
+            EnemyRarity rarity,
+            float power,
+            float totalPower)
         {
-            var archetype = _database.GetRandomArchetype();
+            var archetype = _database.GetRandomArchetype(context, rarity);
             if (archetype == null)
                 return null;
-
-            var rarity = EnemyRarityHelper.Roll(level);
 
             var spawnData = _builder.Build(
                 power,
                 totalPower,
                 archetype,
-                rarity);
+                rarity,
+                GetAffixLimitOverride(context, rarity));
 
             var globalModifiers = _database.GlobalModifiers;
             if (globalModifiers != null && globalModifiers.Count > 0)
@@ -33,6 +36,14 @@ namespace Battle
             }
 
             return spawnData;
+        }
+
+        private static int? GetAffixLimitOverride(WaveContext context, EnemyRarity rarity)
+        {
+            if (rarity != EnemyRarity.Boss || context.BossAffixLimit <= 0)
+                return null;
+
+            return context.BossAffixLimit;
         }
     }
 }
