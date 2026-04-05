@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Overcharge
   m_EditorClassIdentifier: 
   descriptions:
-  - Lightning hits can prime the target for one empowered follow-up hit
-  - When consumed, it grants more damage and crit damage
+  - Overcharge is an {Ailment} caused by Lightning hits
+  - It empowers the next hit against the target with 10% more damage and 20% more
+    Crit Damage Bonus
+  - Overcharge is consumed when this effect is used

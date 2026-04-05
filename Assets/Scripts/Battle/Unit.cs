@@ -10,7 +10,7 @@ namespace Battle
     {
         [SerializeField] public Health health;
         [SerializeField] public MysticHealth mysticHealth;
-        [SerializeField] public EnergyBarrier barrier;
+        [SerializeField] public Barrier barrier;
         [SerializeField] public Attacker attacker;
         [SerializeField] public Attributes attributes;
         [SerializeField] public EffectController effectController;

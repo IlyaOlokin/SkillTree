@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class EnergyBarrier : MonoBehaviour, IUnitComponent
+    public class Barrier : MonoBehaviour, IUnitComponent
     {
         private Unit _owner;
 

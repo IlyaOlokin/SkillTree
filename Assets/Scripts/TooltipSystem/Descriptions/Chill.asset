@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Chill
   m_EditorClassIdentifier: 
   descriptions:
-  - Cold hits can slow attack speed for a short duration
-  - Higher magnitude makes the slow stronger
+  - Chill is an {Ailment} caused by Cold hits
+  - It reduces Attack Speed by 20%
+  - Base Chill duration is 5 seconds

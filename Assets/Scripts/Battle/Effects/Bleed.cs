@@ -4,7 +4,7 @@ namespace Battle
 {
     public class Bleed : BaseEffect
     {
-        private const float BASE_DAMAGE_PERCENTAGE = 0.1f;
+        private const float BASE_DAMAGE_PERCENTAGE = 0.3f;
         private const float BASE_DURATION = 5f;
         private readonly float _totalDamage;
 
@@ -35,7 +35,7 @@ namespace Battle
             float mitigation = Mathf.Min(1f, defender.BaseUnitModifiers.GetStatValue(StatType.BleedMitigation));
             float magnitude = BASE_DAMAGE_PERCENTAGE *
                               (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.BleedMagnitude));
-            return physicalDamageDealt * (1 + magnitude) * (1f - mitigation);
+            return physicalDamageDealt * magnitude * (1f - mitigation);
         }
         
         public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)

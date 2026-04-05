@@ -10,11 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f866e67487ce48e2bb54293b6a94b6d5, type: 3}
-  m_Name: Ailments
+  m_Name: Effect
   m_EditorClassIdentifier: 
   descriptions:
-  - Ailments are negative effects applied by hits
-  - '{ignite|Ignite}, {chill|Chill}, {overcharge|Overcharge} and {bleed|Bleed} are
-    ailments'
-  - The base chance to inflict an Ailment is equal to the corresponding damage dealt
-    by the hit as a percentage of the target's Max Health
+  - Effects can be applied to units
+  - Effects include various negative effects, as well as {Ailments}

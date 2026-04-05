@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Ignite
   m_EditorClassIdentifier: 
   descriptions:
-  - Fire hits can apply a burning damage-over-time effect
-  - Higher magnitude stores more damage before it burns out
+  - Ignite is an {Ailment} caused by Fire hits
+  - It stores 30% of dealt Fire damage in a single burning pool
+  - Ignite damage is dealt over time at 40% of the remaining stored damage per second

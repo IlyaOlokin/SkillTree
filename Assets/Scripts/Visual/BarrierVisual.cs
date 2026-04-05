@@ -3,9 +3,9 @@ using Battle;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class EnergyBarrierVisual : MonoBehaviour
+public class BarrierVisual : MonoBehaviour
 {
-    [SerializeField] private EnergyBarrier barrier;
+    [SerializeField] private Barrier barrier;
     [SerializeField] private GSlider prefab;
     [SerializeField] private RectTransform spawnPos;
     [SerializeField] private float verticalSpacing = 25f;

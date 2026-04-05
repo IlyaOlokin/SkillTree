@@ -29,6 +29,7 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: 3dd7e67d35288364cac2f600da6bb104, type: 2}
     matchTexts:
     - Ailment
+    - Ailments
   - id: ignite
     description: {fileID: 11400000, guid: 575e6f2276a2f11428d8e7aae32809e2, type: 2}
     matchTexts:
@@ -61,3 +62,12 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: b5afc293a54b8c14488911b4b6aa2a41, type: 2}
     matchTexts:
     - accuracy
+  - id: block
+    description: {fileID: 11400000, guid: a38baa50f583722439f7eeb26333ec15, type: 2}
+    matchTexts:
+    - Block
+  - id: effects
+    description: {fileID: 11400000, guid: b94a26fa21693624994df419e66d5b2c, type: 2}
+    matchTexts:
+    - Effect
+    - Effects

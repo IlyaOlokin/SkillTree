@@ -4,7 +4,7 @@ namespace Battle
 {
     public class Ignite : BaseEffect
     {
-        private const float BASE_DAMAGE_PERCENTAGE = 0.1f;
+        private const float BASE_DAMAGE_PERCENTAGE = 0.3f;
         private const float BASE_TOTAL_DAMAGE_PERCENTAGE_PER_SECOND = 0.4f;
         private float _totalDamage;
 
@@ -52,7 +52,7 @@ namespace Battle
             float mitigation = Mathf.Min(1f, defender.BaseUnitModifiers.GetStatValue(StatType.IgniteMitigation));
             float magnitude = BASE_DAMAGE_PERCENTAGE *
                               (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.IgniteMagnitude));
-            return fireDamageDealt * (1 + magnitude) * (1f - mitigation);
+            return fireDamageDealt * magnitude * (1f - mitigation);
         }
 
         public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)

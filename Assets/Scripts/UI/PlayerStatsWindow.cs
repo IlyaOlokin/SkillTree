@@ -103,7 +103,7 @@ public class PlayerStatsWindow : MonoBehaviour
                     rawValue,
                     _player.BaseUnitModifiers.GetStatValue(StatType.MaxLightningResistance)) * (isPercent ? 100f : 1f);
             case StatType.BarrierRegenerationSpeed:
-                return EnergyBarrier.BarrierCooldown / rawValue;
+                return Barrier.BarrierCooldown / rawValue;
             
             default:
                 return normalizedValue;

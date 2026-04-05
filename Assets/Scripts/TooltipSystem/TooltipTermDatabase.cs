@@ -13,6 +13,7 @@ namespace TooltipSystem
         [SerializeField] private List<TooltipTermEntry> entries = new();
 
         private Dictionary<string, TooltipDescriptionData> descriptionById;
+        private Dictionary<string, string> idByMatchText;
         private List<TooltipTermMatchEntry> sortedMatchEntries;
 
         private void OnEnable()
@@ -38,7 +39,21 @@ namespace TooltipSystem
                 RebuildLookup();
             }
 
-            return descriptionById.TryGetValue(linkId.Trim(), out description);
+            string trimmedLinkId = linkId.Trim();
+            if (descriptionById.TryGetValue(trimmedLinkId, out description))
+            {
+                return true;
+            }
+
+            if (idByMatchText != null
+                && idByMatchText.TryGetValue(trimmedLinkId, out string resolvedId)
+                && descriptionById.TryGetValue(resolvedId, out description))
+            {
+                return true;
+            }
+
+            description = null;
+            return false;
         }
 
         public string FormatWithTooltipTokens(string text)
@@ -93,6 +108,7 @@ namespace TooltipSystem
         private void RebuildLookup()
         {
             descriptionById = new Dictionary<string, TooltipDescriptionData>(StringComparer.OrdinalIgnoreCase);
+            idByMatchText = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             Dictionary<string, TooltipTermMatchEntry> matchEntryByText = new Dictionary<string, TooltipTermMatchEntry>(StringComparer.OrdinalIgnoreCase);
 
             for (int i = 0; i < entries.Count; i++)
@@ -134,7 +150,10 @@ namespace TooltipSystem
                     if (!matchEntryByText.TryAdd(matchText, matchEntry))
                     {
                         Debug.LogWarning($"Tooltip term database '{name}' contains duplicate match text '{matchText}'.", this);
+                        continue;
                     }
+
+                    idByMatchText[matchText] = trimmedId;
                 }
             }
 
