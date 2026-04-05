@@ -24,6 +24,7 @@ namespace Battle
         protected override void Start()
         {
             base.Start();
+            ResetCombatState();
             attacker.SetTarget(_enemyTarget);
         }
 

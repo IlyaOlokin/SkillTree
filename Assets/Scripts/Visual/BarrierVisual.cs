@@ -1,21 +1,22 @@
 using System.Collections.Generic;
 using Battle;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class BarrierVisual : MonoBehaviour
 {
     [SerializeField] private Barrier barrier;
     [SerializeField] private GSlider prefab;
     [SerializeField] private RectTransform spawnPos;
-    [SerializeField] private float verticalSpacing = 25f;
+    [SerializeField] private float horizontalGap = 4f;
 
     private readonly List<GSlider> _bars = new();
+    private RectTransform _transform;
 
     private void Awake()
     {
         barrier.OnMaxBarrierChanged += Rebuild;
         barrier.OnBarrierCountChanged += Refresh;
+        _transform = GetComponent<RectTransform>();
     }
 
     private void OnDestroy()
@@ -48,13 +49,29 @@ public class BarrierVisual : MonoBehaviour
             _bars.RemoveAt(_bars.Count - 1);
         }
 
+        LayoutBars();
+
+        Refresh();
+    }
+
+    private void LayoutBars()
+    {
+        if (_bars.Count == 0)
+            return;
+
+        float totalWidth = _transform.rect.width;
+        
+        float gap = _bars.Count > 1 ? horizontalGap : 0f;
+        float availableWidth = Mathf.Max(0f, totalWidth - gap * (_bars.Count - 1));
+        float barWidth = availableWidth / _bars.Count;
+        float startX = -totalWidth * 0.5f + barWidth * 0.5f;
+
         for (int i = 0; i < _bars.Count; i++)
         {
             var rect = _bars[i].GetComponent<RectTransform>();
-            rect.anchoredPosition = new Vector2(0, i * verticalSpacing);
+            rect.anchoredPosition = new Vector2(startX + i * (barWidth + gap), 0f);
+            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, barWidth);
         }
-
-        Refresh();
     }
 
     private void Refresh()
@@ -62,11 +79,11 @@ public class BarrierVisual : MonoBehaviour
         for (int i = 0; i < _bars.Count; i++)
         {
             if (i < barrier.BarrierCount)
-                _bars[i].UpdateBar(1f);
+                _bars[i].SetBar(1f);
             else if (i == barrier.BarrierCount)
-                _bars[i].UpdateBar(barrier.CooldownProgress);
+                _bars[i].SetBar(barrier.CooldownProgress);
             else
-                _bars[i].UpdateBar(0f);
+                _bars[i].SetBar(0f);
         }
     }
 }

@@ -33,9 +33,6 @@ namespace Battle
         {
             _owner = unit;
             _owner.OnStatsRecalculated += UpdateBarrierValues;
-
-            UpdateBarrierValues();
-            _barrierCount = _maxBarrierCount;
         }
 
         private void OnDestroy()
@@ -89,7 +86,6 @@ namespace Battle
         private void UpdateBarrierValues()
         {
             _maxBarrierCount = (int)_owner.BaseUnitModifiers.GetStatValue(StatType.BarrierCount);
-            _barrierCount = Mathf.Min(_barrierCount, _maxBarrierCount);
             _barrierPower = Mathf.Max(1f, _owner.BaseUnitModifiers.GetStatValue(StatType.BarrierPower));
             _regenSpeedMult = _owner.BaseUnitModifiers.GetStatValue(StatType.BarrierRegenerationSpeed);
             _blockedTypes = (DamageType) _owner.BaseUnitModifiers.GetStatValue(StatType.BarrierDamageTypeMask);

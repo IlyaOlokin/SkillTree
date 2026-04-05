@@ -15,15 +15,12 @@ public class GSlider : MonoBehaviour
 
     [SerializeField] private float fillMoveDuration = 0.1f;
 
-    private void Start()
+    private void Awake()
     {
-        UpdateBar();
-        UpdateText();
         secondaryFill.gameObject.SetActive(needSecondaryFill);
         text.gameObject.SetActive(needText);
     }
-
-
+    
     public void UpdateBar(float fillAmount = 0)
     {
         if (needSecondaryFill)
@@ -33,6 +30,14 @@ public class GSlider : MonoBehaviour
         
         fill.DOKill();
         fill.DOFillAmount(fillAmount, fillMoveDuration).SetLink(gameObject);
+    }
+    
+    public void SetBar(float fillAmount = 0)
+    {
+        fill.fillAmount = fillAmount;
+
+        if (needSecondaryFill)
+            secondaryFill.fillAmount = fillAmount;
     }
 
     public void UpdateText(String newText = "")
