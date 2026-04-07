@@ -47,6 +47,7 @@ namespace Battle
             Ignite.Apply(attackerUnit, damageInfo, defender.UnitObject);
             Chill.Apply(attackerUnit, damageInfo, defender.UnitObject);
             Overcharge.Apply(attackerUnit, damageInfo, defender.UnitObject);
+            Sunder.Apply(attackerUnit, damageInfo, defender.UnitObject);
 
             //Block
             if (Block.ApplyBlock(defender.UnitObject))

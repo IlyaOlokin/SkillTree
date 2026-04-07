@@ -35,6 +35,11 @@ public enum StatType
     ChillDurationReduction = 48,
     OverchargeAvoidanceChance = 49,
     BleedMitigation = 50,
+
+    // Fixed-effect debuffs (separate from ailments, not affected by AilmentMagnitude/AilmentGuard)
+    SunderChance = 53,
+    SunderMagnitude = 54,
+    SunderMitigation = 55,
     
     // Crit
     CritChance = 16,

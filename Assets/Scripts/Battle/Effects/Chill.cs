@@ -6,7 +6,7 @@ namespace Battle
 {
     public class Chill : BaseEffect
     {
-        public const float BASE_DURATION = 5f;
+        public const float BASE_DURATION = 3f;
         public const float CHILL_BASE_SLOW = -0.2f;
         public override bool IsStackable { get; set; } = true;
         public override EffectVisualType VisualType => EffectVisualType.Chill;

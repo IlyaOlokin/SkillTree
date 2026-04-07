@@ -71,3 +71,7 @@ MonoBehaviour:
     matchTexts:
     - Effect
     - Effects
+  - id: sunder
+    description: {fileID: 11400000, guid: 6dfbef27ee84d3348bae27b382b46454, type: 2}
+    matchTexts:
+    - Sunder

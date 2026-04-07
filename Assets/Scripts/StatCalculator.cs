@@ -11,6 +11,8 @@ public static class StatCalculator
         // All DamageTypes as well
         StatType.CritChance,
         StatType.CritDamageBonus,
+        StatType.SunderChance,
+        StatType.SunderMagnitude,
         StatType.IgniteMagnitude,
         StatType.ChillMagnitude,
         StatType.OverchargeMagnitude,

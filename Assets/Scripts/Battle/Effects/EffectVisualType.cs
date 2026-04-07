@@ -11,5 +11,6 @@ namespace Battle
         LightAbsorptionDebuff = 6,
         DarknessAbsorptionDebuff = 7,
         NextAttackModifierEffect = 8,
+        Sunder = 9,
     }
 }

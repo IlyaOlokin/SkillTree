@@ -42,7 +42,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
       propertyPath: scalingModifiersDexterity.Array.data[1].attributesPerStack
-      value: 1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
       propertyPath: scalingModifiersIntelligence.Array.data[0].attributesPerStack
@@ -66,7 +66,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
       propertyPath: scalingModifiersDexterity.Array.data[1].modifierContainer.value
-      value: 0.01
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 3882105937609844107, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
       propertyPath: scalingModifiersStrength.Array.data[0].modifierContainer.statType
