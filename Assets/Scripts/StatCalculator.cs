@@ -13,6 +13,8 @@ public static class StatCalculator
         StatType.CritDamageBonus,
         StatType.SunderChance,
         StatType.SunderMagnitude,
+        StatType.DistractChance,
+        StatType.DistractMagnitude,
         StatType.IgniteMagnitude,
         StatType.ChillMagnitude,
         StatType.OverchargeMagnitude,

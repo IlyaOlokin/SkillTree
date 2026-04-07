@@ -40,6 +40,9 @@ public enum StatType
     SunderChance = 53,
     SunderMagnitude = 54,
     SunderMitigation = 55,
+    DistractChance = 56,
+    DistractMagnitude = 57,
+    DistractMitigation = 58,
     
     // Crit
     CritChance = 16,

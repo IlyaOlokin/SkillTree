@@ -71,6 +71,10 @@ MonoBehaviour:
     matchTexts:
     - Effect
     - Effects
+  - id: distract
+    description: {fileID: 11400000, guid: 1d27e90d77b0d124eb92e29be704fcab, type: 2}
+    matchTexts:
+    - Distract
   - id: sunder
     description: {fileID: 11400000, guid: 6dfbef27ee84d3348bae27b382b46454, type: 2}
     matchTexts:

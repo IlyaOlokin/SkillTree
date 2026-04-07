@@ -12,5 +12,6 @@ namespace Battle
         DarknessAbsorptionDebuff = 7,
         NextAttackModifierEffect = 8,
         Sunder = 9,
+        Distract = 10,
     }
 }
