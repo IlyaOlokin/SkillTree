@@ -47,6 +47,20 @@ public class NodeConnectionRendererEditor : Editor
             Debug.Log($"Removed {removed} empty node connections.");
             GUIUtility.ExitGUI();
         }
+
+        if (GUILayout.Button("Remove Duplicate Connections"))
+        {
+            int removed = comp.RemoveDuplicateNodeConnections();
+            Debug.Log($"Removed {removed} duplicate node connections.");
+            GUIUtility.ExitGUI();
+        }
+
+        if (GUILayout.Button("Remove Unreferenced Children"))
+        {
+            int removed = comp.RemoveUnreferencedConnectionChildren();
+            Debug.Log($"Removed {removed} unreferenced child connection objects.");
+            GUIUtility.ExitGUI();
+        }
     }
     
     void OnPlayModeChanged(PlayModeStateChange state)

@@ -3,8 +3,13 @@ Shader "Unlit/NodeConnectionShader"
 Properties
     {
         _StateTex ("State Texture", 2D) = "white" {}
+        _ProgressTex ("Progress Texture", 2D) = "black" {}
         _StateTexWidth ("State Tex Width", Float) = 1
         _BaseWidth ("Base Width", Float) = 1
+        _DefaultColor ("Default Color", Color) = (1,1,1,1)
+        _FrontWidth ("Front Width", Float) = 0.05
+        _FrontThicknessBoost ("Front Thickness Boost", Float) = 0.35
+        _FrontThicknessWidth ("Front Thickness Width", Float) = 0.08
     }
 
     SubShader
@@ -21,8 +26,13 @@ Properties
             #include "UnityCG.cginc"
 
             sampler2D _StateTex;
+            sampler2D _ProgressTex;
             float _StateTexWidth;
             float _BaseWidth;
+            float4 _DefaultColor;
+            float _FrontWidth;
+            float _FrontThicknessBoost;
+            float _FrontThicknessWidth;
 
             struct appdata
             {
@@ -36,7 +46,9 @@ Properties
             struct v2f
             {
                 float4 pos : SV_POSITION;
-                float4 col : COLOR;
+                float4 allocatedCol : COLOR;
+                float t : TEXCOORD0;
+                float2 progressData : TEXCOORD1;
             };
 
             v2f vert (appdata v)
@@ -46,25 +58,33 @@ Properties
                 float id = v.uv2.x;
                 float2 stateUV = float2((id + 0.5) / _StateTexWidth, 0.5);
                 float4 state = tex2Dlod(_StateTex, float4(stateUV, 0, 0));
+                float4 progressState = tex2Dlod(_ProgressTex, float4(stateUV, 0, 0));
 
-                float thickness = state.r;
+                float directedT = progressState.g > 0.5 ? (1.0 - v.uv.x) : v.uv.x;
+                float frontThicknessWidth = max(_FrontThicknessWidth, 0.0001);
+                float frontDistance = abs(directedT - progressState.r);
+                float frontThicknessMask = 1.0 - smoothstep(0.0, frontThicknessWidth, frontDistance);
+                float thickness = state.r * (1.0 + frontThicknessMask * _FrontThicknessBoost);
                 float side = v.uv.y;
 
                 float3 normal = v.normal;
                 float3 offset = normal * side * thickness * _BaseWidth;
                 v.vertex.xyz += offset;
 
-                v.vertex.xyz += offset;
-
                 o.pos = UnityObjectToClipPos(v.vertex);
-                o.col = float4(state.gba, 1);
+                o.allocatedCol = float4(state.gba, 1);
+                o.t = v.uv.x;
+                o.progressData = progressState.rg;
 
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                return i.col;
+                float directedT = i.progressData.y > 0.5 ? (1.0 - i.t) : i.t;
+                float frontWidth = max(_FrontWidth, 0.0001);
+                float fill = 1.0 - smoothstep(i.progressData.x - frontWidth, i.progressData.x + frontWidth, directedT);
+                return lerp(_DefaultColor, i.allocatedCol, saturate(fill));
             }
             ENDCG
         }

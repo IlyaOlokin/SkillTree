@@ -18,21 +18,32 @@ namespace SkillTree
         [SerializeField] private Node rootNode;
         [SerializeField] private List<NodeConnectionData> nodeConnections = new();
         [SerializeField] private SplineContainer connectionPrefab;
-        [SerializeField] private int resolutionPerSpline = 20;
+        [SerializeField] private float segmentsPerUnit = 4f;
+        [SerializeField] private int minSegmentsPerSpline = 6;
+        [SerializeField] private int maxSegmentsPerSpline = 120;
         [SerializeField] private int maxVerticesPerChunk = 60000;
         [SerializeField] private float allocatedLineWidth = 0.15f;
         [SerializeField] private float defaultLineWidth = 0.08f;
         [SerializeField] private Color allocatedColor;
         [SerializeField] private Color defaultColor;
+        [SerializeField] private float connectionGrowSpeed = 6f;
+        [SerializeField] [Range(0.001f, 0.25f)] private float frontWidth = 0.04f;
+        [SerializeField] [Range(0f, 2f)] private float frontThicknessBoost = 0.35f;
+        [SerializeField] [Range(0.001f, 0.25f)] private float frontThicknessWidth = 0.08f;
         
         private Texture2D _stateTexture;
+        private Texture2D _progressTexture;
         private Material _material;
+        private ConnectionVisualState[] _connectionStates = Array.Empty<ConnectionVisualState>();
+        private float[] _connectionLengths = Array.Empty<float>();
+        private Dictionary<Node, bool> _nodeAllocationStates = new();
         private const string ChunkObjectPrefix = "__ConnectionChunk_";
 
 
         private void OnValidate()
         {
             _material = GetComponent<MeshRenderer>().sharedMaterial;
+            ApplyMaterialProperties();
         }
 
         private void Awake()
@@ -40,6 +51,7 @@ namespace SkillTree
             if (_material == null)
                 _material = GetComponent<MeshRenderer>().sharedMaterial;
 
+            CacheNodeAllocationStates();
             skillTree.OnAnyNodeChanged += ChangeNodeConnection;
         }
 
@@ -47,12 +59,58 @@ namespace SkillTree
         {
             if (skillTree != null)
                 skillTree.OnAnyNodeChanged -= ChangeNodeConnection;
+
+            if (_stateTexture != null)
+            {
+                if (Application.isPlaying)
+                    Destroy(_stateTexture);
+                else
+                    DestroyImmediate(_stateTexture);
+            }
+
+            if (_progressTexture != null)
+            {
+                if (Application.isPlaying)
+                    Destroy(_progressTexture);
+                else
+                    DestroyImmediate(_progressTexture);
+            }
         }
 
         private void Start()
         {
             BuildMesh();
             CreateStateTexture();
+            SyncAllConnectionStates();
+        }
+
+        private void Update()
+        {
+            if (!Application.isPlaying || _connectionStates.Length == 0 || _progressTexture == null)
+                return;
+
+            float speed = Mathf.Max(0.0001f, connectionGrowSpeed);
+            bool hasChanges = false;
+
+            for (int i = 0; i < _connectionStates.Length; i++)
+            {
+                ref ConnectionVisualState state = ref _connectionStates[i];
+                if (Mathf.Approximately(state.progress, state.targetProgress))
+                {
+                    FinalizeConnectionVisualState(i, ref state);
+                    continue;
+                }
+
+                float connectionLength = i < _connectionLengths.Length ? Mathf.Max(_connectionLengths[i], 0.0001f) : 0.0001f;
+                float step = (speed * Time.deltaTime) / connectionLength;
+                state.progress = Mathf.MoveTowards(state.progress, state.targetProgress, step);
+                SetConnectionProgress(i, state.progress, state.reverse);
+                FinalizeConnectionVisualState(i, ref state);
+                hasChanges = true;
+            }
+
+            if (hasChanges)
+                _progressTexture.Apply(false);
         }
 
 #if UNITY_EDITOR
@@ -130,6 +188,74 @@ namespace SkillTree
 
             return removedCount;
         }
+
+        public int RemoveDuplicateNodeConnections()
+        {
+            Undo.RecordObject(this, "Remove Duplicate Node Connections");
+
+            int removedCount = 0;
+            var uniquePairs = new HashSet<NodePair>();
+
+            for (int i = 0; i < nodeConnections.Count; i++)
+            {
+                NodeConnectionData connection = nodeConnections[i];
+                bool isInvalid = connection == null ||
+                                 connection.pair.A == null ||
+                                 connection.pair.B == null;
+                if (isInvalid)
+                    continue;
+
+                if (uniquePairs.Add(connection.pair))
+                    continue;
+
+                if (connection.spline != null)
+                    Undo.DestroyObjectImmediate(connection.spline.gameObject);
+
+                nodeConnections.RemoveAt(i);
+                removedCount++;
+                i--;
+            }
+
+            if (removedCount > 0)
+            {
+                PrefabUtility.RecordPrefabInstancePropertyModifications(this);
+                EditorUtility.SetDirty(this);
+            }
+
+            return removedCount;
+        }
+
+        public int RemoveUnreferencedConnectionChildren()
+        {
+            int removedCount = 0;
+            var referencedChildren = new HashSet<GameObject>();
+
+            foreach (NodeConnectionData connection in nodeConnections)
+            {
+                if (connection?.spline == null)
+                    continue;
+
+                referencedChildren.Add(connection.spline.gameObject);
+            }
+
+            for (int i = transform.childCount - 1; i >= 0; i--)
+            {
+                Transform child = transform.GetChild(i);
+                if (referencedChildren.Contains(child.gameObject))
+                    continue;
+
+                Undo.DestroyObjectImmediate(child.gameObject);
+                removedCount++;
+            }
+
+            if (removedCount > 0)
+            {
+                PrefabUtility.RecordPrefabInstancePropertyModifications(this);
+                EditorUtility.SetDirty(this);
+            }
+
+            return removedCount;
+        }
 #endif
 
     public void BuildMesh()
@@ -138,7 +264,7 @@ namespace SkillTree
         if (rootFilter != null)
             rootFilter.sharedMesh = null;
 
-        if (resolutionPerSpline < 2)
+        if (segmentsPerUnit <= 0f || maxSegmentsPerSpline < 2)
         {
             RemoveUnusedChunkObjects(0);
             return;
@@ -156,6 +282,7 @@ namespace SkillTree
         int connectionId = 0;
         int chunkIndex = 0;
         Color baseColor = Color.white;
+        _connectionLengths = new float[nodeConnections.Count];
 
         void FlushChunk()
         {
@@ -192,14 +319,16 @@ namespace SkillTree
                 continue;
             }
 
+            _connectionLengths[connectionId] = EstimateSplineLength(spline);
+            int segmentCount = GetSegmentCountForLength(_connectionLengths[connectionId]);
             Vector3 prevPos = spline.EvaluatePosition(0f);
 
-            for (int i = 1; i < resolutionPerSpline; i++)
+            for (int i = 1; i < segmentCount; i++)
             {
                 if (vertIndex + 4 > maxVerts)
                     FlushChunk();
 
-                float t = i / (float)(resolutionPerSpline - 1);
+                float t = i / (float)(segmentCount - 1);
                 Vector3 currPos = spline.EvaluatePosition(t);
 
                 Vector3 dir = (currPos - prevPos).normalized;
@@ -247,6 +376,35 @@ namespace SkillTree
 
         FlushChunk();
         RemoveUnusedChunkObjects(chunkIndex);
+    }
+
+    private int GetSegmentCountForLength(float length)
+    {
+        int minSegments = Mathf.Max(2, minSegmentsPerSpline);
+        int maxSegments = Mathf.Max(minSegments, maxSegmentsPerSpline);
+        int segmentCount = Mathf.CeilToInt(Mathf.Max(length, 0f) * segmentsPerUnit) + 1;
+        return Mathf.Clamp(segmentCount, minSegments, maxSegments);
+    }
+
+    private float EstimateSplineLength(SplineContainer spline)
+    {
+        const int sampleCount = 16;
+
+        if (spline == null || spline.Splines.Count == 0)
+            return 0f;
+
+        Vector3 prevPos = spline.EvaluatePosition(0f);
+        float length = 0f;
+
+        for (int i = 1; i <= sampleCount; i++)
+        {
+            float t = i / (float)sampleCount;
+            Vector3 currPos = spline.EvaluatePosition(t);
+            length += Vector3.Distance(prevPos, currPos);
+            prevPos = currPos;
+        }
+
+        return length;
     }
 
     private Mesh GetOrCreateChunkMesh(int chunkIndex)
@@ -324,29 +482,116 @@ namespace SkillTree
             _stateTexture.filterMode = FilterMode.Point;
             _stateTexture.wrapMode = TextureWrapMode.Clamp;
 
+            _progressTexture = new Texture2D(
+                nodeConnections.Count,
+                1,
+                TextureFormat.RGBAFloat,
+                false,
+                true
+            );
+
+            _progressTexture.filterMode = FilterMode.Point;
+            _progressTexture.wrapMode = TextureWrapMode.Clamp;
+
+            _connectionStates = new ConnectionVisualState[nodeConnections.Count];
+            if (_connectionLengths.Length != nodeConnections.Count)
+                _connectionLengths = new float[nodeConnections.Count];
+
             for (int i = 0; i < nodeConnections.Count; i++)
             {
-                _stateTexture.SetPixel(i, 0, new Color(defaultLineWidth, defaultColor.r, defaultColor.g, defaultColor.b));
+                bool isAllocated = nodeConnections[i].pair.IsAllocated();
+                float progress = isAllocated ? 1f : 0f;
+                Color color = isAllocated ? allocatedColor : defaultColor;
+                float thickness = isAllocated ? allocatedLineWidth : defaultLineWidth;
+                _connectionLengths[i] = EstimateSplineLength(nodeConnections[i].spline);
+
+                _stateTexture.SetPixel(i, 0, new Color(thickness, color.r, color.g, color.b));
+                _progressTexture.SetPixel(i, 0, new Color(progress, 0f, 0f, 0f));
+                _connectionStates[i] = new ConnectionVisualState
+                {
+                    progress = progress,
+                    targetProgress = progress,
+                    reverse = false
+                };
             }
 
             _stateTexture.Apply(false);
+            _progressTexture.Apply(false);
 
             _material.SetTexture("_StateTex", _stateTexture);
+            _material.SetTexture("_ProgressTex", _progressTexture);
             _material.SetFloat("_StateTexWidth", nodeConnections.Count);
+            ApplyMaterialProperties();
         }
 
         private void ChangeNodeConnection(Node node)
         {
+            if (_stateTexture == null || _progressTexture == null || _connectionStates.Length != nodeConnections.Count)
+                return;
+
+            bool wasAllocated = _nodeAllocationStates.TryGetValue(node, out bool previousAllocated) && previousAllocated;
+            bool isAllocated = node.IsAllocated;
+            bool progressChanged = false;
+
             for (var i = 0; i < nodeConnections.Count; i++)
             {
                 var connection = nodeConnections[i];
                 if (connection.pair.Contains(node))
                 {
-                    SetConnectionState(i, nodeConnections[i].pair.IsAllocated());
+                    bool pairAllocated = connection.pair.IsAllocated();
+                    ref ConnectionVisualState state = ref _connectionStates[i];
+
+                    if (pairAllocated && isAllocated && !wasAllocated)
+                    {
+                        Node sourceNode = connection.pair.A == node ? connection.pair.B : connection.pair.A;
+                        state.reverse = ReferenceEquals(sourceNode, connection.pair.B);
+                        state.targetProgress = 1f;
+                        SetConnectionState(i, true);
+                        SetConnectionProgress(i, state.progress, state.reverse);
+                        progressChanged = true;
+                    }
+                    else if (!pairAllocated && !isAllocated && wasAllocated)
+                    {
+                        Node sourceNode = connection.pair.A == node ? connection.pair.B : connection.pair.A;
+                        if (sourceNode != null && sourceNode.IsAllocated)
+                        {
+                            state.reverse = ReferenceEquals(sourceNode, connection.pair.B);
+                            state.targetProgress = 0f;
+                            SetConnectionState(i, true);
+                            SetConnectionProgress(i, state.progress, state.reverse);
+                        }
+                        else
+                        {
+                            state.reverse = false;
+                            state.progress = 0f;
+                            state.targetProgress = 0f;
+                            SetConnectionState(i, false);
+                            SetConnectionProgress(i, 0f, false);
+                        }
+                        progressChanged = true;
+                    }
+                    else
+                    {
+                        float targetProgress = pairAllocated ? 1f : 0f;
+                        if (!Mathf.Approximately(state.targetProgress, targetProgress) || !Mathf.Approximately(state.progress, targetProgress))
+                        {
+                            state.targetProgress = targetProgress;
+                            if (pairAllocated)
+                                SetConnectionState(i, true);
+                            else
+                                SetConnectionState(i, false);
+                            SetConnectionProgress(i, state.progress, state.reverse);
+                            progressChanged = true;
+                        }
+                    }
                 }
             }
             
             _stateTexture.Apply(false);
+            if (progressChanged)
+                _progressTexture.Apply(false);
+
+            _nodeAllocationStates[node] = isAllocated;
         }
         
         public void SetConnectionState(int id, bool isAllocated)
@@ -359,6 +604,78 @@ namespace SkillTree
                 new Color(thicknessMul, color.r, color.g, color.b)
             );
         }
+
+        private void SetConnectionProgress(int id, float progress, bool reverse)
+        {
+            _progressTexture.SetPixel(
+                id,
+                0,
+                new Color(progress, reverse ? 1f : 0f, 0f, 0f)
+            );
+        }
+
+        private void SyncAllConnectionStates()
+        {
+            if (_connectionStates.Length != nodeConnections.Count || _progressTexture == null)
+                return;
+
+            for (int i = 0; i < nodeConnections.Count; i++)
+            {
+                bool isAllocated = nodeConnections[i].pair.IsAllocated();
+                _connectionStates[i].progress = isAllocated ? 1f : 0f;
+                _connectionStates[i].targetProgress = _connectionStates[i].progress;
+                _connectionStates[i].reverse = false;
+                SetConnectionState(i, isAllocated);
+                SetConnectionProgress(i, _connectionStates[i].progress, false);
+            }
+
+            _stateTexture.Apply(false);
+            _progressTexture.Apply(false);
+            CacheNodeAllocationStates();
+        }
+
+        private void CacheNodeAllocationStates()
+        {
+            _nodeAllocationStates.Clear();
+
+            foreach (NodeConnectionData connection in nodeConnections)
+            {
+                if (connection?.pair.A != null && !_nodeAllocationStates.ContainsKey(connection.pair.A))
+                    _nodeAllocationStates.Add(connection.pair.A, connection.pair.A.IsAllocated);
+
+                if (connection?.pair.B != null && !_nodeAllocationStates.ContainsKey(connection.pair.B))
+                    _nodeAllocationStates.Add(connection.pair.B, connection.pair.B.IsAllocated);
+            }
+        }
+
+        private void ApplyMaterialProperties()
+        {
+            if (_material == null)
+                return;
+
+            _material.SetColor("_DefaultColor", defaultColor);
+            _material.SetFloat("_FrontWidth", frontWidth);
+            _material.SetFloat("_FrontThicknessBoost", frontThicknessBoost);
+            _material.SetFloat("_FrontThicknessWidth", frontThicknessWidth);
+        }
+
+        private void FinalizeConnectionVisualState(int id, ref ConnectionVisualState state)
+        {
+            if (!Mathf.Approximately(state.progress, state.targetProgress))
+                return;
+
+            if (Mathf.Approximately(state.targetProgress, 0f))
+                SetConnectionState(id, false);
+            else if (Mathf.Approximately(state.targetProgress, 1f))
+                SetConnectionState(id, true);
+        }
+    }
+
+    internal struct ConnectionVisualState
+    {
+        public float progress;
+        public float targetProgress;
+        public bool reverse;
     }
 
     [Serializable]
