@@ -77,6 +77,12 @@ namespace Battle
             ScheduleRespawn(RespawnDelay);
         }
 
+        public void RestartCurrentLevel()
+        {
+            SetSelectedLevel(_selectedLevel);
+            SpawnCurrentLevel();
+        }
+
         private void SetSelectedLevel(int level)
         {
             _selectedLevel = Mathf.Clamp(level, 1, _maxUnlockedLevel);

@@ -32,6 +32,7 @@ namespace Battle
 
         private float _accumulator;
         private bool _isTicking;
+        private bool _isPaused;
 
         public float TickDuration
         {
@@ -44,6 +45,7 @@ namespace Battle
             get => speedMultiplier;
             set => speedMultiplier = Mathf.Max(0f, value);
         }
+        public bool IsPaused => _isPaused;
 
         public void SetTickRate(float tickRate)
         {
@@ -53,6 +55,18 @@ namespace Battle
             }
 
             TickDuration = 1f / tickRate;
+        }
+
+        public void Pause()
+        {
+            _isPaused = true;
+            _accumulator = 0f;
+        }
+
+        public void Resume()
+        {
+            _isPaused = false;
+            _accumulator = 0f;
         }
 
         public void Register(ICombatTickable tickable)
@@ -102,6 +116,11 @@ namespace Battle
 
         private void Update()
         {
+            if (_isPaused)
+            {
+                return;
+            }
+
             float frameDeltaTime = (useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime) * speedMultiplier;
             if (frameDeltaTime <= 0f)
             {

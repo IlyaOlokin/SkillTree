@@ -19,6 +19,7 @@ public class GameSceneInstaller : MonoInstaller
             .NonLazy();
 
         Container.Bind<PlayerUnit>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<EnemySpawner>().FromComponentInHierarchy().AsSingle();
         Container.Bind<UnitLevel>()
             .FromResolveGetter<PlayerUnit>(p => p.UnitLevel)
             .AsSingle();
