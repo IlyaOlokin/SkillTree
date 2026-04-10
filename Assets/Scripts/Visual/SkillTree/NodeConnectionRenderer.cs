@@ -30,6 +30,9 @@ namespace SkillTree
         [SerializeField] [Range(0.001f, 0.25f)] private float frontWidth = 0.04f;
         [SerializeField] [Range(0f, 2f)] private float frontThicknessBoost = 0.35f;
         [SerializeField] [Range(0.001f, 0.25f)] private float frontThicknessWidth = 0.08f;
+        [SerializeField] [ColorUsage(true, true)] private Color frontGlowColor = Color.white;
+        [SerializeField] [Range(0.001f, 0.25f)] private float frontGlowWidth = 0.06f;
+        [SerializeField] [Min(0f)] private float frontGlowIntensity = 1f;
         
         private Texture2D _stateTexture;
         private Texture2D _progressTexture;
@@ -104,7 +107,7 @@ namespace SkillTree
                 float connectionLength = i < _connectionLengths.Length ? Mathf.Max(_connectionLengths[i], 0.0001f) : 0.0001f;
                 float step = (speed * Time.deltaTime) / connectionLength;
                 state.progress = Mathf.MoveTowards(state.progress, state.targetProgress, step);
-                SetConnectionProgress(i, state.progress, state.reverse);
+                SetConnectionProgress(i, state.progress, state.reverse, true);
                 FinalizeConnectionVisualState(i, ref state);
                 hasChanges = true;
             }
@@ -547,7 +550,7 @@ namespace SkillTree
                         state.reverse = ReferenceEquals(sourceNode, connection.pair.B);
                         state.targetProgress = 1f;
                         SetConnectionState(i, true);
-                        SetConnectionProgress(i, state.progress, state.reverse);
+                        SetConnectionProgress(i, state.progress, state.reverse, true);
                         progressChanged = true;
                     }
                     else if (!pairAllocated && !isAllocated && wasAllocated)
@@ -558,7 +561,7 @@ namespace SkillTree
                             state.reverse = ReferenceEquals(sourceNode, connection.pair.B);
                             state.targetProgress = 0f;
                             SetConnectionState(i, true);
-                            SetConnectionProgress(i, state.progress, state.reverse);
+                            SetConnectionProgress(i, state.progress, state.reverse, true);
                         }
                         else
                         {
@@ -566,7 +569,7 @@ namespace SkillTree
                             state.progress = 0f;
                             state.targetProgress = 0f;
                             SetConnectionState(i, false);
-                            SetConnectionProgress(i, 0f, false);
+                            SetConnectionProgress(i, 0f, false, false);
                         }
                         progressChanged = true;
                     }
@@ -580,7 +583,7 @@ namespace SkillTree
                                 SetConnectionState(i, true);
                             else
                                 SetConnectionState(i, false);
-                            SetConnectionProgress(i, state.progress, state.reverse);
+                            SetConnectionProgress(i, state.progress, state.reverse, false);
                             progressChanged = true;
                         }
                     }
@@ -605,12 +608,12 @@ namespace SkillTree
             );
         }
 
-        private void SetConnectionProgress(int id, float progress, bool reverse)
+        private void SetConnectionProgress(int id, float progress, bool reverse, bool isFrontActive)
         {
             _progressTexture.SetPixel(
                 id,
                 0,
-                new Color(progress, reverse ? 1f : 0f, 0f, 0f)
+                new Color(progress, reverse ? 1f : 0f, isFrontActive ? 1f : 0f, 0f)
             );
         }
 
@@ -626,7 +629,7 @@ namespace SkillTree
                 _connectionStates[i].targetProgress = _connectionStates[i].progress;
                 _connectionStates[i].reverse = false;
                 SetConnectionState(i, isAllocated);
-                SetConnectionProgress(i, _connectionStates[i].progress, false);
+                SetConnectionProgress(i, _connectionStates[i].progress, false, false);
             }
 
             _stateTexture.Apply(false);
@@ -657,6 +660,9 @@ namespace SkillTree
             _material.SetFloat("_FrontWidth", frontWidth);
             _material.SetFloat("_FrontThicknessBoost", frontThicknessBoost);
             _material.SetFloat("_FrontThicknessWidth", frontThicknessWidth);
+            _material.SetColor("_FrontGlowColor", frontGlowColor);
+            _material.SetFloat("_FrontGlowWidth", frontGlowWidth);
+            _material.SetFloat("_FrontGlowIntensity", frontGlowIntensity);
         }
 
         private void FinalizeConnectionVisualState(int id, ref ConnectionVisualState state)
@@ -665,9 +671,15 @@ namespace SkillTree
                 return;
 
             if (Mathf.Approximately(state.targetProgress, 0f))
+            {
                 SetConnectionState(id, false);
+                SetConnectionProgress(id, 0f, state.reverse, false);
+            }
             else if (Mathf.Approximately(state.targetProgress, 1f))
+            {
                 SetConnectionState(id, true);
+                SetConnectionProgress(id, 1f, state.reverse, false);
+            }
         }
     }
 

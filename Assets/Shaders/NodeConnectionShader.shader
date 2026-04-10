@@ -10,6 +10,9 @@ Properties
         _FrontWidth ("Front Width", Float) = 0.05
         _FrontThicknessBoost ("Front Thickness Boost", Float) = 0.35
         _FrontThicknessWidth ("Front Thickness Width", Float) = 0.08
+        [HDR]_FrontGlowColor ("Front Glow Color", Color) = (1.5,1.8,1.2,1)
+        _FrontGlowWidth ("Front Glow Width", Float) = 0.06
+        _FrontGlowIntensity ("Front Glow Intensity", Float) = 1
     }
 
     SubShader
@@ -33,6 +36,9 @@ Properties
             float _FrontWidth;
             float _FrontThicknessBoost;
             float _FrontThicknessWidth;
+            float4 _FrontGlowColor;
+            float _FrontGlowWidth;
+            float _FrontGlowIntensity;
 
             struct appdata
             {
@@ -48,7 +54,7 @@ Properties
                 float4 pos : SV_POSITION;
                 float4 allocatedCol : COLOR;
                 float t : TEXCOORD0;
-                float2 progressData : TEXCOORD1;
+                float3 progressData : TEXCOORD1;
             };
 
             v2f vert (appdata v)
@@ -61,9 +67,10 @@ Properties
                 float4 progressState = tex2Dlod(_ProgressTex, float4(stateUV, 0, 0));
 
                 float directedT = progressState.g > 0.5 ? (1.0 - v.uv.x) : v.uv.x;
+                float frontActive = progressState.b;
                 float frontThicknessWidth = max(_FrontThicknessWidth, 0.0001);
                 float frontDistance = abs(directedT - progressState.r);
-                float frontThicknessMask = 1.0 - smoothstep(0.0, frontThicknessWidth, frontDistance);
+                float frontThicknessMask = (1.0 - smoothstep(0.0, frontThicknessWidth, frontDistance)) * frontActive;
                 float thickness = state.r * (1.0 + frontThicknessMask * _FrontThicknessBoost);
                 float side = v.uv.y;
 
@@ -74,7 +81,7 @@ Properties
                 o.pos = UnityObjectToClipPos(v.vertex);
                 o.allocatedCol = float4(state.gba, 1);
                 o.t = v.uv.x;
-                o.progressData = progressState.rg;
+                o.progressData = progressState.rgb;
 
                 return o;
             }
@@ -84,7 +91,12 @@ Properties
                 float directedT = i.progressData.y > 0.5 ? (1.0 - i.t) : i.t;
                 float frontWidth = max(_FrontWidth, 0.0001);
                 float fill = 1.0 - smoothstep(i.progressData.x - frontWidth, i.progressData.x + frontWidth, directedT);
-                return lerp(_DefaultColor, i.allocatedCol, saturate(fill));
+                float glowWidth = max(_FrontGlowWidth, 0.0001);
+                float frontDistance = abs(directedT - i.progressData.x);
+                float glowMask = (1.0 - smoothstep(0.0, glowWidth, frontDistance)) * i.progressData.z;
+                float3 baseColor = lerp(_DefaultColor.rgb, i.allocatedCol.rgb, saturate(fill));
+                float3 glowColor = _FrontGlowColor.rgb * (_FrontGlowIntensity * glowMask);
+                return float4(baseColor + glowColor, 1);
             }
             ENDCG
         }
