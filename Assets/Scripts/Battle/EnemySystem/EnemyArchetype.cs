@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using DropSystem;
 
 namespace Battle
 {
@@ -35,6 +36,11 @@ namespace Battle
 
         [Header("Affixes")]
         public List<EnemyAffix> possibleAffixes = new();
+
+        [Header("Drops")]
+        [SerializeField] private GemDropTable gemDropTable;
+
+        public GemDropTable GemDropTable => gemDropTable;
 
         private void OnValidate()
         {

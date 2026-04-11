@@ -21,6 +21,7 @@ namespace SkillTree
         [field:SerializeField] public List<Modifier> Modifiers { get; private set; }
 
         public event Action<Node> OnAllocatedChanged;
+        public event Action<Node> OnNodeChanged;
         public static event Action<Node> OnAnyNodeAllocatedChanged;
 
         public Func<bool> AdditionalAllocatedCondition;
@@ -51,6 +52,7 @@ namespace SkillTree
             
             OnAllocatedChanged?.Invoke(this);
             OnAnyNodeAllocatedChanged?.Invoke(this);
+            RaiseNodeChanged();
         }
 
         public void Deallocate()
@@ -78,6 +80,7 @@ namespace SkillTree
             
             OnAllocatedChanged?.Invoke(this);
             OnAnyNodeAllocatedChanged?.Invoke(this);
+            RaiseNodeChanged();
         }
         
         public virtual IReadOnlyList<string> GetTooltipDescriptions()
@@ -94,6 +97,11 @@ namespace SkillTree
         public virtual bool ShouldShowTooltipTitle()
         {
             return true;
+        }
+
+        protected void RaiseNodeChanged()
+        {
+            OnNodeChanged?.Invoke(this);
         }
     }
 }

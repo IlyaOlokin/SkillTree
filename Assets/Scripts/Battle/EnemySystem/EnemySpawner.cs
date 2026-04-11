@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DropSystem;
+using InventorySystem;
 using UnityEngine;
 using Zenject;
 
@@ -16,6 +18,7 @@ namespace Battle
         private int _currentClearedWaves;
         
         private WaveFactory _waveFactory;
+        private readonly GemDropResolver _gemDropResolver = new();
         private readonly List<EnemyUnit> _activeEnemies = new();
         private Coroutine _respawnCoroutine;
 
@@ -35,6 +38,7 @@ namespace Battle
         
         public event Action OnLevelChanged;
         public event Action OnWaveCleared;
+        public event Action<EnemyUnit, IReadOnlyList<InventoryItem>> OnEnemyDropsResolved;
 
         private void Awake()
         {
@@ -158,11 +162,22 @@ namespace Battle
 
             enemy.OnDeath -= HandleEnemyDeath;
 
+            List<InventoryItem> resolvedDrops = ResolveDrops(enemy);
+            OnEnemyDropsResolved?.Invoke(enemy, resolvedDrops);
+
             if (_activeEnemies.Count > 0)
                 return;
 
             RegisterWaveClear();
             ScheduleRespawn(RespawnDelay);
+        }
+
+        public List<InventoryItem> ResolveDrops(EnemyUnit enemy)
+        {
+            if (enemy == null)
+                return new List<InventoryItem>();
+
+            return _gemDropResolver.Resolve(enemy);
         }
 
         private void RegisterWaveClear()

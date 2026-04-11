@@ -34,8 +34,16 @@ namespace SkillTree
 
         private void ProcessNodeAllocation(Node node)
         {
-            if (node.IsAllocated && !_allocatedNodes.Contains(node)) _allocatedNodes.Add(node);
-            else _allocatedNodes.Remove(node);
+            if (node.IsAllocated)
+            {
+                if (!_allocatedNodes.Contains(node))
+                    _allocatedNodes.Add(node);
+            }
+            else
+            {
+                _allocatedNodes.Remove(node);
+            }
+
             UpdateTree();
         }
 
@@ -48,6 +56,11 @@ namespace SkillTree
                 foreach (var modifier in allocatedNode.Modifiers)
                 {
                     modifiers.Add(modifier);
+                }
+
+                if (allocatedNode is SocketNode socketNode)
+                {
+                    modifiers.AddRange(socketNode.GetActiveModifiers());
                 }
             }
 
@@ -73,7 +86,7 @@ namespace SkillTree
         {
             NodeGraphTraversalService.Traverse(rootNode, node =>
             {
-                node.OnAllocatedChanged += action;
+                node.OnNodeChanged += action;
             });
         }
 
@@ -81,9 +94,8 @@ namespace SkillTree
         {
             NodeGraphTraversalService.Traverse(rootNode, node =>
             {
-                node.OnAllocatedChanged -= action;
+                node.OnNodeChanged -= action;
             });
         }
     }
 }
-

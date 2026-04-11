@@ -1,4 +1,5 @@
 using Battle;
+using InventorySystem;
 using TooltipSystem;
 using UnityEngine;
 using Zenject;
@@ -20,6 +21,7 @@ public class GameSceneInstaller : MonoInstaller
 
         Container.Bind<PlayerUnit>().FromComponentInHierarchy().AsSingle();
         Container.Bind<EnemySpawner>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<PlayerInventory>().FromComponentInHierarchy().AsSingle();
         Container.Bind<UnitLevel>()
             .FromResolveGetter<PlayerUnit>(p => p.UnitLevel)
             .AsSingle();
@@ -27,6 +29,9 @@ public class GameSceneInstaller : MonoInstaller
         Container.Bind<AttackResolver>().FromComponentInHierarchy().AsSingle();
         Container.Bind<SkillTreeUI>().FromComponentInHierarchy().AsSingle();
         Container.Bind<TooltipUI>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<InventorySocketService>().AsSingle();
+        Container.Bind<InventorySelectionState>().AsSingle();
+        Container.Bind<GemPlacementService>().AsSingle();
 
         Container.Bind<ITarget>().WithId(TargetIds.Player).To<PlayerUnit>().FromResolve();
         Container.Bind<ITarget>().WithId(TargetIds.Enemies).To<AttackResolver>().FromResolve();

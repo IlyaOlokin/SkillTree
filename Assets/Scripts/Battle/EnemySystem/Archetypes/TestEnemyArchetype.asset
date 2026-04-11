@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfff9238fe22d774e9c6f626c2244278, type: 3}
   m_Name: TestEnemyArchetype
   m_EditorClassIdentifier: 
+  minLevel: 1
+  maxLevel: 0
+  bossOnly: 0
+  allowedRarities: 
   healthWeight: 0.32666314
   damageWeight: 0.34033686
   defenseWeight: 0.333
@@ -23,3 +27,4 @@ MonoBehaviour:
   defenseTypes: []
   possibleAffixes:
   - {fileID: 11400000, guid: c2bdd953a1ec2154d927e63e023d1378, type: 2}
+  gemDropTable: {fileID: 11400000, guid: 562f4bb25f8bf9a4f95f24fde9f23482, type: 2}
