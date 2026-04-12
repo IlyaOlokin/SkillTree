@@ -25,7 +25,7 @@ namespace SkillTree
 
         public bool CanAcceptGem(GemInstance gemInstance)
         {
-            return IsValidGem(gemInstance) && !HasGem;
+            return IsAllocated && IsValidGem(gemInstance) && !HasGem;
         }
 
         public bool TryInsertGem(GemInstance gemInstance)
@@ -69,13 +69,17 @@ namespace SkillTree
             if (!HasGem)
             {
                 descriptions.Add("Empty Socket");
+
+                if (!IsAllocated)
+                    descriptions.Add("Allocate this node before socketing a {gem|Gem}.");
+
                 return descriptions;
             }
 
             descriptions.Add($"Socketed Gem: {socketedGem.DisplayName}");
 
             if (!IsAllocated)
-                descriptions.Add("Socketed gem is inactive until this node is allocated.");
+                descriptions.Add("Socketed {gem} is inactive until this node is allocated.");
 
             IReadOnlyList<string> gemDescriptions = socketedGem.GetTooltipDescriptions();
             for (int i = 0; i < gemDescriptions.Count; i++)

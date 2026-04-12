@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: TestGem
   m_EditorClassIdentifier: 
   displayName: TestGem
-  description: Gem for testing gems
+  description: Provides {block|Block} chance
   icon: {fileID: 21300000, guid: 34f4291c2694575439bf2ef25f29aaa3, type: 3}
   kind: 0
   modifierRollDefinitions:
-  - modifierTemplate: {fileID: 11400000, guid: ea90c76838984a941b0db3b902ade77b, type: 2}
-    minRollValue: 5
-    maxRollValue: 10
-    rollStep: 1
+  - modifierTemplate: {fileID: 11400000, guid: 80289d26f8df9ae4fbb21b4c8ee2c964, type: 2}
+    minRollValue: 0.03
+    maxRollValue: 0.06
+    rollStep: 0.01

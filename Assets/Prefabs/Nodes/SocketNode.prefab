@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ddd85c6dcb641f788a8f9429df111d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipSource: {fileID: 0}
+  tooltipSource: {fileID: 1935933910676194249}
 --- !u!1 &3204345449470436903
 GameObject:
   m_ObjectHideFlags: 0

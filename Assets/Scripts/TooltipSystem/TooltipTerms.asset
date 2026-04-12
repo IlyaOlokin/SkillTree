@@ -79,3 +79,13 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: 6dfbef27ee84d3348bae27b382b46454, type: 2}
     matchTexts:
     - Sunder
+  - id: socketnode
+    description: {fileID: 11400000, guid: 1d10e1853f307c44782a522ecbaf0848, type: 2}
+    matchTexts:
+    - Socket Node
+    - Socket Nodes
+  - id: gem
+    description: {fileID: 11400000, guid: 253fa2b4a47177a4eb737d69ff9307f1, type: 2}
+    matchTexts:
+    - Gem
+    - Gems

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Zenject;
@@ -8,6 +9,7 @@ namespace TooltipSystem
     {
         [Inject] private TooltipUI tooltipUI;
         [SerializeField] private MonoBehaviour tooltipSource;
+        [SerializeField] private TooltipCanvasTarget canvasTarget;
 
         private ITooltipDescriptionProvider tooltipDescriptionProvider;
 
@@ -23,10 +25,15 @@ namespace TooltipSystem
                 return;
             }
 
-            tooltipUI.DisplayTooltip(this, tooltipDescriptionProvider, eventData.position);
+            tooltipUI.DisplayTooltip(this, tooltipDescriptionProvider, eventData.position, canvasTarget);
         }
 
         public void OnPointerExit(PointerEventData eventData)
+        {
+            tooltipUI.HideTooltip(this);
+        }
+
+        private void OnDisable()
         {
             tooltipUI.HideTooltip(this);
         }

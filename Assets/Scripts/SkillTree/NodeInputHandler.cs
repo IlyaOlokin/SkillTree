@@ -25,7 +25,10 @@ namespace SkillTree
 
             if (Input.GetMouseButtonDown(0))
             {
-                if (_node is SocketNode socketNode && _gemPlacementService != null && _gemPlacementService.SelectionState.HasSelectedGem)
+                if (_node is SocketNode socketNode
+                    && socketNode.IsAllocated
+                    && _gemPlacementService != null
+                    && _gemPlacementService.SelectionState.HasSelectedGem)
                 {
                     _gemPlacementService.TryPlaceSelectedGem(socketNode);
                     return;

@@ -13,6 +13,7 @@ namespace UI
         [Inject] private PlayerInventory _playerInventory;
         [Inject] private GemPlacementService _gemPlacementService;
         [Inject] private InventorySelectionState _selectionState;
+        [Inject] private DiContainer _container;
 
         private readonly List<InventorySlotUI> _slotViews = new();
 
@@ -69,7 +70,7 @@ namespace UI
 
             while (_slotViews.Count < _playerInventory.SlotCount)
             {
-                InventorySlotUI slotView = Instantiate(slotPrefab, slotsRoot);
+                InventorySlotUI slotView = _container.InstantiatePrefabForComponent<InventorySlotUI>(slotPrefab, slotsRoot);
                 slotView.Initialize(_slotViews.Count, this);
                 _slotViews.Add(slotView);
             }

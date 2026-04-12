@@ -3,6 +3,7 @@ using Battle;
 using InventorySystem;
 using UnityEngine;
 using UnityEngine.Pool;
+using Zenject;
 
 namespace DropSystem
 {
@@ -18,6 +19,8 @@ namespace DropSystem
         [SerializeField] private float spawnRadius = 0.5f;
         [SerializeField] [Min(1)] private int defaultCapacity = 8;
         [SerializeField] [Min(1)] private int maxPoolSize = 64;
+
+        [Inject] private DiContainer container;
 
         private ObjectPool<GemDropPickup> pickupPool;
 
@@ -85,7 +88,7 @@ namespace DropSystem
         private GemDropPickup CreatePickup()
         {
             Transform parent = dropRoot != null ? dropRoot : transform;
-            GemDropPickup pickupInstance = Instantiate(gemDropPrefab, parent);
+            GemDropPickup pickupInstance = container.InstantiatePrefabForComponent<GemDropPickup>(gemDropPrefab, parent);
             pickupInstance.SetInventory(playerInventory);
             pickupInstance.SetCamera(battleCamera);
             pickupInstance.gameObject.SetActive(false);

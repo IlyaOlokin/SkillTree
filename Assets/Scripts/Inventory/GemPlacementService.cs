@@ -36,7 +36,7 @@ namespace InventorySystem
 
         public bool TryPlaceSelectedGem(SocketNode socketNode)
         {
-            if (socketNode == null || !SelectionState.HasSelectedGem)
+            if (socketNode == null || !socketNode.IsAllocated || !SelectionState.HasSelectedGem)
                 return false;
 
             int selectedSlotIndex = SelectionState.SelectedSlotIndex;

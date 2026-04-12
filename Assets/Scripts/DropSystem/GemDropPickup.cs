@@ -1,12 +1,14 @@
 using Gems;
 using InventorySystem;
 using System;
+using System.Collections.Generic;
+using TooltipSystem;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace DropSystem
 {
-    public class GemDropPickup : MonoBehaviour
+    public class GemDropPickup : MonoBehaviour, ITooltipDescriptionProvider
     {
         private PlayerInventory inventory;
         private Action<GemDropPickup> releaseToPool;
@@ -67,6 +69,11 @@ namespace DropSystem
             }
 
             gameObject.SetActive(false);
+        }
+
+        public IReadOnlyList<string> GetTooltipDescriptions()
+        {
+            return gemInstance?.GetTooltipDescriptions() ?? Array.Empty<string>();
         }
 
         private void OnValidate()
