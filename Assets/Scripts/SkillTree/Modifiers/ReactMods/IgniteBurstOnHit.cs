@@ -32,7 +32,7 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return $"On Hit: trigger {burstPercent * 100f:0.#}% of current Ignite damage instantly";
+            return $"On Hit: trigger {burstPercent * 100f:0.#}% of current {{ignite|Ignite}} damage instantly";
         }
     }
 }

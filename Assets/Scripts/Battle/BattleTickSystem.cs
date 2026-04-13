@@ -116,6 +116,12 @@ namespace Battle
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                if (!_isPaused) Pause();
+                else Resume();
+            }
+            
             if (_isPaused)
             {
                 return;

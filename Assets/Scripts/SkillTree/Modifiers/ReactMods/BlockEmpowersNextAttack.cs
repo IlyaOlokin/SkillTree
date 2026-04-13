@@ -29,7 +29,7 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return $"After Block: next attack gains +{morePhysicalDamage * 100f:0.#}% more Physical Damage and always applies Bleed";
+            return $"After {{block|Block}}: next attack gains +{morePhysicalDamage * 100f:0.#}% more Physical Damage and always applies {{bleed|Bleed}}";
         }
     }
 }
