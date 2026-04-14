@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DropSystem;
 using InventorySystem;
+using SaveSystem;
 using UnityEngine;
 using Zenject;
 
@@ -21,6 +22,10 @@ namespace Battle
         private readonly GemDropResolver _gemDropResolver = new();
         private readonly List<EnemyUnit> _activeEnemies = new();
         private Coroutine _respawnCoroutine;
+        private bool _defaultsCaptured;
+        private bool _hasStarted;
+        private int _defaultSelectedLevel;
+        private int _defaultMaxUnlockedLevel;
 
         private int _selectedLevel;
         private int _maxUnlockedLevel;
@@ -54,10 +59,12 @@ namespace Battle
 
             _maxUnlockedLevel = Mathf.Clamp(StartingLevel, 1, MaxWaveLevel);
             _selectedLevel = _maxUnlockedLevel;
+            CaptureDefaultsIfNeeded();
         }
 
         private void Start()
         {
+            _hasStarted = true;
             SpawnCurrentLevel();
         }
 
@@ -234,6 +241,60 @@ namespace Battle
         private void OnDestroy()
         {
             UnsubscribeFromActiveEnemies();
+        }
+
+        public ProgressSaveData CaptureSaveData()
+        {
+            return new ProgressSaveData
+            {
+                selectedLevel = _selectedLevel,
+                maxUnlockedLevel = _maxUnlockedLevel,
+                currentClearedWaves = 0
+            };
+        }
+
+        public void ApplySaveData(ProgressSaveData saveData)
+        {
+            if (saveData == null)
+            {
+                ResetProgressToDefaults();
+                return;
+            }
+
+            _maxUnlockedLevel = Mathf.Clamp(saveData.maxUnlockedLevel, StartingLevel, MaxWaveLevel);
+            _selectedLevel = Mathf.Clamp(saveData.selectedLevel, StartingLevel, _maxUnlockedLevel);
+            _currentClearedWaves = 0;
+            _autoProgressionEnabled = _selectedLevel >= _maxUnlockedLevel;
+
+            OnLevelChanged?.Invoke();
+
+            if (_hasStarted && isActiveAndEnabled)
+                SpawnCurrentLevel();
+        }
+
+        public void ResetProgressToDefaults()
+        {
+            CaptureDefaultsIfNeeded();
+
+            _selectedLevel = _defaultSelectedLevel;
+            _maxUnlockedLevel = _defaultMaxUnlockedLevel;
+            _currentClearedWaves = 0;
+            _autoProgressionEnabled = _selectedLevel >= _maxUnlockedLevel;
+
+            OnLevelChanged?.Invoke();
+
+            if (_hasStarted && isActiveAndEnabled)
+                SpawnCurrentLevel();
+        }
+
+        private void CaptureDefaultsIfNeeded()
+        {
+            if (_defaultsCaptured)
+                return;
+
+            _defaultSelectedLevel = _selectedLevel;
+            _defaultMaxUnlockedLevel = _maxUnlockedLevel;
+            _defaultsCaptured = true;
         }
     }
 }

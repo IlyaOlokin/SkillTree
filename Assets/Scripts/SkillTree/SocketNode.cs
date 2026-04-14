@@ -9,12 +9,14 @@ namespace SkillTree
     public class SocketNode : Node
     {
         [SerializeField] private GemInstance socketedGem;
+        [SerializeField] [HideInInspector] private GemInstance defaultSocketedGem;
 
         private readonly List<Modifier> _runtimeGemModifiers = new();
 
         public event Action<SocketNode> OnSocketedGemChanged;
 
         public GemInstance SocketedGem => socketedGem;
+        public GemInstance DefaultSocketedGem => defaultSocketedGem;
         public bool HasGem => IsValidGem(socketedGem);
         public bool IsGemActive => IsAllocated && HasGem;
 
@@ -118,6 +120,19 @@ namespace SkillTree
         private static bool IsValidGem(GemInstance gemInstance)
         {
             return gemInstance != null && gemInstance.Definition != null;
+        }
+
+        public void SetSocketedGemFromSave(GemInstance gemInstance)
+        {
+            socketedGem = gemInstance;
+            RebuildRuntimeGemModifiers();
+            NotifySocketChanged();
+        }
+
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            defaultSocketedGem = socketedGem;
         }
     }
 }

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Gems;
+using SaveSystem;
 using UnityEngine;
 
 namespace InventorySystem
@@ -8,6 +10,7 @@ namespace InventorySystem
     {
         [SerializeField] [Min(1)] private int slotCount = 24;
         [SerializeField] private List<InventorySlot> slots = new();
+        private InventorySaveData _defaultSaveData;
 
         public event Action OnInventoryChanged;
 
@@ -17,6 +20,7 @@ namespace InventorySystem
         private void Awake()
         {
             EnsureSlotCount();
+            _defaultSaveData = CaptureSaveData();
         }
 
         private void OnValidate()
@@ -117,6 +121,72 @@ namespace InventorySystem
         private void RaiseInventoryChanged()
         {
             OnInventoryChanged?.Invoke();
+        }
+
+        public InventorySaveData CaptureSaveData()
+        {
+            EnsureSlotCount();
+            InventorySaveData saveData = new InventorySaveData
+            {
+                slotCount = slotCount,
+                slots = new List<InventorySlotSaveData>(slots.Count)
+            };
+
+            for (int i = 0; i < slots.Count; i++)
+            {
+                InventorySlot slot = slots[i];
+                InventoryItem item = slot.Item;
+                if (item == null || item.IsEmpty)
+                    continue;
+
+                saveData.slots.Add(new InventorySlotSaveData
+                {
+                    slotIndex = i,
+                    item = InventoryItemSaveData.FromInventoryItem(item)
+                });
+            }
+
+            return saveData;
+        }
+
+        public void ApplySaveData(InventorySaveData saveData, Func<GemInstanceSaveData, GemInstance> gemResolver)
+        {
+            EnsureSlotCount();
+            ClearAllInternal();
+
+            if (saveData != null && saveData.slotCount > 0)
+                slotCount = saveData.slotCount;
+
+            EnsureSlotCount();
+
+            if (saveData?.slots != null)
+            {
+                for (int i = 0; i < saveData.slots.Count; i++)
+                {
+                    InventorySlotSaveData slotSave = saveData.slots[i];
+                    if (slotSave == null || !IsValidSlotIndex(slotSave.slotIndex))
+                        continue;
+
+                    InventoryItem restoredItem = slotSave.item?.ToInventoryItem(gemResolver);
+                    if (restoredItem == null || restoredItem.IsEmpty)
+                        continue;
+
+                    slots[slotSave.slotIndex].SetItem(restoredItem);
+                }
+            }
+
+            RaiseInventoryChanged();
+        }
+
+        public void ResetToDefaults(Func<GemInstanceSaveData, GemInstance> gemResolver)
+        {
+            ApplySaveData(_defaultSaveData, gemResolver);
+        }
+
+        private void ClearAllInternal()
+        {
+            for (int i = 0; i < slots.Count; i++)
+                slots[i].Clear();
         }
     }
 }

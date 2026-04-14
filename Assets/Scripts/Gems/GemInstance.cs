@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using SaveSystem;
 using SkillTree;
 using UnityEngine;
 
@@ -24,6 +25,19 @@ namespace Gems
         {
             GemInstance instance = new GemInstance();
             instance.Initialize(definition);
+            return instance;
+        }
+
+        public static GemInstance Restore(GemDefinition definition, string savedInstanceId, IReadOnlyList<float> savedRolledValues)
+        {
+            GemInstance instance = new GemInstance
+            {
+                definition = definition,
+                instanceId = string.IsNullOrWhiteSpace(savedInstanceId) ? Guid.NewGuid().ToString("N") : savedInstanceId,
+                rolledValues = savedRolledValues != null ? new List<float>(savedRolledValues) : new List<float>()
+            };
+
+            instance.EnsureRollCount();
             return instance;
         }
 
@@ -116,6 +130,16 @@ namespace Gems
 
             if (rolledValues.Count > rollDefinitions.Count)
                 rolledValues.RemoveRange(rollDefinitions.Count, rolledValues.Count - rollDefinitions.Count);
+        }
+
+        public GemInstanceSaveData CaptureSaveData()
+        {
+            return new GemInstanceSaveData
+            {
+                instanceId = instanceId,
+                definitionId = definition != null ? definition.SaveDefinitionId : string.Empty,
+                rolledValues = new List<float>(rolledValues)
+            };
         }
     }
 }

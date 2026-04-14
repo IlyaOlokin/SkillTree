@@ -1,11 +1,17 @@
 using UnityEngine;
 using System;
+using SaveSystem;
 
 namespace Battle
 {
     public class UnitLevel : MonoBehaviour, IUnitComponent
     { 
         private Unit _owner;
+        private bool _defaultsCaptured;
+        private int _defaultLevel;
+        private double _defaultCurrentExp;
+        private double _defaultExpToNextLevel;
+        private int _defaultSkillPoints;
     
         [Header("Level")]
         [SerializeField] private int level = 1;
@@ -25,6 +31,11 @@ namespace Battle
         public event Action OnExpChanged;
         public event Action<int> OnLevelUp;
         public event Action<int> OnSkillPointsChanged;
+
+        private void Awake()
+        {
+            CaptureDefaultsIfNeeded();
+        }
 
         public void Init(Unit owner)
         {
@@ -104,6 +115,56 @@ namespace Battle
 
             skillPoints += amount;
             OnSkillPointsChanged?.Invoke(skillPoints);
+        }
+
+        public PlayerSaveData CaptureSaveData()
+        {
+            return new PlayerSaveData
+            {
+                level = level,
+                currentExp = currentExp,
+                skillPoints = skillPoints
+            };
+        }
+
+        public void ApplySaveData(PlayerSaveData saveData)
+        {
+            if (saveData == null)
+                return;
+
+            level = Math.Max(1, saveData.level);
+            currentExp = Math.Max(0d, saveData.currentExp);
+            skillPoints = Math.Max(0, saveData.skillPoints);
+            RecalculateExpToNextLevel();
+            currentExp = Math.Min(currentExp, expToNextLevel);
+
+            OnExpChanged?.Invoke();
+            OnSkillPointsChanged?.Invoke(skillPoints);
+        }
+
+        public void ResetToDefaults()
+        {
+            CaptureDefaultsIfNeeded();
+
+            level = _defaultLevel;
+            currentExp = _defaultCurrentExp;
+            expToNextLevel = _defaultExpToNextLevel;
+            skillPoints = _defaultSkillPoints;
+
+            OnExpChanged?.Invoke();
+            OnSkillPointsChanged?.Invoke(skillPoints);
+        }
+
+        private void CaptureDefaultsIfNeeded()
+        {
+            if (_defaultsCaptured)
+                return;
+
+            _defaultLevel = Math.Max(1, level);
+            _defaultCurrentExp = Math.Max(0d, currentExp);
+            _defaultExpToNextLevel = Math.Max(1d, expToNextLevel);
+            _defaultSkillPoints = Math.Max(0, skillPoints);
+            _defaultsCaptured = true;
         }
     }
 }

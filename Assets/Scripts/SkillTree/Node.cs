@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using Battle;
 using TooltipSystem;
 using UnityEngine;
@@ -12,6 +12,8 @@ namespace SkillTree
     public class Node : MonoBehaviour, ITooltipDescriptionProvider, ITooltipTitleVisibilityProvider
     { 
         [Inject] private UnitLevel _unitLevel;
+        [SerializeField] [HideInInspector] private string saveId;
+        [SerializeField] [HideInInspector] private bool defaultIsAllocated;
         
         public virtual bool IsAllocated { get; private set; }
         [SerializeField] private int nodeCost = 1;
@@ -19,6 +21,10 @@ namespace SkillTree
         public IReadOnlyList<Node> ConnectedNodes => connectedNodes;
 
         [field:SerializeField] public List<Modifier> Modifiers { get; private set; }
+        public string SaveId => string.IsNullOrWhiteSpace(saveId) ? BuildFallbackSaveId() : saveId;
+        public string ExplicitSaveId => saveId;
+        public string FallbackSaveId => BuildFallbackSaveId();
+        public bool DefaultIsAllocated => defaultIsAllocated;
 
         public event Action<Node> OnAllocatedChanged;
         public event Action<Node> OnNodeChanged;
@@ -102,6 +108,44 @@ namespace SkillTree
         protected void RaiseNodeChanged()
         {
             OnNodeChanged?.Invoke(this);
+        }
+
+        public void SetAllocatedFromSave(bool allocated)
+        {
+            IsAllocated = allocated;
+            if (allocated)
+            {
+                OnAllocatedChanged?.Invoke(this);
+                OnAnyNodeAllocatedChanged?.Invoke(this);
+                RaiseNodeChanged();
+            }
+        }
+
+        public bool EnsureSaveId()
+        {
+            if (!string.IsNullOrWhiteSpace(saveId))
+                return false;
+
+            saveId = Guid.NewGuid().ToString("N");
+            return true;
+        }
+
+        public void RegenerateSaveId()
+        {
+            saveId = Guid.NewGuid().ToString("N");
+        }
+
+        protected virtual void OnValidate()
+        {
+            defaultIsAllocated = IsAllocated;
+        }
+
+        private string BuildFallbackSaveId()
+        {
+            string hierarchyPath = string.Join("/", transform.GetComponentsInParent<Transform>(true)
+                .Reverse()
+                .Select(t => $"{t.name}[{t.GetSiblingIndex()}]"));
+            return $"{gameObject.scene.path}:{hierarchyPath}";
         }
     }
 }
