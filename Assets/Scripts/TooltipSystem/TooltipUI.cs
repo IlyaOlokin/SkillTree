@@ -31,8 +31,10 @@ namespace TooltipSystem
 
         private bool _pendingHideRequest;
         private Object _currentOwner;
+        private ITooltipDescriptionProvider _currentTooltipDescriptionProvider;
         private Object _pendingHideOwner;
         private TooltipCanvasTarget _currentCanvasTarget = TooltipCanvasTarget.SkillTree;
+        private Vector2 _currentScreenPosition;
         private readonly Dictionary<TooltipCanvasTarget, TooltipCanvasState> _canvasStates = new();
 
         private void Awake()
@@ -86,13 +88,29 @@ namespace TooltipSystem
             }
 
             _currentOwner = owner;
+            _currentTooltipDescriptionProvider = tooltipDescriptionProvider;
             _currentCanvasTarget = canvasTarget;
+            _currentScreenPosition = screenPosition;
             _pendingHideOwner = null;
             _pendingHideRequest = false;
             HideAllTooltipWindows();
             bool shouldShowTitle = tooltipDescriptionProvider is ITooltipTitleVisibilityProvider titleVisibilityProvider
                 && titleVisibilityProvider.ShouldShowTooltipTitle();
             ShowTooltipWindow(canvasState, 0, tooltipDescriptionProvider.GetTooltipDescriptions(), screenPosition, shouldShowTitle);
+        }
+
+        public void RefreshCurrentTooltip()
+        {
+            if (_currentOwner == null || _currentTooltipDescriptionProvider == null)
+            {
+                return;
+            }
+
+            DisplayTooltip(
+                _currentOwner,
+                _currentTooltipDescriptionProvider,
+                _currentScreenPosition,
+                _currentCanvasTarget);
         }
 
         public void HideTooltip(Object owner)
@@ -128,19 +146,49 @@ namespace TooltipSystem
 
             HideTooltipWindowsFrom(canvasState, tooltipLevel);
 
-            if (tooltipTermDatabase == null)
+            if (!TryGetLinkedTooltipDescription(linkId, out TooltipDescriptionData description))
             {
-                Debug.LogWarning("Tooltip term database is not assigned on TooltipUI.", this);
-                return;
-            }
-
-            if (!tooltipTermDatabase.TryGetDescription(linkId, out TooltipDescriptionData description))
-            {
-                Debug.LogWarning($"Tooltip term '{linkId}' was not found in database '{tooltipTermDatabase.name}'.", tooltipTermDatabase);
                 return;
             }
 
             ShowTooltipWindow(canvasState, tooltipLevel, description.Descriptions, screenPosition, false);
+        }
+
+        public void DisplayLinkedTooltipAsRoot(
+            Object owner,
+            string linkId,
+            Vector2 screenPosition,
+            TooltipCanvasTarget canvasTarget = TooltipCanvasTarget.SkillTree)
+        {
+            if (!TryGetCanvasState(canvasTarget, out TooltipCanvasState canvasState))
+            {
+                return;
+            }
+
+            _currentOwner = owner;
+            _currentTooltipDescriptionProvider = null;
+            _currentCanvasTarget = canvasTarget;
+            _currentScreenPosition = screenPosition;
+            _pendingHideOwner = null;
+            _pendingHideRequest = false;
+            HideAllTooltipWindows();
+
+            if (!TryGetLinkedTooltipDescription(linkId, out TooltipDescriptionData description))
+            {
+                return;
+            }
+
+            ShowTooltipWindow(canvasState, 0, description.Descriptions, screenPosition, false);
+        }
+
+        public void HideLinkedTooltipsFrom(int tooltipLevel)
+        {
+            if (!TryGetCanvasState(_currentCanvasTarget, out TooltipCanvasState canvasState))
+            {
+                return;
+            }
+
+            HideTooltipWindowsFrom(canvasState, Mathf.Max(tooltipLevel, 0));
         }
 
         private void SetDescriptionPosition(TooltipCanvasState canvasState, int tooltipLevel, Vector2 screenPosition)
@@ -180,6 +228,7 @@ namespace TooltipSystem
 
             _pendingHideOwner = null;
             _currentOwner = null;
+            _currentTooltipDescriptionProvider = null;
             HideAllTooltipWindows();
         }
 
@@ -229,6 +278,24 @@ namespace TooltipSystem
             Canvas.ForceUpdateCanvases();
             tooltipWindow.RefreshLayout();
             SetDescriptionPosition(canvasState, tooltipLevel, screenPosition);
+        }
+
+        private bool TryGetLinkedTooltipDescription(string linkId, out TooltipDescriptionData description)
+        {
+            if (tooltipTermDatabase == null)
+            {
+                Debug.LogWarning("Tooltip term database is not assigned on TooltipUI.", this);
+                description = null;
+                return false;
+            }
+
+            if (tooltipTermDatabase.TryGetDescription(linkId, out description))
+            {
+                return true;
+            }
+
+            Debug.LogWarning($"Tooltip term '{linkId}' was not found in database '{tooltipTermDatabase.name}'.", tooltipTermDatabase);
+            return false;
         }
 
         private void HideTooltipWindowsFrom(TooltipCanvasState canvasState, int tooltipLevel)

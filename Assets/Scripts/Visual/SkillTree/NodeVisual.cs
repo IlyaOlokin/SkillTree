@@ -3,6 +3,7 @@ using Battle;
 using UnityEngine;
 using Zenject;
 using Node = SkillTree.Node;
+using SocketNode = SkillTree.SocketNode;
 
 namespace Visual
 {
@@ -23,6 +24,8 @@ namespace Visual
         [SerializeField] private Color nodeImageAllocatedColor;
         [SerializeField] private Color borderAllocatedColor;
 
+        private Sprite _defaultNodeIcon;
+
         public Sprite NodeIcon
         {
             get => nodeImage != null ? nodeImage.sprite : null;
@@ -37,8 +40,13 @@ namespace Visual
 
         private void Awake()
         {
+            _defaultNodeIcon = nodeImage != null ? nodeImage.sprite : null;
+
             if (node != null)
                 node.OnAllocatedChanged += UpdateVisual;
+
+            if (node is SocketNode socketNode)
+                socketNode.OnSocketedGemChanged += UpdateSocketVisual;
 
             Node.OnAnyNodeAllocatedChanged += UpdateVisualSelf;
 
@@ -50,6 +58,9 @@ namespace Visual
         {
             if (node != null)
                 node.OnAllocatedChanged -= UpdateVisual;
+
+            if (node is SocketNode socketNode)
+                socketNode.OnSocketedGemChanged -= UpdateSocketVisual;
             
             Node.OnAnyNodeAllocatedChanged -= UpdateVisualSelf;
 
@@ -59,14 +70,14 @@ namespace Visual
 
         private void Start()
         {
+            RefreshNodeIcon();
             UpdateVisual(node);
         }
 
         private void UpdateVisual(Node node)
         {
-            if (node == null || border == null || nodeImage == null)
-                return;
-            
+            RefreshNodeIcon();
+
             bool canAllocateNow = node.CanBeAllocated() && node.HasEnoughSkillPoints();
 
             if (node.IsAllocated)
@@ -95,6 +106,27 @@ namespace Visual
         private void UpdateVisualSelf(Node node)
         {
             UpdateVisual(this.node);
+        }
+
+        private void UpdateSocketVisual(SocketNode _)
+        {
+            RefreshNodeIcon();
+        }
+
+        private void RefreshNodeIcon()
+        {
+            if (nodeImage == null)
+                return;
+
+            if (node is not SocketNode socketNode || !socketNode.HasGem)
+            {
+                nodeImage.sprite = _defaultNodeIcon;
+                return;
+            }
+
+            nodeImage.sprite = socketNode.SocketedGem.Icon != null
+                ? socketNode.SocketedGem.Icon
+                : _defaultNodeIcon;
         }
     }
 }

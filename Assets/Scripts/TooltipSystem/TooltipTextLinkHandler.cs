@@ -11,6 +11,8 @@ namespace TooltipSystem
         private string currentHoveredLinkId;
         private TooltipUI tooltipUI;
         private int tooltipLevel;
+        private bool showAsRootTooltip;
+        private TooltipCanvasTarget canvasTarget = TooltipCanvasTarget.SkillTree;
 
         private void Awake()
         {
@@ -18,10 +20,16 @@ namespace TooltipSystem
             textComponent.raycastTarget = true;
         }
 
-        public void Initialize(TooltipUI ownerTooltipUI, int level)
+        public void Initialize(
+            TooltipUI ownerTooltipUI,
+            int level,
+            bool useRootTooltip = false,
+            TooltipCanvasTarget targetCanvas = TooltipCanvasTarget.SkillTree)
         {
             tooltipUI = ownerTooltipUI;
             tooltipLevel = level;
+            showAsRootTooltip = useRootTooltip;
+            canvasTarget = targetCanvas;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -36,15 +44,24 @@ namespace TooltipSystem
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            HideCurrentTooltip();
+            currentHoveredLinkId = null;
+        }
+
+        private void OnDisable()
+        {
+            HideCurrentTooltip();
             currentHoveredLinkId = null;
         }
 
         private void TryLogHoveredLink(PointerEventData eventData)
         {
+            ResolveTooltipUI();
             Camera eventCamera = GetEventCamera();
             int linkIndex = TMP_TextUtilities.FindIntersectingLink(textComponent, eventData.position, eventCamera);
             if (linkIndex < 0)
             {
+                HideCurrentTooltip();
                 currentHoveredLinkId = null;
                 return;
             }
@@ -57,6 +74,12 @@ namespace TooltipSystem
             }
 
             currentHoveredLinkId = linkId;
+            if (showAsRootTooltip)
+            {
+                tooltipUI?.DisplayLinkedTooltipAsRoot(this, linkId, eventData.position, canvasTarget);
+                return;
+            }
+
             tooltipUI?.DisplayLinkedTooltip(tooltipLevel + 1, linkId, eventData.position);
         }
 
@@ -69,6 +92,32 @@ namespace TooltipSystem
             }
 
             return canvas.worldCamera;
+        }
+
+        private void HideCurrentTooltip()
+        {
+            if (tooltipUI == null || string.IsNullOrEmpty(currentHoveredLinkId))
+            {
+                return;
+            }
+
+            if (showAsRootTooltip)
+            {
+                tooltipUI.HideTooltip(this);
+                return;
+            }
+
+            tooltipUI.HideLinkedTooltipsFrom(tooltipLevel + 1);
+        }
+
+        private void ResolveTooltipUI()
+        {
+            if (tooltipUI != null)
+            {
+                return;
+            }
+
+            tooltipUI = FindFirstObjectByType<TooltipUI>(FindObjectsInactive.Include);
         }
     }
 }

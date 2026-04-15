@@ -81,10 +81,6 @@ public class TooltipWindow : MonoBehaviour
         descriptionField.raycastTarget = true;
 
         TooltipTextLinkHandler linkHandler = descriptionField.GetComponent<TooltipTextLinkHandler>();
-        if (linkHandler == null)
-        {
-            linkHandler = descriptionField.gameObject.AddComponent<TooltipTextLinkHandler>();
-        }
 
         linkHandler.Initialize(tooltipUI, tooltipLevel);
     }

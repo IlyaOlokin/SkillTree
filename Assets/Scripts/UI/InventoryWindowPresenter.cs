@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using InventorySystem;
+using TooltipSystem;
 using UnityEngine;
 using Zenject;
 
@@ -14,6 +15,7 @@ namespace UI
         [Inject] private GemPlacementService _gemPlacementService;
         [Inject] private InventorySelectionState _selectionState;
         [Inject] private DiContainer _container;
+        [Inject] private TooltipUI _tooltipUI;
 
         private readonly List<InventorySlotUI> _slotViews = new();
 
@@ -55,6 +57,8 @@ namespace UI
                 bool isSelected = _selectionState != null && _selectionState.IsSelected(i);
                 _slotViews[i].Refresh(item, isSelected);
             }
+
+            _tooltipUI?.RefreshCurrentTooltip();
         }
 
         public void RebuildSlots()

@@ -39,11 +39,14 @@ namespace InventorySystem
             if (socketNode == null || !socketNode.IsAllocated || !SelectionState.HasSelectedGem)
                 return false;
 
+            bool hadGemInSocket = socketNode.HasGem;
             int selectedSlotIndex = SelectionState.SelectedSlotIndex;
             if (!_inventorySocketService.TryInsertGem(_inventory, selectedSlotIndex, socketNode))
                 return false;
 
-            SelectionState.ClearSelection();
+            if (!hadGemInSocket)
+                SelectionState.ClearSelection();
+
             return true;
         }
 

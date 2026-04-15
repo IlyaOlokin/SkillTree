@@ -12,9 +12,12 @@ namespace UI
         [SerializeField] private RectTransform root;
         [SerializeField] private Vector2 screenOffset = new(18f, -18f);
         [SerializeField] private Image iconImage;
-        [SerializeField] private TMP_Text nameText;
 
         [Inject] private InventorySelectionState _selectionState;
+
+        [SerializeField] private Camera UICamera;
+        [SerializeField] private Canvas parentCanvas;
+        [SerializeField] private RectTransform canvasRectTransform;
 
         private void Start()
         {
@@ -32,10 +35,28 @@ namespace UI
 
         private void Update()
         {
-            if (root == null || _selectionState == null || !_selectionState.HasSelectedGem)
+            if (_selectionState == null || !_selectionState.HasSelectedGem)
+                return;
+            
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    canvasRectTransform,
+                    (Vector2)Input.mousePosition + screenOffset,
+                    UICamera,
+                    out Vector2 localPoint))
                 return;
 
-            root.position = (Vector2)Input.mousePosition + screenOffset;
+            root.anchoredPosition = localPoint;
+        }
+
+        private void LateUpdate()
+        {
+            if (_selectionState == null || !_selectionState.HasSelectedGem)
+                return;
+
+            if (!Input.GetMouseButtonDown(1))
+                return;
+
+            _selectionState.ClearSelection();
         }
 
         private void RefreshState()
@@ -51,9 +72,6 @@ namespace UI
 
             if (iconImage != null)
                 iconImage.sprite = selectedGem.Icon;
-
-            if (nameText != null)
-                nameText.text = selectedGem.DisplayName;
         }
     }
 }

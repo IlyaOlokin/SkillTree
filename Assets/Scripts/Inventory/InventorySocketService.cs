@@ -14,9 +14,17 @@ namespace InventorySystem
             if (item == null || item.ItemType != InventoryItemType.Gem || item.Gem == null)
                 return false;
 
-            if (!socketNode.CanAcceptGem(item.Gem))
+            if (!socketNode.IsAllocated)
                 return false;
 
+            if (!socketNode.HasGem)
+                return TryInsertIntoEmptySocket(inventory, slotIndex, socketNode);
+
+            return TrySwapGem(inventory, slotIndex, socketNode, item.Gem);
+        }
+
+        private static bool TryInsertIntoEmptySocket(PlayerInventory inventory, int slotIndex, SocketNode socketNode)
+        {
             if (!inventory.TryRemoveItem(slotIndex, out InventoryItem removedItem))
                 return false;
 
@@ -24,6 +32,25 @@ namespace InventorySystem
                 return true;
 
             inventory.TrySetItem(slotIndex, removedItem, out _);
+            return false;
+        }
+
+        private static bool TrySwapGem(PlayerInventory inventory, int slotIndex, SocketNode socketNode, GemInstance selectedGem)
+        {
+            if (!socketNode.TryRemoveGem(out GemInstance socketedGem))
+                return false;
+
+            if (!socketNode.TryInsertGem(selectedGem))
+            {
+                socketNode.TryInsertGem(socketedGem);
+                return false;
+            }
+
+            if (inventory.TrySetItem(slotIndex, InventoryItem.FromGem(socketedGem), out _))
+                return true;
+
+            socketNode.TryRemoveGem(out _);
+            socketNode.TryInsertGem(socketedGem);
             return false;
         }
 
