@@ -4,9 +4,9 @@ using LocalizationSupport;
 
 namespace SkillTree
 {
-    [CreateAssetMenu(menuName = "Modifiers/Special/Add Attribute Magnitude Modifier", fileName = "New AttributeMagnitudeModifier")]
+    [CreateAssetMenu(menuName = "Modifiers/Special/Add Attribute Power Modifier", fileName = "New AttributePowerModifier")]
     
-    public class AttributeMagnitudeModifier : Modifier
+    public class AttributePowerModifier : Modifier
     { 
         [SerializeField] private AttributeType attributeType;
         [SerializeField] private float multiplier = 1;
@@ -18,7 +18,7 @@ namespace SkillTree
                 return;
             }
 
-            unit.attributes.ChangeAttributeMagnitude(attributeType, multiplier);
+            unit.attributes.ChangeAttributePower(attributeType, multiplier);
         }
 
         public override string GetDescription()
@@ -30,23 +30,23 @@ namespace SkillTree
             if (multiplier <= 0f)
             {
                 return GameLocalization.FormatModifier(
-                    "modifier.attributeMagnitude.noBonuses",
+                    "modifier.attributePower.noBonuses",
                     "[[0]] provides no bonuses",
                     localizedAttribute);
             }
 
             string effectiveness = percentChange >= 0f
                 ? GameLocalization.FormatModifier(
-                    "modifier.attributeMagnitude.moreEffective",
+                    "modifier.attributePower.moreEffective",
                     "[[0]]% more effective",
                     percentChange)
                 : GameLocalization.FormatModifier(
-                    "modifier.attributeMagnitude.lessEffective",
+                    "modifier.attributePower.lessEffective",
                     "[[0]]% less effective",
                     -percentChange);
 
             return GameLocalization.FormatModifier(
-                "modifier.attributeMagnitude.description",
+                "modifier.attributePower.description",
                 "Each bonus to [[0]] is [[1]]",
                 localizedAttribute,
                 effectiveness);

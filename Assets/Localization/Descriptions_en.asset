@@ -31,7 +31,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 247115550953472
-    m_Localized: Ailments are negative effects applied by hits
+    m_Localized: Ailments are negative {effect|Effects} applied by hits
     m_Metadata:
       m_Items: []
   - m_Id: 247175881822208
@@ -82,7 +82,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 247601490432000
-    m_Localized: Block does not prevent {effects|Effects} from being applied
+    m_Localized: Block does not prevent {effect|Effects} from being applied
     m_Metadata:
       m_Items: []
   - m_Id: 247671870853120
@@ -107,7 +107,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 247885616779264
-    m_Localized: Distract is an {effects|Effect} that can be applied to units
+    m_Localized: Distract is an {effect|Effect} that can be applied to units
     m_Metadata:
       m_Items: []
   - m_Id: 247894802305024
@@ -178,7 +178,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 248713857601536
-    m_Localized: Sunder is an {effects|Effect} that can be applied to units
+    m_Localized: Sunder is an {effect|Effect} that can be applied to units
     m_Metadata:
       m_Items: []
   - m_Id: 248718592970752
@@ -209,6 +209,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 294655453433856
     m_Localized: '{elemental|Elemental} Resistance and matching Resistance stack'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358944797233152
+    m_Localized: Power increases how effective an {effect|Effect} is
     m_Metadata:
       m_Items: []
   references:

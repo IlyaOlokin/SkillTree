@@ -54,8 +54,8 @@ namespace Battle
         private static float CalculateAccuracyReduction(DamageInfo damageInfo, Unit defender)
         {
             float mitigation = Mathf.Clamp01(defender.BaseUnitModifiers.GetStatValue(StatType.DistractMitigation));
-            float magnitude = Mathf.Max(0f, 1f + damageInfo.BaseUnitModifiers.GetStatValue(StatType.DistractMagnitude));
-            return BASE_REDUCED_ACCURACY * magnitude * (1f - mitigation);
+            float power = Mathf.Max(0f, 1f + damageInfo.BaseUnitModifiers.GetStatValue(StatType.DistractPower));
+            return BASE_REDUCED_ACCURACY * power * (1f - mitigation);
         }
 
         public static void Apply(Unit _, DamageInfo damageInfo, Unit defender)

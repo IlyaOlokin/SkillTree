@@ -39,7 +39,7 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: b5afc293a54b8c14488911b4b6aa2a41, type: 2}
   - id: block
     description: {fileID: 11400000, guid: a38baa50f583722439f7eeb26333ec15, type: 2}
-  - id: effects
+  - id: effect
     description: {fileID: 11400000, guid: b94a26fa21693624994df419e66d5b2c, type: 2}
   - id: distract
     description: {fileID: 11400000, guid: 1d27e90d77b0d124eb92e29be704fcab, type: 2}
@@ -51,3 +51,5 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: 253fa2b4a47177a4eb737d69ff9307f1, type: 2}
   - id: resistance
     description: {fileID: 11400000, guid: a15214a5a7c705e4f84ece3fc8f6aee0, type: 2}
+  - id: power
+    description: {fileID: 11400000, guid: 926d52a01f0d9f74f9260e9c8b907c57, type: 2}

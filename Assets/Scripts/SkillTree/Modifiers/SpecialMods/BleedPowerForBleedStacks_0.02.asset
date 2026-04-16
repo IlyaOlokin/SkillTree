@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0efcf1e8bb407244f9e2b400627efba8, type: 3}
-  m_Name: BleedMagnitudeForBleedStacks_0.02
+  m_Name: BleedPowerForBleedStacks_0.02
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 03000000
   AddedValue: 0.02

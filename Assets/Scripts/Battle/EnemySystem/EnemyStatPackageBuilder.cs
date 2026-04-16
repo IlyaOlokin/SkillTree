@@ -69,7 +69,7 @@ namespace Battle
             }
             
             float barrierPower = power * archetype.barrierWeight * 2f;
-            Add(package, ModifierType.Added, StatType.BarrierPower, barrierPower);
+            Add(package, ModifierType.Added, StatType.BarrierCapacity, barrierPower);
         }
         
         private void ApplyAttackSpeed(

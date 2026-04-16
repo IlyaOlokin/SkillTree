@@ -24,12 +24,12 @@ namespace Battle
         {
             MoreDamage = ScriptableObject.CreateInstance<BaseModifier>();
             MoreDamage.modifierContainer = new ModifierContainer(ModifierType.More, StatType.Damage, 
-                BASE_MORE_DAMAGE_BONUS * (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)));
+                BASE_MORE_DAMAGE_BONUS * (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.OverchargePower)));
             MoreDamage.SetPriorities(new List<ModifierPriority>() { ModifierPriority.OnAttack });
             
             MoreCritDamageBonus = ScriptableObject.CreateInstance<BaseModifier>();
             MoreCritDamageBonus.modifierContainer = new ModifierContainer(ModifierType.More, StatType.CritDamageBonus, 
-                BASE_MORE_CRIT_DAMAGE_BONUS * (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.OverchargeMagnitude)));
+                BASE_MORE_CRIT_DAMAGE_BONUS * (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.OverchargePower)));
             MoreCritDamageBonus.SetPriorities(new List<ModifierPriority>() { ModifierPriority.OnAttack });
         }
 

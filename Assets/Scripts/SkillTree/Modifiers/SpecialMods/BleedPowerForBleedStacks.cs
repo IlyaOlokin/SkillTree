@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace SkillTree
 {
-    [CreateAssetMenu(menuName = "Modifiers/Special/Bleed Magnitude For Bleed Stacks", fileName = "New BleedMagnitudeForBleedStacks")]
-    public class BleedMagnitudeForBleedStacks : Modifier
+    [CreateAssetMenu(menuName = "Modifiers/Special/Bleed Power For Bleed Stacks", fileName = "New BleedPowerForBleedStacks")]
+    public class BleedPowerForBleedStacks : Modifier
     {
         [SerializeField] private float AddedValue = 0.02f;
 
@@ -24,14 +24,14 @@ namespace SkillTree
             }
 
             damageInfo.BaseUnitModifiers.ChangeModifierValue(
-                new ModifierContainer(ModifierType.Added, StatType.BleedMagnitude, AddedValue * bleedStacks));
+                new ModifierContainer(ModifierType.Added, StatType.BleedPower, AddedValue * bleedStacks));
         }
 
         public override string GetDescription()
         {
             return GameLocalization.FormatModifier(
-                "modifier.bleedMagnitudeForStacks.description",
-                "+[[0]]% Bleed Magnitude per Bleed stack on target",
+                "modifier.bleedPowerForStacks.description",
+                "+[[0]]% Bleed Power per Bleed stack on target",
                 AddedValue * 100f);
         }
     }

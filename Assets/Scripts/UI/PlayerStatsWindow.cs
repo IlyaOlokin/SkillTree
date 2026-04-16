@@ -212,13 +212,13 @@ public class PlayerStatsWindow : MonoBehaviour
                 return "+";
             case StatType.OverchargeChance:
                 return "+";
-            case StatType.BleedMagnitude:
+            case StatType.BleedPower:
                 return "+";
-            case StatType.IgniteMagnitude:
+            case StatType.IgnitePower:
                 return "+";
-            case StatType.ChillMagnitude:
+            case StatType.ChillPower:
                 return "+";
-            case StatType.OverchargeMagnitude:
+            case StatType.OverchargePower:
                 return "+";
             
             default:

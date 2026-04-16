@@ -199,6 +199,10 @@ MonoBehaviour:
     m_Key: description.resistance5
     m_Metadata:
       m_Items: []
+  - m_Id: 358944797233152
+    m_Key: description.power1
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

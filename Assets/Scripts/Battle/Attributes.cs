@@ -25,18 +25,18 @@ namespace Battle
         [SerializeField] public List<AttributeScalingModifier> scalingModifiersIntelligence = new List<AttributeScalingModifier>();
         private readonly List<AttributeScalingModifier> _runtimeModifiersIntelligence = new List<AttributeScalingModifier>();
         
-        private float _attributeMagnitude = 1f; 
-        private float _strengthMagnitude = 1f; 
-        private float _dexterityMagnitude = 1f; 
-        private float _intelligenceMagnitude = 1f; 
+        private float _attributePower = 1f; 
+        private float _strengthPower = 1f; 
+        private float _dexterityPower = 1f; 
+        private float _intelligencePower = 1f; 
 
         public void Reset()
         {
             ClearRuntimeModifiers();
-            _attributeMagnitude = 1f;
-            _strengthMagnitude = 1f;
-            _dexterityMagnitude = 1f;
-            _intelligenceMagnitude = 1f;
+            _attributePower = 1f;
+            _strengthPower = 1f;
+            _dexterityPower = 1f;
+            _intelligencePower = 1f;
         }
         
         public void ClearRuntimeModifiers()
@@ -109,17 +109,17 @@ namespace Battle
             }
         }
 
-        public void ChangeAttributeMagnitude(AttributeType attributeType, float multiplier)
+        public void ChangeAttributePower(AttributeType attributeType, float multiplier)
         {
             switch (attributeType)
             {
-                case AttributeType.Strength: _strengthMagnitude *= multiplier;
+                case AttributeType.Strength: _strengthPower *= multiplier;
                     break;
-                case AttributeType.Dexterity: _dexterityMagnitude *= multiplier;
+                case AttributeType.Dexterity: _dexterityPower *= multiplier;
                     break;
-                case AttributeType.Intelligence: _intelligenceMagnitude *= multiplier;
+                case AttributeType.Intelligence: _intelligencePower *= multiplier;
                     break;
-                case AttributeType.AllAttributes: _attributeMagnitude *= multiplier;
+                case AttributeType.AllAttributes: _attributePower *= multiplier;
                     break;
             }
         }
@@ -140,15 +140,15 @@ namespace Battle
                 return;
             }
 
-            float localMagnitude = attributeType switch
+            float localPower = attributeType switch
             {
-                AttributeType.Strength => _strengthMagnitude,
-                AttributeType.Dexterity => _dexterityMagnitude,
-                AttributeType.Intelligence => _intelligenceMagnitude,
+                AttributeType.Strength => _strengthPower,
+                AttributeType.Dexterity => _dexterityPower,
+                AttributeType.Intelligence => _intelligencePower,
                 _ => 1f
             };
-            localMagnitude += _attributeMagnitude - 1f;
-            baseUnitModifiers.ChangeModifierValue(modifierContainer * stacks * localMagnitude);
+            localPower += _attributePower - 1f;
+            baseUnitModifiers.ChangeModifierValue(modifierContainer * stacks * localPower);
         }
     }
 }

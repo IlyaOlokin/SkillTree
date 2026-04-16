@@ -18,12 +18,12 @@ public enum StatType
     PoisonDamage = 10,
     
     // Negative Effects
-    AilmentMagnitude  = 11,
+    AilmentPower  = 11,
     
-    IgniteMagnitude = 12,
-    ChillMagnitude = 13,
-    OverchargeMagnitude = 14,
-    BleedMagnitude = 15,
+    IgnitePower = 12,
+    ChillPower = 13,
+    OverchargePower = 14,
+    BleedPower = 15,
     
     IgniteChance = 38,
     ChillChance = 39,
@@ -36,12 +36,12 @@ public enum StatType
     OverchargeAvoidanceChance = 49,
     BleedMitigation = 50,
 
-    // Fixed-effect debuffs (separate from ailments, not affected by AilmentMagnitude/AilmentGuard)
+    // Fixed-effect debuffs (separate from ailments, not affected by AilmentPower/AilmentGuard)
     SunderChance = 53,
-    SunderMagnitude = 54,
+    SunderPower = 54,
     SunderMitigation = 55,
     DistractChance = 56,
-    DistractMagnitude = 57,
+    DistractPower = 57,
     DistractMitigation = 58,
     
     // Crit
@@ -60,7 +60,7 @@ public enum StatType
     MaximumHealth = 22,
     HealthRegenerationPerSecond = 31,
     BarrierCount = 32,
-    BarrierPower = 33,
+    BarrierCapacity = 33,
     BarrierRegenerationSpeed = 34,
     BarrierDamageTypeMask = 35,
     LifeSteal = 36,

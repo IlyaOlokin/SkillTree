@@ -54,8 +54,8 @@ namespace Battle
         private static float CalculateArmorReduction(DamageInfo damageInfo, Unit defender)
         {
             float mitigation = Mathf.Clamp01(defender.BaseUnitModifiers.GetStatValue(StatType.SunderMitigation));
-            float magnitude = Mathf.Max(0f, 1f + damageInfo.BaseUnitModifiers.GetStatValue(StatType.SunderMagnitude));
-            return BASE_REDUCED_ARMOR * magnitude * (1f - mitigation);
+            float power = Mathf.Max(0f, 1f + damageInfo.BaseUnitModifiers.GetStatValue(StatType.SunderPower));
+            return BASE_REDUCED_ARMOR * power * (1f - mitigation);
         }
 
         public static void Apply(Unit _, DamageInfo damageInfo, Unit defender)

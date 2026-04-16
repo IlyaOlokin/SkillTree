@@ -12,13 +12,13 @@ public static class StatCalculator
         StatType.CritChance,
         StatType.CritDamageBonus,
         StatType.SunderChance,
-        StatType.SunderMagnitude,
+        StatType.SunderPower,
         StatType.DistractChance,
-        StatType.DistractMagnitude,
-        StatType.IgniteMagnitude,
-        StatType.ChillMagnitude,
-        StatType.OverchargeMagnitude,
-        StatType.BleedMagnitude
+        StatType.DistractPower,
+        StatType.IgnitePower,
+        StatType.ChillPower,
+        StatType.OverchargePower,
+        StatType.BleedPower
     };
 
     public static void RecalculateStats(Unit unit, List<Modifier> mods)
@@ -92,7 +92,7 @@ public static class StatCalculator
     {
         baseUnitModifiers.MergeModifier(StatType.Armor, baseUnitModifiers.GetModifier(StatType.Defence));
         baseUnitModifiers.MergeModifier(StatType.Evasion, baseUnitModifiers.GetModifier(StatType.Defence));
-        baseUnitModifiers.MergeModifier(StatType.BarrierPower, baseUnitModifiers.GetModifier(StatType.Defence));
+        baseUnitModifiers.MergeModifier(StatType.BarrierCapacity, baseUnitModifiers.GetModifier(StatType.Defence));
         baseUnitModifiers.MergeModifier(StatType.BlockChance, baseUnitModifiers.GetModifier(StatType.Defence));
         
         baseUnitModifiers.ClearModifier(StatType.Defence);
@@ -100,12 +100,12 @@ public static class StatCalculator
     
     public static void MergeAilmentModifiers(BaseUnitModifiers baseUnitModifiers)
     {
-        baseUnitModifiers.MergeModifier(StatType.IgniteMagnitude, baseUnitModifiers.GetModifier(StatType.AilmentMagnitude));
-        baseUnitModifiers.MergeModifier(StatType.ChillMagnitude, baseUnitModifiers.GetModifier(StatType.AilmentMagnitude));
-        baseUnitModifiers.MergeModifier(StatType.OverchargeMagnitude, baseUnitModifiers.GetModifier(StatType.AilmentMagnitude));
-        baseUnitModifiers.MergeModifier(StatType.BleedMagnitude, baseUnitModifiers.GetModifier(StatType.AilmentMagnitude));
+        baseUnitModifiers.MergeModifier(StatType.IgnitePower, baseUnitModifiers.GetModifier(StatType.AilmentPower));
+        baseUnitModifiers.MergeModifier(StatType.ChillPower, baseUnitModifiers.GetModifier(StatType.AilmentPower));
+        baseUnitModifiers.MergeModifier(StatType.OverchargePower, baseUnitModifiers.GetModifier(StatType.AilmentPower));
+        baseUnitModifiers.MergeModifier(StatType.BleedPower, baseUnitModifiers.GetModifier(StatType.AilmentPower));
         
-        baseUnitModifiers.ClearModifier(StatType.AilmentMagnitude);
+        baseUnitModifiers.ClearModifier(StatType.AilmentPower);
         
         baseUnitModifiers.MergeModifier(StatType.IgniteMitigation, baseUnitModifiers.GetModifier(StatType.AilmentGuard));
         baseUnitModifiers.MergeModifier(StatType.ChillDurationReduction, baseUnitModifiers.GetModifier(StatType.AilmentGuard));

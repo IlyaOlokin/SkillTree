@@ -306,220 +306,100 @@ MonoBehaviour:
     m_Localized: You have no Poison Damage
     m_Metadata:
       m_Items: []
-  - m_Id: 7780251603003
-    m_Localized: '[[0]] to {ailmentMagnitude|Ailment Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603004
-    m_Localized: '[[0]]% increased {ailmentMagnitude|Ailment Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603005
-    m_Localized: '[[0]]% decreased {ailmentMagnitude|Ailment Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603006
-    m_Localized: '[[0]]% more {ailmentMagnitude|Ailment Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603007
-    m_Localized: '[[0]]% less {ailmentMagnitude|Ailment Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603008
-    m_Localized: You have no {ailmentMagnitude|Ailment Magnitude}
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603009
-    m_Localized: '[[0]] to {igniteMagnitude|Ignite Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603010
-    m_Localized: '[[0]]% increased {igniteMagnitude|Ignite Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603011
-    m_Localized: '[[0]]% decreased {igniteMagnitude|Ignite Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603012
-    m_Localized: '[[0]]% more {igniteMagnitude|Ignite Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603013
-    m_Localized: '[[0]]% less {igniteMagnitude|Ignite Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603014
-    m_Localized: You have no {igniteMagnitude|Ignite Magnitude}
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603015
-    m_Localized: '[[0]] to {chillMagnitude|Chill Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603016
-    m_Localized: '[[0]]% increased {chillMagnitude|Chill Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603017
-    m_Localized: '[[0]]% decreased {chillMagnitude|Chill Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603018
-    m_Localized: '[[0]]% more {chillMagnitude|Chill Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603019
-    m_Localized: '[[0]]% less {chillMagnitude|Chill Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603020
-    m_Localized: You have no {chillMagnitude|Chill Magnitude}
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603021
-    m_Localized: '[[0]] to {overchargeMagnitude|Overcharge Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603022
-    m_Localized: '[[0]]% increased {overchargeMagnitude|Overcharge Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603023
-    m_Localized: '[[0]]% decreased {overchargeMagnitude|Overcharge Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603024
-    m_Localized: '[[0]]% more {overchargeMagnitude|Overcharge Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603025
-    m_Localized: '[[0]]% less {overchargeMagnitude|Overcharge Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603026
-    m_Localized: You have no {overchargeMagnitude|Overcharge Magnitude}
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603027
-    m_Localized: '[[0]] to {bleedMagnitude|Bleed Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603028
-    m_Localized: '[[0]]% increased {bleedMagnitude|Bleed Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603029
-    m_Localized: '[[0]]% decreased {bleedMagnitude|Bleed Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603030
-    m_Localized: '[[0]]% more {bleedMagnitude|Bleed Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603031
-    m_Localized: '[[0]]% less {bleedMagnitude|Bleed Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603032
-    m_Localized: You have no {bleedMagnitude|Bleed Magnitude}
-    m_Metadata:
-      m_Items: []
   - m_Id: 7780251603033
-    m_Localized: '[[0]] to {igniteChance|Ignite Chance}'
+    m_Localized: '[[0]] to {ignite|Ignite} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603034
-    m_Localized: '[[0]]% increased {igniteChance|Ignite Chance}'
+    m_Localized: '[[0]]% increased {ignite|Ignite} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603035
-    m_Localized: '[[0]]% decreased {igniteChance|Ignite Chance}'
+    m_Localized: '[[0]]% decreased {ignite|Ignite} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603036
-    m_Localized: '[[0]]% more {igniteChance|Ignite Chance}'
+    m_Localized: '[[0]]% more {ignite|Ignite} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603037
-    m_Localized: '[[0]]% less {igniteChance|Ignite Chance}'
+    m_Localized: '[[0]]% less {ignite|Ignite} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603038
-    m_Localized: You have no {igniteChance|Ignite Chance}
+    m_Localized: You have no {ignite|Ignite} Chance
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603039
-    m_Localized: '[[0]] to {chillChance|Chill Chance}'
+    m_Localized: '[[0]] to {chill|Chill} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603040
-    m_Localized: '[[0]]% increased {chillChance|Chill Chance}'
+    m_Localized: '[[0]]% increased {chill|Chill} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603041
-    m_Localized: '[[0]]% decreased {chillChance|Chill Chance}'
+    m_Localized: '[[0]]% decreased {chill|Chill} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603042
-    m_Localized: '[[0]]% more {chillChance|Chill Chance}'
+    m_Localized: '[[0]]% more {chill|Chill} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603043
-    m_Localized: '[[0]]% less {chillChance|Chill Chance}'
+    m_Localized: '[[0]]% less {chill|Chill} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603044
-    m_Localized: You have no {chillChance|Chill Chance}
+    m_Localized: You have no {chill|Chill} Chance
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603045
-    m_Localized: '[[0]] to {overchargeChance|Overcharge Chance}'
+    m_Localized: '[[0]] to {overcharge|Overcharge} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603046
-    m_Localized: '[[0]]% increased {overchargeChance|Overcharge Chance}'
+    m_Localized: '[[0]]% increased {overcharge|Overcharge} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603047
-    m_Localized: '[[0]]% decreased {overchargeChance|Overcharge Chance}'
+    m_Localized: '[[0]]% decreased {overcharge|Overcharge} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603048
-    m_Localized: '[[0]]% more {overchargeChance|Overcharge Chance}'
+    m_Localized: '[[0]]% more {overcharge|Overcharge} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603049
-    m_Localized: '[[0]]% less {overchargeChance|Overcharge Chance}'
+    m_Localized: '[[0]]% less {overcharge|Overcharge} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603050
-    m_Localized: You have no {overchargeChance|Overcharge Chance}
+    m_Localized: You have no {overcharge|Overcharge} Chance
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603051
-    m_Localized: '[[0]] to {bleedChance|Bleed Chance}'
+    m_Localized: '[[0]] to {bleed|Bleed} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603052
-    m_Localized: '[[0]]% increased {bleedChance|Bleed Chance}'
+    m_Localized: '[[0]]% increased {bleed|Bleed} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603053
-    m_Localized: '[[0]]% decreased {bleedChance|Bleed Chance}'
+    m_Localized: '[[0]]% decreased {bleed|Bleed} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603054
-    m_Localized: '[[0]]% more {bleedChance|Bleed Chance}'
+    m_Localized: '[[0]]% more {bleed|Bleed} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603055
-    m_Localized: '[[0]]% less {bleedChance|Bleed Chance}'
+    m_Localized: '[[0]]% less {bleed|Bleed} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603056
-    m_Localized: You have no {bleedChance|Bleed Chance}
+    m_Localized: You have no {bleed|Bleed} Chance
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603057
@@ -643,51 +523,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797269
-    m_Localized: '[[0]] to {sunderChance|Sunder Chance}'
+    m_Localized: '[[0]] to {sunder|Sunder} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797270
-    m_Localized: '[[0]]% increased {sunderChance|Sunder Chance}'
+    m_Localized: '[[0]]% increased {sunder|Sunder} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797271
-    m_Localized: '[[0]]% decreased {sunderChance|Sunder Chance}'
+    m_Localized: '[[0]]% decreased {sunder|Sunder} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797272
-    m_Localized: '[[0]]% more {sunderChance|Sunder Chance}'
+    m_Localized: '[[0]]% more {sunder|Sunder} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797273
-    m_Localized: '[[0]]% less {sunderChance|Sunder Chance}'
+    m_Localized: '[[0]]% less {sunder|Sunder} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797274
-    m_Localized: You have no {sunderChance|Sunder Chance}
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797275
-    m_Localized: '[[0]] to {sunderMagnitude|Sunder Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797276
-    m_Localized: '[[0]]% increased {sunderMagnitude|Sunder Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797277
-    m_Localized: '[[0]]% decreased {sunderMagnitude|Sunder Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797278
-    m_Localized: '[[0]]% more {sunderMagnitude|Sunder Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797279
-    m_Localized: '[[0]]% less {sunderMagnitude|Sunder Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797280
-    m_Localized: You have no {sunderMagnitude|Sunder Magnitude}
+    m_Localized: You have no {sunder|Sunder} Chance
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797281
@@ -715,51 +571,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797287
-    m_Localized: '[[0]] to {distractChance|Distract Chance}'
+    m_Localized: '[[0]] to {distract|Distract} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797288
-    m_Localized: '[[0]]% increased {distractChance|Distract Chance}'
+    m_Localized: '[[0]]% increased {distract|Distract} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797289
-    m_Localized: '[[0]]% decreased {distractChance|Distract Chance}'
+    m_Localized: '[[0]]% decreased {distract|Distract} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797290
-    m_Localized: '[[0]]% more {distractChance|Distract Chance}'
+    m_Localized: '[[0]]% more {distract|Distract} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797291
-    m_Localized: '[[0]]% less {distractChance|Distract Chance}'
+    m_Localized: '[[0]]% less {distract|Distract} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797292
-    m_Localized: You have no {distractChance|Distract Chance}
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797293
-    m_Localized: '[[0]] to {distractMagnitude|Distract Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797294
-    m_Localized: '[[0]]% increased {distractMagnitude|Distract Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797295
-    m_Localized: '[[0]]% decreased {distractMagnitude|Distract Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797296
-    m_Localized: '[[0]]% more {distractMagnitude|Distract Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797297
-    m_Localized: '[[0]]% less {distractMagnitude|Distract Magnitude}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797298
-    m_Localized: You have no {distractMagnitude|Distract Magnitude}
+    m_Localized: You have no {distract|Distract} Chance
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797299
@@ -787,27 +619,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797305
-    m_Localized: '[[0]] to {critChance|Crit Chance}'
+    m_Localized: '[[0]] to {crit|Crit} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797306
-    m_Localized: '[[0]]% increased {critChance|Crit Chance}'
+    m_Localized: '[[0]]% increased {crit|Crit} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797307
-    m_Localized: '[[0]]% decreased {critChance|Crit Chance}'
+    m_Localized: '[[0]]% decreased {crit|Crit} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797308
-    m_Localized: '[[0]]% more {critChance|Crit Chance}'
+    m_Localized: '[[0]]% more {crit|Crit} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797309
-    m_Localized: '[[0]]% less {critChance|Crit Chance}'
+    m_Localized: '[[0]]% less {crit|Crit} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797310
-    m_Localized: You have no {critChance|Crit Chance}
+    m_Localized: You have no {crit|Crit} Chance
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797311
@@ -859,27 +691,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797323
-    m_Localized: '[[0]] to {blockChance|Block Chance}'
+    m_Localized: '[[0]] to {block|Block} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797324
-    m_Localized: '[[0]]% increased {blockChance|Block Chance}'
+    m_Localized: '[[0]]% increased {block|Block} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797325
-    m_Localized: '[[0]]% decreased {blockChance|Block Chance}'
+    m_Localized: '[[0]]% decreased {block|Block} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797326
-    m_Localized: '[[0]]% more {blockChance|Block Chance}'
+    m_Localized: '[[0]]% more {block|Block} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797327
-    m_Localized: '[[0]]% less {blockChance|Block Chance}'
+    m_Localized: '[[0]]% less {block|Block} Chance'
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797328
-    m_Localized: You have no {blockChance|Block Chance}
+    m_Localized: You have no {block|Block} Chance
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797329
@@ -1002,28 +834,8 @@ MonoBehaviour:
     m_Localized: You have no {barrierCount|Barrier Count}
     m_Metadata:
       m_Items: []
-  - m_Id: 7780259991565
-    m_Localized: '[[0]] to {barrierPower|Barrier Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780259991566
-    m_Localized: '[[0]]% increased {barrierPower|Barrier Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780259991567
-    m_Localized: '[[0]]% decreased {barrierPower|Barrier Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780259991568
-    m_Localized: '[[0]]% more {barrierPower|Barrier Power}'
-    m_Metadata:
-      m_Items: []
   - m_Id: 7780259991569
-    m_Localized: '[[0]]% less {barrierPower|Barrier Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780259991570
-    m_Localized: You have no {barrierPower|Barrier Power}
+    m_Localized: '[[0]]% less {barrierCapacity|Barrier Capacity}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991571
@@ -1410,6 +1222,194 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 7780259991666
     m_Localized: You have no {intelligence|Intelligence}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603003
+    m_Localized: '[[0]] to {ailment|Ailment} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603004
+    m_Localized: '[[0]]% increased {ailment|Ailment} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603005
+    m_Localized: '[[0]]% decreased {ailment|Ailment} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603006
+    m_Localized: '[[0]]% more {ailment|Ailment} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603007
+    m_Localized: '[[0]]% less {ailment|Ailment} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603008
+    m_Localized: You have no {ailment|Ailment} {power|Power}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603009
+    m_Localized: '[[0]] to {ignite|Ignite} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603010
+    m_Localized: '[[0]]% increased {ignite|Ignite} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603011
+    m_Localized: '[[0]]% decreased {ignite|Ignite} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603012
+    m_Localized: '[[0]]% more {ignite|Ignite} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603013
+    m_Localized: '[[0]]% less {ignite|Ignite} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603014
+    m_Localized: You have no {ignite|Ignite} {power|Power}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603015
+    m_Localized: '[[0]] to {chill|Chill} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603016
+    m_Localized: '[[0]]% increased {chill|Chill} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603017
+    m_Localized: '[[0]]% decreased {chill|Chill} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603018
+    m_Localized: '[[0]]% more {chill|Chill} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603019
+    m_Localized: '[[0]]% less {chill|Chill} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603020
+    m_Localized: You have no {chill|Chill} {power|Power}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603021
+    m_Localized: '[[0]] to {overcharge|Overcharge} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603022
+    m_Localized: '[[0]]% increased {overcharge|Overcharge} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603023
+    m_Localized: '[[0]]% decreased {overcharge|Overcharge} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603024
+    m_Localized: '[[0]]% more {overcharge|Overcharge} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603025
+    m_Localized: '[[0]]% less {overcharge|Overcharge} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603026
+    m_Localized: You have no {overcharge|Overcharge} {power|Power}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603027
+    m_Localized: '[[0]] to {bleed|Bleed} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603028
+    m_Localized: '[[0]]% increased {bleed|Bleed} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603029
+    m_Localized: '[[0]]% decreased {bleed|Bleed} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603030
+    m_Localized: '[[0]]% more {bleed|Bleed} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603031
+    m_Localized: '[[0]]% less {bleed|Bleed} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603032
+    m_Localized: You have no {bleed|Bleed} {power|Power}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797275
+    m_Localized: '[[0]] to {sunder|Sunder} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797276
+    m_Localized: '[[0]]% increased {sunder|Sunder} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797277
+    m_Localized: '[[0]]% decreased {sunder|Sunder} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797278
+    m_Localized: '[[0]]% more {sunder|Sunder} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797279
+    m_Localized: '[[0]]% less {sunder|Sunder} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797280
+    m_Localized: You have no {sunder|Sunder} {power|Power}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797293
+    m_Localized: '[[0]] to {distract|Distract} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797294
+    m_Localized: '[[0]]% increased {distract|Distract} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797295
+    m_Localized: '[[0]]% decreased {distract|Distract} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797296
+    m_Localized: '[[0]]% more {distract|Distract} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797297
+    m_Localized: '[[0]]% less {distract|Distract} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797298
+    m_Localized: You have no {distract|Distract} {power|Power}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991565
+    m_Localized: '[[0]] to {barrierCapacity|Barrier Capacity}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991566
+    m_Localized: '[[0]]% increased {barrierCapacity|Barrier Capacity}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991567
+    m_Localized: '[[0]]% decreased {barrierCapacity|Barrier Capacity}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991568
+    m_Localized: '[[0]]% more {barrierCapacity|Barrier Capacity}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991570
+    m_Localized: You have no {barrierCapacity|Barrier Capacity}
     m_Metadata:
       m_Items: []
   references:

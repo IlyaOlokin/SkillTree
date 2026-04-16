@@ -50,9 +50,9 @@ namespace Battle
         private float CalculateTotalDamage(DamageInfo damageInfo, Unit defender, float fireDamageDealt)
         {
             float mitigation = Mathf.Min(1f, defender.BaseUnitModifiers.GetStatValue(StatType.IgniteMitigation));
-            float magnitude = BASE_DAMAGE_PERCENTAGE *
-                              (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.IgniteMagnitude));
-            return fireDamageDealt * magnitude * (1f - mitigation);
+            float power = BASE_DAMAGE_PERCENTAGE *
+                (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.IgnitePower));
+            return fireDamageDealt * power * (1f - mitigation);
         }
 
         public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)

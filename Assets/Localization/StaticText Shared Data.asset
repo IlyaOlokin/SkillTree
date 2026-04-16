@@ -20,6 +20,11 @@ MonoBehaviour:
       Label
     m_Metadata:
       m_Items: []
+  - m_Id: 310077879881728
+    m_Key: SampleScene/SkillTreeUICanvas/PlayerStatsWindow/Background/Viewport/Content/Barrier/Barrier
+      Power Label
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

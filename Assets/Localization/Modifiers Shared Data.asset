@@ -304,123 +304,123 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603003
-    m_Key: modifier.container.added.AilmentMagnitude
+    m_Key: modifier.container.added.AilmentPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603004
-    m_Key: modifier.container.increased.AilmentMagnitude
+    m_Key: modifier.container.increased.AilmentPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603005
-    m_Key: modifier.container.decreased.AilmentMagnitude
+    m_Key: modifier.container.decreased.AilmentPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603006
-    m_Key: modifier.container.more.AilmentMagnitude
+    m_Key: modifier.container.more.AilmentPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603007
-    m_Key: modifier.container.less.AilmentMagnitude
+    m_Key: modifier.container.less.AilmentPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603008
-    m_Key: modifier.container.none.AilmentMagnitude
+    m_Key: modifier.container.none.AilmentPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603009
-    m_Key: modifier.container.added.IgniteMagnitude
+    m_Key: modifier.container.added.IgnitePower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603010
-    m_Key: modifier.container.increased.IgniteMagnitude
+    m_Key: modifier.container.increased.IgnitePower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603011
-    m_Key: modifier.container.decreased.IgniteMagnitude
+    m_Key: modifier.container.decreased.IgnitePower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603012
-    m_Key: modifier.container.more.IgniteMagnitude
+    m_Key: modifier.container.more.IgnitePower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603013
-    m_Key: modifier.container.less.IgniteMagnitude
+    m_Key: modifier.container.less.IgnitePower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603014
-    m_Key: modifier.container.none.IgniteMagnitude
+    m_Key: modifier.container.none.IgnitePower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603015
-    m_Key: modifier.container.added.ChillMagnitude
+    m_Key: modifier.container.added.ChillPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603016
-    m_Key: modifier.container.increased.ChillMagnitude
+    m_Key: modifier.container.increased.ChillPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603017
-    m_Key: modifier.container.decreased.ChillMagnitude
+    m_Key: modifier.container.decreased.ChillPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603018
-    m_Key: modifier.container.more.ChillMagnitude
+    m_Key: modifier.container.more.ChillPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603019
-    m_Key: modifier.container.less.ChillMagnitude
+    m_Key: modifier.container.less.ChillPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603020
-    m_Key: modifier.container.none.ChillMagnitude
+    m_Key: modifier.container.none.ChillPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603021
-    m_Key: modifier.container.added.OverchargeMagnitude
+    m_Key: modifier.container.added.OverchargePower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603022
-    m_Key: modifier.container.increased.OverchargeMagnitude
+    m_Key: modifier.container.increased.OverchargePower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603023
-    m_Key: modifier.container.decreased.OverchargeMagnitude
+    m_Key: modifier.container.decreased.OverchargePower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603024
-    m_Key: modifier.container.more.OverchargeMagnitude
+    m_Key: modifier.container.more.OverchargePower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603025
-    m_Key: modifier.container.less.OverchargeMagnitude
+    m_Key: modifier.container.less.OverchargePower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603026
-    m_Key: modifier.container.none.OverchargeMagnitude
+    m_Key: modifier.container.none.OverchargePower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603027
-    m_Key: modifier.container.added.BleedMagnitude
+    m_Key: modifier.container.added.BleedPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603028
-    m_Key: modifier.container.increased.BleedMagnitude
+    m_Key: modifier.container.increased.BleedPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603029
-    m_Key: modifier.container.decreased.BleedMagnitude
+    m_Key: modifier.container.decreased.BleedPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603030
-    m_Key: modifier.container.more.BleedMagnitude
+    m_Key: modifier.container.more.BleedPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603031
-    m_Key: modifier.container.less.BleedMagnitude
+    m_Key: modifier.container.less.BleedPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603032
-    m_Key: modifier.container.none.BleedMagnitude
+    m_Key: modifier.container.none.BleedPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603033
@@ -664,27 +664,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797275
-    m_Key: modifier.container.added.SunderMagnitude
+    m_Key: modifier.container.added.SunderPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797276
-    m_Key: modifier.container.increased.SunderMagnitude
+    m_Key: modifier.container.increased.SunderPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797277
-    m_Key: modifier.container.decreased.SunderMagnitude
+    m_Key: modifier.container.decreased.SunderPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797278
-    m_Key: modifier.container.more.SunderMagnitude
+    m_Key: modifier.container.more.SunderPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797279
-    m_Key: modifier.container.less.SunderMagnitude
+    m_Key: modifier.container.less.SunderPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797280
-    m_Key: modifier.container.none.SunderMagnitude
+    m_Key: modifier.container.none.SunderPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797281
@@ -736,27 +736,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797293
-    m_Key: modifier.container.added.DistractMagnitude
+    m_Key: modifier.container.added.DistractPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797294
-    m_Key: modifier.container.increased.DistractMagnitude
+    m_Key: modifier.container.increased.DistractPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797295
-    m_Key: modifier.container.decreased.DistractMagnitude
+    m_Key: modifier.container.decreased.DistractPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797296
-    m_Key: modifier.container.more.DistractMagnitude
+    m_Key: modifier.container.more.DistractPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797297
-    m_Key: modifier.container.less.DistractMagnitude
+    m_Key: modifier.container.less.DistractPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797298
-    m_Key: modifier.container.none.DistractMagnitude
+    m_Key: modifier.container.none.DistractPower
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797299
@@ -1000,27 +1000,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991565
-    m_Key: modifier.container.added.BarrierPower
+    m_Key: modifier.container.added.BarrierCapacity
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991566
-    m_Key: modifier.container.increased.BarrierPower
+    m_Key: modifier.container.increased.BarrierCapacity
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991567
-    m_Key: modifier.container.decreased.BarrierPower
+    m_Key: modifier.container.decreased.BarrierCapacity
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991568
-    m_Key: modifier.container.more.BarrierPower
+    m_Key: modifier.container.more.BarrierCapacity
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991569
-    m_Key: modifier.container.less.BarrierPower
+    m_Key: modifier.container.less.BarrierCapacity
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991570
-    m_Key: modifier.container.none.BarrierPower
+    m_Key: modifier.container.none.BarrierCapacity
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991571
