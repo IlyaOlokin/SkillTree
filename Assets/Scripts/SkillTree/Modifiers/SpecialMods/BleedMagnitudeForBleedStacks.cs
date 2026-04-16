@@ -29,7 +29,7 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return GameLocalization.Format(
+            return GameLocalization.FormatModifier(
                 "modifier.bleedMagnitudeForStacks.description",
                 "+[[0]]% Bleed Magnitude per Bleed stack on target",
                 AddedValue * 100f);

@@ -29,23 +29,23 @@ namespace SkillTree
 
             if (multiplier <= 0f)
             {
-                return GameLocalization.Format(
+                return GameLocalization.FormatModifier(
                     "modifier.attributeMagnitude.noBonuses",
                     "[[0]] provides no bonuses",
                     localizedAttribute);
             }
 
             string effectiveness = percentChange >= 0f
-                ? GameLocalization.Format(
+                ? GameLocalization.FormatModifier(
                     "modifier.attributeMagnitude.moreEffective",
                     "[[0]]% more effective",
                     percentChange)
-                : GameLocalization.Format(
+                : GameLocalization.FormatModifier(
                     "modifier.attributeMagnitude.lessEffective",
                     "[[0]]% less effective",
                     -percentChange);
 
-            return GameLocalization.Format(
+            return GameLocalization.FormatModifier(
                 "modifier.attributeMagnitude.description",
                 "Each bonus to [[0]] is [[1]]",
                 localizedAttribute,

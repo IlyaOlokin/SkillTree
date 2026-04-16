@@ -44,7 +44,11 @@ namespace TooltipSystem
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            HideCurrentTooltip();
+            if (showAsRootTooltip)
+            {
+                HideCurrentTooltip();
+            }
+
             currentHoveredLinkId = null;
         }
 
@@ -61,7 +65,11 @@ namespace TooltipSystem
             int linkIndex = TMP_TextUtilities.FindIntersectingLink(textComponent, eventData.position, eventCamera);
             if (linkIndex < 0)
             {
-                HideCurrentTooltip();
+                if (showAsRootTooltip)
+                {
+                    HideCurrentTooltip();
+                }
+
                 currentHoveredLinkId = null;
                 return;
             }

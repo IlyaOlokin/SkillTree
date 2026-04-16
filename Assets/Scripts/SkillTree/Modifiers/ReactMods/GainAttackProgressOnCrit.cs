@@ -29,7 +29,7 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return GameLocalization.Format(
+            return GameLocalization.FormatModifier(
                 "modifier.gainAttackProgressOnCrit.description",
                 "On Crit: gain [[0]]% Attack Progress",
                 attackProgressGain * 100f);

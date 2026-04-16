@@ -33,7 +33,7 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return GameLocalization.Format(
+            return GameLocalization.FormatModifier(
                 "modifier.igniteBurstOnHit.description",
                 "On Hit: trigger [[0]]% of current {ignite|Ignite} damage instantly",
                 burstPercent * 100f);

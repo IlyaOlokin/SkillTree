@@ -24,7 +24,7 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return GameLocalization.Format(
+            return GameLocalization.FormatModifier(
                 "modifier.dualWielding.description",
                 "Dual Wielding: when attack progress reaches [[0]]%, perform an extra attack.",
                 triggerThreshold * 100f);

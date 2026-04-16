@@ -23,7 +23,7 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return GameLocalization.Get(
+            return GameLocalization.GetModifier(
                 "modifier.evadeToMitigationCharges.description",
                 "Each Evade grants a charge: take 10% less damage from the next hit");
         }

@@ -1,0 +1,1420 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Modifiers Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: Modifiers
+  m_TableCollectionNameGuidString: 7a62af1d3b21ccd43838ec178b1eadf2
+  m_Entries:
+  - m_Id: 46525452288
+    m_Key: modifier.container.added.Armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 85905772544
+    m_Key: modifier.container.increased.Armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 124103299072
+    m_Key: modifier.container.decreased.Armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 292894674944
+    m_Key: modifier.container.more.Armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 307746705408
+    m_Key: modifier.container.less.Armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 319645945856
+    m_Key: modifier.container.none.Armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3497212907520
+    m_Key: modifier.container.added.Evasion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3497212907521
+    m_Key: modifier.container.increased.Evasion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3497212907522
+    m_Key: modifier.container.decreased.Evasion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3497212907523
+    m_Key: modifier.container.more.Evasion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3497212907524
+    m_Key: modifier.container.less.Evasion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3860179587072
+    m_Key: modifier.container.none.Evasion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780222242816
+    m_Key: modifier.container.added.Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602944
+    m_Key: modifier.container.increased.Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602945
+    m_Key: modifier.container.decreased.Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602946
+    m_Key: modifier.container.more.Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602947
+    m_Key: modifier.container.less.Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602948
+    m_Key: modifier.container.none.Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602949
+    m_Key: modifier.container.added.ElementalDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602950
+    m_Key: modifier.container.increased.ElementalDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602951
+    m_Key: modifier.container.decreased.ElementalDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602952
+    m_Key: modifier.container.more.ElementalDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602953
+    m_Key: modifier.container.less.ElementalDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602954
+    m_Key: modifier.container.none.ElementalDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602955
+    m_Key: modifier.container.added.MysticDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602956
+    m_Key: modifier.container.increased.MysticDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602957
+    m_Key: modifier.container.decreased.MysticDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602958
+    m_Key: modifier.container.more.MysticDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602959
+    m_Key: modifier.container.less.MysticDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602960
+    m_Key: modifier.container.none.MysticDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602961
+    m_Key: modifier.container.added.PhysicalDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602962
+    m_Key: modifier.container.increased.PhysicalDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602963
+    m_Key: modifier.container.decreased.PhysicalDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602964
+    m_Key: modifier.container.more.PhysicalDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602965
+    m_Key: modifier.container.less.PhysicalDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602966
+    m_Key: modifier.container.none.PhysicalDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602967
+    m_Key: modifier.container.added.FireDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602968
+    m_Key: modifier.container.increased.FireDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602969
+    m_Key: modifier.container.decreased.FireDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602970
+    m_Key: modifier.container.more.FireDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602971
+    m_Key: modifier.container.less.FireDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602972
+    m_Key: modifier.container.none.FireDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602973
+    m_Key: modifier.container.added.ColdDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602974
+    m_Key: modifier.container.increased.ColdDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602975
+    m_Key: modifier.container.decreased.ColdDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602976
+    m_Key: modifier.container.more.ColdDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602977
+    m_Key: modifier.container.less.ColdDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602978
+    m_Key: modifier.container.none.ColdDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602979
+    m_Key: modifier.container.added.LightningDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602980
+    m_Key: modifier.container.increased.LightningDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602981
+    m_Key: modifier.container.decreased.LightningDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602982
+    m_Key: modifier.container.more.LightningDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602983
+    m_Key: modifier.container.less.LightningDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602984
+    m_Key: modifier.container.none.LightningDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602985
+    m_Key: modifier.container.added.LightDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602986
+    m_Key: modifier.container.increased.LightDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602987
+    m_Key: modifier.container.decreased.LightDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602988
+    m_Key: modifier.container.more.LightDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602989
+    m_Key: modifier.container.less.LightDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602990
+    m_Key: modifier.container.none.LightDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602991
+    m_Key: modifier.container.added.DarknessDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602992
+    m_Key: modifier.container.increased.DarknessDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602993
+    m_Key: modifier.container.decreased.DarknessDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602994
+    m_Key: modifier.container.more.DarknessDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602995
+    m_Key: modifier.container.less.DarknessDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602996
+    m_Key: modifier.container.none.DarknessDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602997
+    m_Key: modifier.container.added.PoisonDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602998
+    m_Key: modifier.container.increased.PoisonDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602999
+    m_Key: modifier.container.decreased.PoisonDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603000
+    m_Key: modifier.container.more.PoisonDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603001
+    m_Key: modifier.container.less.PoisonDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603002
+    m_Key: modifier.container.none.PoisonDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603003
+    m_Key: modifier.container.added.AilmentMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603004
+    m_Key: modifier.container.increased.AilmentMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603005
+    m_Key: modifier.container.decreased.AilmentMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603006
+    m_Key: modifier.container.more.AilmentMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603007
+    m_Key: modifier.container.less.AilmentMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603008
+    m_Key: modifier.container.none.AilmentMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603009
+    m_Key: modifier.container.added.IgniteMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603010
+    m_Key: modifier.container.increased.IgniteMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603011
+    m_Key: modifier.container.decreased.IgniteMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603012
+    m_Key: modifier.container.more.IgniteMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603013
+    m_Key: modifier.container.less.IgniteMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603014
+    m_Key: modifier.container.none.IgniteMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603015
+    m_Key: modifier.container.added.ChillMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603016
+    m_Key: modifier.container.increased.ChillMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603017
+    m_Key: modifier.container.decreased.ChillMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603018
+    m_Key: modifier.container.more.ChillMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603019
+    m_Key: modifier.container.less.ChillMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603020
+    m_Key: modifier.container.none.ChillMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603021
+    m_Key: modifier.container.added.OverchargeMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603022
+    m_Key: modifier.container.increased.OverchargeMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603023
+    m_Key: modifier.container.decreased.OverchargeMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603024
+    m_Key: modifier.container.more.OverchargeMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603025
+    m_Key: modifier.container.less.OverchargeMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603026
+    m_Key: modifier.container.none.OverchargeMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603027
+    m_Key: modifier.container.added.BleedMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603028
+    m_Key: modifier.container.increased.BleedMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603029
+    m_Key: modifier.container.decreased.BleedMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603030
+    m_Key: modifier.container.more.BleedMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603031
+    m_Key: modifier.container.less.BleedMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603032
+    m_Key: modifier.container.none.BleedMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603033
+    m_Key: modifier.container.added.IgniteChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603034
+    m_Key: modifier.container.increased.IgniteChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603035
+    m_Key: modifier.container.decreased.IgniteChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603036
+    m_Key: modifier.container.more.IgniteChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603037
+    m_Key: modifier.container.less.IgniteChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603038
+    m_Key: modifier.container.none.IgniteChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603039
+    m_Key: modifier.container.added.ChillChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603040
+    m_Key: modifier.container.increased.ChillChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603041
+    m_Key: modifier.container.decreased.ChillChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603042
+    m_Key: modifier.container.more.ChillChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603043
+    m_Key: modifier.container.less.ChillChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603044
+    m_Key: modifier.container.none.ChillChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603045
+    m_Key: modifier.container.added.OverchargeChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603046
+    m_Key: modifier.container.increased.OverchargeChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603047
+    m_Key: modifier.container.decreased.OverchargeChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603048
+    m_Key: modifier.container.more.OverchargeChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603049
+    m_Key: modifier.container.less.OverchargeChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603050
+    m_Key: modifier.container.none.OverchargeChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603051
+    m_Key: modifier.container.added.BleedChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603052
+    m_Key: modifier.container.increased.BleedChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603053
+    m_Key: modifier.container.decreased.BleedChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603054
+    m_Key: modifier.container.more.BleedChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603055
+    m_Key: modifier.container.less.BleedChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603056
+    m_Key: modifier.container.none.BleedChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603057
+    m_Key: modifier.container.added.AilmentGuard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603058
+    m_Key: modifier.container.increased.AilmentGuard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603059
+    m_Key: modifier.container.decreased.AilmentGuard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603060
+    m_Key: modifier.container.more.AilmentGuard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603061
+    m_Key: modifier.container.less.AilmentGuard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603062
+    m_Key: modifier.container.none.AilmentGuard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603063
+    m_Key: modifier.container.added.IgniteMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603064
+    m_Key: modifier.container.increased.IgniteMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603065
+    m_Key: modifier.container.decreased.IgniteMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797248
+    m_Key: modifier.container.more.IgniteMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797249
+    m_Key: modifier.container.less.IgniteMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797250
+    m_Key: modifier.container.none.IgniteMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797251
+    m_Key: modifier.container.added.ChillDurationReduction
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797252
+    m_Key: modifier.container.increased.ChillDurationReduction
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797253
+    m_Key: modifier.container.decreased.ChillDurationReduction
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797254
+    m_Key: modifier.container.more.ChillDurationReduction
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797255
+    m_Key: modifier.container.less.ChillDurationReduction
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797256
+    m_Key: modifier.container.none.ChillDurationReduction
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797257
+    m_Key: modifier.container.added.OverchargeAvoidanceChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797258
+    m_Key: modifier.container.increased.OverchargeAvoidanceChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797259
+    m_Key: modifier.container.decreased.OverchargeAvoidanceChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797260
+    m_Key: modifier.container.more.OverchargeAvoidanceChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797261
+    m_Key: modifier.container.less.OverchargeAvoidanceChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797262
+    m_Key: modifier.container.none.OverchargeAvoidanceChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797263
+    m_Key: modifier.container.added.BleedMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797264
+    m_Key: modifier.container.increased.BleedMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797265
+    m_Key: modifier.container.decreased.BleedMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797266
+    m_Key: modifier.container.more.BleedMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797267
+    m_Key: modifier.container.less.BleedMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797268
+    m_Key: modifier.container.none.BleedMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797269
+    m_Key: modifier.container.added.SunderChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797270
+    m_Key: modifier.container.increased.SunderChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797271
+    m_Key: modifier.container.decreased.SunderChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797272
+    m_Key: modifier.container.more.SunderChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797273
+    m_Key: modifier.container.less.SunderChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797274
+    m_Key: modifier.container.none.SunderChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797275
+    m_Key: modifier.container.added.SunderMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797276
+    m_Key: modifier.container.increased.SunderMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797277
+    m_Key: modifier.container.decreased.SunderMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797278
+    m_Key: modifier.container.more.SunderMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797279
+    m_Key: modifier.container.less.SunderMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797280
+    m_Key: modifier.container.none.SunderMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797281
+    m_Key: modifier.container.added.SunderMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797282
+    m_Key: modifier.container.increased.SunderMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797283
+    m_Key: modifier.container.decreased.SunderMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797284
+    m_Key: modifier.container.more.SunderMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797285
+    m_Key: modifier.container.less.SunderMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797286
+    m_Key: modifier.container.none.SunderMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797287
+    m_Key: modifier.container.added.DistractChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797288
+    m_Key: modifier.container.increased.DistractChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797289
+    m_Key: modifier.container.decreased.DistractChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797290
+    m_Key: modifier.container.more.DistractChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797291
+    m_Key: modifier.container.less.DistractChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797292
+    m_Key: modifier.container.none.DistractChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797293
+    m_Key: modifier.container.added.DistractMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797294
+    m_Key: modifier.container.increased.DistractMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797295
+    m_Key: modifier.container.decreased.DistractMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797296
+    m_Key: modifier.container.more.DistractMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797297
+    m_Key: modifier.container.less.DistractMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797298
+    m_Key: modifier.container.none.DistractMagnitude
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797299
+    m_Key: modifier.container.added.DistractMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797300
+    m_Key: modifier.container.increased.DistractMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797301
+    m_Key: modifier.container.decreased.DistractMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797302
+    m_Key: modifier.container.more.DistractMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797303
+    m_Key: modifier.container.less.DistractMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797304
+    m_Key: modifier.container.none.DistractMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797305
+    m_Key: modifier.container.added.CritChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797306
+    m_Key: modifier.container.increased.CritChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797307
+    m_Key: modifier.container.decreased.CritChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797308
+    m_Key: modifier.container.more.CritChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797309
+    m_Key: modifier.container.less.CritChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797310
+    m_Key: modifier.container.none.CritChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797311
+    m_Key: modifier.container.added.CritDamageBonus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797312
+    m_Key: modifier.container.increased.CritDamageBonus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797313
+    m_Key: modifier.container.decreased.CritDamageBonus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797314
+    m_Key: modifier.container.more.CritDamageBonus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797315
+    m_Key: modifier.container.less.CritDamageBonus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797316
+    m_Key: modifier.container.none.CritDamageBonus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797317
+    m_Key: modifier.container.added.AttackSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797318
+    m_Key: modifier.container.increased.AttackSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797319
+    m_Key: modifier.container.decreased.AttackSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797320
+    m_Key: modifier.container.more.AttackSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797321
+    m_Key: modifier.container.less.AttackSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797322
+    m_Key: modifier.container.none.AttackSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797323
+    m_Key: modifier.container.added.BlockChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797324
+    m_Key: modifier.container.increased.BlockChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797325
+    m_Key: modifier.container.decreased.BlockChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797326
+    m_Key: modifier.container.more.BlockChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797327
+    m_Key: modifier.container.less.BlockChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797328
+    m_Key: modifier.container.none.BlockChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797329
+    m_Key: modifier.container.added.Defence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797330
+    m_Key: modifier.container.increased.Defence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797331
+    m_Key: modifier.container.decreased.Defence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797332
+    m_Key: modifier.container.more.Defence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797333
+    m_Key: modifier.container.less.Defence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797334
+    m_Key: modifier.container.none.Defence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797335
+    m_Key: modifier.container.added.Accuracy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797336
+    m_Key: modifier.container.increased.Accuracy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797337
+    m_Key: modifier.container.decreased.Accuracy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797338
+    m_Key: modifier.container.more.Accuracy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797339
+    m_Key: modifier.container.less.Accuracy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797340
+    m_Key: modifier.container.none.Accuracy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797341
+    m_Key: modifier.container.added.MaximumHealth
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797342
+    m_Key: modifier.container.increased.MaximumHealth
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797343
+    m_Key: modifier.container.decreased.MaximumHealth
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797344
+    m_Key: modifier.container.more.MaximumHealth
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797345
+    m_Key: modifier.container.less.MaximumHealth
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991552
+    m_Key: modifier.container.none.MaximumHealth
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991553
+    m_Key: modifier.container.added.HealthRegenerationPerSecond
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991554
+    m_Key: modifier.container.increased.HealthRegenerationPerSecond
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991555
+    m_Key: modifier.container.decreased.HealthRegenerationPerSecond
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991556
+    m_Key: modifier.container.more.HealthRegenerationPerSecond
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991557
+    m_Key: modifier.container.less.HealthRegenerationPerSecond
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991558
+    m_Key: modifier.container.none.HealthRegenerationPerSecond
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991559
+    m_Key: modifier.container.added.BarrierCount
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991560
+    m_Key: modifier.container.increased.BarrierCount
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991561
+    m_Key: modifier.container.decreased.BarrierCount
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991562
+    m_Key: modifier.container.more.BarrierCount
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991563
+    m_Key: modifier.container.less.BarrierCount
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991564
+    m_Key: modifier.container.none.BarrierCount
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991565
+    m_Key: modifier.container.added.BarrierPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991566
+    m_Key: modifier.container.increased.BarrierPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991567
+    m_Key: modifier.container.decreased.BarrierPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991568
+    m_Key: modifier.container.more.BarrierPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991569
+    m_Key: modifier.container.less.BarrierPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991570
+    m_Key: modifier.container.none.BarrierPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991571
+    m_Key: modifier.container.added.BarrierRegenerationSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991572
+    m_Key: modifier.container.increased.BarrierRegenerationSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991573
+    m_Key: modifier.container.decreased.BarrierRegenerationSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991574
+    m_Key: modifier.container.more.BarrierRegenerationSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991575
+    m_Key: modifier.container.less.BarrierRegenerationSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991576
+    m_Key: modifier.container.none.BarrierRegenerationSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991577
+    m_Key: modifier.container.added.BarrierDamageTypeMask
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991578
+    m_Key: modifier.container.increased.BarrierDamageTypeMask
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991579
+    m_Key: modifier.container.decreased.BarrierDamageTypeMask
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991580
+    m_Key: modifier.container.more.BarrierDamageTypeMask
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991581
+    m_Key: modifier.container.less.BarrierDamageTypeMask
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991582
+    m_Key: modifier.container.none.BarrierDamageTypeMask
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991583
+    m_Key: modifier.container.added.LifeSteal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991584
+    m_Key: modifier.container.increased.LifeSteal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991585
+    m_Key: modifier.container.decreased.LifeSteal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991586
+    m_Key: modifier.container.more.LifeSteal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991587
+    m_Key: modifier.container.less.LifeSteal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991588
+    m_Key: modifier.container.none.LifeSteal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991589
+    m_Key: modifier.container.added.LifeSteelTypeMask
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991590
+    m_Key: modifier.container.increased.LifeSteelTypeMask
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991591
+    m_Key: modifier.container.decreased.LifeSteelTypeMask
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991592
+    m_Key: modifier.container.more.LifeSteelTypeMask
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991593
+    m_Key: modifier.container.less.LifeSteelTypeMask
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991594
+    m_Key: modifier.container.none.LifeSteelTypeMask
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991595
+    m_Key: modifier.container.added.ElementalResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991596
+    m_Key: modifier.container.increased.ElementalResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991597
+    m_Key: modifier.container.decreased.ElementalResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991598
+    m_Key: modifier.container.more.ElementalResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991599
+    m_Key: modifier.container.less.ElementalResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991600
+    m_Key: modifier.container.none.ElementalResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991601
+    m_Key: modifier.container.added.FireResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991602
+    m_Key: modifier.container.increased.FireResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991603
+    m_Key: modifier.container.decreased.FireResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991604
+    m_Key: modifier.container.more.FireResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991605
+    m_Key: modifier.container.less.FireResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991606
+    m_Key: modifier.container.none.FireResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991607
+    m_Key: modifier.container.added.ColdResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991608
+    m_Key: modifier.container.increased.ColdResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991609
+    m_Key: modifier.container.decreased.ColdResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991610
+    m_Key: modifier.container.more.ColdResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991611
+    m_Key: modifier.container.less.ColdResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991612
+    m_Key: modifier.container.none.ColdResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991613
+    m_Key: modifier.container.added.LightningResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991614
+    m_Key: modifier.container.increased.LightningResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991615
+    m_Key: modifier.container.decreased.LightningResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991616
+    m_Key: modifier.container.more.LightningResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991617
+    m_Key: modifier.container.less.LightningResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991618
+    m_Key: modifier.container.none.LightningResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991619
+    m_Key: modifier.container.added.MaxElementalResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991620
+    m_Key: modifier.container.increased.MaxElementalResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991621
+    m_Key: modifier.container.decreased.MaxElementalResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991622
+    m_Key: modifier.container.more.MaxElementalResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991623
+    m_Key: modifier.container.less.MaxElementalResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991624
+    m_Key: modifier.container.none.MaxElementalResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991625
+    m_Key: modifier.container.added.MaxFireResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991626
+    m_Key: modifier.container.increased.MaxFireResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991627
+    m_Key: modifier.container.decreased.MaxFireResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991628
+    m_Key: modifier.container.more.MaxFireResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991629
+    m_Key: modifier.container.less.MaxFireResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991630
+    m_Key: modifier.container.none.MaxFireResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991631
+    m_Key: modifier.container.added.MaxColdResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991632
+    m_Key: modifier.container.increased.MaxColdResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991633
+    m_Key: modifier.container.decreased.MaxColdResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991634
+    m_Key: modifier.container.more.MaxColdResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991635
+    m_Key: modifier.container.less.MaxColdResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991636
+    m_Key: modifier.container.none.MaxColdResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991637
+    m_Key: modifier.container.added.MaxLightningResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991638
+    m_Key: modifier.container.increased.MaxLightningResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991639
+    m_Key: modifier.container.decreased.MaxLightningResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991640
+    m_Key: modifier.container.more.MaxLightningResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991641
+    m_Key: modifier.container.less.MaxLightningResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991642
+    m_Key: modifier.container.none.MaxLightningResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991643
+    m_Key: modifier.container.added.MysticCleansePerSecond
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991644
+    m_Key: modifier.container.increased.MysticCleansePerSecond
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991645
+    m_Key: modifier.container.decreased.MysticCleansePerSecond
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991646
+    m_Key: modifier.container.more.MysticCleansePerSecond
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991647
+    m_Key: modifier.container.less.MysticCleansePerSecond
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991648
+    m_Key: modifier.container.none.MysticCleansePerSecond
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991649
+    m_Key: modifier.container.added.Strength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991650
+    m_Key: modifier.container.increased.Strength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991651
+    m_Key: modifier.container.decreased.Strength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991652
+    m_Key: modifier.container.more.Strength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991653
+    m_Key: modifier.container.less.Strength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991654
+    m_Key: modifier.container.none.Strength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991655
+    m_Key: modifier.container.added.Dexterity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991656
+    m_Key: modifier.container.increased.Dexterity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991657
+    m_Key: modifier.container.decreased.Dexterity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991658
+    m_Key: modifier.container.more.Dexterity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991659
+    m_Key: modifier.container.less.Dexterity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991660
+    m_Key: modifier.container.none.Dexterity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991661
+    m_Key: modifier.container.added.Intelligence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991662
+    m_Key: modifier.container.increased.Intelligence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991663
+    m_Key: modifier.container.decreased.Intelligence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991664
+    m_Key: modifier.container.more.Intelligence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991665
+    m_Key: modifier.container.less.Intelligence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991666
+    m_Key: modifier.container.none.Intelligence
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2049264645172101204
+  references:
+    version: 2
+    RefIds:
+    - rid: 2049264645172101204
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1776332227868

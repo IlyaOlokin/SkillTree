@@ -27,7 +27,7 @@ namespace SkillTree
 
             if (modifierContainer == null)
             {
-                return GameLocalization.Format(
+                return GameLocalization.FormatModifier(
                     "modifier.addAttributeModifierContainer.noModifier",
                     "Adds modifier container to [[0]] attribute scaling",
                     localizedAttribute);
@@ -35,14 +35,14 @@ namespace SkillTree
 
             if (attributesPerStack <= 1)
             {
-                return GameLocalization.Format(
+                return GameLocalization.FormatModifier(
                     "modifier.addAttributeModifierContainer.single",
                     "Adds '[[0]]' per 1 [[1]]",
                     modifierContainer.GetDescription(),
                     localizedAttribute);
             }
 
-            return GameLocalization.Format(
+            return GameLocalization.FormatModifier(
                 "modifier.addAttributeModifierContainer.multi",
                 "Adds '[[0]]' per [[1]] [[2]]",
                 modifierContainer.GetDescription(),

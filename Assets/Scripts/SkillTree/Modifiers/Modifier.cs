@@ -31,7 +31,7 @@ namespace SkillTree
 
         public virtual string GetDescription()
         {
-            return GameLocalization.Get("modifier.emptyDescription", "Empty description");
+            return GameLocalization.GetModifier("modifier.emptyDescription", "Empty description");
         }
 
         public void SetPriorities(List<ModifierPriority> priorities)
@@ -64,33 +64,74 @@ namespace SkillTree
 
         public string GetDescription()
         {
-            var forcePercentForAdded = StatTypeDisplayRules.IsPercentStat(statType);
+            string descriptionKey = GetDescriptionKey();
+            string fallbackTemplate = GetFallbackTemplate();
+            object[] arguments = GetDescriptionArguments();
+            return GameLocalization.FormatModifier(descriptionKey, fallbackTemplate, arguments);
+        }
+
+        private string GetDescriptionKey()
+        {
+            return $"modifier.container.{GetSemanticKey()}.{statType}";
+        }
+
+        private string GetSemanticKey()
+        {
+            return modifierType switch
+            {
+                ModifierType.Added => "added",
+                ModifierType.Increased => value < 0f ? "decreased" : "increased",
+                ModifierType.More => IsNoStatModifier() ? "none" : value < 0f ? "less" : "more",
+                _ => "unknown"
+            };
+        }
+
+        private string GetFallbackTemplate()
+        {
             string formattedStatName = StatTypeTooltipFormatter.Format(statType);
 
-            switch (modifierType)
+            return modifierType switch
             {
-                case ModifierType.Added:
-                    string addedValue = $"+{(forcePercentForAdded ? value * 100f : value)}{(forcePercentForAdded ? "%" : string.Empty)}";
-                    return GameLocalization.Format(
-                        "modifier.container.added",
-                        "[[0]] to [[1]]",
-                        addedValue,
-                        formattedStatName.Replace("Added", string.Empty));
-                case ModifierType.Increased:
-                    return GameLocalization.Format(
-                        value < 0 ? "modifier.container.decreased" : "modifier.container.increased",
-                        value < 0 ? "[[0]]% Decreased [[1]]" : "[[0]]% Increased [[1]]",
-                        Mathf.Abs(value * 100f),
-                        formattedStatName);
-                case ModifierType.More:
-                    return GameLocalization.Format(
-                        value < 0 ? "modifier.container.less" : "modifier.container.more",
-                        value < 0 ? "[[0]]% Less [[1]]" : "[[0]]% More [[1]]",
-                        Mathf.Abs(value * 100f),
-                        formattedStatName);
+                ModifierType.Added => "[[0]] to " + formattedStatName,
+                ModifierType.Increased => value < 0f
+                    ? "[[0]]% decreased " + formattedStatName
+                    : "[[0]]% increased " + formattedStatName,
+                ModifierType.More => IsNoStatModifier()
+                    ? "You have no " + formattedStatName
+                    : value < 0f
+                        ? "[[0]]% less " + formattedStatName
+                        : "[[0]]% more " + formattedStatName,
+                _ => string.Empty
+            };
+        }
+
+        private object[] GetDescriptionArguments()
+        {
+            if (modifierType == ModifierType.More && IsNoStatModifier())
+            {
+                return Array.Empty<object>();
             }
 
-            return string.Empty;
+            return modifierType switch
+            {
+                ModifierType.Added => new object[] { FormatAddedValue() },
+                ModifierType.Increased => new object[] { Mathf.Abs(value * 100f) },
+                ModifierType.More => new object[] { Mathf.Abs(value * 100f) },
+                _ => Array.Empty<object>()
+            };
+        }
+
+        private string FormatAddedValue()
+        {
+            bool isPercentStat = StatTypeDisplayRules.IsPercentStat(statType);
+            float displayValue = isPercentStat ? value * 100f : value;
+            string suffix = isPercentStat ? "%" : string.Empty;
+            return $"{displayValue:+0.##;-0.##;0}{suffix}";
+        }
+
+        private bool IsNoStatModifier()
+        {
+            return modifierType == ModifierType.More && value <= -1f;
         }
     }
 }

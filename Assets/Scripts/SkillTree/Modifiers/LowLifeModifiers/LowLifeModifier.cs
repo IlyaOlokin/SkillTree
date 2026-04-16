@@ -22,12 +22,12 @@ namespace SkillTree
         {
             if (modifierContainer == null)
             {
-                return GameLocalization.Get(
+                return GameLocalization.GetModifier(
                     "modifier.lowLife.noModifier",
                     "While on Low Life, applies modifier");
             }
 
-            return GameLocalization.Format(
+            return GameLocalization.FormatModifier(
                 "modifier.lowLife.withModifier",
                 "While on Low Life, [[0]]",
                 modifierContainer.GetDescription());

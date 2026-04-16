@@ -22,11 +22,19 @@ MonoBehaviour:
     - Locale-de
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 32538e21df367c946b07d36328e89cce
+    m_Address: Modifiers_de
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-de
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9b7e1b51d92498843930aa54f7a7353c
     m_Address: StaticText_de
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-de
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: dd90b1b53af68af42bb01720a74f1fb5, type: 2}

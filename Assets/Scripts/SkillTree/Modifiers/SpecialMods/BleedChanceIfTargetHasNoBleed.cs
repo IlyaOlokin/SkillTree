@@ -28,7 +28,7 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return GameLocalization.Format(
+            return GameLocalization.FormatModifier(
                 "modifier.bleedChanceIfTargetHasNoBleed.description",
                 "+[[0]]% {bleed|Bleed} Chance if target has no {bleed|Bleed}",
                 addedBleedChance * 100f);

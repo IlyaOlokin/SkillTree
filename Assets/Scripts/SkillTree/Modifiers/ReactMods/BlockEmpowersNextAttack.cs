@@ -30,7 +30,7 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return GameLocalization.Format(
+            return GameLocalization.FormatModifier(
                 "modifier.blockEmpowersNextAttack.description",
                 "After {block|Block}: next attack gains +[[0]]% more Physical Damage and always applies {bleed|Bleed}",
                 morePhysicalDamage * 100f);

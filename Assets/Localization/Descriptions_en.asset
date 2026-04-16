@@ -189,6 +189,28 @@ MonoBehaviour:
     m_Localized: Sunder lasts 2 seconds
     m_Metadata:
       m_Items: []
+  - m_Id: 292686433226752
+    m_Localized: Resistance reduces incoming {elemental|Elemental} damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 292724769165312
+    m_Localized: '{elemental|Elemental} Resistance applies to all {elemental|Elemental}
+      damage types'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 292734143434752
+    m_Localized: Each {elemental|Elemental} damage type have also its own matching
+      Resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 294350485590016
+    m_Localized: Each Resistance has a default maximum value of 50%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 294655453433856
+    m_Localized: '{elemental|Elemental} Resistance and matching Resistance stack'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

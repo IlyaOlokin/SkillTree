@@ -15,77 +15,39 @@ MonoBehaviour:
   entries:
   - id: armor
     description: {fileID: 11400000, guid: 5781b14e84dd22d46ada5da95bab023d, type: 2}
-    matchTexts:
-    - Armor
   - id: elemental
     description: {fileID: 11400000, guid: 331a4b40f4a9a7d4a87788b753831a2b, type: 2}
-    matchTexts:
-    - Elemental
   - id: mystic
     description: {fileID: 11400000, guid: a57177c45d241b14b8e7cfbdc8bbffc4, type: 2}
-    matchTexts:
-    - Mystic
   - id: ailment
     description: {fileID: 11400000, guid: 3dd7e67d35288364cac2f600da6bb104, type: 2}
-    matchTexts:
-    - Ailment
-    - Ailments
   - id: ignite
     description: {fileID: 11400000, guid: 575e6f2276a2f11428d8e7aae32809e2, type: 2}
-    matchTexts:
-    - Ignite
   - id: chill
     description: {fileID: 11400000, guid: 031776043a171c046b009f3a2fab2e08, type: 2}
-    matchTexts:
-    - Chill
   - id: overcharge
     description: {fileID: 11400000, guid: be40098b2afd6d049a3f8be1393aebeb, type: 2}
-    matchTexts:
-    - Overcharge
   - id: evasion
     description: {fileID: 11400000, guid: a9ffe64125d02bb44984dd89d864dbd7, type: 2}
-    matchTexts:
-    - Evasion
   - id: defence
     description: {fileID: 11400000, guid: d0cbbab3f76901b489b508914e8528ed, type: 2}
-    matchTexts:
-    - Defence
   - id: barrier
     description: {fileID: 11400000, guid: ae05bb48ddb7c484b9b20fee8d52627c, type: 2}
-    matchTexts:
-    - Barrier
   - id: bleed
     description: {fileID: 11400000, guid: c704e7c60065f7b4f85f3b38c887c739, type: 2}
-    matchTexts:
-    - Bleed
   - id: accuracy
     description: {fileID: 11400000, guid: b5afc293a54b8c14488911b4b6aa2a41, type: 2}
-    matchTexts:
-    - accuracy
   - id: block
     description: {fileID: 11400000, guid: a38baa50f583722439f7eeb26333ec15, type: 2}
-    matchTexts:
-    - Block
   - id: effects
     description: {fileID: 11400000, guid: b94a26fa21693624994df419e66d5b2c, type: 2}
-    matchTexts:
-    - Effect
-    - Effects
   - id: distract
     description: {fileID: 11400000, guid: 1d27e90d77b0d124eb92e29be704fcab, type: 2}
-    matchTexts:
-    - Distract
   - id: sunder
     description: {fileID: 11400000, guid: 6dfbef27ee84d3348bae27b382b46454, type: 2}
-    matchTexts:
-    - Sunder
   - id: socketnode
     description: {fileID: 11400000, guid: 1d10e1853f307c44782a522ecbaf0848, type: 2}
-    matchTexts:
-    - Socket Node
-    - Socket Nodes
   - id: gem
     description: {fileID: 11400000, guid: 253fa2b4a47177a4eb737d69ff9307f1, type: 2}
-    matchTexts:
-    - Gem
-    - Gems
+  - id: resistance
+    description: {fileID: 11400000, guid: a15214a5a7c705e4f84ece3fc8f6aee0, type: 2}

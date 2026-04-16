@@ -21,12 +21,12 @@ namespace SkillTree
             {
                 if (modifierContainer == null)
                 {
-                    return GameLocalization.Get(
+                    return GameLocalization.GetModifier(
                         "modifier.hasBarrier.noModifier",
                         "While Barrier is active, applies modifier");
                 }
 
-                return GameLocalization.Format(
+                return GameLocalization.FormatModifier(
                     "modifier.hasBarrier.withModifier",
                     "While Barrier is active, [[0]]",
                     modifierContainer.GetDescription());

@@ -8,6 +8,7 @@ namespace LocalizationSupport
     public static class GameLocalization
     {
         public const string DescriptionsTable = "Descriptions";
+        public const string ModifiersTable = "Modifiers";
         public const string RuntimeTable = DescriptionsTable;
         public const string ContentTable = DescriptionsTable;
 
@@ -26,9 +27,19 @@ namespace LocalizationSupport
             return GetFromTable(DescriptionsTable, key, fallback);
         }
 
+        public static string GetModifier(string key, string fallback)
+        {
+            return GetFromTable(ModifiersTable, key, fallback);
+        }
+
         public static string Format(string key, string fallbackTemplate, params object[] arguments)
         {
             return FormatFromTable(RuntimeTable, key, fallbackTemplate, arguments);
+        }
+
+        public static string FormatModifier(string key, string fallbackTemplate, params object[] arguments)
+        {
+            return FormatFromTable(ModifiersTable, key, fallbackTemplate, arguments);
         }
 
         public static string FormatContent(string key, string fallbackTemplate, params object[] arguments)

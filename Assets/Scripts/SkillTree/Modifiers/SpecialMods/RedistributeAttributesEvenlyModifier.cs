@@ -45,7 +45,7 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return GameLocalization.Get(
+            return GameLocalization.GetModifier(
                 "modifier.redistributeAttributesEvenly.description",
                 "Redistributes total Strength, Dexterity and Intelligence evenly");
         }

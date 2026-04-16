@@ -18,7 +18,7 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return GameLocalization.Format(
+            return GameLocalization.FormatModifier(
                 "modifier.healthRegen.percent",
                 "+[[0]]% of Maximum Health regeneration per second",
                 healthRegenerationPercentage * 100f);

@@ -179,6 +179,26 @@ MonoBehaviour:
     m_Key: description.sunder3
     m_Metadata:
       m_Items: []
+  - m_Id: 292686433226752
+    m_Key: description.resistance1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 292724769165312
+    m_Key: description.resistance2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 292734143434752
+    m_Key: description.resistance3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 294350485590016
+    m_Key: description.resistance4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 294655453433856
+    m_Key: description.resistance5
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

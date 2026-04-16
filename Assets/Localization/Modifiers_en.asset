@@ -1,0 +1,1417 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Modifiers_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 7a62af1d3b21ccd43838ec178b1eadf2, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 46525452288
+    m_Localized: '[[0]] to {armor|Armor}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 85905772544
+    m_Localized: '[[0]]% increased {armor|Armor}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 124103299072
+    m_Localized: '[[0]]% decreased {armor|Armor}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 292894674944
+    m_Localized: '[[0]]% more {armor|Armor}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 307746705408
+    m_Localized: '[[0]]% less {armor|Armor}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 319645945856
+    m_Localized: You have no {armor|Armor}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3860179587072
+    m_Localized: You have no {evasion|Evasion}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3497212907520
+    m_Localized: '[[0]] to {evasion|Evasion}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3497212907521
+    m_Localized: '[[0]]% increased {evasion|Evasion}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3497212907522
+    m_Localized: '[[0]]% decreased {evasion|Evasion}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3497212907523
+    m_Localized: '[[0]]% more {evasion|Evasion}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3497212907524
+    m_Localized: '[[0]]% less {evasion|Evasion}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780222242816
+    m_Localized: '[[0]] to Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602944
+    m_Localized: '[[0]]% increased Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602945
+    m_Localized: '[[0]]% decreased Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602946
+    m_Localized: '[[0]]% more Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602947
+    m_Localized: '[[0]]% less Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602948
+    m_Localized: You have no Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602949
+    m_Localized: '[[0]] to Elemental Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602950
+    m_Localized: '[[0]]% increased Elemental Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602951
+    m_Localized: '[[0]]% decreased Elemental Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602952
+    m_Localized: '[[0]]% more Elemental Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602953
+    m_Localized: '[[0]]% less Elemental Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602954
+    m_Localized: You have no Elemental Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602955
+    m_Localized: '[[0]] to Mystic Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602956
+    m_Localized: '[[0]]% increased Mystic Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602957
+    m_Localized: '[[0]]% decreased Mystic Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602958
+    m_Localized: '[[0]]% more Mystic Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602959
+    m_Localized: '[[0]]% less Mystic Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602960
+    m_Localized: You have no Mystic Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602961
+    m_Localized: '[[0]] to Physical Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602962
+    m_Localized: '[[0]]% increased Physical Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602963
+    m_Localized: '[[0]]% decreased Physical Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602964
+    m_Localized: '[[0]]% more Physical Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602965
+    m_Localized: '[[0]]% less Physical Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602966
+    m_Localized: You have no Physical Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602967
+    m_Localized: '[[0]] to Fire Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602968
+    m_Localized: '[[0]]% increased Fire Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602969
+    m_Localized: '[[0]]% decreased Fire Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602970
+    m_Localized: '[[0]]% more Fire Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602971
+    m_Localized: '[[0]]% less Fire Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602972
+    m_Localized: You have no Fire Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602973
+    m_Localized: '[[0]] to Cold Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602974
+    m_Localized: '[[0]]% increased Cold Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602975
+    m_Localized: '[[0]]% decreased Cold Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602976
+    m_Localized: '[[0]]% more Cold Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602977
+    m_Localized: '[[0]]% less Cold Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602978
+    m_Localized: You have no Cold Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602979
+    m_Localized: '[[0]] to Lightning Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602980
+    m_Localized: '[[0]]% increased Lightning Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602981
+    m_Localized: '[[0]]% decreased Lightning Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602982
+    m_Localized: '[[0]]% more Lightning Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602983
+    m_Localized: '[[0]]% less Lightning Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602984
+    m_Localized: You have no Lightning Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602985
+    m_Localized: '[[0]] to Light Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602986
+    m_Localized: '[[0]]% increased Light Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602987
+    m_Localized: '[[0]]% decreased Light Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602988
+    m_Localized: '[[0]]% more Light Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602989
+    m_Localized: '[[0]]% less Light Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602990
+    m_Localized: You have no Light Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602991
+    m_Localized: '[[0]] to Darkness Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602992
+    m_Localized: '[[0]]% increased Darkness Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602993
+    m_Localized: '[[0]]% decreased Darkness Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602994
+    m_Localized: '[[0]]% more Darkness Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602995
+    m_Localized: '[[0]]% less Darkness Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602996
+    m_Localized: You have no Darkness Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602997
+    m_Localized: '[[0]] to Poison Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602998
+    m_Localized: '[[0]]% increased Poison Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251602999
+    m_Localized: '[[0]]% decreased Poison Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603000
+    m_Localized: '[[0]]% more Poison Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603001
+    m_Localized: '[[0]]% less Poison Damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603002
+    m_Localized: You have no Poison Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603003
+    m_Localized: '[[0]] to {ailmentMagnitude|Ailment Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603004
+    m_Localized: '[[0]]% increased {ailmentMagnitude|Ailment Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603005
+    m_Localized: '[[0]]% decreased {ailmentMagnitude|Ailment Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603006
+    m_Localized: '[[0]]% more {ailmentMagnitude|Ailment Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603007
+    m_Localized: '[[0]]% less {ailmentMagnitude|Ailment Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603008
+    m_Localized: You have no {ailmentMagnitude|Ailment Magnitude}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603009
+    m_Localized: '[[0]] to {igniteMagnitude|Ignite Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603010
+    m_Localized: '[[0]]% increased {igniteMagnitude|Ignite Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603011
+    m_Localized: '[[0]]% decreased {igniteMagnitude|Ignite Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603012
+    m_Localized: '[[0]]% more {igniteMagnitude|Ignite Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603013
+    m_Localized: '[[0]]% less {igniteMagnitude|Ignite Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603014
+    m_Localized: You have no {igniteMagnitude|Ignite Magnitude}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603015
+    m_Localized: '[[0]] to {chillMagnitude|Chill Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603016
+    m_Localized: '[[0]]% increased {chillMagnitude|Chill Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603017
+    m_Localized: '[[0]]% decreased {chillMagnitude|Chill Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603018
+    m_Localized: '[[0]]% more {chillMagnitude|Chill Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603019
+    m_Localized: '[[0]]% less {chillMagnitude|Chill Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603020
+    m_Localized: You have no {chillMagnitude|Chill Magnitude}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603021
+    m_Localized: '[[0]] to {overchargeMagnitude|Overcharge Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603022
+    m_Localized: '[[0]]% increased {overchargeMagnitude|Overcharge Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603023
+    m_Localized: '[[0]]% decreased {overchargeMagnitude|Overcharge Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603024
+    m_Localized: '[[0]]% more {overchargeMagnitude|Overcharge Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603025
+    m_Localized: '[[0]]% less {overchargeMagnitude|Overcharge Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603026
+    m_Localized: You have no {overchargeMagnitude|Overcharge Magnitude}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603027
+    m_Localized: '[[0]] to {bleedMagnitude|Bleed Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603028
+    m_Localized: '[[0]]% increased {bleedMagnitude|Bleed Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603029
+    m_Localized: '[[0]]% decreased {bleedMagnitude|Bleed Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603030
+    m_Localized: '[[0]]% more {bleedMagnitude|Bleed Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603031
+    m_Localized: '[[0]]% less {bleedMagnitude|Bleed Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603032
+    m_Localized: You have no {bleedMagnitude|Bleed Magnitude}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603033
+    m_Localized: '[[0]] to {igniteChance|Ignite Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603034
+    m_Localized: '[[0]]% increased {igniteChance|Ignite Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603035
+    m_Localized: '[[0]]% decreased {igniteChance|Ignite Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603036
+    m_Localized: '[[0]]% more {igniteChance|Ignite Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603037
+    m_Localized: '[[0]]% less {igniteChance|Ignite Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603038
+    m_Localized: You have no {igniteChance|Ignite Chance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603039
+    m_Localized: '[[0]] to {chillChance|Chill Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603040
+    m_Localized: '[[0]]% increased {chillChance|Chill Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603041
+    m_Localized: '[[0]]% decreased {chillChance|Chill Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603042
+    m_Localized: '[[0]]% more {chillChance|Chill Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603043
+    m_Localized: '[[0]]% less {chillChance|Chill Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603044
+    m_Localized: You have no {chillChance|Chill Chance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603045
+    m_Localized: '[[0]] to {overchargeChance|Overcharge Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603046
+    m_Localized: '[[0]]% increased {overchargeChance|Overcharge Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603047
+    m_Localized: '[[0]]% decreased {overchargeChance|Overcharge Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603048
+    m_Localized: '[[0]]% more {overchargeChance|Overcharge Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603049
+    m_Localized: '[[0]]% less {overchargeChance|Overcharge Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603050
+    m_Localized: You have no {overchargeChance|Overcharge Chance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603051
+    m_Localized: '[[0]] to {bleedChance|Bleed Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603052
+    m_Localized: '[[0]]% increased {bleedChance|Bleed Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603053
+    m_Localized: '[[0]]% decreased {bleedChance|Bleed Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603054
+    m_Localized: '[[0]]% more {bleedChance|Bleed Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603055
+    m_Localized: '[[0]]% less {bleedChance|Bleed Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603056
+    m_Localized: You have no {bleedChance|Bleed Chance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603057
+    m_Localized: '[[0]] to {ailmentGuard|Ailment Guard}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603058
+    m_Localized: '[[0]]% increased {ailmentGuard|Ailment Guard}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603059
+    m_Localized: '[[0]]% decreased {ailmentGuard|Ailment Guard}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603060
+    m_Localized: '[[0]]% more {ailmentGuard|Ailment Guard}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603061
+    m_Localized: '[[0]]% less {ailmentGuard|Ailment Guard}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603062
+    m_Localized: You have no {ailmentGuard|Ailment Guard}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603063
+    m_Localized: '[[0]] to Ignite Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603064
+    m_Localized: '[[0]]% increased Ignite Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603065
+    m_Localized: '[[0]]% decreased Ignite Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797248
+    m_Localized: '[[0]]% more Ignite Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797249
+    m_Localized: '[[0]]% less Ignite Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797250
+    m_Localized: You have no Ignite Mitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797251
+    m_Localized: '[[0]] to Chill Duration Reduction'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797252
+    m_Localized: '[[0]]% increased Chill Duration Reduction'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797253
+    m_Localized: '[[0]]% decreased Chill Duration Reduction'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797254
+    m_Localized: '[[0]]% more Chill Duration Reduction'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797255
+    m_Localized: '[[0]]% less Chill Duration Reduction'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797256
+    m_Localized: You have no Chill Duration Reduction
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797257
+    m_Localized: '[[0]] to Overcharge Avoidance Chance'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797258
+    m_Localized: '[[0]]% increased Overcharge Avoidance Chance'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797259
+    m_Localized: '[[0]]% decreased Overcharge Avoidance Chance'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797260
+    m_Localized: '[[0]]% more Overcharge Avoidance Chance'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797261
+    m_Localized: '[[0]]% less Overcharge Avoidance Chance'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797262
+    m_Localized: You have no Overcharge Avoidance Chance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797263
+    m_Localized: '[[0]] to Bleed Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797264
+    m_Localized: '[[0]]% increased Bleed Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797265
+    m_Localized: '[[0]]% decreased Bleed Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797266
+    m_Localized: '[[0]]% more Bleed Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797267
+    m_Localized: '[[0]]% less Bleed Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797268
+    m_Localized: You have no Bleed Mitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797269
+    m_Localized: '[[0]] to {sunderChance|Sunder Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797270
+    m_Localized: '[[0]]% increased {sunderChance|Sunder Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797271
+    m_Localized: '[[0]]% decreased {sunderChance|Sunder Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797272
+    m_Localized: '[[0]]% more {sunderChance|Sunder Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797273
+    m_Localized: '[[0]]% less {sunderChance|Sunder Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797274
+    m_Localized: You have no {sunderChance|Sunder Chance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797275
+    m_Localized: '[[0]] to {sunderMagnitude|Sunder Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797276
+    m_Localized: '[[0]]% increased {sunderMagnitude|Sunder Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797277
+    m_Localized: '[[0]]% decreased {sunderMagnitude|Sunder Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797278
+    m_Localized: '[[0]]% more {sunderMagnitude|Sunder Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797279
+    m_Localized: '[[0]]% less {sunderMagnitude|Sunder Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797280
+    m_Localized: You have no {sunderMagnitude|Sunder Magnitude}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797281
+    m_Localized: '[[0]] to {sunderMitigation|Sunder Mitigation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797282
+    m_Localized: '[[0]]% increased {sunderMitigation|Sunder Mitigation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797283
+    m_Localized: '[[0]]% decreased {sunderMitigation|Sunder Mitigation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797284
+    m_Localized: '[[0]]% more {sunderMitigation|Sunder Mitigation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797285
+    m_Localized: '[[0]]% less {sunderMitigation|Sunder Mitigation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797286
+    m_Localized: You have no {sunderMitigation|Sunder Mitigation}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797287
+    m_Localized: '[[0]] to {distractChance|Distract Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797288
+    m_Localized: '[[0]]% increased {distractChance|Distract Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797289
+    m_Localized: '[[0]]% decreased {distractChance|Distract Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797290
+    m_Localized: '[[0]]% more {distractChance|Distract Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797291
+    m_Localized: '[[0]]% less {distractChance|Distract Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797292
+    m_Localized: You have no {distractChance|Distract Chance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797293
+    m_Localized: '[[0]] to {distractMagnitude|Distract Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797294
+    m_Localized: '[[0]]% increased {distractMagnitude|Distract Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797295
+    m_Localized: '[[0]]% decreased {distractMagnitude|Distract Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797296
+    m_Localized: '[[0]]% more {distractMagnitude|Distract Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797297
+    m_Localized: '[[0]]% less {distractMagnitude|Distract Magnitude}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797298
+    m_Localized: You have no {distractMagnitude|Distract Magnitude}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797299
+    m_Localized: '[[0]] to {distractMitigation|Distract Mitigation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797300
+    m_Localized: '[[0]]% increased {distractMitigation|Distract Mitigation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797301
+    m_Localized: '[[0]]% decreased {distractMitigation|Distract Mitigation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797302
+    m_Localized: '[[0]]% more {distractMitigation|Distract Mitigation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797303
+    m_Localized: '[[0]]% less {distractMitigation|Distract Mitigation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797304
+    m_Localized: You have no {distractMitigation|Distract Mitigation}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797305
+    m_Localized: '[[0]] to {critChance|Crit Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797306
+    m_Localized: '[[0]]% increased {critChance|Crit Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797307
+    m_Localized: '[[0]]% decreased {critChance|Crit Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797308
+    m_Localized: '[[0]]% more {critChance|Crit Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797309
+    m_Localized: '[[0]]% less {critChance|Crit Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797310
+    m_Localized: You have no {critChance|Crit Chance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797311
+    m_Localized: '[[0]] to Crit Damage Bonus'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797312
+    m_Localized: '[[0]]% increased Crit Damage Bonus'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797313
+    m_Localized: '[[0]]% decreased Crit Damage Bonus'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797314
+    m_Localized: '[[0]]% more Crit Damage Bonus'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797315
+    m_Localized: '[[0]]% less Crit Damage Bonus'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797316
+    m_Localized: You have no Crit Damage Bonus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797317
+    m_Localized: '[[0]] to Attack Speed'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797318
+    m_Localized: '[[0]]% increased Attack Speed'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797319
+    m_Localized: '[[0]]% decreased Attack Speed'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797320
+    m_Localized: '[[0]]% more Attack Speed'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797321
+    m_Localized: '[[0]]% less Attack Speed'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797322
+    m_Localized: You have no Attack Speed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797323
+    m_Localized: '[[0]] to {blockChance|Block Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797324
+    m_Localized: '[[0]]% increased {blockChance|Block Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797325
+    m_Localized: '[[0]]% decreased {blockChance|Block Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797326
+    m_Localized: '[[0]]% more {blockChance|Block Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797327
+    m_Localized: '[[0]]% less {blockChance|Block Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797328
+    m_Localized: You have no {blockChance|Block Chance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797329
+    m_Localized: '[[0]] to {defence|Defence}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797330
+    m_Localized: '[[0]]% increased {defence|Defence}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797331
+    m_Localized: '[[0]]% decreased {defence|Defence}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797332
+    m_Localized: '[[0]]% more {defence|Defence}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797333
+    m_Localized: '[[0]]% less {defence|Defence}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797334
+    m_Localized: You have no {defence|Defence}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797335
+    m_Localized: '[[0]] to {accuracy|Accuracy}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797336
+    m_Localized: '[[0]]% increased {accuracy|Accuracy}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797337
+    m_Localized: '[[0]]% decreased {accuracy|Accuracy}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797338
+    m_Localized: '[[0]]% more {accuracy|Accuracy}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797339
+    m_Localized: '[[0]]% less {accuracy|Accuracy}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797340
+    m_Localized: You have no {accuracy|Accuracy}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797341
+    m_Localized: '[[0]] to Maximum Health'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797342
+    m_Localized: '[[0]]% increased Maximum Health'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797343
+    m_Localized: '[[0]]% decreased Maximum Health'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797344
+    m_Localized: '[[0]]% more Maximum Health'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797345
+    m_Localized: '[[0]]% less Maximum Health'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991552
+    m_Localized: You have no Maximum Health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991553
+    m_Localized: '[[0]] to Health Regeneration Per Second'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991554
+    m_Localized: '[[0]]% increased Health Regeneration Per Second'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991555
+    m_Localized: '[[0]]% decreased Health Regeneration Per Second'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991556
+    m_Localized: '[[0]]% more Health Regeneration Per Second'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991557
+    m_Localized: '[[0]]% less Health Regeneration Per Second'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991558
+    m_Localized: You have no Health Regeneration Per Second
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991559
+    m_Localized: '[[0]] to {barrierCount|Barrier Count}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991560
+    m_Localized: '[[0]]% increased {barrierCount|Barrier Count}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991561
+    m_Localized: '[[0]]% decreased {barrierCount|Barrier Count}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991562
+    m_Localized: '[[0]]% more {barrierCount|Barrier Count}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991563
+    m_Localized: '[[0]]% less {barrierCount|Barrier Count}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991564
+    m_Localized: You have no {barrierCount|Barrier Count}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991565
+    m_Localized: '[[0]] to {barrierPower|Barrier Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991566
+    m_Localized: '[[0]]% increased {barrierPower|Barrier Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991567
+    m_Localized: '[[0]]% decreased {barrierPower|Barrier Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991568
+    m_Localized: '[[0]]% more {barrierPower|Barrier Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991569
+    m_Localized: '[[0]]% less {barrierPower|Barrier Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991570
+    m_Localized: You have no {barrierPower|Barrier Power}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991571
+    m_Localized: '[[0]] to {barrierRegenerationSpeed|Barrier Regeneration Speed}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991572
+    m_Localized: '[[0]]% increased {barrierRegenerationSpeed|Barrier Regeneration
+      Speed}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991573
+    m_Localized: '[[0]]% decreased {barrierRegenerationSpeed|Barrier Regeneration
+      Speed}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991574
+    m_Localized: '[[0]]% more {barrierRegenerationSpeed|Barrier Regeneration Speed}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991575
+    m_Localized: '[[0]]% less {barrierRegenerationSpeed|Barrier Regeneration Speed}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991576
+    m_Localized: You have no {barrierRegenerationSpeed|Barrier Regeneration Speed}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991577
+    m_Localized: '[[0]] to Barrier Damage Type Mask'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991578
+    m_Localized: '[[0]]% increased Barrier Damage Type Mask'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991579
+    m_Localized: '[[0]]% decreased Barrier Damage Type Mask'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991580
+    m_Localized: '[[0]]% more Barrier Damage Type Mask'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991581
+    m_Localized: '[[0]]% less Barrier Damage Type Mask'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991582
+    m_Localized: You have no Barrier Damage Type Mask
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991583
+    m_Localized: '[[0]] to {lifeSteal|Life Steal}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991584
+    m_Localized: '[[0]]% increased {lifeSteal|Life Steal}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991585
+    m_Localized: '[[0]]% decreased {lifeSteal|Life Steal}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991586
+    m_Localized: '[[0]]% more {lifeSteal|Life Steal}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991587
+    m_Localized: '[[0]]% less {lifeSteal|Life Steal}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991588
+    m_Localized: You have no {lifeSteal|Life Steal}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991589
+    m_Localized: '[[0]] to {lifeSteelTypeMask|Life Steel Type Mask}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991590
+    m_Localized: '[[0]]% increased {lifeSteelTypeMask|Life Steel Type Mask}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991591
+    m_Localized: '[[0]]% decreased {lifeSteelTypeMask|Life Steel Type Mask}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991592
+    m_Localized: '[[0]]% more {lifeSteelTypeMask|Life Steel Type Mask}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991593
+    m_Localized: '[[0]]% less {lifeSteelTypeMask|Life Steel Type Mask}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991594
+    m_Localized: You have no {lifeSteelTypeMask|Life Steel Type Mask}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991595
+    m_Localized: '[[0]] to Elemental {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991596
+    m_Localized: '[[0]]% increased Elemental {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991597
+    m_Localized: '[[0]]% decreased Elemental {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991598
+    m_Localized: '[[0]]% more Elemental {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991599
+    m_Localized: '[[0]]% less Elemental {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991600
+    m_Localized: You have no Elemental {resistance|Resistance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991601
+    m_Localized: '[[0]] to Fire {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991602
+    m_Localized: '[[0]]% increased Fire {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991603
+    m_Localized: '[[0]]% decreased Fire {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991604
+    m_Localized: '[[0]]% more Fire {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991605
+    m_Localized: '[[0]]% less Fire {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991606
+    m_Localized: You have no Fire {resistance|Resistance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991607
+    m_Localized: '[[0]] to Cold {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991608
+    m_Localized: '[[0]]% increased Cold {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991609
+    m_Localized: '[[0]]% decreased Cold {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991610
+    m_Localized: '[[0]]% more Cold {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991611
+    m_Localized: '[[0]]% less Cold {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991612
+    m_Localized: You have no Cold {resistance|Resistance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991613
+    m_Localized: '[[0]] to Lightning {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991614
+    m_Localized: '[[0]]% increased Lightning {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991615
+    m_Localized: '[[0]]% decreased Lightning {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991616
+    m_Localized: '[[0]]% more Lightning {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991617
+    m_Localized: '[[0]]% less Lightning {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991618
+    m_Localized: You have no Lightning {resistance|Resistance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991619
+    m_Localized: '[[0]] to Max Elemental {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991620
+    m_Localized: '[[0]]% increased Max Elemental {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991621
+    m_Localized: '[[0]]% decreased Max Elemental {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991622
+    m_Localized: '[[0]]% more Max Elemental {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991623
+    m_Localized: '[[0]]% less Max Elemental {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991624
+    m_Localized: You have no Max Elemental {resistance|Resistance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991625
+    m_Localized: '[[0]] to Max Fire {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991626
+    m_Localized: '[[0]]% increased Max Fire {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991627
+    m_Localized: '[[0]]% decreased Max Fire {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991628
+    m_Localized: '[[0]]% more Max Fire {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991629
+    m_Localized: '[[0]]% less Max Fire {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991630
+    m_Localized: You have no Max Fire {resistance|Resistance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991631
+    m_Localized: '[[0]] to Max Cold {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991632
+    m_Localized: '[[0]]% increased Max Cold {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991633
+    m_Localized: '[[0]]% decreased Max Cold {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991634
+    m_Localized: '[[0]]% more Max Cold {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991635
+    m_Localized: '[[0]]% less Max Cold {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991636
+    m_Localized: You have no Max Cold {resistance|Resistance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991637
+    m_Localized: '[[0]] to Max Lightning {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991638
+    m_Localized: '[[0]]% increased Max Lightning {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991639
+    m_Localized: '[[0]]% decreased Max Lightning {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991640
+    m_Localized: '[[0]]% more Max Lightning {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991641
+    m_Localized: '[[0]]% less Max Lightning {resistance|Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991642
+    m_Localized: You have no Max Lightning {resistance|Resistance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991643
+    m_Localized: '[[0]] to {mysticCleansePerSecond|Mystic Cleanse Per Second}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991644
+    m_Localized: '[[0]]% increased {mysticCleansePerSecond|Mystic Cleanse Per Second}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991645
+    m_Localized: '[[0]]% decreased {mysticCleansePerSecond|Mystic Cleanse Per Second}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991646
+    m_Localized: '[[0]]% more {mysticCleansePerSecond|Mystic Cleanse Per Second}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991647
+    m_Localized: '[[0]]% less {mysticCleansePerSecond|Mystic Cleanse Per Second}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991648
+    m_Localized: You have no {mysticCleansePerSecond|Mystic Cleanse Per Second}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991649
+    m_Localized: '[[0]] to {strength|Strength}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991650
+    m_Localized: '[[0]]% increased {strength|Strength}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991651
+    m_Localized: '[[0]]% decreased {strength|Strength}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991652
+    m_Localized: '[[0]]% more {strength|Strength}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991653
+    m_Localized: '[[0]]% less {strength|Strength}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991654
+    m_Localized: You have no {strength|Strength}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991655
+    m_Localized: '[[0]] to {dexterity|Dexterity}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991656
+    m_Localized: '[[0]]% increased {dexterity|Dexterity}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991657
+    m_Localized: '[[0]]% decreased {dexterity|Dexterity}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991658
+    m_Localized: '[[0]]% more {dexterity|Dexterity}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991659
+    m_Localized: '[[0]]% less {dexterity|Dexterity}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991660
+    m_Localized: You have no {dexterity|Dexterity}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991661
+    m_Localized: '[[0]] to {intelligence|Intelligence}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991662
+    m_Localized: '[[0]]% increased {intelligence|Intelligence}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991663
+    m_Localized: '[[0]]% decreased {intelligence|Intelligence}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991664
+    m_Localized: '[[0]]% more {intelligence|Intelligence}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991665
+    m_Localized: '[[0]]% less {intelligence|Intelligence}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991666
+    m_Localized: You have no {intelligence|Intelligence}
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []
