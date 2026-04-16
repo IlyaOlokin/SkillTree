@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SocketNode
   m_EditorClassIdentifier: 
   descriptions:
-  - Socket Node can store a {Gem} while allocated
+  - description.socketNode

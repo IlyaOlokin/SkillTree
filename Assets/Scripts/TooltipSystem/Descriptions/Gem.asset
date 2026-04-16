@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Gem
   m_EditorClassIdentifier: 
   descriptions:
-  - Gems can be placed into {Socket Nodes}
-  - Gem grants its effect only while placed in a {Socket Node}
+  - Gems can be placed into {socketnode|Socket Nodes}
+  - Gem grants its effect only while placed in a {socketnode|Socket Node}

@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: Ailments
   m_EditorClassIdentifier: 
   descriptions:
-  - Ailments are negative effects applied by hits
-  - '{ignite|Ignite}, {chill|Chill}, {overcharge|Overcharge} and {bleed|Bleed} are
-    ailments'
-  - The base chance to inflict an Ailment is equal to the corresponding damage dealt
-    by the hit as a percentage of the target's Max Health
+  - description.ailments1
+  - description.ailments2
+  - description.ailments3

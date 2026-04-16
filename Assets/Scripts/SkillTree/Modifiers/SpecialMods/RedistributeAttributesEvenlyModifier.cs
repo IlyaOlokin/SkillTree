@@ -1,4 +1,5 @@
 using Battle;
+using LocalizationSupport;
 using UnityEngine;
 
 namespace SkillTree
@@ -44,7 +45,9 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return "Redistributes total Strength, Dexterity and Intelligence evenly";
+            return GameLocalization.Get(
+                "modifier.redistributeAttributesEvenly.description",
+                "Redistributes total Strength, Dexterity and Intelligence evenly");
         }
     }
 }

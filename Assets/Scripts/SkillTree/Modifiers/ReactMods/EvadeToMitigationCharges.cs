@@ -1,4 +1,5 @@
 using Battle;
+using LocalizationSupport;
 using UnityEngine;
 
 namespace SkillTree
@@ -22,7 +23,9 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return "Each Evade grants a charge: take 10% less damage from the next hit";
+            return GameLocalization.Get(
+                "modifier.evadeToMitigationCharges.description",
+                "Each Evade grants a charge: take 10% less damage from the next hit");
         }
     }
 }

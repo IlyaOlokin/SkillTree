@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 using Battle;
+using LocalizationSupport;
 using TMPro;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 using Zenject;
 
 public class PlayerStatsWindow : MonoBehaviour
@@ -26,8 +29,17 @@ public class PlayerStatsWindow : MonoBehaviour
     {
         _player.OnStatsRecalculated += UpdateTexts;
         _player.UnitLevel.OnLevelUp += UpdateLevelText;
+        LocalizationSettings.SelectedLocaleChanged += HandleLocaleChanged;
         UpdateTexts();
         UpdateLevelText(1);
+    }
+
+    private void OnDisable()
+    {
+        if (LocalizationSettings.HasSettings)
+        {
+            LocalizationSettings.SelectedLocaleChanged -= HandleLocaleChanged;
+        }
     }
 
     private void OnDestroy()
@@ -41,7 +53,10 @@ public class PlayerStatsWindow : MonoBehaviour
 
     private void UpdateLevelText(int level)
     {
-        lvlText.text = $"Level: {_player.UnitLevel.Level}";
+        lvlText.text = GameLocalization.Format(
+            "ui.playerStats.level",
+            "Level: [[0]]",
+            _player.UnitLevel.Level);
     }
    
     void UpdateTexts()
@@ -60,7 +75,9 @@ public class PlayerStatsWindow : MonoBehaviour
             float displayValue = CalculateDisplayValue(statText.stat, rawValue, isPercent);
             string prefix = GetStatPrefix(statText.stat, rawValue);
             string suffix = GetStatSuffix(statText.stat, rawValue);
-            var label = statText.needToOverrideText ? statText.overrideText : statText.stat.ToPrettyString();
+            string label = statText.needToOverrideText
+                ? GameLocalization.LocalizeValueOrKey(GameLocalization.ContentTable, statText.overrideText)
+                : GameLocalization.LocalizeEnum(statText.stat);
             statText.labelText.text = $"{label}:";
             statText.valueText.text = FormatStatValue(displayValue, isPercent, prefix, suffix);
         }
@@ -139,6 +156,11 @@ public class PlayerStatsWindow : MonoBehaviour
         float darknessDamage = _player.BaseUnitModifiers.GetStatValue(StatType.DarknessDamage);
         float signedMysticDamage = lightDamage - darknessDamage;
         
+        if (MysticLabelText != null)
+        {
+            MysticLabelText.text = GameLocalization.Get("ui.playerStats.mystic", "Mystic");
+        }
+
         MysticValueText.text = FormatStatValue(Mathf.Abs(signedMysticDamage), false);
 
         Color textColor = GetMysticColor(signedMysticDamage);
@@ -174,7 +196,7 @@ public class PlayerStatsWindow : MonoBehaviour
             case StatType.LightningResistance:
                 return GetUncappedResistanceSuffix(rawValue, StatType.MaxLightningResistance);
             case StatType.BarrierRegenerationSpeed: 
-                return "s";
+                return GameLocalization.Get("ui.common.secondsShort", "s");
             default:
                 return string.Empty;
         }
@@ -211,7 +233,16 @@ public class PlayerStatsWindow : MonoBehaviour
             return string.Empty;
 
         rawValue *= 100f;
-        return $" ({FormatStatValue(rawValue, true)})";
+        return GameLocalization.Format(
+            "ui.playerStats.uncappedValueSuffix",
+            " ([[0]])",
+            FormatStatValue(rawValue, true));
+    }
+
+    private void HandleLocaleChanged(Locale _)
+    {
+        UpdateTexts();
+        UpdateLevelText(_player != null ? _player.UnitLevel.Level : 0);
     }
 }
 

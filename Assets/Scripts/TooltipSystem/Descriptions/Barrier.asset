@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Barrier
   m_EditorClassIdentifier: 
   descriptions:
-  - Barrier charges absorb pgysical damage before health is hit
-  - Any hit that is absorbed by a Barrier  breaks it
-  - Each charge absorbs damage up to Barrier Power
-  - Remaining damage beyond Barrier Power continues through
+  - description.barrier1
+  - description.barrier2
+  - description.barrier3
+  - description.barrier4

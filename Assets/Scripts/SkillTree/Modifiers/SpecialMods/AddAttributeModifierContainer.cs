@@ -1,4 +1,5 @@
 using Battle;
+using LocalizationSupport;
 using UnityEngine;
 
 namespace SkillTree
@@ -22,17 +23,31 @@ namespace SkillTree
 
         public override string GetDescription()
         {
+            string localizedAttribute = GameLocalization.LocalizeEnum(attributeType);
+
             if (modifierContainer == null)
             {
-                return $"Adds modifier container to {attributeType} attribute scaling";
+                return GameLocalization.Format(
+                    "modifier.addAttributeModifierContainer.noModifier",
+                    "Adds modifier container to [[0]] attribute scaling",
+                    localizedAttribute);
             }
 
             if (attributesPerStack <= 1)
             {
-                return $"Adds '{modifierContainer.GetDescription()}' per 1 {attributeType}";
+                return GameLocalization.Format(
+                    "modifier.addAttributeModifierContainer.single",
+                    "Adds '[[0]]' per 1 [[1]]",
+                    modifierContainer.GetDescription(),
+                    localizedAttribute);
             }
 
-            return $"Adds '{modifierContainer.GetDescription()}' per {attributesPerStack} {attributeType}";
+            return GameLocalization.Format(
+                "modifier.addAttributeModifierContainer.multi",
+                "Adds '[[0]]' per [[1]] [[2]]",
+                modifierContainer.GetDescription(),
+                attributesPerStack,
+                localizedAttribute);
         }
     }
 }

@@ -1,6 +1,9 @@
 using TMPro;
+using LocalizationSupport;
 using TooltipSystem;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 namespace SkillTree
 {
@@ -23,6 +26,7 @@ namespace SkillTree
             }
 
             bonusZone.OnAllocatedCountChanged += UpdateText;
+            LocalizationSettings.SelectedLocaleChanged += HandleLocaleChanged;
             UpdateText();
         }
 
@@ -30,12 +34,18 @@ namespace SkillTree
         {
             if (bonusZone != null)
                 bonusZone.OnAllocatedCountChanged -= UpdateText;
+
+            if (LocalizationSettings.HasSettings)
+                LocalizationSettings.SelectedLocaleChanged -= HandleLocaleChanged;
         }
 
         private void UpdateText()
         {
-            string bonusZoneText =
-                $"Gain {bonusZone.GetCurrentModifierDescription()} for every allocated node in this zone\nAllocated: {bonusZone.AllocatedNodesCount}";
+            string bonusZoneText = GameLocalization.Format(
+                "ui.bonusZone.description",
+                "Gain [[0]] for every allocated node in this zone\nAllocated: [[1]]",
+                bonusZone.GetCurrentModifierDescription(),
+                bonusZone.AllocatedNodesCount);
             if (tooltipLinkedText != null)
             {
                 tooltipLinkedText.SetText(bonusZoneText);
@@ -43,6 +53,11 @@ namespace SkillTree
             }
 
             text.text = TooltipTextLinkFormatter.Format(bonusZoneText);
+        }
+
+        private void HandleLocaleChanged(Locale _)
+        {
+            UpdateText();
         }
     }
 

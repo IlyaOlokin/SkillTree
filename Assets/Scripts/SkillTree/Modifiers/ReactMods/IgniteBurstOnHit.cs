@@ -1,4 +1,5 @@
 using Battle;
+using LocalizationSupport;
 using UnityEngine;
 
 namespace SkillTree
@@ -32,7 +33,10 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return $"On Hit: trigger {burstPercent * 100f:0.#}% of current {{ignite|Ignite}} damage instantly";
+            return GameLocalization.Format(
+                "modifier.igniteBurstOnHit.description",
+                "On Hit: trigger [[0]]% of current {ignite|Ignite} damage instantly",
+                burstPercent * 100f);
         }
     }
 }

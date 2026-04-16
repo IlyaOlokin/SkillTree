@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Overcharge
   m_EditorClassIdentifier: 
   descriptions:
-  - Overcharge is an {Ailment} caused by Lightning hits
-  - It empowers the next hit against the target with 10% more damage and 20% more
-    Crit Damage Bonus
-  - Overcharge is consumed when this effect is used
+  - description.overcharge1
+  - description.overcharge2
+  - description.overcharge3

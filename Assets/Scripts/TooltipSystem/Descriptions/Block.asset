@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Block
   m_EditorClassIdentifier: 
   descriptions:
-  - Block negates all damage from a hit
-  - Block does not prevent {Effects} from being applied
+  - description.block1
+  - description.block2

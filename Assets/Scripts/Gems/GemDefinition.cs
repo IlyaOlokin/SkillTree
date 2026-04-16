@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LocalizationSupport;
 using UnityEngine;
 
 namespace Gems
@@ -16,8 +17,10 @@ namespace Gems
 
         public string SaveDefinitionId => string.IsNullOrWhiteSpace(saveDefinitionId) ? $"name:{name}" : saveDefinitionId;
         public string ExplicitSaveDefinitionId => saveDefinitionId;
-        public string DisplayName => string.IsNullOrWhiteSpace(displayName) ? name : displayName;
-        public string Description => description;
+        public string DisplayName => GameLocalization.LocalizeValueOrKey(
+            GameLocalization.ContentTable,
+            string.IsNullOrWhiteSpace(displayName) ? name : displayName);
+        public string Description => GameLocalization.LocalizeValueOrKey(GameLocalization.ContentTable, description);
         public Sprite Icon => icon;
         public GemKind Kind => kind;
         public IReadOnlyList<GemModifierRollDefinition> ModifierRollDefinitions => modifierRollDefinitions;

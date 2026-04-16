@@ -1,4 +1,5 @@
 using Battle;
+using LocalizationSupport;
 using TooltipSystem;
 using UnityEngine;
 using Zenject;
@@ -67,13 +68,13 @@ namespace Visual
         private void DisplayEvadeNotification()
         {
             var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
-            newEffect.WriteMessage("Evade");
+            newEffect.WriteMessage(GameLocalization.Get("combat.notification.evade", "Evade"));
         }
 
         private void DisplayBlockNotification()
         {
             var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
-            newEffect.WriteMessage("Block");
+            newEffect.WriteMessage(GameLocalization.Get("combat.notification.block", "Block"));
         }
 
         private void DisplayGettingHitEffect(DamageInfo damageInfo)

@@ -1,6 +1,10 @@
+using System;
 using Battle;
+using LocalizationSupport;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 
 public class WaveUI : MonoBehaviour
@@ -17,19 +21,36 @@ public class WaveUI : MonoBehaviour
         UpdateUI();
         spawner.OnLevelChanged += UpdateUI;
         spawner.OnWaveCleared += UpdateUI;
+        LocalizationSettings.SelectedLocaleChanged += HandleLocaleChanged;
     }
     
     private void UpdateUI()
     {
-        waveNumberText.text = $"LVL: {spawner.SelectedLevel}";
+        waveNumberText.text = GameLocalization.Format(
+            "ui.wave.level",
+            "LVL: [[0]]",
+            spawner.SelectedLevel);
         waveProgressText.text = $"{spawner.CurrentClearedWaves}/{spawner.WavesToUnlockNextLevel}";
         nextLevelButton.interactable = spawner.SelectedLevel < spawner.MaxUnlockedLevel;
         previousLevelButton.interactable = spawner.SelectedLevel > 1;
+    }
+
+    private void OnDisable()
+    {
+        if (LocalizationSettings.HasSettings)
+        {
+            LocalizationSettings.SelectedLocaleChanged -= HandleLocaleChanged;
+        }
     }
 
     private void OnDestroy()
     {
         spawner.OnLevelChanged -= UpdateUI;
         spawner.OnWaveCleared -= UpdateUI;
+    }
+
+    private void HandleLocaleChanged(Locale _)
+    {
+        UpdateUI();
     }
 }

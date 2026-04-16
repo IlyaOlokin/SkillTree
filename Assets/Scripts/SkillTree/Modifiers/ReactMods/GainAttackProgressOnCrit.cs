@@ -1,4 +1,5 @@
 using Battle;
+using LocalizationSupport;
 using UnityEngine;
 
 namespace SkillTree
@@ -28,7 +29,10 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return $"On Crit: gain {attackProgressGain * 100f:0.#}% Attack Progress";
+            return GameLocalization.Format(
+                "modifier.gainAttackProgressOnCrit.description",
+                "On Crit: gain [[0]]% Attack Progress",
+                attackProgressGain * 100f);
         }
     }
 }

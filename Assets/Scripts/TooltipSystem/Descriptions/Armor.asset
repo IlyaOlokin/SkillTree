@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Armor
   m_EditorClassIdentifier: 
   descriptions:
-  - Reduces incoming physical damage
+  - description.armor

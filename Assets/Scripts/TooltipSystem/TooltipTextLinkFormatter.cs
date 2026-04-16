@@ -47,19 +47,24 @@ namespace TooltipSystem
         {
             if (string.IsNullOrWhiteSpace(tokenContent))
             {
+                builder.Append('{').Append(tokenContent).Append('}');
                 return;
             }
 
             int separatorIndex = tokenContent.IndexOf('|');
-            string linkId = separatorIndex >= 0
-                ? tokenContent.Substring(0, separatorIndex).Trim()
-                : tokenContent.Trim();
-            string linkText = separatorIndex >= 0
-                ? tokenContent.Substring(separatorIndex + 1).Trim()
-                : linkId;
+            if (separatorIndex < 0)
+            {
+                // Invalid shorthand like {Ignite} is left visible so content issues are obvious.
+                builder.Append('{').Append(tokenContent).Append('}');
+                return;
+            }
+
+            string linkId = tokenContent.Substring(0, separatorIndex).Trim();
+            string linkText = tokenContent.Substring(separatorIndex + 1).Trim();
 
             if (string.IsNullOrEmpty(linkId) || string.IsNullOrEmpty(linkText))
             {
+                builder.Append('{').Append(tokenContent).Append('}');
                 return;
             }
 

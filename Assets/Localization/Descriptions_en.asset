@@ -1,0 +1,194 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Descriptions_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 5818c1b60ea6b4645a467af69cab22c1, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 20545933312
+    m_Localized: Socket Node can store a {gem|Gem} while allocated
+    m_Metadata:
+      m_Items: []
+  - m_Id: 246914488602624
+    m_Localized: Increases chance to land an attack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247052791582720
+    m_Localized: Its hit chance is checked against defender {evasion|Evasion}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247115550953472
+    m_Localized: Ailments are negative effects applied by hits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247175881822208
+    m_Localized: '{ignite|Ignite}, {chill|Chill}, {overcharge|Overcharge} and {bleed|Bleed}
+      are ailments'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247191832760320
+    m_Localized: The base chance to inflict an Ailment is equal to the corresponding
+      damage dealt by the hit as a percentage of the target's Max Health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247264213864448
+    m_Localized: Reduces incoming physical damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247311684997120
+    m_Localized: Barrier charges absorb pgysical damage before health is hit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247372057808896
+    m_Localized: Any hit that is absorbed by a Barrier  breaks it
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247384347119616
+    m_Localized: Each charge absorbs damage up to Barrier Power
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247399215927296
+    m_Localized: Remaining damage beyond Barrier Power continues through
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247474637901824
+    m_Localized: Bleed is an {ailment|Ailment} caused by Physical hits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247487862542336
+    m_Localized: It stores 30% of dealt Physical damage as damage over time
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247495907217408
+    m_Localized: Each Bleed stack is a separate effect, and deals its stored damage
+      evenly over 5 seconds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247590371332096
+    m_Localized: Block negates all damage from a hit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247601490432000
+    m_Localized: Block does not prevent {effects|Effects} from being applied
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247671870853120
+    m_Localized: Chill is an {ailment|Ailment} caused by Cold hits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247686471225344
+    m_Localized: It reduces Attack Speed by 20%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247699477762048
+    m_Localized: Base Chill duration is 3 seconds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247765575798784
+    m_Localized: A shared defensive stat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247782403346432
+    m_Localized: It feeds {armor|Armor}, {evasion|Evasion}, {barrier|Barrier} power,
+      and {block|Block} chance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247885616779264
+    m_Localized: Distract is an {effects|Effect} that can be applied to units
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247894802305024
+    m_Localized: It reduces {accuracy|Accuracy} by 20%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247903375462400
+    m_Localized: Distract lasts 5 seconds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247989987840000
+    m_Localized: Effects can be applied to units
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248008887373824
+    m_Localized: Effects include various negative effects, as well as {ailment|Ailments}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248071780962304
+    m_Localized: Covers fire, cold, and lightning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248179712987136
+    m_Localized: Gives attacks a chance to miss entirely
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248190060335104
+    m_Localized: Its dodge chance is checked against attacker {accuracy|Accuracy}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248299066101760
+    m_Localized: Gems can be placed into {socketnode|Socket Nodes}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248313007968256
+    m_Localized: Gem grants its effect only while placed in a {socketnode|Socket
+      Node}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248348328202240
+    m_Localized: Ignite is an {ailment|Ailment} caused by Fire hits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248365214470144
+    m_Localized: It stores 30% of dealt Fire damage in a single burning pool
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248374098006016
+    m_Localized: Ignite damage is dealt over time at 40% of the remaining stored
+      damage per second
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248452351135744
+    m_Localized: Covers light and darkness damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248538325979136
+    m_Localized: Overcharge is an {ailment|Ailment} caused by Lightning hits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248576729026560
+    m_Localized: It empowers the next hit against the target with 10% more damage
+      and 20% more Crit Damage Bonus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248584895336448
+    m_Localized: Overcharge is consumed when this effect is used
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248713857601536
+    m_Localized: Sunder is an {effects|Effect} that can be applied to units
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248718592970752
+    m_Localized: It reduces {armor|Armor} by 20%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248729670127616
+    m_Localized: Sunder lasts 2 seconds
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

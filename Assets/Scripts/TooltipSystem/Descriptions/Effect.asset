@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Effect
   m_EditorClassIdentifier: 
   descriptions:
-  - Effects can be applied to units
-  - Effects include various negative effects, as well as {Ailments}
+  - description.effect1
+  - description.effect2

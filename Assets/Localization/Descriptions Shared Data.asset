@@ -1,0 +1,192 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Descriptions Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: Descriptions
+  m_TableCollectionNameGuidString: 5818c1b60ea6b4645a467af69cab22c1
+  m_Entries:
+  - m_Id: 20545933312
+    m_Key: description.socketNode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 246914488602624
+    m_Key: description.accuracy1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247052791582720
+    m_Key: description.accuracy2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247115550953472
+    m_Key: description.ailments1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247175881822208
+    m_Key: description.ailments2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247191832760320
+    m_Key: description.ailments3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247264213864448
+    m_Key: description.armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247311684997120
+    m_Key: description.barrier1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247372057808896
+    m_Key: description.barrier2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247384347119616
+    m_Key: description.barrier3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247399215927296
+    m_Key: description.barrier4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247474637901824
+    m_Key: description.bleed1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247487862542336
+    m_Key: description.bleed2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247495907217408
+    m_Key: description.bleed3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247590371332096
+    m_Key: description.block1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247601490432000
+    m_Key: description.block2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247671870853120
+    m_Key: description.chill1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247686471225344
+    m_Key: description.chill2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247699477762048
+    m_Key: description.chill3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247765575798784
+    m_Key: description.defence1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247782403346432
+    m_Key: description.defence2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247885616779264
+    m_Key: description.distract1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247894802305024
+    m_Key: description.distract2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247903375462400
+    m_Key: description.distract3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 247989987840000
+    m_Key: description.effect1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248008887373824
+    m_Key: description.effect2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248071780962304
+    m_Key: description.elemental1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248179712987136
+    m_Key: description.evasion1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248190060335104
+    m_Key: description.evasion2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248299066101760
+    m_Key: description.gem1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248313007968256
+    m_Key: description.gem2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248348328202240
+    m_Key: description.ignite1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248365214470144
+    m_Key: description.ignite2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248374098006016
+    m_Key: description.ignite3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248452351135744
+    m_Key: description.mystic1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248538325979136
+    m_Key: description.overcharge1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248576729026560
+    m_Key: description.overcharge2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248584895336448
+    m_Key: description.overcharge3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248713857601536
+    m_Key: description.sunder1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248718592970752
+    m_Key: description.sunder2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 248729670127616
+    m_Key: description.sunder3
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2049264629621194752
+  references:
+    version: 2
+    RefIds:
+    - rid: 2049264629621194752
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1776270678652

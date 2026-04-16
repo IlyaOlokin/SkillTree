@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Evasion
   m_EditorClassIdentifier: 
   descriptions:
-  - Gives attacks a chance to miss entirely
-  - Its dodge chance is checked against attacker {accuracy|Accuracy}
+  - description.evasion1
+  - description.evasion2

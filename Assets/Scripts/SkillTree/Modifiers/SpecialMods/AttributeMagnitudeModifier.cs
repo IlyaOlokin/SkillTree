@@ -1,5 +1,6 @@
 using UnityEngine;
 using Battle;
+using LocalizationSupport;
 
 namespace SkillTree
 {
@@ -24,17 +25,31 @@ namespace SkillTree
         {
             base.GetDescription();
             float percentChange = (multiplier - 1f) * 100f;
+            string localizedAttribute = GameLocalization.LocalizeEnum(attributeType);
 
             if (multiplier <= 0f)
             {
-                return $"{attributeType.ToPrettyString()} provides no bonuses";
+                return GameLocalization.Format(
+                    "modifier.attributeMagnitude.noBonuses",
+                    "[[0]] provides no bonuses",
+                    localizedAttribute);
             }
 
             string effectiveness = percentChange >= 0f
-                ? $"{percentChange:0.##}% more effective"
-                : $"{-percentChange:0.##}% less effective";
+                ? GameLocalization.Format(
+                    "modifier.attributeMagnitude.moreEffective",
+                    "[[0]]% more effective",
+                    percentChange)
+                : GameLocalization.Format(
+                    "modifier.attributeMagnitude.lessEffective",
+                    "[[0]]% less effective",
+                    -percentChange);
 
-            return $"Each bonus to {attributeType.ToPrettyString()} is {effectiveness}";
+            return GameLocalization.Format(
+                "modifier.attributeMagnitude.description",
+                "Each bonus to [[0]] is [[1]]",
+                localizedAttribute,
+                effectiveness);
         }
     }
 }

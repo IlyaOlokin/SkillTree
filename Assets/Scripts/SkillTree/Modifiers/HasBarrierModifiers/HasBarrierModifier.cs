@@ -1,4 +1,5 @@
 using Battle;
+using LocalizationSupport;
 using UnityEngine;
 
 
@@ -20,10 +21,15 @@ namespace SkillTree
             {
                 if (modifierContainer == null)
                 {
-                    return "While Barrier is active, applies modifier";
+                    return GameLocalization.Get(
+                        "modifier.hasBarrier.noModifier",
+                        "While Barrier is active, applies modifier");
                 }
 
-                return $"While Barrier is active, {modifierContainer.GetDescription()}";
+                return GameLocalization.Format(
+                    "modifier.hasBarrier.withModifier",
+                    "While Barrier is active, [[0]]",
+                    modifierContainer.GetDescription());
             }
 
         

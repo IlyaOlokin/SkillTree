@@ -1,4 +1,5 @@
 using Battle;
+using LocalizationSupport;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -21,10 +22,15 @@ namespace SkillTree
         {
             if (modifierContainer == null)
             {
-                return "While on Low Life, applies modifier";
+                return GameLocalization.Get(
+                    "modifier.lowLife.noModifier",
+                    "While on Low Life, applies modifier");
             }
 
-            return $"While on Low Life, {modifierContainer.GetDescription()}";
+            return GameLocalization.Format(
+                "modifier.lowLife.withModifier",
+                "While on Low Life, [[0]]",
+                modifierContainer.GetDescription());
         }
 
     }

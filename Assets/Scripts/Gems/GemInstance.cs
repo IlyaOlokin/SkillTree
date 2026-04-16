@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LocalizationSupport;
 using SaveSystem;
 using SkillTree;
 using UnityEngine;
@@ -15,7 +16,9 @@ namespace Gems
 
         public string InstanceId => instanceId;
         public GemDefinition Definition => definition;
-        public string DisplayName => definition != null ? definition.DisplayName : "Unknown Gem";
+        public string DisplayName => definition != null
+            ? definition.DisplayName
+            : GameLocalization.GetContent("content.gem.unknown", "Unknown Gem");
         public string Description => definition != null ? definition.Description : string.Empty;
         public Sprite Icon => definition != null ? definition.Icon : null;
         public GemKind Kind => definition != null ? definition.Kind : GemKind.LocalModifiers;

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Elemental
   m_EditorClassIdentifier: 
   descriptions:
-  - Covers fire, cold, and lightning
+  - description.elemental1

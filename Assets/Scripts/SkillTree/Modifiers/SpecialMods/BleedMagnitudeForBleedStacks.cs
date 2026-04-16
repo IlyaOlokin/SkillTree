@@ -1,4 +1,5 @@
 using Battle;
+using LocalizationSupport;
 using UnityEngine;
 
 namespace SkillTree
@@ -28,7 +29,10 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return $"+{AddedValue * 100f}% Bleed Magnitude per Bleed stack on target";
+            return GameLocalization.Format(
+                "modifier.bleedMagnitudeForStacks.description",
+                "+[[0]]% Bleed Magnitude per Bleed stack on target",
+                AddedValue * 100f);
         }
     }
 

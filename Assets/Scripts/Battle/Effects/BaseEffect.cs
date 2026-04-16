@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LocalizationSupport;
 using TooltipSystem;
 
 namespace Battle
@@ -55,19 +56,9 @@ namespace Battle
                 return string.Empty;
             }
 
-            System.Text.StringBuilder builder = new System.Text.StringBuilder(typeName.Length + 4);
-            for (int i = 0; i < typeName.Length; i++)
-            {
-                char current = typeName[i];
-                if (i > 0 && char.IsUpper(current) && !char.IsUpper(typeName[i - 1]))
-                {
-                    builder.Append(' ');
-                }
-
-                builder.Append(current);
-            }
-
-            return builder.ToString();
+            return GameLocalization.GetContent(
+                $"effect.{GetDescriptionId()}.name",
+                GameLocalization.HumanizeIdentifier(typeName));
         }
     }
 }

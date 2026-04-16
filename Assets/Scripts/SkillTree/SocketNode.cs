@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
 using Gems;
+using LocalizationSupport;
 using SkillTree;
+using TooltipSystem;
 using UnityEngine;
 
 namespace SkillTree
 {
     public class SocketNode : Node
     {
+        private const string TooltipDescriptionId = "socketnode";
+
         [SerializeField] private GemInstance socketedGem;
         [SerializeField] [HideInInspector] private GemInstance defaultSocketedGem;
 
@@ -67,21 +71,33 @@ namespace SkillTree
         public override IReadOnlyList<string> GetTooltipDescriptions()
         {
             List<string> descriptions = new(base.GetTooltipDescriptions());
+            AppendSocketNodeDescription(descriptions);
 
             if (!HasGem)
             {
-                descriptions.Add("Empty Socket");
+                descriptions.Add(GameLocalization.Get("node.socket.empty", "Empty Socket"));
 
                 if (!IsAllocated)
-                    descriptions.Add("Allocate this node before socketing a {gem|Gem}.");
+                {
+                    descriptions.Add(GameLocalization.Get(
+                        "node.socket.allocateBeforeSocketing",
+                        "Allocate this node before socketing a {gem|Gem}."));
+                }
 
                 return descriptions;
             }
 
-            descriptions.Add($"Socketed Gem: {socketedGem.DisplayName}");
+            descriptions.Add(GameLocalization.Format(
+                "node.socket.socketedGem",
+                "Socketed Gem: [[0]]",
+                socketedGem.DisplayName));
 
             if (!IsAllocated)
-                descriptions.Add("Socketed {gem} is inactive until this node is allocated.");
+            {
+                descriptions.Add(GameLocalization.Get(
+                    "node.socket.inactiveGem",
+                    "Socketed {gem|Gem} is inactive until this node is allocated."));
+            }
 
             IReadOnlyList<string> gemDescriptions = socketedGem.GetTooltipDescriptions();
             for (int i = 0; i < gemDescriptions.Count; i++)
@@ -90,6 +106,23 @@ namespace SkillTree
             }
 
             return descriptions;
+        }
+
+        private static void AppendSocketNodeDescription(List<string> descriptions)
+        {
+            TooltipTermDatabase activeDatabase = TooltipTermDatabase.ActiveDatabase;
+            if (activeDatabase == null
+                || !activeDatabase.TryGetDescription(TooltipDescriptionId, out TooltipDescriptionData description))
+            {
+                return;
+            }
+
+            IReadOnlyList<string> socketDescriptions = description.Descriptions;
+            for (int i = 0; i < socketDescriptions.Count; i++)
+            {
+                if (!string.IsNullOrWhiteSpace(socketDescriptions[i]))
+                    descriptions.Add(socketDescriptions[i]);
+            }
         }
 
         private void RebuildRuntimeGemModifiers()

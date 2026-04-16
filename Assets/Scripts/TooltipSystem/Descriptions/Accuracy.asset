@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Accuracy
   m_EditorClassIdentifier: 
   descriptions:
-  - Increases chance to land an attack
-  - Its hit chance is checked against defender {evasion|Evasion}
+  - description.accuracy1
+  - description.accuracy2

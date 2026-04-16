@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using LocalizationSupport;
 
 namespace SaveSystem
 {
@@ -60,7 +61,9 @@ namespace SaveSystem
         {
             string profileId = Guid.NewGuid().ToString("N");
             string utcNow = DateTime.UtcNow.ToString("O");
-            string sanitizedDisplayName = string.IsNullOrWhiteSpace(displayName) ? "Profile" : displayName.Trim();
+            string sanitizedDisplayName = string.IsNullOrWhiteSpace(displayName)
+                ? GameLocalization.Get("save.profile.defaultName", "Profile")
+                : displayName.Trim();
 
             ProfileManifestData manifestData = new()
             {

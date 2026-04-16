@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Defence
   m_EditorClassIdentifier: 
   descriptions:
-  - A shared defensive stat
-  - It feeds {armor|Armor}, {evasion|Evasion}, {barrier|Barrier} power, and {block|Block}
-    chance
+  - description.defence1
+  - description.defence2

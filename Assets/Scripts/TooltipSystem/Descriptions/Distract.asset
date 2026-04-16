@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Distract
   m_EditorClassIdentifier: 
   descriptions:
-  - Distract is an {Effect} that can be applied to units
-  - It reduces {Accuracy} by 20%
-  - Distract lasts 5 seconds
+  - description.distract1
+  - description.distract2
+  - description.distract3

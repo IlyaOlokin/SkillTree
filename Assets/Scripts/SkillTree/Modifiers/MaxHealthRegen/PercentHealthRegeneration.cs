@@ -1,4 +1,5 @@
 using Battle;
+using LocalizationSupport;
 using UnityEngine;
 
 namespace SkillTree
@@ -17,7 +18,10 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return "+" + healthRegenerationPercentage * 100 + "% of Maximum Health regeneration per second";
+            return GameLocalization.Format(
+                "modifier.healthRegen.percent",
+                "+[[0]]% of Maximum Health regeneration per second",
+                healthRegenerationPercentage * 100f);
         }
     }
 }

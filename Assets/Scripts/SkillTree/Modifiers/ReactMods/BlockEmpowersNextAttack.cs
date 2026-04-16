@@ -1,4 +1,5 @@
 using Battle;
+using LocalizationSupport;
 using UnityEngine;
 
 namespace SkillTree
@@ -29,7 +30,10 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return $"After {{block|Block}}: next attack gains +{morePhysicalDamage * 100f:0.#}% more Physical Damage and always applies {{bleed|Bleed}}";
+            return GameLocalization.Format(
+                "modifier.blockEmpowersNextAttack.description",
+                "After {block|Block}: next attack gains +[[0]]% more Physical Damage and always applies {bleed|Bleed}",
+                morePhysicalDamage * 100f);
         }
     }
 }

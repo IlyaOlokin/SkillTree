@@ -1,4 +1,5 @@
 using Battle;
+using LocalizationSupport;
 using UnityEngine;
 
 namespace SkillTree
@@ -23,7 +24,10 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return $"Dual Wielding: when attack progress reaches {triggerThreshold * 100f:0.#}%, perform an extra attack.";
+            return GameLocalization.Format(
+                "modifier.dualWielding.description",
+                "Dual Wielding: when attack progress reaches [[0]]%, perform an extra attack.",
+                triggerThreshold * 100f);
         }
     }
 }

@@ -1,4 +1,5 @@
 using Battle;
+using LocalizationSupport;
 using UnityEngine;
 
 namespace SkillTree
@@ -27,7 +28,10 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return $"+{addedBleedChance * 100f:0.#}% {{Bleed}} Chance if target has no {{Bleed}}";
+            return GameLocalization.Format(
+                "modifier.bleedChanceIfTargetHasNoBleed.description",
+                "+[[0]]% {bleed|Bleed} Chance if target has no {bleed|Bleed}",
+                addedBleedChance * 100f);
         }
     }
 }

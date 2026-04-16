@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Mystic
   m_EditorClassIdentifier: 
   descriptions:
-  - Covers light and darkness damage
+  - description.mystic1

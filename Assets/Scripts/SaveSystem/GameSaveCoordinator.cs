@@ -2,6 +2,7 @@ using System;
 using Battle;
 using Gems;
 using InventorySystem;
+using LocalizationSupport;
 using SkillTree;
 using UnityEngine;
 using Zenject;
@@ -15,8 +16,6 @@ namespace SaveSystem
         private const int SkillTreeDocumentVersion = 1;
         private const int InventoryDocumentVersion = 1;
         private const float DeferredSaveDelaySeconds = 0.75f;
-        private const string DefaultProfileDisplayName = "Profile 1";
-
         private readonly UnitLevel _unitLevel;
         private readonly EnemySpawner _enemySpawner;
         private readonly MainSkillTree _skillTree;
@@ -68,7 +67,7 @@ namespace SaveSystem
         {
             _cloudSettingsService.Load();
             _localSettingsService.Load();
-            _activeProfile = _profileManager.GetOrCreateActiveProfile(DefaultProfileDisplayName);
+            _activeProfile = _profileManager.GetOrCreateActiveProfile(GetDefaultProfileDisplayName());
             LoadActiveProfile();
             Subscribe();
             Application.quitting += HandleApplicationQuitting;
@@ -114,7 +113,7 @@ namespace SaveSystem
             if (!_profileManager.TrySetActiveProfile(profileId))
                 return false;
 
-            _activeProfile = _profileManager.GetOrCreateActiveProfile(DefaultProfileDisplayName);
+            _activeProfile = _profileManager.GetOrCreateActiveProfile(GetDefaultProfileDisplayName());
             LoadActiveProfile();
             return true;
         }
@@ -397,6 +396,11 @@ namespace SaveSystem
             _progressDirty = false;
             _skillTreeDirty = false;
             _inventoryDirty = false;
+        }
+
+        private static string GetDefaultProfileDisplayName()
+        {
+            return GameLocalization.Get("save.profile.defaultFirst", "Profile 1");
         }
     }
 }

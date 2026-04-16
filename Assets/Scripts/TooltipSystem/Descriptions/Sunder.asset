@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Sunder
   m_EditorClassIdentifier: 
   descriptions:
-  - Sunder is an {Effect} that can be applied to units
-  - It reduces {Armor} by 20%
-  - Sunder lasts 2 seconds
+  - description.sunder1
+  - description.sunder2
+  - description.sunder3

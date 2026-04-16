@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Battle;
+using LocalizationSupport;
 using TooltipSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -30,7 +31,7 @@ namespace SkillTree
 
         public virtual string GetDescription()
         {
-            return "Empty description";
+            return GameLocalization.Get("modifier.emptyDescription", "Empty description");
         }
 
         public void SetPriorities(List<ModifierPriority> priorities)
@@ -63,32 +64,33 @@ namespace SkillTree
 
         public string GetDescription()
         {
-            StringBuilder builder = new StringBuilder();
             var forcePercentForAdded = StatTypeDisplayRules.IsPercentStat(statType);
             string formattedStatName = StatTypeTooltipFormatter.Format(statType);
 
             switch (modifierType)
             {
                 case ModifierType.Added:
-                    builder.Append("+")
-                        .Append(forcePercentForAdded ? value * 100f : value)
-                        .Append(forcePercentForAdded ? "%" : "")
-                        .Append(" to ")
-                        .Append(formattedStatName.Replace("Added", ""));
-                    break;
+                    string addedValue = $"+{(forcePercentForAdded ? value * 100f : value)}{(forcePercentForAdded ? "%" : string.Empty)}";
+                    return GameLocalization.Format(
+                        "modifier.container.added",
+                        "[[0]] to [[1]]",
+                        addedValue,
+                        formattedStatName.Replace("Added", string.Empty));
                 case ModifierType.Increased:
-                    builder.Append(Mathf.Abs(value * 100f))
-                        .Append(value < 0 ? "% Decreased " : "% Increased ")
-                        .Append(formattedStatName);
-                    break;
+                    return GameLocalization.Format(
+                        value < 0 ? "modifier.container.decreased" : "modifier.container.increased",
+                        value < 0 ? "[[0]]% Decreased [[1]]" : "[[0]]% Increased [[1]]",
+                        Mathf.Abs(value * 100f),
+                        formattedStatName);
                 case ModifierType.More:
-                    builder.Append(Mathf.Abs(value * 100f))
-                        .Append(value < 0 ? "% Less " : "% More ")
-                        .Append(formattedStatName);
-                    break;
+                    return GameLocalization.Format(
+                        value < 0 ? "modifier.container.less" : "modifier.container.more",
+                        value < 0 ? "[[0]]% Less [[1]]" : "[[0]]% More [[1]]",
+                        Mathf.Abs(value * 100f),
+                        formattedStatName);
             }
 
-            return builder.ToString();
+            return string.Empty;
         }
     }
 }

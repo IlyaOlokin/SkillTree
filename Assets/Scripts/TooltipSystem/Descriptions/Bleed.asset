@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Bleed
   m_EditorClassIdentifier: 
   descriptions:
-  - Bleed is an {Ailment} caused by Physical hits
-  - It stores 30% of dealt Physical damage as damage over time
-  - Each Bleed stack is a separate effect, and deals its stored damage evenly over
-    5 seconds
+  - description.bleed1
+  - description.bleed2
+  - description.bleed3
