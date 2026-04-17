@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Splines;
 using SkillTree;
+using ConnectionRendering;
+#if UNITY_EDITOR
+using UnityEditor;
 using Unity.Mathematics;
+#endif
 
 namespace SkillTree
 {
@@ -33,6 +36,7 @@ namespace SkillTree
         [SerializeField] [ColorUsage(true, true)] private Color frontGlowColor = Color.white;
         [SerializeField] [Range(0.001f, 0.25f)] private float frontGlowWidth = 0.06f;
         [SerializeField] [Min(0f)] private float frontGlowIntensity = 1f;
+        [SerializeField] [Min(0f)] private float baseWidth;
         
         private Texture2D _stateTexture;
         private Texture2D _progressTexture;
@@ -45,17 +49,17 @@ namespace SkillTree
 
         private void OnValidate()
         {
-            _material = GetComponent<MeshRenderer>().sharedMaterial;
+            CacheMaterialReference();
             ApplyMaterialProperties();
         }
 
         private void Awake()
         {
-            if (_material == null)
-                _material = GetComponent<MeshRenderer>().sharedMaterial;
+            CacheMaterialReference();
 
             CacheNodeAllocationStates();
-            skillTree.OnAnyNodeChanged += ChangeNodeConnection;
+            if (skillTree != null)
+                skillTree.OnAnyNodeChanged += ChangeNodeConnection;
         }
 
         private void OnDestroy()
@@ -63,21 +67,8 @@ namespace SkillTree
             if (skillTree != null)
                 skillTree.OnAnyNodeChanged -= ChangeNodeConnection;
 
-            if (_stateTexture != null)
-            {
-                if (Application.isPlaying)
-                    Destroy(_stateTexture);
-                else
-                    DestroyImmediate(_stateTexture);
-            }
-
-            if (_progressTexture != null)
-            {
-                if (Application.isPlaying)
-                    Destroy(_progressTexture);
-                else
-                    DestroyImmediate(_progressTexture);
-            }
+            ConnectionRendererUtility.ReleaseTexture(_stateTexture);
+            ConnectionRendererUtility.ReleaseTexture(_progressTexture);
         }
 
         private void Start()
@@ -113,7 +104,10 @@ namespace SkillTree
             }
 
             if (hasChanges)
+            {
+                _stateTexture.Apply(false);
                 _progressTexture.Apply(false);
+            }
         }
 
 #if UNITY_EDITOR
@@ -383,31 +377,12 @@ namespace SkillTree
 
     private int GetSegmentCountForLength(float length)
     {
-        int minSegments = Mathf.Max(2, minSegmentsPerSpline);
-        int maxSegments = Mathf.Max(minSegments, maxSegmentsPerSpline);
-        int segmentCount = Mathf.CeilToInt(Mathf.Max(length, 0f) * segmentsPerUnit) + 1;
-        return Mathf.Clamp(segmentCount, minSegments, maxSegments);
+        return ConnectionRendererUtility.GetSegmentCountForLength(length, segmentsPerUnit, minSegmentsPerSpline, maxSegmentsPerSpline);
     }
 
     private float EstimateSplineLength(SplineContainer spline)
     {
-        const int sampleCount = 16;
-
-        if (spline == null || spline.Splines.Count == 0)
-            return 0f;
-
-        Vector3 prevPos = spline.EvaluatePosition(0f);
-        float length = 0f;
-
-        for (int i = 1; i <= sampleCount; i++)
-        {
-            float t = i / (float)sampleCount;
-            Vector3 currPos = spline.EvaluatePosition(t);
-            length += Vector3.Distance(prevPos, currPos);
-            prevPos = currPos;
-        }
-
-        return length;
+        return ConnectionRendererUtility.EstimateSplineLength(spline);
     }
 
     private Mesh GetOrCreateChunkMesh(int chunkIndex)
@@ -471,30 +446,14 @@ namespace SkillTree
         
         private void CreateStateTexture()
         {
-            if (_material == null)
-                _material = GetComponent<MeshRenderer>().sharedMaterial;
+            CacheMaterialReference();
+            ConnectionRendererUtility.ReleaseTexture(_stateTexture);
+            ConnectionRendererUtility.ReleaseTexture(_progressTexture);
 
-            _stateTexture = new Texture2D(
-                nodeConnections.Count,
-                1,
-                TextureFormat.RGBAFloat,
-                false,
-                true
-            );
+            int textureWidth = Mathf.Max(1, nodeConnections.Count);
 
-            _stateTexture.filterMode = FilterMode.Point;
-            _stateTexture.wrapMode = TextureWrapMode.Clamp;
-
-            _progressTexture = new Texture2D(
-                nodeConnections.Count,
-                1,
-                TextureFormat.RGBAFloat,
-                false,
-                true
-            );
-
-            _progressTexture.filterMode = FilterMode.Point;
-            _progressTexture.wrapMode = TextureWrapMode.Clamp;
+            _stateTexture = ConnectionRendererUtility.CreateRuntimeTexture(textureWidth);
+            _progressTexture = ConnectionRendererUtility.CreateRuntimeTexture(textureWidth);
 
             _connectionStates = new ConnectionVisualState[nodeConnections.Count];
             if (_connectionLengths.Length != nodeConnections.Count)
@@ -504,7 +463,7 @@ namespace SkillTree
             {
                 bool isAllocated = nodeConnections[i].pair.IsAllocated();
                 float progress = isAllocated ? 1f : 0f;
-                Color color = isAllocated ? allocatedColor : defaultColor;
+                Color color = ConnectionRendererUtility.GetShaderColor(isAllocated ? allocatedColor : defaultColor);
                 float thickness = isAllocated ? allocatedLineWidth : defaultLineWidth;
                 _connectionLengths[i] = EstimateSplineLength(nodeConnections[i].spline);
 
@@ -521,9 +480,7 @@ namespace SkillTree
             _stateTexture.Apply(false);
             _progressTexture.Apply(false);
 
-            _material.SetTexture("_StateTex", _stateTexture);
-            _material.SetTexture("_ProgressTex", _progressTexture);
-            _material.SetFloat("_StateTexWidth", nodeConnections.Count);
+            ConnectionRendererUtility.BindTextures(_material, _stateTexture, _progressTexture, textureWidth);
             ApplyMaterialProperties();
         }
 
@@ -599,7 +556,7 @@ namespace SkillTree
         
         public void SetConnectionState(int id, bool isAllocated)
         {
-            Color color = isAllocated ? allocatedColor : defaultColor;
+            Color color = ConnectionRendererUtility.GetShaderColor(isAllocated ? allocatedColor : defaultColor);
             float thicknessMul = isAllocated ? allocatedLineWidth : defaultLineWidth;
             _stateTexture.SetPixel(
                 id,
@@ -656,13 +613,18 @@ namespace SkillTree
             if (_material == null)
                 return;
 
-            _material.SetColor("_DefaultColor", defaultColor);
-            _material.SetFloat("_FrontWidth", frontWidth);
-            _material.SetFloat("_FrontThicknessBoost", frontThicknessBoost);
-            _material.SetFloat("_FrontThicknessWidth", frontThicknessWidth);
-            _material.SetColor("_FrontGlowColor", frontGlowColor);
-            _material.SetFloat("_FrontGlowWidth", frontGlowWidth);
-            _material.SetFloat("_FrontGlowIntensity", frontGlowIntensity);
+            ConnectionRendererUtility.ApplySharedMaterialProperties(
+                _material,
+                baseWidth,
+                defaultColor,
+                defaultLineWidth,
+                allocatedLineWidth,
+                frontWidth,
+                frontThicknessBoost,
+                frontThicknessWidth,
+                frontGlowColor,
+                frontGlowWidth,
+                frontGlowIntensity);
         }
 
         private void FinalizeConnectionVisualState(int id, ref ConnectionVisualState state)
@@ -681,6 +643,14 @@ namespace SkillTree
                 SetConnectionProgress(id, 1f, state.reverse, false);
             }
         }
+
+        private void CacheMaterialReference()
+        {
+            var meshRenderer = GetComponent<MeshRenderer>();
+            if (meshRenderer != null)
+                _material = meshRenderer.sharedMaterial;
+        }
+
     }
 
     internal struct ConnectionVisualState

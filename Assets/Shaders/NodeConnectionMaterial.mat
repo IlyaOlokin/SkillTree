@@ -23,14 +23,27 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _ProgressTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _StateTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BaseWidth: 1
-    - _StateTexWidth: 1
-    m_Colors: []
+    - _AllocatedWidth: 4
+    - _BaseWidth: 0.01
+    - _DefaultWidth: 3
+    - _FrontGlowIntensity: 1
+    - _FrontGlowWidth: 0.06
+    - _FrontThicknessBoost: 0.5
+    - _FrontThicknessWidth: 0.1
+    - _FrontWidth: 0.09
+    - _StateTexWidth: 6
+    m_Colors:
+    - _DefaultColor: {r: 0.19999997, g: 0.19999997, b: 0.19999997, a: 1}
+    - _FrontGlowColor: {r: 2, g: 0.9990562, b: 0.46274507, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

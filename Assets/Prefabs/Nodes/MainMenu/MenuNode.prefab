@@ -9,13 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 12786875266663409}
-  - component: {fileID: 3041048277598826952}
   - component: {fileID: 4119631117331947586}
-  - component: {fileID: 7357462243889916700}
-  - component: {fileID: 4188905282137775919}
-  - component: {fileID: 4314464931997583764}
+  - component: {fileID: 3164708400631711736}
+  - component: {fileID: 5933905221332520699}
+  - component: {fileID: 4592495039614221979}
   m_Layer: 3
-  m_Name: SpecialNode
+  m_Name: MenuNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,30 +30,13 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.19, y: -0.27, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3898207953597048116}
   - {fileID: 813590188894130794}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3041048277598826952
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1966638709148332189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae1f51100ecafc144b31813065a5776c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveId: 
-  defaultIsAllocated: 0
-  nodeCost: 1
-  connectedNodes: []
-  <Modifiers>k__BackingField: []
 --- !u!58 &4119631117331947586
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -91,7 +73,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &7357462243889916700
+--- !u!114 &3164708400631711736
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -100,43 +82,53 @@ MonoBehaviour:
   m_GameObject: {fileID: 1966638709148332189}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3a8a2f8db65ad549bae343865e9b27b, type: 3}
+  m_Script: {fileID: 11500000, guid: 08587eb119ed0344e8b0023a152f54da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  node: {fileID: 3041048277598826952}
+  isPersistentRoot: 0
+  isAllocated: 0
+  defaultIsAllocated: 0
+  connectedNodes: []
+  tooltipDescriptions: []
+  showTooltipTitle: 1
+  action: {fileID: 0}
+--- !u!114 &5933905221332520699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966638709148332189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27738688f14508a47ac7dee61a33f01a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  node: {fileID: 3164708400631711736}
+  treeController: {fileID: 0}
+  cameraController: {fileID: 0}
+  tooltipUI: {fileID: 0}
+--- !u!114 &4592495039614221979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966638709148332189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f32aa0127b3844c97ec27c0e0a2ade, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  node: {fileID: 3164708400631711736}
   border: {fileID: 2706540189942539725}
   nodeImage: {fileID: 3160987939310528331}
-  nodeImageBaseColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
-  borderBaseColor: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
-  nodeImageCanAllocateColor: {r: 0.67058825, g: 0.67058825, b: 0.67058825, a: 1}
-  borderCanAllocateColor: {r: 0.5764706, g: 0.5764706, b: 0.5764706, a: 1}
-  nodeImageAllocatedColor: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
-  borderAllocatedColor: {r: 0.9528302, g: 0.9528302, b: 0.9528302, a: 1}
---- !u!114 &4188905282137775919
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1966638709148332189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1f90593a65c83c48968f08cd07c84b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4314464931997583764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1966638709148332189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ddd85c6dcb641f788a8f9429df111d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tooltipSource: {fileID: 3041048277598826952}
+  nodeImageBaseColor: {r: 0.7254902, g: 0.7254902, b: 0.7254902, a: 1}
+  borderBaseColor: {r: 0.22745098, g: 0.22745098, b: 0.22745098, a: 1}
+  nodeImageCanAllocateColor: {r: 0.7254902, g: 0.7254902, b: 0.7254902, a: 1}
+  borderCanAllocateColor: {r: 0.29411766, g: 0.29411766, b: 0.29411766, a: 1}
+  nodeImageAllocatedColor: {r: 0.7254902, g: 0.7254902, b: 0.7254902, a: 1}
+  borderAllocatedColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &3204345449470436903
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,7 +156,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.89393, y: 0.89393, z: 0.89393}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1689631404583513304}
@@ -302,7 +294,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 145ee4ceb3e1cfd468a64c3d119ed1ca, type: 3}
-  m_Color: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
+  m_Color: {r: 0.67058825, g: 0.67058825, b: 0.67058825, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

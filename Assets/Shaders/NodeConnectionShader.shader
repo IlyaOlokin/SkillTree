@@ -6,6 +6,8 @@ Properties
         _ProgressTex ("Progress Texture", 2D) = "black" {}
         _StateTexWidth ("State Tex Width", Float) = 1
         _BaseWidth ("Base Width", Float) = 1
+        _DefaultWidth ("Default Width", Float) = 0.08
+        _AllocatedWidth ("Allocated Width", Float) = 0.15
         _DefaultColor ("Default Color", Color) = (1,1,1,1)
         _FrontWidth ("Front Width", Float) = 0.05
         _FrontThicknessBoost ("Front Thickness Boost", Float) = 0.35
@@ -32,6 +34,8 @@ Properties
             sampler2D _ProgressTex;
             float _StateTexWidth;
             float _BaseWidth;
+            float _DefaultWidth;
+            float _AllocatedWidth;
             float4 _DefaultColor;
             float _FrontWidth;
             float _FrontThicknessBoost;
@@ -68,10 +72,20 @@ Properties
 
                 float directedT = progressState.g > 0.5 ? (1.0 - v.uv.x) : v.uv.x;
                 float frontActive = progressState.b;
+                float frontWidth = max(_FrontWidth, 0.0001);
+                float bandLerp = saturate((progressState.r + frontWidth - directedT) / (2.0 * frontWidth));
+                float fullyFilled = 1.0 - step(progressState.r - frontWidth, directedT);
+                float fullyUnfilled = step(progressState.r + frontWidth, directedT);
+                float bandMask = saturate(1.0 - fullyFilled - fullyUnfilled);
                 float frontThicknessWidth = max(_FrontThicknessWidth, 0.0001);
                 float frontDistance = abs(directedT - progressState.r);
                 float frontThicknessMask = (1.0 - smoothstep(0.0, frontThicknessWidth, frontDistance)) * frontActive;
-                float thickness = state.r * (1.0 + frontThicknessMask * _FrontThicknessBoost);
+                float restThickness = state.r;
+                float animatedThickness = fullyFilled * _AllocatedWidth
+                    + fullyUnfilled * _DefaultWidth
+                    + bandMask * lerp(_DefaultWidth, _AllocatedWidth, bandLerp);
+                float baseThickness = frontActive > 0.5 ? animatedThickness : restThickness;
+                float thickness = baseThickness * (1.0 + frontThicknessMask * _FrontThicknessBoost);
                 float side = v.uv.y;
 
                 float3 normal = v.normal;
@@ -90,11 +104,17 @@ Properties
             {
                 float directedT = i.progressData.y > 0.5 ? (1.0 - i.t) : i.t;
                 float frontWidth = max(_FrontWidth, 0.0001);
-                float fill = 1.0 - smoothstep(i.progressData.x - frontWidth, i.progressData.x + frontWidth, directedT);
+                float bandLerp = saturate((i.progressData.x + frontWidth - directedT) / (2.0 * frontWidth));
+                float fullyFilled = 1.0 - step(i.progressData.x - frontWidth, directedT);
+                float fullyUnfilled = step(i.progressData.x + frontWidth, directedT);
+                float bandMask = saturate(1.0 - fullyFilled - fullyUnfilled);
                 float glowWidth = max(_FrontGlowWidth, 0.0001);
                 float frontDistance = abs(directedT - i.progressData.x);
                 float glowMask = (1.0 - smoothstep(0.0, glowWidth, frontDistance)) * i.progressData.z;
-                float3 baseColor = lerp(_DefaultColor.rgb, i.allocatedCol.rgb, saturate(fill));
+                float3 animatedColor = fullyFilled * i.allocatedCol.rgb
+                    + fullyUnfilled * _DefaultColor.rgb
+                    + bandMask * lerp(_DefaultColor.rgb, i.allocatedCol.rgb, bandLerp);
+                float3 baseColor = i.progressData.z > 0.5 ? animatedColor : i.allocatedCol.rgb;
                 float3 glowColor = _FrontGlowColor.rgb * (_FrontGlowIntensity * glowMask);
                 return float4(baseColor + glowColor, 1);
             }

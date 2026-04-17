@@ -9,6 +9,7 @@ namespace LocalizationSupport
     {
         public const string DescriptionsTable = "Descriptions";
         public const string ModifiersTable = "Modifiers";
+        public const string MainMenuTable = "MainMenu";
         public const string RuntimeTable = DescriptionsTable;
         public const string ContentTable = DescriptionsTable;
 
@@ -30,6 +31,11 @@ namespace LocalizationSupport
         public static string GetModifier(string key, string fallback)
         {
             return GetFromTable(ModifiersTable, key, fallback);
+        }
+
+        public static string GetMainMenu(string key, string fallback)
+        {
+            return GetFromTable(MainMenuTable, key, fallback);
         }
 
         public static string Format(string key, string fallbackTemplate, params object[] arguments)
@@ -68,6 +74,11 @@ namespace LocalizationSupport
         public static string LocalizeEnum<TEnum>(TEnum value) where TEnum : Enum
         {
             return GetContent($"enum.{typeof(TEnum).Name}.{value}", value.ToPrettyString());
+        }
+
+        public static string LocalizeMainMenuValueOrKey(string valueOrKey)
+        {
+            return LocalizeValueOrKey(MainMenuTable, valueOrKey);
         }
 
         public static string HumanizeIdentifier(string value)
