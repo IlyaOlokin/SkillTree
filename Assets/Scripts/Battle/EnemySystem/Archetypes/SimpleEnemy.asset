@@ -10,18 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfff9238fe22d774e9c6f626c2244278, type: 3}
-  m_Name: TestEnemyArchetype
+  m_Name: SimpleEnemy
   m_EditorClassIdentifier: 
   minLevel: 1
   maxLevel: 0
   bossOnly: 0
   allowedRarities: 
-  healthWeight: 0.628
-  offenceWeight: 0.372
-  defenceWeight: 0
+  healthWeight: 0.32666314
+  offenceWeight: 0.34033686
+  defenceWeight: 0.333
   utilityWeight: 0
-  health:
-    maxHealth: 1
   offence:
     physical: 1
     fire: 0
@@ -34,8 +32,7 @@ MonoBehaviour:
   defence:
     armor: 1
     evasion: 0
-    barrierCapacity: 0
-    barrierCount: 0
+    barrierPower: 0
     blockChance: 0
     elementalResistance: 0
     fireResistance: 0
@@ -44,7 +41,7 @@ MonoBehaviour:
     mysticCleanse: 0
   utility:
     physical:
-      power: 1
+      power: 0
       mitigation: 0
       chance: 0
     fire:
@@ -63,8 +60,7 @@ MonoBehaviour:
   baseAttackSpeed: 0.15
   possibleAffixes:
   - {fileID: 11400000, guid: c2bdd953a1ec2154d927e63e023d1378, type: 2}
-  extraModifiers: []
   gemDropTable: {fileID: 11400000, guid: 562f4bb25f8bf9a4f95f24fde9f23482, type: 2}
-  previewDatabaseOverride: {fileID: 11400000, guid: 50846ac0286e5b9428d5953602917acc, type: 2}
+  previewDatabaseOverride: {fileID: 0}
   previewLevel: 1
   previewRarity: 0

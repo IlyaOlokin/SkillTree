@@ -14,14 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   archetypes:
   - {fileID: 11400000, guid: 3eb85abf4551864498ca76ae65819ca3, type: 2}
-  basePower: 10
-  powerGrowthRate: 1.12
+  basePower: 6
+  powerFlatIncrease: 0.5
+  powerExponent: 1.03
   startingLevel: 1
-  wavesToUnlockNextLevel: 2
+  wavesToUnlockNextLevel: 5
   maxWaveLevel: 100
-  respawnDelay: 2
+  respawnDelay: 1.5
   maxEnemiesPerWave: 3
   rarityBalance: {fileID: 11400000, guid: e06ecfd8fa36bd64ab614c313d620730, type: 2}
   bossBalance: {fileID: 11400000, guid: 4effbdd8084dcd74790e13923953cfb1, type: 2}
   wavePowerBalance: {fileID: 11400000, guid: a8b39b4775f364d4db2ad8585647ed53, type: 2}
+  statBudgetConfig: {fileID: 11400000, guid: c638789c3f0751a4c83dff393bcc550c, type: 2}
   globalModifiers: []

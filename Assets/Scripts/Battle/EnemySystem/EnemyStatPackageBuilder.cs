@@ -11,16 +11,17 @@ namespace Battle
             float totalPower,
             EnemyArchetype archetype,
             EnemyRarity rarity,
-            int? affixCountOverride = null)
+            EnemyStatBudgetConfig statBudgetConfig,
+            int? affixCountOverride = null,
+            bool applyRandomVariance = true)
         {
-            float finalPower = power * EnemyRarityHelper.GetMultiplier(rarity);
-            finalPower *= Random.Range(0.9f, 1.1f);
+            float finalPower = EnemyPowerCalculator.Calculate(power, rarity, archetype, applyRandomVariance);
             
             var package = new EnemySpawnData(archetype, rarity, finalPower, ScriptableObject.CreateInstance<BaseInnateModifiers>());
 
-            DistributePrimaryStats(package.Modifiers, finalPower, archetype);
-            ApplyBarrier(package.Modifiers, finalPower, archetype);
-            ApplyAttackSpeed(package.Modifiers, archetype);
+            ApplyCategoryBudgets(package.Modifiers, finalPower, archetype, statBudgetConfig);
+            ApplyArchetypeModifiers(package.Modifiers, archetype);
+            ApplyAttackSpeed(package.Modifiers, archetype, applyRandomVariance);
             ApplyAccuracy(package.Modifiers, totalPower);
             ApplyRarityScaling(package.Modifiers, rarity);
             ApplyAffixes(package.Modifiers, archetype, rarity, affixCountOverride);
@@ -28,55 +29,116 @@ namespace Battle
             return package;
         }
         
-        private void DistributePrimaryStats(
+        private void ApplyCategoryBudgets(
             BaseInnateModifiers package,
             float power,
-            EnemyArchetype archetype)
+            EnemyArchetype archetype,
+            EnemyStatBudgetConfig statBudgetConfig)
         {
-            float hp = power * archetype.healthWeight * 3f;
-            Add(package, ModifierType.Added, StatType.MaximumHealth, hp);
-            
-            float damageBudget = power * archetype.damageWeight * 3f;
-
-            foreach (var damageType in archetype.damageTypes)
-            {
-                float value = damageBudget * damageType.weight;
-                Add(package, ModifierType.Added, damageType.statType, value);
-            }
-            
-            float defenseBudget = power * archetype.defenseWeight * 0.6f;
-
-            foreach (var defenseType in archetype.defenseTypes)
-            {
-                float value = defenseBudget * defenseType.weight;
-                Add(package, ModifierType.Added, defenseType.statType, value);
-            }
-        }
-        
-        private void ApplyBarrier(
-            BaseInnateModifiers package,
-            float power,
-            EnemyArchetype archetype)
-        {
-            if (archetype.barrierWeight <= 0f)
+            if (archetype == null)
                 return;
-            
-            int barrierCount = Mathf.FloorToInt(archetype.barrierWeight / 0.1f);
 
-            if (barrierCount > 0)
-            {
-                Add(package, ModifierType.Added, StatType.BarrierCount, barrierCount);
-            }
-            
-            float barrierPower = power * archetype.barrierWeight * 2f;
-            Add(package, ModifierType.Added, StatType.BarrierCapacity, barrierPower);
+            float totalCategoryWeight = archetype.GetTotalCategoryWeight();
+            if (totalCategoryWeight <= 0f)
+                return;
+
+            var entries = new List<EnemyStatWeightEntry>();
+
+            entries.Clear();
+            archetype.AddHealthEntries(entries);
+            float healthCategoryRatio = archetype.healthWeight / totalCategoryWeight;
+            float healthBudget = power * healthCategoryRatio;
+            ApplyConfiguredStats(package, healthBudget, healthCategoryRatio, entries, statBudgetConfig);
+
+            entries.Clear();
+            archetype.AddOffenceEntries(entries);
+            float offenceCategoryRatio = archetype.offenceWeight / totalCategoryWeight;
+            float offenceBudget = power * offenceCategoryRatio;
+            ApplyConfiguredStats(package, offenceBudget, offenceCategoryRatio, entries, statBudgetConfig);
+
+            entries.Clear();
+            archetype.AddDefenceEntries(entries);
+            float defenceCategoryRatio = archetype.defenceWeight / totalCategoryWeight;
+            float defenceBudget = power * defenceCategoryRatio;
+            ApplyConfiguredStats(package, defenceBudget, defenceCategoryRatio, entries, statBudgetConfig);
+
+            entries.Clear();
+            archetype.AddUtilityEntries(entries);
+            float utilityCategoryRatio = archetype.utilityWeight / totalCategoryWeight;
+            float utilityBudget = power * utilityCategoryRatio;
+            ApplyConfiguredStats(package, utilityBudget, utilityCategoryRatio, entries, statBudgetConfig);
         }
         
+        private void ApplyConfiguredStats(
+            BaseInnateModifiers package,
+            float categoryBudget,
+            float categoryAllocationRatio,
+            List<EnemyStatWeightEntry> entries,
+            EnemyStatBudgetConfig statBudgetConfig)
+        {
+            if (categoryBudget <= 0f || entries == null || entries.Count == 0)
+                return;
+
+            float totalStatWeight = 0f;
+            for (int i = 0; i < entries.Count; i++)
+                totalStatWeight += Mathf.Max(0f, entries[i].Weight);
+
+            if (totalStatWeight <= 0f)
+                return;
+            for (int i = 0; i < entries.Count; i++)
+            {
+                var entry = entries[i];
+                if (entry.Weight <= 0f)
+                    continue;
+
+                float normalizedStatWeight = entry.Weight / totalStatWeight;
+                float statBudget = categoryBudget * normalizedStatWeight;
+                float allocationRatio = categoryAllocationRatio * normalizedStatWeight;
+                ApplyConfiguredStat(package, entry.StatType, statBudget, allocationRatio, statBudgetConfig);
+            }
+        }
+
+        private void ApplyConfiguredStat(
+            BaseInnateModifiers package,
+            StatType statType,
+            float budget,
+            float allocationRatio,
+            EnemyStatBudgetConfig statBudgetConfig)
+        {
+            if (budget <= 0f)
+                return;
+
+            EnemyStatBudgetRule rule = statBudgetConfig != null
+                ? statBudgetConfig.GetRule(statType)
+                : EnemyStatBudgetRuleDefaults.Get(statType);
+
+            float value = rule.Evaluate(budget, allocationRatio);
+            if (value <= 0f)
+                return;
+
+            Add(package, rule.modifierType, statType, value);
+        }
+
         private void ApplyAttackSpeed(
             BaseInnateModifiers package,
+            EnemyArchetype archetype,
+            bool applyRandomVariance)
+        {
+            float attackSpeed = archetype.baseAttackSpeed;
+            if (applyRandomVariance)
+                attackSpeed *= Random.Range(0.98f, 1.02f);
+
+            Add(package, ModifierType.Added, StatType.AttackSpeed, attackSpeed);
+        }
+
+        private void ApplyArchetypeModifiers(
+            BaseInnateModifiers package,
             EnemyArchetype archetype)
         {
-            Add(package, ModifierType.Added, StatType.AttackSpeed, archetype.baseAttackSpeed);
+            if (archetype == null || archetype.extraModifiers == null || archetype.extraModifiers.Count == 0)
+                return;
+
+            package.AddRange(archetype.extraModifiers);
         }
         
         private void ApplyAccuracy(

@@ -27,6 +27,7 @@ namespace Battle
                 totalPower,
                 archetype,
                 rarity,
+                _database != null ? _database.StatBudgetConfig : null,
                 GetAffixLimitOverride(context, rarity));
 
             var globalModifiers = _database.GlobalModifiers;

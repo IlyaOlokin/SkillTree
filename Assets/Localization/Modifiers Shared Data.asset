@@ -1407,6 +1407,10 @@ MonoBehaviour:
     m_Key: modifier.container.none.Intelligence
     m_Metadata:
       m_Items: []
+  - m_Id: 487906223460352
+    m_Key: modifier.noArmor.withModifier
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

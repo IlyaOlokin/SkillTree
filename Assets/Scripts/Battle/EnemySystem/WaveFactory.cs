@@ -15,8 +15,9 @@ namespace Battle
             _enemyFactory = factory;
             _database = database;
             float basePower = database != null ? database.BasePower : 10f;
-            float growthRate = database != null ? database.PowerGrowthRate : 1.12f;
-            _powerCalculator = new LevelPowerCalculator(basePower, growthRate);
+            float flatIncrease = database != null ? database.PowerFlatIncrease : 10f;
+            float exponent = database != null ? database.PowerExponent : 1f;
+            _powerCalculator = new LevelPowerCalculator(basePower, flatIncrease, exponent);
         }
 
         public List<EnemySpawnData> CreateWave(WaveContext context)

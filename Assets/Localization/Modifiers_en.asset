@@ -1412,6 +1412,10 @@ MonoBehaviour:
     m_Localized: You have no {barrierCapacity|Barrier Capacity}
     m_Metadata:
       m_Items: []
+  - m_Id: 487906223460352
+    m_Localized: 'While you have no Armor, [[0]]'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -12,7 +12,8 @@ namespace Battle
 
         [Header("Power scaling")]
         [SerializeField, Min(0.01f)] private float basePower = 10f;
-        [SerializeField, Min(1f)] private float powerGrowthRate = 1.12f;
+        [SerializeField, Min(0f)] private float powerFlatIncrease = 10f;
+        [SerializeField, Min(1f)] private float powerExponent = 1f;
 
         [Header("Wave progression")]
         [SerializeField, Min(1)] private int startingLevel = 1;
@@ -31,12 +32,16 @@ namespace Battle
 
         [Header("Wave power balance")]
         [SerializeField] private EnemyWavePowerBalanceConfig wavePowerBalance;
+
+        [Header("Stat budget rules")]
+        [SerializeField] private EnemyStatBudgetConfig statBudgetConfig;
         
         [Header("Global enemy modifiers")]
         [SerializeField] private List<ModifierContainer> globalModifiers = new();
 
         public float BasePower => basePower;
-        public float PowerGrowthRate => powerGrowthRate;
+        public float PowerFlatIncrease => powerFlatIncrease;
+        public float PowerExponent => powerExponent;
         public int StartingLevel => startingLevel;
         public int WavesToUnlockNextLevel => wavesToUnlockNextLevel;
         public int MaxWaveLevel => maxWaveLevel;
@@ -45,6 +50,7 @@ namespace Battle
         public EnemyRarityBalanceConfig RarityBalance => rarityBalance;
         public EnemyBossBalanceConfig BossBalance => bossBalance;
         public EnemyWavePowerBalanceConfig WavePowerBalance => wavePowerBalance;
+        public EnemyStatBudgetConfig StatBudgetConfig => statBudgetConfig;
         public IReadOnlyList<ModifierContainer> GlobalModifiers => globalModifiers;
 
         public EnemyArchetype GetRandomArchetype(WaveContext context, EnemyRarity rarity)
