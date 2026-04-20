@@ -12,15 +12,17 @@ namespace SkillTree
         [Inject] private GemPlacementService _gemPlacementService;
         [Inject] private TooltipUI _tooltipUI;
         private Node _node;
+        private SkillTreeFogOfWarController _fogOfWarController;
 
         private void Awake()
         {
             _node = GetComponent<Node>();
+            _fogOfWarController = FindFirstObjectByType<SkillTreeFogOfWarController>(FindObjectsInactive.Include);
         }
 
         private void OnMouseOver()
         {
-            if (IsPointerOverUI())
+            if (IsPointerOverUI() || (_fogOfWarController != null && !_fogOfWarController.IsNodeDiscovered(_node)))
             {
                 return;
             }

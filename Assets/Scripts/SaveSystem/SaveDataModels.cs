@@ -58,6 +58,7 @@ namespace SaveSystem
     public class SkillTreeSaveData
     {
         public List<string> allocatedNodeIds = new();
+        public List<string> discoveredFogNodeIds = new();
         public List<SocketedGemSaveData> socketedGems = new();
 
         public HashSet<string> ToAllocatedNodeSet()

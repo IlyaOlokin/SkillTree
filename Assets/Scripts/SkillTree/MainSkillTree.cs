@@ -15,6 +15,7 @@ namespace SkillTree
 
         [SerializeField] private Node root;
         [SerializeField] private List<BonusZone> bonusZones;
+        [SerializeField] private SkillTreeFogOfWarController fogOfWarController;
         private List<Node> _allocatedNodes = new List<Node>();
 
         private void Awake()
@@ -22,6 +23,8 @@ namespace SkillTree
             SubscribeAllFromRoot(root, RaiseAnyNodeChanged);
             OnAnyNodeChanged += ProcessNodeAllocation;
             RebuildAllocatedNodes();
+            fogOfWarController?.Bind(this, root);
+            fogOfWarController?.SetDiscoveredNodes(_allocatedNodes);
         }
 
         private void OnDestroy()
@@ -105,6 +108,7 @@ namespace SkillTree
         {
             SkillTreeSaveData saveData = new SkillTreeSaveData();
             Dictionary<Node, string> nodeIds = BuildResolvedNodeIds();
+            HashSet<string> discoveredNodeIds = new(StringComparer.Ordinal);
 
             foreach (Node node in EnumerateNodes())
             {
@@ -119,6 +123,18 @@ namespace SkillTree
                     socketNodeId = nodeIds[socketNode],
                     gem = socketNode.SocketedGem.CaptureSaveData()
                 });
+            }
+
+            if (fogOfWarController != null)
+            {
+                foreach (Node discoveredNode in fogOfWarController.GetDiscoveredNodes())
+                {
+                    if (discoveredNode == null || !nodeIds.TryGetValue(discoveredNode, out string discoveredNodeId))
+                        continue;
+
+                    if (discoveredNodeIds.Add(discoveredNodeId))
+                        saveData.discoveredFogNodeIds.Add(discoveredNodeId);
+                }
             }
 
             return saveData;
@@ -155,6 +171,7 @@ namespace SkillTree
             }
 
             RebuildAllocatedNodes();
+            ApplyFogOfWarSaveData(saveData, nodesById, resolvedNodeIds);
             RaiseOnSkillTreeChanged();
         }
 
@@ -216,6 +233,48 @@ namespace SkillTree
             }
 
             return saveData;
+        }
+
+        private void ApplyFogOfWarSaveData(
+            SkillTreeSaveData saveData,
+            Dictionary<string, Node> nodesById,
+            Dictionary<Node, string> resolvedNodeIds)
+        {
+            if (fogOfWarController == null)
+                return;
+
+            fogOfWarController.Bind(this, root);
+
+            HashSet<Node> discoveredNodes = new();
+            foreach (Node allocatedNode in _allocatedNodes)
+                discoveredNodes.Add(allocatedNode);
+
+            if (saveData?.discoveredFogNodeIds != null)
+            {
+                for (int i = 0; i < saveData.discoveredFogNodeIds.Count; i++)
+                {
+                    string discoveredNodeId = saveData.discoveredFogNodeIds[i];
+                    if (string.IsNullOrWhiteSpace(discoveredNodeId))
+                        continue;
+
+                    if (nodesById.TryGetValue(discoveredNodeId, out Node discoveredNode))
+                    {
+                        discoveredNodes.Add(discoveredNode);
+                        continue;
+                    }
+
+                    foreach (KeyValuePair<Node, string> pair in resolvedNodeIds)
+                    {
+                        if (!string.Equals(pair.Value, discoveredNodeId, StringComparison.Ordinal))
+                            continue;
+
+                        discoveredNodes.Add(pair.Key);
+                        break;
+                    }
+                }
+            }
+
+            fogOfWarController.SetDiscoveredNodes(discoveredNodes);
         }
 
         private Dictionary<Node, string> BuildResolvedNodeIds()
