@@ -23,6 +23,7 @@ namespace DropSystem
         [Inject] private DiContainer container;
 
         private ObjectPool<GemDropPickup> pickupPool;
+        private readonly List<GemDropPickup> _activePickups = new();
 
         private void Awake()
         {
@@ -45,13 +46,19 @@ namespace DropSystem
         private void OnEnable()
         {
             if (enemySpawner != null)
+            {
                 enemySpawner.OnEnemyDropsResolved += HandleEnemyDropsResolved;
+                enemySpawner.OnBattleActivityChanged += HandleBattleActivityChanged;
+            }
         }
 
         private void OnDisable()
         {
             if (enemySpawner != null)
+            {
                 enemySpawner.OnEnemyDropsResolved -= HandleEnemyDropsResolved;
+                enemySpawner.OnBattleActivityChanged -= HandleBattleActivityChanged;
+            }
         }
 
         private void HandleEnemyDropsResolved(EnemyUnit enemy, IReadOnlyList<InventoryItem> drops)
@@ -72,6 +79,7 @@ namespace DropSystem
                 pickupInstance.transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
                 pickupInstance.SetCamera(battleCamera);
                 pickupInstance.Initialize(dropItem.Gem, playerInventory, ReleasePickup);
+                RegisterActivePickup(pickupInstance);
             }
         }
 
@@ -102,6 +110,7 @@ namespace DropSystem
 
         private void OnReturnPickupToPool(GemDropPickup pickup)
         {
+            _activePickups.Remove(pickup);
             pickup.transform.SetParent(dropRoot != null ? dropRoot : transform);
             pickup.gameObject.SetActive(false);
         }
@@ -120,9 +129,33 @@ namespace DropSystem
             pickupPool.Release(pickup);
         }
 
+        public void ClearActiveDrops()
+        {
+            if (pickupPool == null || _activePickups.Count == 0)
+                return;
+
+            // Release from the end because releasing removes entries from the active list.
+            for (int i = _activePickups.Count - 1; i >= 0; i--)
+            {
+                GemDropPickup pickup = _activePickups[i];
+                if (pickup == null)
+                    continue;
+
+                pickup.Release();
+            }
+
+            _activePickups.Clear();
+        }
+
         private void OnDestroy()
         {
             pickupPool?.Dispose();
+        }
+
+        private void HandleBattleActivityChanged(bool isBattleActive)
+        {
+            if (!isBattleActive)
+                ClearActiveDrops();
         }
 
         private Camera FindBattleCamera()
@@ -136,6 +169,27 @@ namespace DropSystem
                 return cameraComponent;
 
             return battleCameraObject.GetComponentInChildren<Camera>();
+        }
+
+        private void LateUpdate()
+        {
+            // Track active pooled pickups centrally so they can be cleared on location exit.
+            for (int i = 0; i < _activePickups.Count; i++)
+            {
+                if (_activePickups[i] != null)
+                    continue;
+
+                _activePickups.RemoveAt(i);
+                i--;
+            }
+        }
+
+        private void RegisterActivePickup(GemDropPickup pickup)
+        {
+            if (pickup == null || _activePickups.Contains(pickup))
+                return;
+
+            _activePickups.Add(pickup);
         }
     }
 }

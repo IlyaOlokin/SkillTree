@@ -40,9 +40,18 @@ namespace SaveSystem
     [Serializable]
     public class ProgressSaveData
     {
+        public string selectedLocationId;
+        public List<LocationProgressSaveData> locations = new();
+    }
+
+    [Serializable]
+    public class LocationProgressSaveData
+    {
+        public string locationId;
         public int selectedLevel = 1;
         public int maxUnlockedLevel = 1;
-        public int currentClearedWaves;
+        public int completedLevelCount;
+        public List<string> claimedRewardIds = new();
     }
 
     [Serializable]

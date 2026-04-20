@@ -32,7 +32,7 @@ public class WaveUI : MonoBehaviour
             spawner.SelectedLevel);
         waveProgressText.text = $"{spawner.CurrentClearedWaves}/{spawner.WavesToUnlockNextLevel}";
         nextLevelButton.interactable = spawner.SelectedLevel < spawner.MaxUnlockedLevel;
-        previousLevelButton.interactable = spawner.SelectedLevel > 1;
+        previousLevelButton.interactable = spawner.SelectedLevel > spawner.CurrentLocationStartingLevel;
     }
 
     private void OnDisable()

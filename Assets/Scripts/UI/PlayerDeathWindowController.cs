@@ -13,6 +13,7 @@ public class PlayerDeathWindowController : MonoBehaviour
     [Inject] private PlayerUnit _player;
     [Inject] private EnemySpawner _enemySpawner;
     
+    [SerializeField] private LocationFlowController locationFlowController;
     [SerializeField] private GameObject window;
     [SerializeField] private Image background;
     [SerializeField] private List<Image> uiObjects = new List<Image>();
@@ -31,6 +32,9 @@ public class PlayerDeathWindowController : MonoBehaviour
 
     private void Awake()
     {
+        if (locationFlowController == null)
+            locationFlowController = FindFirstObjectByType<LocationFlowController>();
+
         CacheTargetAlphas();
         HideInstant();
     }
@@ -63,6 +67,28 @@ public class PlayerDeathWindowController : MonoBehaviour
         _enemySpawner.RestartCurrentLevel();
         _battleTickSystem.Resume();
         
+        OnDeathWindowClosed?.Invoke();
+    }
+
+    public void ExitLocation()
+    {
+        _deathSequence?.Kill();
+        HideInstant();
+        window.SetActive(false);
+
+        _player.gameObject.SetActive(true);
+        _player.ResetCombatState();
+
+        if (locationFlowController != null)
+        {
+            locationFlowController.ReturnToMap();
+        }
+        else
+        {
+            _enemySpawner.ExitBattle();
+            _battleTickSystem.Pause();
+        }
+
         OnDeathWindowClosed?.Invoke();
     }
 
