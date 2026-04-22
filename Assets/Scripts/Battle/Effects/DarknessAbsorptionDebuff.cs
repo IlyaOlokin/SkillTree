@@ -52,12 +52,25 @@ namespace Battle
             _cachedModifier1.modifierContainer.value = _modifierContainer1.value * _stacks;
             unit.AddOuterModifier(_cachedModifier1);
             
-            _cachedModifier1.modifierContainer.value = _modifierContainer2.value * _stacks;
+            _cachedModifier2.modifierContainer.value = _modifierContainer2.value * _stacks;
             unit.AddOuterModifier(_cachedModifier2);
         }
 
         public override bool IsReadyToBeRemoved(Unit unit) => _isReadyToBeRemoved;
 
-        public override void OnRemove(Unit unit) { }
+        public override void OnRemove(Unit unit)
+        {
+            if (_cachedModifier1 != null)
+            {
+                unit.RemoveOuterModifier(_cachedModifier1);
+                _cachedModifier1 = null;
+            }
+
+            if (_cachedModifier2 != null)
+            {
+                unit.RemoveOuterModifier(_cachedModifier2);
+                _cachedModifier2 = null;
+            }
+        }
     }
 }

@@ -118,6 +118,7 @@ namespace Battle
         {
             health.RestoreToFull();
             barrier.RestoreFull();
+            mysticHealth.Reset();
             effectController.ClearAllEffects();
             attacker.ResetAttackCooldownHard();
         }
