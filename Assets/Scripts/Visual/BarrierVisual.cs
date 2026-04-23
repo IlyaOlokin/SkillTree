@@ -4,10 +4,20 @@ using UnityEngine;
 
 public class BarrierVisual : MonoBehaviour
 {
+    [System.Serializable]
+    private struct BarrierBarStyle
+    {
+        public Sprite Border;
+        public Sprite Fill;
+    }
+
     [SerializeField] private Barrier barrier;
     [SerializeField] private GSlider prefab;
     [SerializeField] private RectTransform spawnPos;
     [SerializeField] private float horizontalGap = 4f;
+    [SerializeField] private BarrierBarStyle edgeStyle;
+    [SerializeField] private BarrierBarStyle middleStyle;
+    [SerializeField] private BarrierBarStyle singleStyle;
 
     private readonly List<GSlider> _bars = new();
     private RectTransform _transform;
@@ -30,10 +40,7 @@ public class BarrierVisual : MonoBehaviour
         if (!barrier.HasBarrier || barrier.IsFull)
             return;
 
-        int index = barrier.BarrierCount;
-
-        if (index >= 0 && index < _bars.Count)
-            _bars[index].UpdateBar(barrier.CooldownProgress);
+        RefreshAnimated();
     }
 
     private void Rebuild()
@@ -50,6 +57,7 @@ public class BarrierVisual : MonoBehaviour
         }
 
         LayoutBars();
+        ApplyBarStyles();
 
         Refresh();
     }
@@ -85,5 +93,51 @@ public class BarrierVisual : MonoBehaviour
             else
                 _bars[i].SetBar(0f);
         }
+    }
+
+    private void RefreshAnimated()
+    {
+        for (int i = 0; i < _bars.Count; i++)
+        {
+            if (i < barrier.BarrierCount)
+            {
+                _bars[i].SetBar(1f);
+            }
+            else if (i == barrier.BarrierCount)
+            {
+                _bars[i].UpdateBar(barrier.CooldownProgress);
+            }
+            else
+            {
+                _bars[i].SetBar(0f);
+            }
+        }
+    }
+
+    private void ApplyBarStyles()
+    {
+        int barCount = _bars.Count;
+
+        for (int i = 0; i < barCount; i++)
+        {
+            bool isSingle = barCount == 1;
+            bool isFirst = i == 0;
+            bool isLast = i == barCount - 1;
+
+            BarrierBarStyle style = GetStyle(isSingle, isFirst, isLast);
+            _bars[i].SetSprites(style.Border, style.Fill);
+            _bars[i].SetMirrored(!isSingle && isLast);
+        }
+    }
+
+    private BarrierBarStyle GetStyle(bool isSingle, bool isFirst, bool isLast)
+    {
+        if (isSingle)
+            return singleStyle;
+
+        if (isFirst || isLast)
+            return edgeStyle;
+
+        return middleStyle;
     }
 }

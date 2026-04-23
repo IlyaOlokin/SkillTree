@@ -87,4 +87,13 @@ MonoBehaviour:
   barrier: {fileID: 0}
   prefab: {fileID: 8407382721510612867, guid: 4d70d1ff769d01f45b979aa9b5e538a5, type: 3}
   spawnPos: {fileID: 799327412677325886}
-  verticalSpacing: 7
+  horizontalGap: 5
+  edgeStyle:
+    Border: {fileID: 7731606681304194789, guid: 902a51a3ccc76334b8063a6f915cacf6, type: 3}
+    Fill: {fileID: -971312180452540717, guid: 902a51a3ccc76334b8063a6f915cacf6, type: 3}
+  middleStyle:
+    Border: {fileID: -8678844185104200763, guid: 902a51a3ccc76334b8063a6f915cacf6, type: 3}
+    Fill: {fileID: -8373082881705168215, guid: 902a51a3ccc76334b8063a6f915cacf6, type: 3}
+  singleStyle:
+    Border: {fileID: 350806213853468933, guid: 902a51a3ccc76334b8063a6f915cacf6, type: 3}
+    Fill: {fileID: 720752879747906818, guid: 902a51a3ccc76334b8063a6f915cacf6, type: 3}
