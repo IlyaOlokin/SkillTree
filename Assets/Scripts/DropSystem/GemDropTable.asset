@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entries:
   - gemDefinition: {fileID: 11400000, guid: 4a211faeb581cc3409ad6fbbbba5b328, type: 2}
-    baseDropChance: 1
+    baseDropChance: 0.01
     powerForMaxBonus: 100
     maxPowerBonusChance: 0
     normalRarityMultiplier: 1

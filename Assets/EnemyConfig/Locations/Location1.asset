@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d219f318536ff974580c180788e87719, type: 3}
-  m_Name: testLocationDefinition
+  m_Name: Location1
   m_EditorClassIdentifier: 
-  locationId: location
-  displayName: TestLocation
+  locationId: location-1
+  displayName: Location1
   description: 
   mapIcon: {fileID: 21300000, guid: b753c88a6aeb2674fa1d4f0a4c0a285a, type: 3}
-  enemyDatabase: {fileID: 11400000, guid: 50846ac0286e5b9428d5953602917acc, type: 2}
+  enemyDatabase: {fileID: 11400000, guid: b89dbc099b0773449954e02193c1b3c7, type: 2}

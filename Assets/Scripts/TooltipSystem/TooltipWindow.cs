@@ -8,12 +8,14 @@ using UnityEngine.UI;
 public class TooltipWindow : MonoBehaviour
 {
     [SerializeField] private TMP_Text description;
+    [SerializeField] private TMP_Text titleText;
     [SerializeField] private RectTransform heightOffsetSource;
     [SerializeField] private int maxCharactersPerLine = 32;
     private RectTransform selfRectTransform;
     private readonly List<TMP_Text> descriptionFields = new();
     private TooltipUI tooltipUI;
     private int tooltipLevel;
+    private string defaultTitleText;
     
     [SerializeField] private GameObject title;
 
@@ -22,6 +24,16 @@ public class TooltipWindow : MonoBehaviour
         selfRectTransform = (RectTransform)transform;
         ConfigureDescriptionField(description);
         descriptionFields.Add(description);
+
+        if (titleText == null && title != null)
+        {
+            titleText = title.GetComponentInChildren<TMP_Text>(true);
+        }
+
+        if (titleText != null)
+        {
+            defaultTitleText = titleText.text;
+        }
     }
 
     public void Initialize(TooltipUI ownerTooltipUI, int level)
@@ -35,12 +47,19 @@ public class TooltipWindow : MonoBehaviour
         }
     }
 
-    public void SetTexts(IReadOnlyList<string> texts, bool shouldShowTitle)
+    public void SetTexts(IReadOnlyList<string> texts, bool shouldShowTitle, string titleValue)
     {
         EnsureDescriptionFieldCount(texts.Count);
         if (title != null)
         {
             title.SetActive(shouldShowTitle);
+        }
+
+        if (titleText != null)
+        {
+            titleText.text = string.IsNullOrWhiteSpace(titleValue)
+                ? defaultTitleText
+                : TooltipTextLinkFormatter.Format(WrapText(titleValue));
         }
 
         for (int i = 0; i < descriptionFields.Count; i++)

@@ -45,7 +45,7 @@ namespace TooltipSystem
 
         private void Update()
         {
-            if (!_pendingHideRequest || IsTooltipPinned())
+            if (!_pendingHideRequest || IsTooltipPinned() || IsPointerOverVisibleTooltip())
             {
                 return;
             }
@@ -94,9 +94,9 @@ namespace TooltipSystem
             _pendingHideOwner = null;
             _pendingHideRequest = false;
             HideAllTooltipWindows();
-            bool shouldShowTitle = tooltipDescriptionProvider is ITooltipTitleVisibilityProvider titleVisibilityProvider
-                && titleVisibilityProvider.ShouldShowTooltipTitle();
-            ShowTooltipWindow(canvasState, 0, tooltipDescriptionProvider.GetTooltipDescriptions(), screenPosition, shouldShowTitle);
+            bool shouldShowTitle = tooltipDescriptionProvider.ShouldShowTooltipTitle();
+            string title = tooltipDescriptionProvider.GetTooltipTitle();
+            ShowTooltipWindow(canvasState, 0, tooltipDescriptionProvider.GetTooltipDescriptions(), screenPosition, shouldShowTitle, title);
         }
 
         public void RefreshCurrentTooltip()
@@ -120,6 +120,18 @@ namespace TooltipSystem
                 return;
             }
 
+            _pendingHideRequest = false;
+            _pendingHideOwner = null;
+            HideTooltipInternal();
+        }
+
+        public void RequestHideTooltip(Object owner)
+        {
+            if (owner != _currentOwner)
+            {
+                return;
+            }
+
             if (IsTooltipPinned())
             {
                 _pendingHideRequest = true;
@@ -127,9 +139,14 @@ namespace TooltipSystem
                 return;
             }
 
-            _pendingHideRequest = false;
-            _pendingHideOwner = null;
-            HideTooltipInternal();
+            if (IsPointerOverVisibleTooltip())
+            {
+                _pendingHideRequest = true;
+                _pendingHideOwner = owner;
+                return;
+            }
+
+            HideTooltip(owner);
         }
 
         public void DisplayLinkedTooltip(int tooltipLevel, string linkId, Vector2 screenPosition)
@@ -151,7 +168,13 @@ namespace TooltipSystem
                 return;
             }
 
-            ShowTooltipWindow(canvasState, tooltipLevel, description.Descriptions, screenPosition, false);
+            ShowTooltipWindow(
+                canvasState,
+                tooltipLevel,
+                description.Descriptions,
+                screenPosition,
+                description.ShowTooltipTitle,
+                description.Title);
         }
 
         public void DisplayLinkedTooltipAsRoot(
@@ -178,7 +201,13 @@ namespace TooltipSystem
                 return;
             }
 
-            ShowTooltipWindow(canvasState, 0, description.Descriptions, screenPosition, false);
+            ShowTooltipWindow(
+                canvasState,
+                0,
+                description.Descriptions,
+                screenPosition,
+                description.ShowTooltipTitle,
+                description.Title);
         }
 
         public void HideLinkedTooltipsFrom(int tooltipLevel)
@@ -210,6 +239,7 @@ namespace TooltipSystem
                 Vector2 totalOffset = descriptionOffset + new Vector2(0f, childHeightOffset)
                     + nestedDescriptionOffset * tooltipLevel;
                 tooltipWindowRect.anchoredPosition = localPoint + totalOffset;
+                RepositionTooltipAwayFromPointerOnOverflow(canvasState, tooltipWindowRect, localPoint);
                 ClampTooltipToCanvasBounds(canvasState.CanvasRectTransform, tooltipWindowRect);
             }
         }
@@ -270,10 +300,11 @@ namespace TooltipSystem
             int tooltipLevel,
             IReadOnlyList<string> descriptions,
             Vector2 screenPosition,
-            bool shouldShowTitle)
+            bool shouldShowTitle,
+            string title)
         {
             TooltipWindow tooltipWindow = canvasState.TooltipWindows[tooltipLevel];
-            tooltipWindow.SetTexts(descriptions, shouldShowTitle);
+            tooltipWindow.SetTexts(descriptions, shouldShowTitle, title);
             tooltipWindow.gameObject.SetActive(true);
             Canvas.ForceUpdateCanvases();
             tooltipWindow.RefreshLayout();
@@ -382,6 +413,82 @@ namespace TooltipSystem
             }
 
             tooltipWindowRect.anchoredPosition += positionOffset;
+        }
+
+        private bool IsPointerOverVisibleTooltip()
+        {
+            if (!TryGetCanvasState(_currentCanvasTarget, out TooltipCanvasState canvasState))
+            {
+                return false;
+            }
+
+            Camera uiCamera = GetUICamera(canvasState);
+            Vector2 screenPoint = Input.mousePosition;
+
+            for (int i = 0; i < canvasState.TooltipWindows.Count; i++)
+            {
+                TooltipWindow tooltipWindow = canvasState.TooltipWindows[i];
+                if (tooltipWindow == null || !tooltipWindow.gameObject.activeInHierarchy)
+                {
+                    continue;
+                }
+
+                if (RectTransformUtility.RectangleContainsScreenPoint(
+                        canvasState.TooltipWindowRects[i],
+                        screenPoint,
+                        uiCamera))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void RepositionTooltipAwayFromPointerOnOverflow(
+            TooltipCanvasState canvasState,
+            RectTransform tooltipWindowRect,
+            Vector2 pointerLocalPoint)
+        {
+            Rect canvasRect = canvasState.CanvasRectTransform.rect;
+            Bounds tooltipBounds = RectTransformUtility.CalculateRelativeRectTransformBounds(
+                canvasState.CanvasRectTransform,
+                tooltipWindowRect);
+
+            float paddedLeft = canvasRect.xMin + viewportPadding;
+            float paddedRight = canvasRect.xMax - viewportPadding;
+            float paddedBottom = canvasRect.yMin + viewportPadding;
+            float paddedTop = canvasRect.yMax - viewportPadding;
+            float pointerPadding = Mathf.Max(viewportPadding, 8f);
+
+            Vector2 positionOffset = Vector2.zero;
+
+            if (tooltipBounds.max.x > paddedRight)
+            {
+                positionOffset.x -= tooltipBounds.max.x - (pointerLocalPoint.x - pointerPadding);
+            }
+            else if (tooltipBounds.min.x < paddedLeft)
+            {
+                positionOffset.x += (pointerLocalPoint.x + pointerPadding) - tooltipBounds.min.x;
+            }
+
+            if (tooltipBounds.max.y > paddedTop)
+            {
+                positionOffset.y -= tooltipBounds.max.y - (pointerLocalPoint.y - pointerPadding);
+            }
+            else if (tooltipBounds.min.y < paddedBottom)
+            {
+                positionOffset.y += (pointerLocalPoint.y + pointerPadding) - tooltipBounds.min.y;
+            }
+
+            tooltipWindowRect.anchoredPosition += positionOffset;
+        }
+
+        private static Camera GetUICamera(TooltipCanvasState canvasState)
+        {
+            return canvasState.Canvas.renderMode == RenderMode.ScreenSpaceOverlay
+                ? null
+                : canvasState.Canvas.worldCamera;
         }
     }
 }

@@ -76,6 +76,16 @@ namespace DropSystem
             return gemInstance?.GetTooltipDescriptions() ?? Array.Empty<string>();
         }
 
+        public string GetTooltipTitle()
+        {
+            return string.Empty;
+        }
+
+        public bool ShouldShowTooltipTitle()
+        {
+            return false;
+        }
+
         private void OnValidate()
         {
             RefreshVisual();

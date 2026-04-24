@@ -57,11 +57,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 247384347119616
-    m_Localized: Each charge absorbs damage up to Barrier Power
+    m_Localized: Each charge absorbs damage up to Barrier Capacity
     m_Metadata:
       m_Items: []
   - m_Id: 247399215927296
-    m_Localized: Remaining damage beyond Barrier Power continues through
+    m_Localized: Remaining damage beyond Barrier Capacity continues through
     m_Metadata:
       m_Items: []
   - m_Id: 247474637901824
@@ -213,6 +213,30 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 358944797233152
     m_Localized: Power increases how effective an {effect|Effect} is
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3211732585680896
+    m_Localized: +2 Maximum Health per 1 Strength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3213892748709888
+    m_Localized: 1% increased Physical Damage per 2 Strength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3214049204637696
+    m_Localized: 1% increased Evasion per 1 Dexterity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3214157480595456
+    m_Localized: +0.1% Crit Chance per 10 Dexterity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3214213218701312
+    m_Localized: 1% increased Barrier Capacity per 2 Intelligence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3214420366987264
+    m_Localized: 1% increased Elemental Damage per 2 Intelligence
     m_Metadata:
       m_Items: []
   references:

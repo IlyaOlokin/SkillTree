@@ -65,6 +65,16 @@ namespace UI
             return _item?.GetTooltipDescriptions() ?? System.Array.Empty<string>();
         }
 
+        public string GetTooltipTitle()
+        {
+            return string.Empty;
+        }
+
+        public bool ShouldShowTooltipTitle()
+        {
+            return false;
+        }
+
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (_tooltipUI == null || _item == null || _item.IsEmpty)
@@ -78,7 +88,7 @@ namespace UI
             if (_tooltipUI == null)
                 return;
 
-            _tooltipUI.HideTooltip(this);
+            _tooltipUI.RequestHideTooltip(this);
         }
 
         private void HandleClick()

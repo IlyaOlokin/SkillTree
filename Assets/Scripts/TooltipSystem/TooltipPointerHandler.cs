@@ -30,7 +30,7 @@ namespace TooltipSystem
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            tooltipUI.HideTooltip(this);
+            tooltipUI.RequestHideTooltip(this);
         }
 
         private void OnDisable()

@@ -203,6 +203,32 @@ MonoBehaviour:
     m_Key: description.power1
     m_Metadata:
       m_Items: []
+  - m_Id: 3211732585680896
+    m_Key: description.strength1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3213892748709888
+    m_Key: 'description.strength2
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3214049204637696
+    m_Key: description.dexterity1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3214157480595456
+    m_Key: description.dexterity2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3214213218701312
+    m_Key: description.intelligence1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3214420366987264
+    m_Key: description.intelligence2
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

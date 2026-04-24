@@ -111,7 +111,7 @@ namespace TooltipSystem
 
             if (showAsRootTooltip)
             {
-                tooltipUI.HideTooltip(this);
+                tooltipUI.RequestHideTooltip(this);
                 return;
             }
 

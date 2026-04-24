@@ -81,7 +81,7 @@ namespace MenuTree
 
         private void OnMouseExit()
         {
-            tooltipUI?.HideTooltip(this);
+            tooltipUI?.RequestHideTooltip(this);
         }
 
         private void OnDisable()

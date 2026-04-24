@@ -10,17 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c890a7a896953d74f903350c03d7d8d2, type: 3}
-  m_Name: EnemyConfigDatabase
+  m_Name: EnemyConfigDatabase_1
   m_EditorClassIdentifier: 
   archetypes:
-  - {fileID: 11400000, guid: 3eb85abf4551864498ca76ae65819ca3, type: 2}
+  - {fileID: 11400000, guid: f4606d8069ee0c74eb1e2f9e26412773, type: 2}
+  - {fileID: 11400000, guid: 2bc348cbe40aa0147a65f48fee335f98, type: 2}
+  - {fileID: 11400000, guid: 287d7324b51110b45bfd876022012a3e, type: 2}
   basePower: 6
   powerFlatIncrease: 0.5
   powerExponent: 1.03
   startingLevel: 1
-  wavesToUnlockNextLevel: 10
+  wavesToUnlockNextLevel: 5
   maxWaveLevel: 100
-  respawnDelay: 1
+  respawnDelay: 1.5
   maxEnemiesPerWave: 3
   rarityBalance: {fileID: 11400000, guid: e06ecfd8fa36bd64ab614c313d620730, type: 2}
   bossBalance: {fileID: 11400000, guid: 4effbdd8084dcd74790e13923953cfb1, type: 2}

@@ -4,11 +4,11 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Splines;
+using Unity.Mathematics;
 using SkillTree;
 using ConnectionRendering;
 #if UNITY_EDITOR
 using UnityEditor;
-using Unity.Mathematics;
 #endif
 
 namespace SkillTree
@@ -119,17 +119,10 @@ namespace SkillTree
             {
                 if (nodeConnections.Exists(x => x.pair.Equals(pair)))
                 {
-                    NodeConnectionData NodeConnectionData = nodeConnections.Find(x => x.pair.Equals(pair));
-                    BezierKnot knot11 = NodeConnectionData.spline.Splines[0][0];
-                    BezierKnot knot22 = NodeConnectionData.spline.Splines[0][1];
-                    
-                    knot11.Position = new float3(pair.A.transform.position);
-                    knot22.Position = new float3(pair.B.transform.position);
-                    
-                    NodeConnectionData.spline.Splines[0][0] = knot11;
-                    NodeConnectionData.spline.Splines[0][1] = knot22;
-                    PrefabUtility.RecordPrefabInstancePropertyModifications(NodeConnectionData.spline);
-                    
+                    NodeConnectionData existingConnection = nodeConnections.Find(x => x.pair.Equals(pair));
+                    SyncSplineToPair(existingConnection);
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(existingConnection.spline);
+
                     continue;
                 }
                 SplineContainer spline =
@@ -137,19 +130,17 @@ namespace SkillTree
                         connectionPrefab, transform);
 
 
-                spline.transform.position = Vector3.zero;
+                spline.transform.localPosition = Vector3.zero;
+                spline.transform.localRotation = Quaternion.identity;
+                spline.transform.localScale = Vector3.one;
 
-                BezierKnot knot1 = new BezierKnot(pair.A.transform.position);
-                BezierKnot knot2 = new BezierKnot(pair.B.transform.position);
-
-                spline.Splines[0].Add(knot1);
-                spline.Splines[0].Add(knot2);
-
-                nodeConnections.Add(new NodeConnectionData
+                var connectionData = new NodeConnectionData
                 {
                     pair = pair,
                     spline = spline
-                });
+                };
+                SyncSplineToPair(connectionData, true);
+                nodeConnections.Add(connectionData);
             }
 
             EditorUtility.SetDirty(this);
@@ -257,6 +248,8 @@ namespace SkillTree
 
     public void BuildMesh()
     {
+        SyncAllSplinePositionsToNodes();
+
         var rootFilter = GetComponent<MeshFilter>();
         if (rootFilter != null)
             rootFilter.sharedMesh = null;
@@ -443,6 +436,38 @@ namespace SkillTree
 #endif
         }
     }
+
+        private void SyncAllSplinePositionsToNodes()
+        {
+            foreach (NodeConnectionData connection in nodeConnections)
+                SyncSplineToPair(connection);
+        }
+
+        private void SyncSplineToPair(NodeConnectionData connection, bool resetSpline = false)
+        {
+            if (connection?.spline == null || connection.pair.A == null || connection.pair.B == null)
+                return;
+
+            Spline spline = connection.spline.Spline;
+            if (spline == null)
+                return;
+
+            if (resetSpline)
+                spline.Clear();
+
+            while (spline.Count < 2)
+                spline.Add(new BezierKnot(float3.zero));
+
+            int lastKnotIndex = spline.Count - 1;
+            BezierKnot startKnot = spline[0];
+            BezierKnot endKnot = spline[lastKnotIndex];
+
+            startKnot.Position = (float3)connection.spline.transform.InverseTransformPoint(connection.pair.A.transform.position);
+            endKnot.Position = (float3)connection.spline.transform.InverseTransformPoint(connection.pair.B.transform.position);
+
+            spline[0] = startKnot;
+            spline[lastKnotIndex] = endKnot;
+        }
         
         private void CreateStateTexture()
         {

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MenuTree
 {
-    public class MenuNode : MonoBehaviour, ITooltipDescriptionProvider, ITooltipTitleVisibilityProvider
+    public class MenuNode : MonoBehaviour, ITooltipDescriptionProvider
     {
         private static readonly IReadOnlyList<string> EmptyTooltipDescriptions = Array.Empty<string>();
 
@@ -97,6 +97,11 @@ namespace MenuTree
             }
 
             return localizedDescriptions;
+        }
+
+        public string GetTooltipTitle()
+        {
+            return gameObject.name;
         }
 
         public bool ShouldShowTooltipTitle()

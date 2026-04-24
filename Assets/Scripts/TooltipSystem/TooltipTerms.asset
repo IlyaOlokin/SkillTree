@@ -53,3 +53,9 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: a15214a5a7c705e4f84ece3fc8f6aee0, type: 2}
   - id: power
     description: {fileID: 11400000, guid: 926d52a01f0d9f74f9260e9c8b907c57, type: 2}
+  - id: strength
+    description: {fileID: 11400000, guid: 024fb02d13cae0747b2850d5b0de7250, type: 2}
+  - id: dexterity
+    description: {fileID: 11400000, guid: 2e46e75a5ceee8c4894bd47efe598423, type: 2}
+  - id: intelligence
+    description: {fileID: 11400000, guid: 5b59341b4a8ebf9409468eedab9f8ee4, type: 2}

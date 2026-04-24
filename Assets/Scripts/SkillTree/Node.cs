@@ -9,7 +9,7 @@ using Zenject;
 namespace SkillTree
 {
     [Serializable]
-    public class Node : MonoBehaviour, ITooltipDescriptionProvider, ITooltipTitleVisibilityProvider
+    public class Node : MonoBehaviour, ITooltipDescriptionProvider
     { 
         [Inject] private UnitLevel _unitLevel;
         [SerializeField] [HideInInspector] private string saveId;
@@ -98,6 +98,11 @@ namespace SkillTree
             }
 
             return descriptions;
+        }
+
+        public virtual string GetTooltipTitle()
+        {
+            return gameObject.name;
         }
 
         public virtual bool ShouldShowTooltipTitle()

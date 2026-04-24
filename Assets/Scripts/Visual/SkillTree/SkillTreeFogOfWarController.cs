@@ -114,10 +114,13 @@ namespace SkillTree
         private void Awake()
         {
             Bind(skillTree, rootNode);
+            UpdateFogOverlayVisibility();
         }
 
         private void Update()
         {
+            UpdateFogOverlayVisibility();
+
             if (!Application.isPlaying || !UpdateRevealAnimation())
                 return;
 
@@ -144,6 +147,7 @@ namespace SkillTree
             visibilityThreshold = Mathf.Clamp01(visibilityThreshold);
             boundsPadding.x = Mathf.Max(0f, boundsPadding.x);
             boundsPadding.y = Mathf.Max(0f, boundsPadding.y);
+            UpdateFogOverlayVisibility();
         }
 
         private void HandleNodeChanged(Node node)
@@ -503,6 +507,12 @@ namespace SkillTree
             return new Vector2(
                 _worldBounds.min.x + ((x + 0.5f) / width) * _worldBounds.size.x,
                 _worldBounds.min.y + ((y + 0.5f) / height) * _worldBounds.size.y);
+        }
+
+        private void UpdateFogOverlayVisibility()
+        {
+            if (fogOverlayRenderer != null)
+                fogOverlayRenderer.enabled = Application.isPlaying;
         }
 
         private sealed class NodePresentationState

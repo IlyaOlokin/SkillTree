@@ -28,7 +28,7 @@ namespace TooltipSystem
 
         private void OnMouseExit()
         {
-            tooltipUI.HideTooltip(this);
+            tooltipUI.RequestHideTooltip(this);
         }
 
         private ITooltipDescriptionProvider ResolveTooltipDescriptionProvider()

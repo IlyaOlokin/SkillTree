@@ -64,6 +64,16 @@ namespace Visual
                 : Array.Empty<string>();
         }
 
+        public string GetTooltipTitle()
+        {
+            return string.Empty;
+        }
+
+        public bool ShouldShowTooltipTitle()
+        {
+            return false;
+        }
+
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (_tooltipUI == null || _effect == null)
@@ -81,7 +91,7 @@ namespace Visual
                 return;
             }
 
-            _tooltipUI.HideTooltip(this);
+            _tooltipUI.RequestHideTooltip(this);
         }
     }
 }

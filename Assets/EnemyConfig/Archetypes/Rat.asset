@@ -10,16 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfff9238fe22d774e9c6f626c2244278, type: 3}
-  m_Name: SimpleEnemy
+  m_Name: Rat
   m_EditorClassIdentifier: 
   minLevel: 1
   maxLevel: 0
   bossOnly: 0
-  allowedRarities: 
-  healthWeight: 0.32666314
-  offenceWeight: 0.34033686
-  defenceWeight: 0.333
+  allowedRarities: 00000000
+  healthWeight: 0.34000003
+  offenceWeight: 0.65999997
+  defenceWeight: 0
   utilityWeight: 0
+  health:
+    maxHealth: 1
   offence:
     physical: 1
     fire: 0
@@ -32,7 +34,8 @@ MonoBehaviour:
   defence:
     armor: 1
     evasion: 0
-    barrierPower: 0
+    barrierCapacity: 0
+    barrierCount: 0
     blockChance: 0
     elementalResistance: 0
     fireResistance: 0
@@ -41,25 +44,25 @@ MonoBehaviour:
     mysticCleanse: 0
   utility:
     physical:
-      power: 0
-      mitigation: 0
-      chance: 0
+      power: 0.08333334
+      mitigation: 0.08333334
+      chance: 0.08333334
     fire:
-      power: 0
-      mitigation: 0
-      chance: 0
+      power: 0.08333334
+      mitigation: 0.08333334
+      chance: 0.08333334
     cold:
-      power: 0
-      mitigation: 0
-      chance: 0
+      power: 0.08333334
+      mitigation: 0.08333334
+      chance: 0.08333334
     lightning:
-      power: 0
-      mitigation: 0
-      chance: 0
+      power: 0.08333334
+      mitigation: 0.08333334
+      chance: 0.08333334
   powerMultiplier: 1
   baseAttackSpeed: 0.15
-  possibleAffixes:
-  - {fileID: 11400000, guid: c2bdd953a1ec2154d927e63e023d1378, type: 2}
+  possibleAffixes: []
+  extraModifiers: []
   gemDropTable: {fileID: 11400000, guid: 562f4bb25f8bf9a4f95f24fde9f23482, type: 2}
   previewDatabaseOverride: {fileID: 0}
   previewLevel: 1

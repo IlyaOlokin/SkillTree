@@ -28,7 +28,7 @@ public class EnemyDataText : MonoBehaviour
 
     private void UpdateText()
     {
-        text.text = Math.Round(unit.SpawnData.Power) + "\n" + GameLocalization.LocalizeEnum(unit.SpawnData.Rarity);
+        text.text = Math.Round(unit.SpawnData.Power) + "\n" + unit.SpawnData.Archetype.name;
     }
 
     private void HandleLocaleChanged(Locale _)

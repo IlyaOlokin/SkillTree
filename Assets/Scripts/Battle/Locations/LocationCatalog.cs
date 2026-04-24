@@ -43,5 +43,25 @@ namespace Battle
             location = null;
             return false;
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            var seenIds = new HashSet<string>(System.StringComparer.Ordinal);
+
+            for (int i = 0; i < locations.Count; i++)
+            {
+                var location = locations[i];
+                if (location == null)
+                    continue;
+
+                string id = location.LocationId;
+                if (seenIds.Add(id))
+                    continue;
+
+                Debug.LogWarning($"Duplicate location id '{id}' detected in {nameof(LocationCatalog)} '{name}'. Progress for such locations will be shared.", this);
+            }
+        }
+#endif
     }
 }
