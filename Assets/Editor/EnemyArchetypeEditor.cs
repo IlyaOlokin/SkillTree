@@ -108,7 +108,6 @@ public class EnemyArchetypeEditor : Editor
         EditorGUILayout.LabelField("Spawn Rules", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("minLevel"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("maxLevel"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("bossOnly"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedRarities"), true);
         EditorGUILayout.Space();
     }
@@ -125,7 +124,7 @@ public class EnemyArchetypeEditor : Editor
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("previewDatabaseOverride"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("previewLevel"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("previewPower"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("previewRarity"));
     }
 
@@ -259,7 +258,7 @@ public class EnemyArchetypeEditor : Editor
             return;
         }
 
-        float basePower = CalculateBasePower(archetype, database);
+        float basePower = archetype.PreviewPower;
         float previewPower = EnemyPowerCalculator.Calculate(basePower, archetype.PreviewRarity, archetype, false);
         float totalCategoryWeight = archetype.GetTotalCategoryWeight();
 
@@ -267,7 +266,7 @@ public class EnemyArchetypeEditor : Editor
         {
             EditorGUILayout.ObjectField("Preview Database", database, typeof(EnemyConfigDatabase), false);
             EditorGUILayout.ObjectField("Stat Budget Config", database != null ? database.StatBudgetConfig : null, typeof(EnemyStatBudgetConfig), false);
-            EditorGUILayout.FloatField("Base Level Power", basePower);
+            EditorGUILayout.FloatField("Base Power", basePower);
             EditorGUILayout.FloatField("Preview Power", previewPower);
         }
 
@@ -338,16 +337,6 @@ public class EnemyArchetypeEditor : Editor
         _showStatPreview = EditorGUILayout.Foldout(_showStatPreview, "Final Stats", true);
         if (_showStatPreview)
             DrawFinalStats(previewModifiers);
-    }
-
-    private float CalculateBasePower(EnemyArchetype archetype, EnemyConfigDatabase database)
-    {
-        var levelPowerCalculator = new LevelPowerCalculator(
-            database.BasePower,
-            database.PowerFlatIncrease,
-            database.PowerExponent);
-
-        return levelPowerCalculator.Calculate(archetype.PreviewLevel);
     }
 
     private BaseUnitModifiers BuildPreviewModifiers(EnemyArchetype archetype, EnemyConfigDatabase database, float basePower)

@@ -8,21 +8,18 @@ namespace Battle
     {
         private readonly EnemyFactory _enemyFactory;
         private readonly EnemyConfigDatabase _database;
-        private readonly LevelPowerCalculator _powerCalculator;
 
         public WaveFactory(EnemyFactory factory, EnemyConfigDatabase database)
         {
             _enemyFactory = factory;
             _database = database;
-            float basePower = database != null ? database.BasePower : 10f;
-            float flatIncrease = database != null ? database.PowerFlatIncrease : 10f;
-            float exponent = database != null ? database.PowerExponent : 1f;
-            _powerCalculator = new LevelPowerCalculator(basePower, flatIncrease, exponent);
         }
 
         public List<EnemySpawnData> CreateWave(WaveContext context)
         {
-            float totalPower = _powerCalculator.Calculate(context.Level);
+            float totalPower = _database != null
+                ? _database.GetPowerForLevel(context.Level)
+                : 10f;
             if (_database != null && _database.WavePowerBalance != null)
             {
                 totalPower *= _database.WavePowerBalance.GetMultiplier(context);
@@ -64,7 +61,7 @@ namespace Battle
                 else
                     rarityCounts[rarity] = 1;
 
-                var data = _enemyFactory.CreateEnemyStats(context, rarity, powerPerEnemy, totalPower);
+                var data = _enemyFactory.CreateEnemyStats(context, rarity, i, powerPerEnemy, totalPower);
                 result.Add(data);
             }
 

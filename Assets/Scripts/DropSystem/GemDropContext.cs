@@ -35,7 +35,7 @@ namespace DropSystem
 
             string sourceId = spawnData.Archetype != null ? spawnData.Archetype.name : string.Empty;
             int sourceLevel = spawnData.Archetype != null ? spawnData.Archetype.minLevel : 0;
-            bool sourceIsBoss = spawnData.Rarity == EnemyRarity.Boss || (spawnData.Archetype != null && spawnData.Archetype.bossOnly);
+            bool sourceIsBoss = spawnData.Rarity == EnemyRarity.Boss;
 
             return new GemDropContext(
                 sourceId,

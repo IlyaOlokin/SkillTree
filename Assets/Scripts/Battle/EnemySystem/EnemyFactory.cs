@@ -15,10 +15,11 @@ namespace Battle
         public EnemySpawnData CreateEnemyStats(
             WaveContext context,
             EnemyRarity rarity,
+            int enemyIndex,
             float power,
             float totalPower)
         {
-            var archetype = _database.GetRandomArchetype(context, rarity);
+            var archetype = _database.GetRandomArchetype(context, rarity, enemyIndex);
             if (archetype == null)
                 return null;
 

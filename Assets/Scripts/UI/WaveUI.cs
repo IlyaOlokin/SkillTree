@@ -26,11 +26,14 @@ public class WaveUI : MonoBehaviour
     
     private void UpdateUI()
     {
+        int wavesInLevel = Mathf.Max(1, spawner.WavesToUnlockNextLevel);
+        int currentWave = Mathf.Clamp(spawner.CurrentClearedWaves + 1, 1, wavesInLevel);
+
         waveNumberText.text = GameLocalization.Format(
             "ui.wave.level",
             "LVL: [[0]]",
             spawner.SelectedLevel);
-        waveProgressText.text = $"{spawner.CurrentClearedWaves}/{spawner.WavesToUnlockNextLevel}";
+        waveProgressText.text = $"{currentWave}/{wavesInLevel}";
         nextLevelButton.interactable = spawner.SelectedLevel < spawner.MaxUnlockedLevel;
         previousLevelButton.interactable = spawner.SelectedLevel > spawner.CurrentLocationStartingLevel;
     }

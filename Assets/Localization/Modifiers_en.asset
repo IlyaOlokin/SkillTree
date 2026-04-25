@@ -1416,6 +1416,10 @@ MonoBehaviour:
     m_Localized: 'While you have no Armor, [[0]]'
     m_Metadata:
       m_Items: []
+  - m_Id: 487906223460353
+    m_Localized: '[[0]] if target has {bleed|Bleed}'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -36,10 +36,17 @@ namespace Battle
         [SerializeField, Min(1)] private int bossCount = 1;
         [SerializeField, Min(1)] private int totalEnemiesInWave = 1;
         [SerializeField, Min(0)] private int maxBossAffixes = 0;
+        [Header("Archetype pools")]
+        [SerializeField] private List<EnemyArchetype> bossArchetypes = new();
+        [SerializeField] private List<EnemyArchetype> secondEnemyArchetypes = new();
+        [SerializeField] private List<EnemyArchetype> thirdEnemyArchetypes = new();
 
         public int BossCount => bossCount;
         public int TotalEnemiesInWave => Mathf.Max(totalEnemiesInWave, bossCount);
         public int MaxBossAffixes => maxBossAffixes;
+        public IReadOnlyList<EnemyArchetype> BossArchetypes => bossArchetypes;
+        public IReadOnlyList<EnemyArchetype> SecondEnemyArchetypes => secondEnemyArchetypes;
+        public IReadOnlyList<EnemyArchetype> ThirdEnemyArchetypes => thirdEnemyArchetypes;
 
         public bool Matches(WaveContext context)
         {
@@ -50,6 +57,19 @@ namespace Battle
                 return context.IsLastWave;
 
             return context.WaveIndex == waveIndex;
+        }
+
+        public IReadOnlyList<EnemyArchetype> GetArchetypePool(int enemyIndex, EnemyRarity rarity)
+        {
+            if (rarity == EnemyRarity.Boss)
+                return bossArchetypes;
+
+            return enemyIndex switch
+            {
+                1 => secondEnemyArchetypes,
+                2 => thirdEnemyArchetypes,
+                _ => null
+            };
         }
     }
 }

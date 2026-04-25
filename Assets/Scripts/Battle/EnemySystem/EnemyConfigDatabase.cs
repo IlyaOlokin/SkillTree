@@ -10,15 +10,12 @@ namespace Battle
         [Header("Enemy selection")]
         public List<EnemyArchetype> archetypes = new();
 
-        [Header("Power scaling")]
-        [SerializeField, Min(0.01f)] private float basePower = 10f;
-        [SerializeField, Min(0f)] private float powerFlatIncrease = 10f;
-        [SerializeField, Min(1f)] private float powerExponent = 1f;
+        [Header("Level power")]
+        [SerializeField] private List<float> levelPowers = new() { 10f };
 
         [Header("Wave progression")]
         [SerializeField, Min(1)] private int startingLevel = 1;
         [SerializeField, Min(1)] private int wavesToUnlockNextLevel = 10;
-        [SerializeField, Min(1)] private int maxWaveLevel = 100;
         [SerializeField, Min(0f)] private float respawnDelay = 2f;
 
         [Header("Wave composition")]
@@ -39,12 +36,10 @@ namespace Battle
         [Header("Global enemy modifiers")]
         [SerializeField] private List<ModifierContainer> globalModifiers = new();
 
-        public float BasePower => basePower;
-        public float PowerFlatIncrease => powerFlatIncrease;
-        public float PowerExponent => powerExponent;
+        public IReadOnlyList<float> LevelPowers => levelPowers;
         public int StartingLevel => startingLevel;
         public int WavesToUnlockNextLevel => wavesToUnlockNextLevel;
-        public int MaxWaveLevel => maxWaveLevel;
+        public int MaxWaveLevel => Mathf.Max(startingLevel, startingLevel + GetLevelPowerCount() - 1);
         public float RespawnDelay => respawnDelay;
         public int MaxEnemiesPerWave => maxEnemiesPerWave;
         public EnemyRarityBalanceConfig RarityBalance => rarityBalance;
@@ -53,7 +48,41 @@ namespace Battle
         public EnemyStatBudgetConfig StatBudgetConfig => statBudgetConfig;
         public IReadOnlyList<ModifierContainer> GlobalModifiers => globalModifiers;
 
-        public EnemyArchetype GetRandomArchetype(WaveContext context, EnemyRarity rarity)
+        private void OnValidate()
+        {
+            startingLevel = Mathf.Max(1, startingLevel);
+            wavesToUnlockNextLevel = Mathf.Max(1, wavesToUnlockNextLevel);
+            respawnDelay = Mathf.Max(0f, respawnDelay);
+            maxEnemiesPerWave = Mathf.Clamp(maxEnemiesPerWave, 1, 3);
+
+            levelPowers ??= new List<float>();
+            if (levelPowers.Count == 0)
+                levelPowers.Add(10f);
+
+            for (int i = 0; i < levelPowers.Count; i++)
+                levelPowers[i] = Mathf.Max(0.01f, levelPowers[i]);
+        }
+
+        public float GetPowerForLevel(int level)
+        {
+            int powerCount = GetLevelPowerCount();
+            if (powerCount <= 0)
+            {
+                Debug.LogWarning($"{nameof(EnemyConfigDatabase)} has no level powers configured. Using fallback power 10.", this);
+                return 10f;
+            }
+
+            int clampedLevel = Mathf.Clamp(level, StartingLevel, MaxWaveLevel);
+            int index = clampedLevel - StartingLevel;
+            return levelPowers[index];
+        }
+
+        public int GetLevelPowerCount()
+        {
+            return levelPowers?.Count ?? 0;
+        }
+
+        public EnemyArchetype GetRandomArchetype(WaveContext context, EnemyRarity rarity, int enemyIndex = 0)
         {
             if (archetypes == null || archetypes.Count == 0)
             {
@@ -61,11 +90,12 @@ namespace Battle
                 return null;
             }
 
+            IReadOnlyList<EnemyArchetype> archetypePool = GetArchetypePool(context, rarity, enemyIndex);
             var matchingArchetypes = new List<EnemyArchetype>();
 
-            for (int i = 0; i < archetypes.Count; i++)
+            for (int i = 0; i < archetypePool.Count; i++)
             {
-                var archetype = archetypes[i];
+                var archetype = archetypePool[i];
                 if (archetype != null && archetype.Matches(context, rarity))
                     matchingArchetypes.Add(archetype);
             }
@@ -74,10 +104,41 @@ namespace Battle
                 return matchingArchetypes[Random.Range(0, matchingArchetypes.Count)];
 
             Debug.LogWarning(
-                $"{nameof(EnemyConfigDatabase)} found no matching archetypes for level {context.Level}, wave {context.WaveIndex}, rarity {rarity}. Falling back to any archetype.",
+                $"{nameof(EnemyConfigDatabase)} found no matching archetypes for level {context.Level}, wave {context.WaveIndex}, rarity {rarity}. Falling back to any archetype from the selected pool.",
                 this);
 
-            return archetypes[Random.Range(0, archetypes.Count)];
+            return GetRandomAnyArchetype(archetypePool);
+        }
+
+        private IReadOnlyList<EnemyArchetype> GetArchetypePool(WaveContext context, EnemyRarity rarity, int enemyIndex)
+        {
+            if (context.IsBossWave &&
+                bossBalance != null &&
+                bossBalance.TryGetRule(context, out var bossRule))
+            {
+                IReadOnlyList<EnemyArchetype> specificPool = bossRule.GetArchetypePool(enemyIndex, rarity);
+                if (specificPool is { Count: > 0 })
+                    return specificPool;
+            }
+
+            return archetypes;
+        }
+
+        private EnemyArchetype GetRandomAnyArchetype(IReadOnlyList<EnemyArchetype> archetypePool)
+        {
+            var availableArchetypes = new List<EnemyArchetype>();
+
+            for (int i = 0; i < archetypePool.Count; i++)
+            {
+                if (archetypePool[i] != null)
+                    availableArchetypes.Add(archetypePool[i]);
+            }
+
+            if (availableArchetypes.Count > 0)
+                return availableArchetypes[Random.Range(0, availableArchetypes.Count)];
+
+            Debug.LogError($"{nameof(EnemyConfigDatabase)} selected archetype pool contains no valid entries.", this);
+            return null;
         }
     }
 }

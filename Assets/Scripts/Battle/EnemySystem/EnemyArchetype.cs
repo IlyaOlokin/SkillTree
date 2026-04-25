@@ -12,7 +12,6 @@ namespace Battle
         [Header("Spawn Rules")]
         [Min(1)] public int minLevel = 1;
         [Min(0)] public int maxLevel = 0;
-        public bool bossOnly;
         public List<EnemyRarity> allowedRarities = new();
 
         [Header("Category Weights")]
@@ -52,13 +51,13 @@ namespace Battle
 
         [Header("Preview")]
         [SerializeField] private EnemyConfigDatabase previewDatabaseOverride;
-        [SerializeField, Min(1)] private int previewLevel = 1;
+        [SerializeField, Min(0.01f)] private float previewPower = 10f;
         [SerializeField] private EnemyRarity previewRarity = EnemyRarity.Normal;
 
         public GemDropTable GemDropTable => gemDropTable;
         public float PowerMultiplier => Mathf.Max(0f, powerMultiplier);
         public EnemyConfigDatabase PreviewDatabaseOverride => previewDatabaseOverride;
-        public int PreviewLevel => Mathf.Max(1, previewLevel);
+        public float PreviewPower => Mathf.Max(0.01f, previewPower);
         public EnemyRarity PreviewRarity => previewRarity;
 
         private void OnValidate()
@@ -73,7 +72,7 @@ namespace Battle
             defenceWeight = Mathf.Clamp01(defenceWeight);
             utilityWeight = Mathf.Clamp01(utilityWeight);
             powerMultiplier = Mathf.Max(0f, powerMultiplier);
-            previewLevel = Mathf.Max(1, previewLevel);
+            previewPower = Mathf.Max(0.01f, previewPower);
 
             EnemyWeightMath.NormalizeToOne(ref healthWeight, ref offenceWeight, ref defenceWeight, ref utilityWeight);
 
@@ -122,9 +121,6 @@ namespace Battle
                 return false;
 
             if (maxLevel > 0 && context.Level > maxLevel)
-                return false;
-
-            if (bossOnly && rarity != EnemyRarity.Boss)
                 return false;
 
             if (!context.IsBossWave && rarity == EnemyRarity.Boss)

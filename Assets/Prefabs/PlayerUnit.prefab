@@ -292,8 +292,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   level: 1
   currentExp: 0
-  expToNextLevel: 10
-  baseExpToNextLevel: 10
+  expToNextLevel: 5
+  baseExpToNextLevel: 5
   expGrowthPerLevel: 1.12
   skillPoints: 1
 --- !u!114 &7463270014328316196 stripped

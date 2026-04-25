@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfff9238fe22d774e9c6f626c2244278, type: 3}
+  m_Name: Necromat
+  m_EditorClassIdentifier: 
+  minLevel: 1
+  maxLevel: 0
+  allowedRarities: 
+  healthWeight: 0.5451381
+  offenceWeight: 0.2548619
+  defenceWeight: 0.2
+  utilityWeight: 0
+  health:
+    maxHealth: 1
+  offence:
+    physical: 0
+    fire: 1
+    cold: 0
+    lightning: 0
+    light: 0
+    dark: 0
+    critChance: 0
+    critBonus: 0
+  defence:
+    armor: 0.5
+    evasion: 0
+    barrierCapacity: 0
+    barrierCount: 0
+    blockChance: 0
+    elementalResistance: 0.5
+    fireResistance: 0
+    coldResistance: 0
+    lightningResistance: 0
+    mysticCleanse: 0
+  utility:
+    physical:
+      power: 0.08333334
+      mitigation: 0.08333334
+      chance: 0.08333334
+    fire:
+      power: 0.08333334
+      mitigation: 0.08333334
+      chance: 0.08333334
+    cold:
+      power: 0.08333334
+      mitigation: 0.08333334
+      chance: 0.08333334
+    lightning:
+      power: 0.08333334
+      mitigation: 0.08333334
+      chance: 0.08333334
+  powerMultiplier: 0.9
+  baseAttackSpeed: 0.12
+  possibleAffixes: []
+  extraModifiers: []
+  gemDropTable: {fileID: 11400000, guid: 562f4bb25f8bf9a4f95f24fde9f23482, type: 2}
+  previewDatabaseOverride: {fileID: 11400000, guid: b89dbc099b0773449954e02193c1b3c7, type: 2}
+  previewPower: 18
+  previewRarity: 4

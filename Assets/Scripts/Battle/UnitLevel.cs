@@ -18,7 +18,7 @@ namespace Battle
         [SerializeField] private double currentExp = 0d;
         [SerializeField] private double expToNextLevel = 100d;
         [SerializeField] private double baseExpToNextLevel = 100d;
-        [SerializeField] private float expGrowthPerLevel = 1.12f;
+        [SerializeField] private float expGrowthPerLevel = 1.08f;
 
         [Header("Skill Points")]
         [SerializeField] private int skillPoints = 1;
