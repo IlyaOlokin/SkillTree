@@ -2,6 +2,7 @@ using System;
 using Battle;
 using Gems;
 using InventorySystem;
+using Items;
 using LocalizationSupport;
 using SkillTree;
 using UnityEngine;
@@ -23,6 +24,7 @@ namespace SaveSystem
         private readonly SaveFileStorage _storage;
         private readonly SaveProfileManager _profileManager;
         private readonly GemDefinitionCatalog _gemDefinitionCatalog;
+        private readonly ItemDefinitionCatalog _itemDefinitionCatalog;
         private readonly CloudSettingsService _cloudSettingsService;
         private readonly LocalSettingsService _localSettingsService;
 
@@ -47,6 +49,7 @@ namespace SaveSystem
             SaveFileStorage storage,
             SaveProfileManager profileManager,
             GemDefinitionCatalog gemDefinitionCatalog,
+            ItemDefinitionCatalog itemDefinitionCatalog,
             CloudSettingsService cloudSettingsService,
             LocalSettingsService localSettingsService)
         {
@@ -57,6 +60,7 @@ namespace SaveSystem
             _storage = storage;
             _profileManager = profileManager;
             _gemDefinitionCatalog = gemDefinitionCatalog;
+            _itemDefinitionCatalog = itemDefinitionCatalog;
             _cloudSettingsService = cloudSettingsService;
             _localSettingsService = localSettingsService;
         }
@@ -219,11 +223,11 @@ namespace SaveSystem
                     _inventoryMigrations,
                     out InventorySaveData saveData))
             {
-                _playerInventory.ApplySaveData(saveData, RestoreGemInstance);
+                _playerInventory.ApplySaveData(saveData, RestoreGemInstance, RestoreItemDefinition);
                 return;
             }
 
-            _playerInventory.ResetToDefaults(RestoreGemInstance);
+            _playerInventory.ResetToDefaults(RestoreGemInstance, RestoreItemDefinition);
         }
 
         private void ApplyDefaultsForFreshProfile()
@@ -234,7 +238,7 @@ namespace SaveSystem
                 _unitLevel.ResetToDefaults();
                 _enemySpawner.ResetProgressToDefaults();
                 _skillTree.ResetToDefaults(RestoreGemInstance);
-                _playerInventory.ResetToDefaults(RestoreGemInstance);
+                _playerInventory.ResetToDefaults(RestoreGemInstance, RestoreItemDefinition);
                 ClearDirtyFlags();
             }
             finally
@@ -255,6 +259,20 @@ namespace SaveSystem
             }
 
             return GemInstance.Restore(definition, saveData.instanceId, saveData.rolledValues);
+        }
+
+        private ItemDefinition RestoreItemDefinition(string definitionId)
+        {
+            if (string.IsNullOrWhiteSpace(definitionId))
+                return null;
+
+            if (!_itemDefinitionCatalog.TryResolve(definitionId, out ItemDefinition definition))
+            {
+                Debug.LogWarning($"Unable to resolve item definition '{definitionId}' during save load.");
+                return null;
+            }
+
+            return definition;
         }
 
         private void HandleApplicationQuitting()

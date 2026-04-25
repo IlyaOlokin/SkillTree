@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Gems;
 using InventorySystem;
+using Items;
 
 namespace SaveSystem
 {
@@ -95,6 +96,8 @@ namespace SaveSystem
     {
         public InventoryItemType itemType;
         public GemInstanceSaveData gem;
+        public string itemDefinitionId;
+        public int stackCount = 1;
 
         public static InventoryItemSaveData FromInventoryItem(InventoryItem item)
         {
@@ -104,15 +107,21 @@ namespace SaveSystem
             return new InventoryItemSaveData
             {
                 itemType = item.ItemType,
-                gem = item.Gem?.CaptureSaveData()
+                gem = item.Gem?.CaptureSaveData(),
+                itemDefinitionId = item.ItemDefinition != null ? item.ItemDefinition.SaveDefinitionId : string.Empty,
+                stackCount = item.StackCount
             };
         }
 
-        public InventoryItem ToInventoryItem(Func<GemInstanceSaveData, GemInstance> gemResolver)
+        public InventoryItem ToInventoryItem(
+            Func<GemInstanceSaveData, GemInstance> gemResolver,
+            Func<string, ItemDefinition> itemResolver)
         {
             return itemType switch
             {
                 InventoryItemType.Gem when gem != null => InventoryItem.FromGem(gemResolver?.Invoke(gem)),
+                InventoryItemType.Generic when !string.IsNullOrWhiteSpace(itemDefinitionId) =>
+                    InventoryItem.FromItemDefinition(itemResolver?.Invoke(itemDefinitionId), stackCount),
                 _ => null
             };
         }

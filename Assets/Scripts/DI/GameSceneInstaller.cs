@@ -37,9 +37,11 @@ public class GameSceneInstaller : MonoInstaller
         Container.Bind<InventorySocketService>().AsSingle();
         Container.Bind<InventorySelectionState>().AsSingle();
         Container.Bind<GemPlacementService>().AsSingle();
+        Container.Bind<InventoryItemUseService>().AsSingle();
         Container.Bind<SaveFileCodec>().AsSingle();
         Container.Bind<SaveFileStorage>().AsSingle();
         Container.Bind<GemDefinitionCatalog>().AsSingle();
+        Container.Bind<ItemDefinitionCatalog>().AsSingle();
         Container.Bind<SaveProfileManager>().AsSingle();
         Container.Bind<CloudSettingsService>().AsSingle();
         Container.Bind<LocalSettingsService>().AsSingle();

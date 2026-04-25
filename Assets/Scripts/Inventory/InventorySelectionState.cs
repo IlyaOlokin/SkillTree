@@ -1,6 +1,4 @@
 using System;
-using Gems;
-
 namespace InventorySystem
 {
     public class InventorySelectionState : IDisposable
@@ -13,7 +11,7 @@ namespace InventorySystem
 
         public bool HasSelectedSlot => SelectedSlotIndex >= 0;
         public InventoryItem SelectedItem => _inventory != null ? _inventory.PeekItem(SelectedSlotIndex) : null;
-        public GemInstance SelectedGem => SelectedItem?.Gem;
+        public Gems.GemInstance SelectedGem => SelectedItem?.ItemType == InventoryItemType.Gem ? SelectedItem.Gem : null;
         public bool HasSelectedGem => SelectedGem != null;
 
         public InventorySelectionState(PlayerInventory inventory)
@@ -26,7 +24,7 @@ namespace InventorySystem
         public bool TrySelectSlot(int slotIndex)
         {
             InventoryItem item = _inventory != null ? _inventory.PeekItem(slotIndex) : null;
-            if (item?.Gem == null)
+            if (item == null || item.ItemType != InventoryItemType.Gem || item.Gem == null)
                 return false;
 
             if (SelectedSlotIndex == slotIndex && HasSelectedGem)

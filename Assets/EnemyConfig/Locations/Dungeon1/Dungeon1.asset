@@ -17,3 +17,7 @@ MonoBehaviour:
   description: 
   mapIcon: {fileID: 21300000, guid: b753c88a6aeb2674fa1d4f0a4c0a285a, type: 3}
   enemyDatabase: {fileID: 11400000, guid: b89dbc099b0773449954e02193c1b3c7, type: 2}
+  levelRewards:
+  - levelNumber: 5
+    itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
+    amount: 1

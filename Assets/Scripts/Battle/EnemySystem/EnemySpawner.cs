@@ -22,7 +22,7 @@ namespace Battle
         private int _currentClearedWaves;
         
         private WaveFactory _waveFactory;
-        private readonly GemDropResolver _gemDropResolver = new();
+        private readonly ItemDropResolver _itemDropResolver = new();
         private readonly List<EnemyUnit> _activeEnemies = new();
         private readonly Dictionary<string, LocationProgressState> _locationProgressById = new(StringComparer.Ordinal);
         private Coroutine _respawnCoroutine;
@@ -56,6 +56,7 @@ namespace Battle
         public event Action OnLevelChanged;
         public event Action OnWaveCleared;
         public event Action<EnemyUnit, IReadOnlyList<InventoryItem>> OnEnemyDropsResolved;
+        public event Action<IReadOnlyList<InventoryItem>, Vector3> OnLocationRewardsResolved;
         public event Action<bool> OnBattleActivityChanged;
 
         private void Awake()
@@ -282,7 +283,7 @@ namespace Battle
             if (enemy == null)
                 return new List<InventoryItem>();
 
-            return _gemDropResolver.Resolve(enemy);
+            return _itemDropResolver.Resolve(enemy);
         }
 
         private void RegisterWaveClear()
@@ -586,9 +587,55 @@ namespace Battle
             if (_selectedLocationProgress == null)
                 return;
 
+            int completedLevel = Mathf.Clamp(_selectedLevel, 0, MaxWaveLevel);
+            int previousCompletedLevelCount = _selectedLocationProgress.CompletedLevelCount;
             _selectedLocationProgress.CompletedLevelCount = Mathf.Max(
-                _selectedLocationProgress.CompletedLevelCount,
-                Mathf.Clamp(_selectedLevel, 0, MaxWaveLevel));
+                previousCompletedLevelCount,
+                completedLevel);
+
+            if (completedLevel <= previousCompletedLevelCount)
+                return;
+
+            ResolveLocationRewardsForCompletedLevel(completedLevel);
+        }
+
+        private void ResolveLocationRewardsForCompletedLevel(int completedLevel)
+        {
+            if (_selectedLocation == null || _selectedLocation.LevelRewards == null || _selectedLocation.LevelRewards.Count == 0)
+                return;
+
+            List<InventoryItem> rewardItems = new();
+            IReadOnlyList<LocationLevelRewardEntry> rewards = _selectedLocation.LevelRewards;
+            for (int i = 0; i < rewards.Count; i++)
+            {
+                LocationLevelRewardEntry reward = rewards[i];
+                if (reward == null || reward.LevelNumber != completedLevel || reward.ItemDefinition == null)
+                    continue;
+
+                string rewardId = reward.GetRewardId(_selectedLocation);
+                if (!TryClaimReward(rewardId))
+                    continue;
+
+                InventoryItem rewardItem = reward.CreateRewardItem();
+                if (rewardItem == null || rewardItem.IsEmpty)
+                    continue;
+
+                rewardItems.Add(rewardItem);
+            }
+
+            if (rewardItems.Count <= 0)
+                return;
+
+            Vector3 spawnPosition = GetLocationRewardSpawnPosition();
+            OnLocationRewardsResolved?.Invoke(rewardItems, spawnPosition);
+        }
+
+        private Vector3 GetLocationRewardSpawnPosition()
+        {
+            if (pool != null && pool.Units != null && pool.Units.Count > 0 && pool.Units[0] != null)
+                return pool.Units[0].transform.position;
+
+            return _player != null ? _player.transform.position : Vector3.zero;
         }
 
         private void CreateWaveFactoryIfPossible()

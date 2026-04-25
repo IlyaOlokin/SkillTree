@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using DropSystem;
 using SkillTree;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Battle
 {
@@ -16,9 +15,7 @@ namespace Battle
 
         [Header("Category Weights")]
         [Range(0f, 1f)] public float healthWeight = 1f;
-        [FormerlySerializedAs("damageWeight")]
         [Range(0f, 1f)] public float offenceWeight = 0f;
-        [FormerlySerializedAs("defenseWeight")]
         [Range(0f, 1f)] public float defenceWeight = 0f;
         [Range(0f, 1f)] public float utilityWeight;
 
@@ -47,14 +44,14 @@ namespace Battle
         public List<ModifierContainer> extraModifiers = new();
 
         [Header("Drops")]
-        [SerializeField] private GemDropTable gemDropTable;
+        [SerializeField] private ItemDropTable itemDropTable;
 
         [Header("Preview")]
         [SerializeField] private EnemyConfigDatabase previewDatabaseOverride;
         [SerializeField, Min(0.01f)] private float previewPower = 10f;
         [SerializeField] private EnemyRarity previewRarity = EnemyRarity.Normal;
 
-        public GemDropTable GemDropTable => gemDropTable;
+        public ItemDropTable ItemDropTable => itemDropTable;
         public float PowerMultiplier => Mathf.Max(0f, powerMultiplier);
         public EnemyConfigDatabase PreviewDatabaseOverride => previewDatabaseOverride;
         public float PreviewPower => Mathf.Max(0.01f, previewPower);
@@ -220,7 +217,6 @@ namespace Battle
     {
         [Range(0f, 1f)] public float armor = 1f;
         [Range(0f, 1f)] public float evasion;
-        [FormerlySerializedAs("barrierPower")]
         [Range(0f, 1f)] public float barrierCapacity;
         [Range(0f, 1f)] public float barrierCount;
         [Range(0f, 1f)] public float blockChance;

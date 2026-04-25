@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Gems;
+using Items;
 using SaveSystem;
 using UnityEngine;
 
@@ -35,12 +36,32 @@ namespace InventorySystem
                 return false;
 
             EnsureSlotCount();
+            if (item.IsStackable)
+            {
+                for (int i = 0; i < slots.Count; i++)
+                {
+                    InventoryItem storedItem = slots[i].Item;
+                    if (storedItem == null || !storedItem.CanStackWith(item))
+                        continue;
+
+                    if (storedItem.MaxStack - storedItem.StackCount < item.StackCount)
+                        continue;
+
+                    if (storedItem.AddToStack(item.StackCount) != item.StackCount)
+                        continue;
+
+                    slotIndex = i;
+                    RaiseInventoryChanged();
+                    return true;
+                }
+            }
+
             for (int i = 0; i < slots.Count; i++)
             {
                 if (!slots[i].IsEmpty)
                     continue;
 
-                slots[i].SetItem(item);
+                slots[i].SetItem(item.CreateCopy() ?? item);
                 slotIndex = i;
                 RaiseInventoryChanged();
                 return true;
@@ -101,6 +122,35 @@ namespace InventorySystem
             return slots[slotIndex].Item;
         }
 
+        public bool TryConsumeItem(int slotIndex, int amount)
+        {
+            if (!IsValidSlotIndex(slotIndex) || amount <= 0)
+                return false;
+
+            InventoryItem item = slots[slotIndex].Item;
+            if (item == null || item.IsEmpty)
+                return false;
+
+            if (item.ItemType == InventoryItemType.Gem)
+            {
+                if (amount != 1)
+                    return false;
+
+                slots[slotIndex].Clear();
+                RaiseInventoryChanged();
+                return true;
+            }
+
+            if (!item.TryConsumeUnits(amount))
+                return false;
+
+            if (item.IsEmpty)
+                slots[slotIndex].Clear();
+
+            RaiseInventoryChanged();
+            return true;
+        }
+
         private void EnsureSlotCount()
         {
             if (slots == null)
@@ -149,7 +199,10 @@ namespace InventorySystem
             return saveData;
         }
 
-        public void ApplySaveData(InventorySaveData saveData, Func<GemInstanceSaveData, GemInstance> gemResolver)
+        public void ApplySaveData(
+            InventorySaveData saveData,
+            Func<GemInstanceSaveData, GemInstance> gemResolver,
+            Func<string, ItemDefinition> itemResolver)
         {
             EnsureSlotCount();
             ClearAllInternal();
@@ -167,7 +220,7 @@ namespace InventorySystem
                     if (slotSave == null || !IsValidSlotIndex(slotSave.slotIndex))
                         continue;
 
-                    InventoryItem restoredItem = slotSave.item?.ToInventoryItem(gemResolver);
+                    InventoryItem restoredItem = slotSave.item?.ToInventoryItem(gemResolver, itemResolver);
                     if (restoredItem == null || restoredItem.IsEmpty)
                         continue;
 
@@ -178,9 +231,9 @@ namespace InventorySystem
             RaiseInventoryChanged();
         }
 
-        public void ResetToDefaults(Func<GemInstanceSaveData, GemInstance> gemResolver)
+        public void ResetToDefaults(Func<GemInstanceSaveData, GemInstance> gemResolver, Func<string, ItemDefinition> itemResolver)
         {
-            ApplySaveData(_defaultSaveData, gemResolver);
+            ApplySaveData(_defaultSaveData, gemResolver, itemResolver);
         }
 
         private void ClearAllInternal()

@@ -13,6 +13,7 @@ namespace UI
 
         [Inject] private PlayerInventory _playerInventory;
         [Inject] private GemPlacementService _gemPlacementService;
+        [Inject] private InventoryItemUseService _itemUseService;
         [Inject] private InventorySelectionState _selectionState;
         [Inject] private DiContainer _container;
         [Inject] private TooltipUI _tooltipUI;
@@ -43,6 +44,12 @@ namespace UI
         public void HandleSlotClicked(int slotIndex)
         {
             _gemPlacementService?.ToggleGemSlotSelection(slotIndex);
+        }
+
+        public void HandleSlotRightClicked(int slotIndex)
+        {
+            if (_itemUseService.TryUseItem(slotIndex))
+                _tooltipUI?.RefreshCurrentTooltip();
         }
 
         public void RefreshAll()
