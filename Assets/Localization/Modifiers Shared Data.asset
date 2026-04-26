@@ -1415,6 +1415,10 @@ MonoBehaviour:
     m_Key: modifier.modifierContainerIfTargetHasBleed.description
     m_Metadata:
       m_Items: []
+  - m_Id: 487906223460354
+    m_Key: modifier.modifierPerBarrierCount.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -1420,6 +1420,10 @@ MonoBehaviour:
     m_Localized: '[[0]] if target has {bleed|Bleed}'
     m_Metadata:
       m_Items: []
+  - m_Id: 487906223460354
+    m_Localized: '[[0]] per {barrierCount|Barrier Count}'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
