@@ -1424,6 +1424,34 @@ MonoBehaviour:
     m_Localized: '[[0]] per {barrierCount|Barrier Count}'
     m_Metadata:
       m_Items: []
+  - m_Id: 487906223460355
+    m_Localized: You have [[0]] {profanedHealth|Profaned Health}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460356
+    m_Localized: '[[0]]% increased {profanedHealth|Profaned Health}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460357
+    m_Localized: '[[0]]% decreased {profanedHealth|Profaned Health}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460358
+    m_Localized: '[[0]]% more {profanedHealth|Profaned Health}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460359
+    m_Localized: '[[0]]% less {profanedHealth|Profaned Health}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460360
+    m_Localized: You have no {profanedHealth|Profaned Health}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460361
+    m_Localized: While you have {profanedHealth|Profaned Health}, take 50% more Damage
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

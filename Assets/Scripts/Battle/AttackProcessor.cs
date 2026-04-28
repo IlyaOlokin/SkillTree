@@ -32,6 +32,12 @@ namespace Battle
             StatCalculator.LightRecalculateAttackStats(damageInfo.BaseUnitModifiers);
             
             DamageCalculator.CalculateAttackDamage(damageInfo);
+
+            foreach (Modifier mod in defender.UnitObject.GetAllModifiers())
+            {
+                if (mod.IsInPriority(ModifierPriority.IncomingPreMitigation) && mod.IsApplicable(defender.UnitObject))
+                    mod.ApplyEffect(damageInfo);
+            }
             
             //Mitigation
             Armor.ApplyArmorMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);

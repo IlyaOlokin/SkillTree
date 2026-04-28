@@ -229,6 +229,10 @@ MonoBehaviour:
     m_Key: description.intelligence2
     m_Metadata:
       m_Items: []
+  - m_Id: 3214420366987265
+    m_Key: description.profanedHealth1
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

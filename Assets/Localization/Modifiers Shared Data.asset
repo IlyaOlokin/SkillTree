@@ -1419,6 +1419,34 @@ MonoBehaviour:
     m_Key: modifier.modifierPerBarrierCount.description
     m_Metadata:
       m_Items: []
+  - m_Id: 487906223460355
+    m_Key: modifier.container.added.ProfanedHealthPercent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460356
+    m_Key: modifier.container.increased.ProfanedHealthPercent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460357
+    m_Key: modifier.container.decreased.ProfanedHealthPercent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460358
+    m_Key: modifier.container.more.ProfanedHealthPercent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460359
+    m_Key: modifier.container.less.ProfanedHealthPercent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460360
+    m_Key: modifier.container.none.ProfanedHealthPercent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460361
+    m_Key: modifier.profanedDamageTaken.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

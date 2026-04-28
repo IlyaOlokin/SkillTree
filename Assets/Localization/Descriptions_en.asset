@@ -239,6 +239,10 @@ MonoBehaviour:
     m_Localized: 1% increased Elemental Damage per 2 Intelligence
     m_Metadata:
       m_Items: []
+  - m_Id: 3214420366987265
+    m_Localized: While you have Profaned Health, take 50% more Damage"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

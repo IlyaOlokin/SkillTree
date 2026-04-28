@@ -7,6 +7,7 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Health health;
     [SerializeField] private MysticHealth mysticHealth;
     [SerializeField] private GSlider healthSlider;
+    [SerializeField] private GSlider profanedHealthSlider;
     [SerializeField] private GSlider mysticHealthSlider;
     [SerializeField] private MysticColorsConfig mysticColorsConfig;
 
@@ -16,6 +17,7 @@ public class HealthBar : MonoBehaviour
         {
             health.OnHealthChanged += UpdateHealthBar;
             health.OnMaximumHealthChanged += UpdateHealthBar;
+            health.OnProfanedHealthChanged += UpdateProfanedHealthBar;
         }
 
         if (mysticHealth != null)
@@ -30,6 +32,7 @@ public class HealthBar : MonoBehaviour
         {
             health.OnHealthChanged -= UpdateHealthBar;
             health.OnMaximumHealthChanged -= UpdateHealthBar;
+            health.OnProfanedHealthChanged -= UpdateProfanedHealthBar;
         }
 
         if (mysticHealth != null)
@@ -41,6 +44,7 @@ public class HealthBar : MonoBehaviour
     private void Start()
     {
         UpdateHealthBar();
+        UpdateProfanedHealthBar();
         UpdateMysticHealthBar(0f, 0f, mysticHealth != null ? mysticHealth.TotalAbsorption : 0f);
     }
 
@@ -48,6 +52,16 @@ public class HealthBar : MonoBehaviour
     {
         healthSlider.UpdateBar(health.CurrentHealth01);
         healthSlider.UpdateText(Math.Ceiling(health.CurrentHealth) + "/" + Math.Ceiling(health.MaxHealth));
+    }
+
+    private void UpdateProfanedHealthBar()
+    {
+        if (profanedHealthSlider == null || health == null)
+        {
+            return;
+        }
+
+        profanedHealthSlider.UpdateBar(health.ProfanedHealthPercent01);
     }
 
     private void UpdateMysticHealthBar(float lightAbsorption, float darknessAbsorption, float totalAbsorption)

@@ -11,6 +11,7 @@ namespace SkillTree
     public class BaseInnateModifiers : Modifier
     {
         [SerializeField] public List<ModifierContainer> baseModifiers = new List<ModifierContainer>();
+        [SerializeField] private List<Modifier> runtimeModifiers = new List<Modifier>();
 
         public override void ApplyEffect(Unit unit)
         {
@@ -19,10 +20,16 @@ namespace SkillTree
                 unit.BaseUnitModifiers.ChangeModifierValue(modifier);
             }
         }
+
+        public IReadOnlyList<Modifier> GetRuntimeModifiers()
+        {
+            return runtimeModifiers;
+        }
         
         public void Clear()
         {
             baseModifiers.Clear();
+            runtimeModifiers.Clear();
         }
 
         public void AddModifier(ModifierContainer modifier)
@@ -37,6 +44,16 @@ namespace SkillTree
         {
             foreach (var mod in modifiers)
                 AddModifier(mod);
+        }
+
+        public void AddRuntimeModifier(Modifier modifier)
+        {
+            if (modifier == null)
+            {
+                return;
+            }
+
+            runtimeModifiers.Add(modifier);
         }
     }
 }

@@ -1114,10 +1114,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 7503999516946654171}
     m_Modifications:
     - target: {fileID: 95323377041699491, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 5156776694448688124, guid: ffd93ddd85b610a408fd1f008c9d3d33, type: 3}
-    - target: {fileID: 95323377041699491, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
       propertyPath: m_Color.b
       value: 0.06341223
       objectReference: {fileID: 0}
@@ -1132,22 +1128,6 @@ PrefabInstance:
     - target: {fileID: 95323377041699491, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
       propertyPath: m_FillAmount
       value: 0.253
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024316387795115320, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -6736055387741465063, guid: 0e550df4aebe85541b4dc7b3291e51c0, type: 3}
-    - target: {fileID: 1024316387795115320, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024316387795115320, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1024316387795115320, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
-      propertyPath: m_Color.r
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1439020382178639579, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
       propertyPath: m_IsActive
@@ -1265,10 +1245,6 @@ PrefabInstance:
       propertyPath: mysticHealth
       value: 
       objectReference: {fileID: 2133904165270539552}
-    - target: {fileID: 3308023268698982117, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 5156776694448688124, guid: ffd93ddd85b610a408fd1f008c9d3d33, type: 3}
     - target: {fileID: 6116439260654742426, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
       propertyPath: needText
       value: 1
@@ -1321,10 +1297,6 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 9005984527397576425, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 5156776694448688124, guid: ffd93ddd85b610a408fd1f008c9d3d33, type: 3}
     - target: {fileID: 9005984527397576425, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
       propertyPath: m_FillAmount
       value: 0

@@ -58,6 +58,7 @@ public enum StatType
     Defence = 26,
     Accuracy = 21,
     MaximumHealth = 22,
+    ProfanedHealthPercent = 59,
     HealthRegenerationPerSecond = 31,
     BarrierCount = 32,
     BarrierCapacity = 33,

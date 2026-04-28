@@ -224,6 +224,9 @@ namespace Battle
         public List<Modifier> GetAllModifiers()
         {
             List<Modifier> mods = new List<Modifier>();
+            mods.AddRange(baseInnateModifiers.GetRuntimeModifiers());
+            mods.AddRange(innateModifiers.GetRuntimeModifiers());
+
             if (this is PlayerUnit playerUnit)
             {
                 mods.AddRange(playerUnit.SkillTree.CollectAllModifiers());

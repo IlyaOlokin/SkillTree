@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using SkillTree;
 using UnityEngine;
 
@@ -14,7 +13,30 @@ namespace Battle
 
         private float _currentHealth = 100f;
         private float _cachedRegenerationSpeed;
+        private float _cachedProfanedHealthPercent01;
         public float CurrentHealth01 => MaxHealth > 0f ? CurrentHealth / MaxHealth : 0f;
+        public float ProfanedHealthPercent01 => _cachedProfanedHealthPercent01;
+        public float ProfanedHealthThreshold => MaxHealth * (1f - _cachedProfanedHealthPercent01);
+        public float ProfanedHealthSegmentStart01 => Mathf.Clamp01(1f - _cachedProfanedHealthPercent01);
+        public float CurrentProfanedHealth => _cachedProfanedHealthPercent01 > 0f
+            ? Mathf.Max(0f, CurrentHealth - ProfanedHealthThreshold)
+            : 0f;
+        public float CurrentProfanedHealth01 => MaxHealth > 0f ? CurrentProfanedHealth / MaxHealth : 0f;
+        public float CurrentProfanedHealthSegment01
+        {
+            get
+            {
+                float profanedPool = MaxHealth * _cachedProfanedHealthPercent01;
+                if (profanedPool <= 0f)
+                {
+                    return 0f;
+                }
+
+                return Mathf.Clamp01(CurrentProfanedHealth / profanedPool);
+            }
+        }
+
+        public bool HasProfanedHealth => CurrentProfanedHealth > 0f;
         public float CurrentHealth
         {
             get => _currentHealth;
@@ -24,6 +46,7 @@ namespace Battle
         public event Action<float> OnHealthChangedDelta;
         public event Action OnHealthChanged;
         public event Action OnMaximumHealthChanged;
+        public event Action OnProfanedHealthChanged;
         public event Action OnHealthZero;
 
         public void Init(Unit owner)
@@ -57,6 +80,7 @@ namespace Battle
             CurrentHealth += amount;
             if (displayHeal) OnHealthChangedDelta?.Invoke(previousHealth - CurrentHealth);
             OnHealthChanged?.Invoke();
+            OnProfanedHealthChanged?.Invoke();
             ValidateAbsorptionDeathThreshold();
         }
 
@@ -73,6 +97,7 @@ namespace Battle
             
             if (displayDamage) OnHealthChangedDelta?.Invoke(previousHealth - CurrentHealth);
             OnHealthChanged?.Invoke();
+            OnProfanedHealthChanged?.Invoke();
             if (CurrentHealth <= 0f)
             {
                 NotifyHealthZero();
@@ -86,16 +111,19 @@ namespace Battle
             CurrentHealth = MaxHealth;
             _deathNotified = false;
             OnHealthChanged?.Invoke();
+            OnProfanedHealthChanged?.Invoke();
         }
 
         private void UpdateHealthValues()
         {
             _cachedRegenerationSpeed = _owner.BaseUnitModifiers.GetStatValue(StatType.HealthRegenerationPerSecond);
+            _cachedProfanedHealthPercent01 = Mathf.Clamp01(_owner.BaseUnitModifiers.GetStatValue(StatType.ProfanedHealthPercent));
             
             float currentHealthPercentage = CurrentHealth / MaxHealth;
             MaxHealth = _owner.BaseUnitModifiers.GetStatValue(StatType.MaximumHealth);
             CurrentHealth = MaxHealth * currentHealthPercentage;
             OnMaximumHealthChanged?.Invoke();
+            OnProfanedHealthChanged?.Invoke();
             ValidateAbsorptionDeathThreshold();
         }
 
