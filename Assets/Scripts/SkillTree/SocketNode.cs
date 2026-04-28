@@ -11,6 +11,7 @@ namespace SkillTree
     public class SocketNode : Node
     {
         private const string TooltipDescriptionId = "socketnode";
+        private const string TooltipTitleLocalizationKey = "node.title.socket";
 
         [SerializeField] private GemInstance socketedGem;
         [SerializeField] [HideInInspector] private GemInstance defaultSocketedGem;
@@ -106,6 +107,11 @@ namespace SkillTree
             }
 
             return descriptions;
+        }
+
+        public override string GetTooltipTitle()
+        {
+            return GameLocalization.GetModifier(TooltipTitleLocalizationKey, "Socket Node");
         }
 
         private static void AppendSocketNodeDescription(List<string> descriptions)

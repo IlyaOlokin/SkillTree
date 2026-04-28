@@ -1447,6 +1447,14 @@ MonoBehaviour:
     m_Key: modifier.profanedDamageTaken.description
     m_Metadata:
       m_Items: []
+  - m_Id: 487906223460362
+    m_Key: node.title.default
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460363
+    m_Key: node.title.socket
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -161,6 +161,17 @@ namespace TooltipSystem
                 return;
             }
 
+            if (!IsTooltipPinned())
+            {
+                HideTooltipWindowsFrom(canvasState, tooltipLevel);
+                return;
+            }
+
+            if (canvasState.TooltipWindows[tooltipLevel - 1].IsHiding)
+            {
+                return;
+            }
+
             HideTooltipWindowsFrom(canvasState, tooltipLevel);
 
             if (!TryGetLinkedTooltipDescription(linkId, out TooltipDescriptionData description))
@@ -305,10 +316,11 @@ namespace TooltipSystem
         {
             TooltipWindow tooltipWindow = canvasState.TooltipWindows[tooltipLevel];
             tooltipWindow.SetTexts(descriptions, shouldShowTitle, title);
-            tooltipWindow.gameObject.SetActive(true);
+            tooltipWindow.PrepareForShow();
             Canvas.ForceUpdateCanvases();
             tooltipWindow.RefreshLayout();
             SetDescriptionPosition(canvasState, tooltipLevel, screenPosition);
+            tooltipWindow.PlayShowAnimation();
         }
 
         private bool TryGetLinkedTooltipDescription(string linkId, out TooltipDescriptionData description)
@@ -333,7 +345,7 @@ namespace TooltipSystem
         {
             for (int i = tooltipLevel; i < canvasState.TooltipWindows.Count; i++)
             {
-                canvasState.TooltipWindows[i].gameObject.SetActive(false);
+                canvasState.TooltipWindows[i].Hide();
             }
         }
 

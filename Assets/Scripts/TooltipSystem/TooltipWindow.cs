@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using DG.Tweening;
 using TMPro;
 using TooltipSystem;
 using UnityEngine;
@@ -11,17 +12,26 @@ public class TooltipWindow : MonoBehaviour
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private RectTransform heightOffsetSource;
     [SerializeField] private int maxCharactersPerLine = 32;
+    [SerializeField] [Min(0f)] private float showDuration = 0.16f;
+    [SerializeField] [Min(0f)] private float hideDuration = 0.12f;
+    [SerializeField] [Range(0f, 1f)] private float hiddenScaleMultiplier = 0f;
+    [SerializeField] private Ease showEase = Ease.OutBack;
+    [SerializeField] private Ease hideEase = Ease.InBack;
     private RectTransform selfRectTransform;
     private readonly List<TMP_Text> descriptionFields = new();
     private TooltipUI tooltipUI;
     private int tooltipLevel;
     private string defaultTitleText;
+    private Vector3 visibleScale;
+    private Tween visibilityTween;
     
     [SerializeField] private GameObject title;
+    public bool IsHiding { get; private set; }
 
     private void Awake()
     {
         selfRectTransform = (RectTransform)transform;
+        visibleScale = selfRectTransform.localScale;
         ConfigureDescriptionField(description);
         descriptionFields.Add(description);
 
@@ -34,6 +44,11 @@ public class TooltipWindow : MonoBehaviour
         {
             defaultTitleText = titleText.text;
         }
+    }
+
+    private void OnDestroy()
+    {
+        visibilityTween?.Kill();
     }
 
     public void Initialize(TooltipUI ownerTooltipUI, int level)
@@ -80,9 +95,70 @@ public class TooltipWindow : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(selfRectTransform);
     }
 
+    public void PrepareForShow()
+    {
+        visibilityTween?.Kill();
+        IsHiding = false;
+        gameObject.SetActive(true);
+        selfRectTransform.localScale = visibleScale;
+    }
+
+    public void PlayShowAnimation()
+    {
+        visibilityTween?.Kill();
+
+        if (showDuration <= 0f)
+        {
+            selfRectTransform.localScale = visibleScale;
+            return;
+        }
+
+        selfRectTransform.localScale = GetHiddenScale();
+        visibilityTween = selfRectTransform
+            .DOScale(visibleScale, showDuration)
+            .SetEase(showEase)
+            .SetUpdate(true);
+    }
+
+    public void Hide()
+    {
+        visibilityTween?.Kill();
+
+        if (!gameObject.activeSelf)
+        {
+            return;
+        }
+
+        IsHiding = true;
+
+        if (hideDuration <= 0f)
+        {
+            IsHiding = false;
+            selfRectTransform.localScale = visibleScale;
+            gameObject.SetActive(false);
+            return;
+        }
+
+        visibilityTween = selfRectTransform
+            .DOScale(GetHiddenScale(), hideDuration)
+            .SetEase(hideEase)
+            .SetUpdate(true)
+            .OnComplete(() =>
+            {
+                IsHiding = false;
+                selfRectTransform.localScale = visibleScale;
+                gameObject.SetActive(false);
+            });
+    }
+
     public float GetChildHeightOffset()
     {
         return heightOffsetSource.rect.height;
+    }
+
+    private Vector3 GetHiddenScale()
+    {
+        return visibleScale * hiddenScaleMultiplier;
     }
 
     private void EnsureDescriptionFieldCount(int requiredCount)

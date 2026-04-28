@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Battle;
+using LocalizationSupport;
 using TooltipSystem;
 using UnityEngine;
 using Zenject;
@@ -11,6 +12,8 @@ namespace SkillTree
     [Serializable]
     public class Node : MonoBehaviour, ITooltipDescriptionProvider
     { 
+        private const string TooltipTitleLocalizationKey = "node.title.default";
+
         [Inject] private UnitLevel _unitLevel;
         [SerializeField] [HideInInspector] private string saveId;
         [SerializeField] [HideInInspector] private bool defaultIsAllocated;
@@ -102,7 +105,7 @@ namespace SkillTree
 
         public virtual string GetTooltipTitle()
         {
-            return gameObject.name;
+            return GameLocalization.GetModifier(TooltipTitleLocalizationKey, "Node");
         }
 
         public virtual bool ShouldShowTooltipTitle()

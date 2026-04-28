@@ -1452,6 +1452,14 @@ MonoBehaviour:
     m_Localized: While you have {profanedHealth|Profaned Health}, take 50% more Damage
     m_Metadata:
       m_Items: []
+  - m_Id: 487906223460362
+    m_Localized: Node
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460363
+    m_Localized: Socket Node
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
