@@ -61,3 +61,5 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: 5b59341b4a8ebf9409468eedab9f8ee4, type: 2}
   - id: profanedHealth
     description: {fileID: 11400000, guid: ea41dfc1d2d3202419bc8ebef26918a7, type: 2}
+  - id: barrierSurge
+    description: {fileID: 11400000, guid: b1380fb513aa21e458864d01c4de0d16, type: 2}

@@ -1460,6 +1460,10 @@ MonoBehaviour:
     m_Localized: Socket Node
     m_Metadata:
       m_Items: []
+  - m_Id: 487906223460364
+    m_Localized: Each restored {barrier|Barrier} grants {barrierSurge|Barrier Surge}
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

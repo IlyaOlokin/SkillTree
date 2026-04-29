@@ -13,5 +13,6 @@ namespace Battle
         NextAttackModifierEffect = 8,
         Sunder = 9,
         Distract = 10,
+        BarrierRestorationPowerBuff = 11,
     }
 }

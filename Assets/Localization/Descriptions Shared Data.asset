@@ -233,6 +233,14 @@ MonoBehaviour:
     m_Key: description.profanedHealth1
     m_Metadata:
       m_Items: []
+  - m_Id: 5085118307897344
+    m_Key: description.barrierSurge1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5086869182353408
+    m_Key: description.barrierSurge2
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -28,6 +28,7 @@ namespace Battle
 
         public event Action OnBarrierCountChanged;
         public event Action OnMaxBarrierChanged;
+        public event Action OnBarrierRestored;
 
         public void Init(Unit unit)
         {
@@ -104,9 +105,15 @@ namespace Battle
             if (_cooldownProgress >= 1f)
             {
                 _cooldownProgress -= 1f;
+                int previousBarrierCount = _barrierCount;
                 _barrierCount = Mathf.Min(_barrierCount + 1, _maxBarrierCount);
 
                 OnBarrierCountChanged?.Invoke();
+
+                if (_barrierCount > previousBarrierCount)
+                {
+                    OnBarrierRestored?.Invoke();
+                }
             }
         }
 

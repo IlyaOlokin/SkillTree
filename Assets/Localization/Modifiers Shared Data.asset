@@ -1455,6 +1455,10 @@ MonoBehaviour:
     m_Key: node.title.socket
     m_Metadata:
       m_Items: []
+  - m_Id: 487906223460364
+    m_Key: modifier.barrierRestorationGrantsBarrierSurge.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
