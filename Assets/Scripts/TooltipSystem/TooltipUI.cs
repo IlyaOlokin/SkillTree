@@ -82,6 +82,17 @@ namespace TooltipSystem
             Vector2 screenPosition,
             TooltipCanvasTarget canvasTarget = TooltipCanvasTarget.SkillTree)
         {
+            DisplayTooltip(owner, tooltipDescriptionProvider, screenPosition, canvasTarget, true, true);
+        }
+
+        private void DisplayTooltip(
+            Object owner,
+            ITooltipDescriptionProvider tooltipDescriptionProvider,
+            Vector2 screenPosition,
+            TooltipCanvasTarget canvasTarget,
+            bool animate,
+            bool hideExistingWindows)
+        {
             if (!TryGetCanvasState(canvasTarget, out TooltipCanvasState canvasState))
             {
                 return;
@@ -93,10 +104,15 @@ namespace TooltipSystem
             _currentScreenPosition = screenPosition;
             _pendingHideOwner = null;
             _pendingHideRequest = false;
-            HideAllTooltipWindows();
+
+            if (hideExistingWindows)
+            {
+                HideAllTooltipWindows();
+            }
+
             bool shouldShowTitle = tooltipDescriptionProvider.ShouldShowTooltipTitle();
             string title = tooltipDescriptionProvider.GetTooltipTitle();
-            ShowTooltipWindow(canvasState, 0, tooltipDescriptionProvider.GetTooltipDescriptions(), screenPosition, shouldShowTitle, title);
+            ShowTooltipWindow(canvasState, 0, tooltipDescriptionProvider.GetTooltipDescriptions(), screenPosition, shouldShowTitle, title, animate);
         }
 
         public void RefreshCurrentTooltip()
@@ -110,7 +126,9 @@ namespace TooltipSystem
                 _currentOwner,
                 _currentTooltipDescriptionProvider,
                 _currentScreenPosition,
-                _currentCanvasTarget);
+                _currentCanvasTarget,
+                false,
+                false);
         }
 
         public void HideTooltip(Object owner)
@@ -185,7 +203,8 @@ namespace TooltipSystem
                 description.Descriptions,
                 screenPosition,
                 description.ShowTooltipTitle,
-                description.Title);
+                description.Title,
+                true);
         }
 
         public void DisplayLinkedTooltipAsRoot(
@@ -218,7 +237,8 @@ namespace TooltipSystem
                 description.Descriptions,
                 screenPosition,
                 description.ShowTooltipTitle,
-                description.Title);
+                description.Title,
+                true);
         }
 
         public void HideLinkedTooltipsFrom(int tooltipLevel)
@@ -312,7 +332,8 @@ namespace TooltipSystem
             IReadOnlyList<string> descriptions,
             Vector2 screenPosition,
             bool shouldShowTitle,
-            string title)
+            string title,
+            bool animate)
         {
             TooltipWindow tooltipWindow = canvasState.TooltipWindows[tooltipLevel];
             tooltipWindow.SetTexts(descriptions, shouldShowTitle, title);
@@ -320,7 +341,11 @@ namespace TooltipSystem
             Canvas.ForceUpdateCanvases();
             tooltipWindow.RefreshLayout();
             SetDescriptionPosition(canvasState, tooltipLevel, screenPosition);
-            tooltipWindow.PlayShowAnimation();
+
+            if (animate)
+            {
+                tooltipWindow.PlayShowAnimation();
+            }
         }
 
         private bool TryGetLinkedTooltipDescription(string linkId, out TooltipDescriptionData description)

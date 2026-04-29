@@ -29,6 +29,12 @@ MonoBehaviour:
     - Locale-de
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 594714a387af2264b8ec8ac693b38cdf
+    m_Address: GameUI_de
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-de
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 64d59c1f5e80d844eb21c642a57e4e2f
     m_Address: MainMenu_de
     m_ReadOnly: 1

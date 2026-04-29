@@ -40,7 +40,7 @@ namespace SkillTree
 
         private void ProcessNodeAllocation(Node node)
         {
-            if (node.IsAllocated)
+            if (node.IsActive)
             {
                 if (!_allocatedNodes.Contains(node))
                     _allocatedNodes.Add(node);
@@ -195,7 +195,7 @@ namespace SkillTree
             _allocatedNodes.Clear();
             foreach (Node node in EnumerateNodes())
             {
-                if (node.IsAllocated)
+                if (node.IsActive)
                     _allocatedNodes.Add(node);
             }
         }

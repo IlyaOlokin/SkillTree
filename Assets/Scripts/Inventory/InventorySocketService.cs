@@ -14,7 +14,7 @@ namespace InventorySystem
             if (item == null || item.ItemType != InventoryItemType.Gem || item.Gem == null)
                 return false;
 
-            if (!socketNode.IsAllocated)
+            if (!socketNode.IsActive)
                 return false;
 
             if (!socketNode.HasGem)

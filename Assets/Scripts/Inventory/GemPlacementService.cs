@@ -36,7 +36,7 @@ namespace InventorySystem
 
         public bool TryPlaceSelectedGem(SocketNode socketNode)
         {
-            if (socketNode == null || !socketNode.IsAllocated || !SelectionState.HasSelectedGem)
+            if (socketNode == null || !socketNode.IsActive || !SelectionState.HasSelectedGem)
                 return false;
 
             bool hadGemInSocket = socketNode.HasGem;

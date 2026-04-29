@@ -23,7 +23,7 @@ namespace SkillTree
         public GemInstance SocketedGem => socketedGem;
         public GemInstance DefaultSocketedGem => defaultSocketedGem;
         public bool HasGem => IsValidGem(socketedGem);
-        public bool IsGemActive => IsAllocated && HasGem;
+        public bool IsGemActive => IsActive && HasGem;
 
         private void Awake()
         {
@@ -32,7 +32,7 @@ namespace SkillTree
 
         public bool CanAcceptGem(GemInstance gemInstance)
         {
-            return IsAllocated && IsValidGem(gemInstance) && !HasGem;
+            return IsActive && IsValidGem(gemInstance) && !HasGem;
         }
 
         public bool TryInsertGem(GemInstance gemInstance)
@@ -78,7 +78,7 @@ namespace SkillTree
             {
                 descriptions.Add(GameLocalization.Get("node.socket.empty", "Empty Socket"));
 
-                if (!IsAllocated)
+                if (!IsActive)
                 {
                     descriptions.Add(GameLocalization.Get(
                         "node.socket.allocateBeforeSocketing",
@@ -93,7 +93,7 @@ namespace SkillTree
                 "Socketed Gem: [[0]]",
                 socketedGem.DisplayName));
 
-            if (!IsAllocated)
+            if (!IsActive)
             {
                 descriptions.Add(GameLocalization.Get(
                     "node.socket.inactiveGem",

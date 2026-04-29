@@ -17,7 +17,10 @@ namespace SkillTree
             foreach (var node in nodes)
             {
                 if (node != null)
+                {
                     node.OnAllocatedChanged += HandleNodeAllocationChanged;
+                    node.OnActiveChanged += HandleNodeAllocationChanged;
+                }
             }
 
             RecalculateAllocatedNodesCount();
@@ -28,7 +31,10 @@ namespace SkillTree
             foreach (var node in nodes)
             {
                 if (node != null)
+                {
                     node.OnAllocatedChanged -= HandleNodeAllocationChanged;
+                    node.OnActiveChanged -= HandleNodeAllocationChanged;
+                }
             }
         }
 
@@ -63,7 +69,7 @@ namespace SkillTree
             int allocatedNodes = 0;
             foreach (var node in nodes)
             {
-                if (node != null && node.IsAllocated)
+                if (node != null && node.IsActive)
                     allocatedNodes++;
             }
 

@@ -43,7 +43,10 @@ namespace Visual
             _defaultNodeIcon = nodeImage != null ? nodeImage.sprite : null;
 
             if (node != null)
+            {
                 node.OnAllocatedChanged += UpdateVisual;
+                node.OnActiveChanged += UpdateVisual;
+            }
 
             if (node is SocketNode socketNode)
                 socketNode.OnSocketedGemChanged += UpdateSocketVisual;
@@ -57,7 +60,10 @@ namespace Visual
         private void OnDestroy()
         {
             if (node != null)
+            {
                 node.OnAllocatedChanged -= UpdateVisual;
+                node.OnActiveChanged -= UpdateVisual;
+            }
 
             if (node is SocketNode socketNode)
                 socketNode.OnSocketedGemChanged -= UpdateSocketVisual;
@@ -80,7 +86,7 @@ namespace Visual
 
             bool canAllocateNow = node.CanBeAllocated() && node.HasEnoughSkillPoints();
 
-            if (node.IsAllocated)
+            if (node.IsActive)
             {
                 border.color = borderAllocatedColor;
                 nodeImage.color = nodeImageAllocatedColor;

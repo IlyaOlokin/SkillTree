@@ -30,7 +30,7 @@ namespace SkillTree
             if (Input.GetMouseButtonDown(0))
             {
                 if (_node is SocketNode socketNode
-                    && socketNode.IsAllocated
+                    && socketNode.IsActive
                     && _gemPlacementService != null
                     && _gemPlacementService.SelectionState.HasSelectedGem)
                 {

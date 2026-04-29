@@ -12,7 +12,7 @@ namespace SkillTree
     {
         /// <summary>
         /// Returns true if there is a path from <paramref name="startNode"/> to <see cref="RootNode"/>
-        /// where each traversed neighbor node is currently allocated.
+        /// where each traversed neighbor node is currently active.
         /// </summary>
         public static bool HasAllocatedPathToRoot(Node startNode)
         {
@@ -86,7 +86,7 @@ namespace SkillTree
 
             foreach (var next in current.ConnectedNodes)
             {
-                if (next != null && next.IsAllocated && HasAllocatedPathToRootInternal(next, visited))
+                if (next != null && next.IsActive && HasAllocatedPathToRootInternal(next, visited))
                     return true;
             }
 

@@ -10,6 +10,7 @@ namespace LocalizationSupport
         public const string DescriptionsTable = "Descriptions";
         public const string ModifiersTable = "Modifiers";
         public const string MainMenuTable = "MainMenu";
+        public const string GameUITable = "GameUI";
         public const string RuntimeTable = DescriptionsTable;
         public const string ContentTable = DescriptionsTable;
 
@@ -38,6 +39,11 @@ namespace LocalizationSupport
             return GetFromTable(MainMenuTable, key, fallback);
         }
 
+        public static string GetGameUI(string key, string fallback)
+        {
+            return GetFromTable(GameUITable, key, fallback);
+        }
+
         public static string Format(string key, string fallbackTemplate, params object[] arguments)
         {
             return FormatFromTable(RuntimeTable, key, fallbackTemplate, arguments);
@@ -51,6 +57,11 @@ namespace LocalizationSupport
         public static string FormatContent(string key, string fallbackTemplate, params object[] arguments)
         {
             return FormatFromTable(ContentTable, key, fallbackTemplate, arguments);
+        }
+
+        public static string FormatGameUI(string key, string fallbackTemplate, params object[] arguments)
+        {
+            return FormatFromTable(GameUITable, key, fallbackTemplate, arguments);
         }
 
         public static string FormatFromTable(string tableName, string key, string fallbackTemplate, params object[] arguments)

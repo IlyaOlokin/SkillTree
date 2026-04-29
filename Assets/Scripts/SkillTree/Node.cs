@@ -19,6 +19,7 @@ namespace SkillTree
         [SerializeField] [HideInInspector] private bool defaultIsAllocated;
         
         public virtual bool IsAllocated { get; private set; }
+        public virtual bool IsActive { get; private set; }
         [SerializeField] private int nodeCost = 1;
         [SerializeField] private List<Node> connectedNodes = new List<Node>();
         public IReadOnlyList<Node> ConnectedNodes => connectedNodes;
@@ -30,10 +31,12 @@ namespace SkillTree
         public bool DefaultIsAllocated => defaultIsAllocated;
 
         public event Action<Node> OnAllocatedChanged;
+        public event Action<Node> OnActiveChanged;
         public event Action<Node> OnNodeChanged;
         public static event Action<Node> OnAnyNodeAllocatedChanged;
 
         public Func<bool> AdditionalAllocatedCondition;
+        public Func<bool> AdditionalActivationCondition;
 
         public bool CanBeAllocated()
         {
@@ -50,6 +53,11 @@ namespace SkillTree
             return NodeGraphTraversalService.HasAllocatedPathToRoot(this);
         }
 
+        public bool HasActiveRootConnection()
+        {
+            return HasRootConnection();
+        }
+
 
         public void Allocate()
         {
@@ -58,6 +66,7 @@ namespace SkillTree
                 return;
             
             IsAllocated = true;
+            SetActiveInternal(AdditionalActivationCondition == null || AdditionalActivationCondition(), false);
             
             OnAllocatedChanged?.Invoke(this);
             OnAnyNodeAllocatedChanged?.Invoke(this);
@@ -67,22 +76,29 @@ namespace SkillTree
         public void Deallocate()
         {
             if (!IsAllocated) return;
-            
-            IsAllocated = false;
-            bool allowDeallocation = true;
-            foreach (var node in ConnectedNodes)
-            {
-                if (!node.HasRootConnection() && node.IsAllocated)
-                {
-                    allowDeallocation = false;
-                    break;
-                }
-            }
 
-            if (!allowDeallocation)
+            bool wasActive = IsActive;
+            IsAllocated = false;
+            SetActiveInternal(false, false);
+
+            if (wasActive)
             {
-                IsAllocated = true;
-                return;
+                bool allowDeallocation = true;
+                foreach (var node in ConnectedNodes)
+                {
+                    if (!node.HasRootConnection() && node.IsActive)
+                    {
+                        allowDeallocation = false;
+                        break;
+                    }
+                }
+
+                if (!allowDeallocation)
+                {
+                    IsAllocated = true;
+                    SetActiveInternal(true, false);
+                    return;
+                }
             }
 
             _unitLevel.RefundSkillPoints(nodeCost);
@@ -120,13 +136,23 @@ namespace SkillTree
 
         public void SetAllocatedFromSave(bool allocated)
         {
+            bool wasAllocated = IsAllocated;
             IsAllocated = allocated;
-            if (allocated)
+            SetActiveInternal(allocated && (AdditionalActivationCondition == null || AdditionalActivationCondition()), false);
+            if (allocated || wasAllocated != allocated)
             {
                 OnAllocatedChanged?.Invoke(this);
                 OnAnyNodeAllocatedChanged?.Invoke(this);
                 RaiseNodeChanged();
             }
+        }
+
+        public void SetActiveFromLimitZone(bool active)
+        {
+            if (!IsAllocated)
+                active = false;
+
+            SetActiveInternal(active, true);
         }
 
         public bool EnsureSaveId()
@@ -146,6 +172,21 @@ namespace SkillTree
         protected virtual void OnValidate()
         {
             defaultIsAllocated = IsAllocated;
+        }
+
+        private void SetActiveInternal(bool active, bool notify)
+        {
+            if (IsActive == active)
+                return;
+
+            IsActive = active;
+
+            if (!notify)
+                return;
+
+            OnActiveChanged?.Invoke(this);
+            OnAnyNodeAllocatedChanged?.Invoke(this);
+            RaiseNodeChanged();
         }
 
         private string BuildFallbackSaveId()

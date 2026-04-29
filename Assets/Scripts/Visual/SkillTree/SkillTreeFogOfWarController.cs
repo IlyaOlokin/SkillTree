@@ -152,7 +152,7 @@ namespace SkillTree
 
         private void HandleNodeChanged(Node node)
         {
-            if (node == null || !node.IsAllocated)
+            if (node == null || !node.IsActive)
                 return;
 
             if (!_discoveredNodes.Add(node))
