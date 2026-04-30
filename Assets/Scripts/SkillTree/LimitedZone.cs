@@ -28,6 +28,7 @@ namespace SkillTree
         };
 
         private readonly List<Node> _allocationOrder = new();
+        private int _lastMaxAllocatedNode;
 
         public int MaxAllocatedNode => limitMode == LimitMode.PlayerLevel
             ? GetMaxAllocatedNodeForPlayerLevel()
@@ -54,6 +55,7 @@ namespace SkillTree
                 _unitLevel.OnExpChanged += OnPlayerProgressChanged;
 
             RebuildAllocationOrderFromNodes();
+            _lastMaxAllocatedNode = MaxAllocatedNode;
             RebuildActiveNodes();
         }
 
@@ -220,7 +222,14 @@ namespace SkillTree
         {
             if (limitMode == LimitMode.PlayerLevel)
             {
-                RebuildActiveNodes();
+                int currentMaxAllocatedNode = MaxAllocatedNode;
+                if (currentMaxAllocatedNode != _lastMaxAllocatedNode)
+                {
+                    _lastMaxAllocatedNode = currentMaxAllocatedNode;
+                    RebuildAllocationOrderFromNodes();
+                    RebuildActiveNodes();
+                }
+
                 OnAllocatedCountChanged?.Invoke();
             }
         }

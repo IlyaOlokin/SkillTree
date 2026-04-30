@@ -45,17 +45,11 @@ namespace VFX
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                Play();
-            }
             if (!_isPlaying)
             {
                 return;
             }
-
             
-
             _elapsed += Time.deltaTime;
             float normalizedLife = duration <= 0f ? 1f : Mathf.Clamp01(_elapsed / duration);
             SetLife(normalizedLife);

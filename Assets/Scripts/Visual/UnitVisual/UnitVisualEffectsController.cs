@@ -85,7 +85,6 @@ namespace Visual
         private UnitEffectIconView CreateEffectIcon(ActiveEffect activeEffect)
         {
             var iconView = Object.Instantiate(effectIconPrefab, effectIconsRoot);
-            iconView.RectTransform.localScale = effectIconsRoot.localScale;
             iconView.Initialize(_tooltipUI);
             iconView.SetIcon(ResolveEffectIcon(activeEffect.Effect));
             iconView.SetEffect(activeEffect.Effect);

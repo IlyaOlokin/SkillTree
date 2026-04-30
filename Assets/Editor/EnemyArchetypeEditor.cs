@@ -70,6 +70,7 @@ public class EnemyArchetypeEditor : Editor
                 new WeightFieldDefinition("defence.evasion", "Evasion"),
                 new WeightFieldDefinition("defence.barrierCapacity", "Barrier Capacity"),
                 new WeightFieldDefinition("defence.barrierCount", "Barrier Count"),
+                new WeightFieldDefinition("defence.healthRegeneration", "Health Regeneration"),
                 new WeightFieldDefinition("defence.blockChance", "Block Chance"),
                 new WeightFieldDefinition("defence.elementalResistance", "Elemental Resistance"),
                 new WeightFieldDefinition("defence.fireResistance", "Fire Resistance"),
@@ -424,13 +425,14 @@ public class EnemyArchetypeEditor : Editor
                 float statBudget = categoryBudget * normalizedStatWeight;
                 float allocationRatio = normalizedCategoryWeight * normalizedStatWeight;
                 float finalValue = previewModifiers.GetStatValue(entry.StatType);
+                float maximumHealth = previewModifiers.GetStatValue(StatType.MaximumHealth);
                 EnemyStatBudgetRule rule = statBudgetConfig != null
                     ? statBudgetConfig.GetRule(entry.StatType)
                     : EnemyStatBudgetRuleDefaults.Get(entry.StatType);
 
                 EditorGUILayout.LabelField(
                     Nicify(entry.StatType),
-                    $"{entry.Weight:0.##} w | {normalizedStatWeight * 100f:0.#}% in category | {allocationRatio * 100f:0.#}% total | {statBudget:0.##} budget | {FormatRule(rule)} | {FormatStatValue(entry.StatType, finalValue)}");
+                    $"{entry.Weight:0.##} w | {normalizedStatWeight * 100f:0.#}% in category | {allocationRatio * 100f:0.#}% total | {statBudget:0.##} budget | {FormatRule(rule)} | {FormatStatValue(entry.StatType, finalValue, maximumHealth)}");
             }
         }
     }
@@ -451,7 +453,8 @@ public class EnemyArchetypeEditor : Editor
                     continue;
 
                 drewAny = true;
-                EditorGUILayout.LabelField(Nicify(statType), FormatStatValue(statType, value));
+                float maximumHealth = previewModifiers.GetStatValue(StatType.MaximumHealth);
+                EditorGUILayout.LabelField(Nicify(statType), FormatStatValue(statType, value, maximumHealth));
             }
 
             if (!drewAny)
@@ -472,10 +475,13 @@ public class EnemyArchetypeEditor : Editor
         };
     }
 
-    private static string FormatStatValue(StatType statType, float value)
+    private static string FormatStatValue(StatType statType, float value, float maximumHealth = 0f)
     {
         if (statType == StatType.BarrierCount)
-            return Mathf.RoundToInt(value).ToString();
+            return Mathf.FloorToInt(value + 0.5f).ToString();
+
+        if (statType == StatType.HealthRegenerationPerSecond && maximumHealth > 0.0001f)
+            return $"{value:0.##}/s ({value / maximumHealth * 100f:0.##}% HP/s)";
 
         if (StatTypeDisplayRules.IsPercentStat(statType))
             return $"{value * 100f:0.##}%";

@@ -112,6 +112,26 @@ namespace Battle
                 ? statBudgetConfig.GetRule(statType)
                 : EnemyStatBudgetRuleDefaults.Get(statType);
 
+            if (statType == StatType.BarrierCount)
+            {
+                float barrierCount = Mathf.Floor(rule.Evaluate(budget, allocationRatio) + 0.5f);
+                if (barrierCount > 0f)
+                    Add(package, rule.modifierType, statType, barrierCount);
+
+                return;
+            }
+
+            if (statType == StatType.HealthRegenerationPerSecond)
+            {
+                float maximumHealth = CalculatePackageStat(package, StatType.MaximumHealth);
+                float healthRegenerationRatio = rule.Evaluate(budget, allocationRatio);
+                float healthRegeneration = maximumHealth * healthRegenerationRatio;
+                if (healthRegeneration > 0f)
+                    Add(package, rule.modifierType, statType, healthRegeneration);
+
+                return;
+            }
+
             float value = rule.Evaluate(budget, allocationRatio);
             if (value <= 0f)
                 return;
@@ -210,6 +230,22 @@ namespace Battle
             float value)
         {
             package.AddModifier(new ModifierContainer(type, stat, value));
+        }
+
+        private static float CalculatePackageStat(BaseInnateModifiers package, StatType statType)
+        {
+            if (package == null)
+                return 0f;
+
+            var modifiers = new BaseUnitModifiers();
+            foreach (var modifier in package.baseModifiers)
+                modifiers.ChangeModifierValue(modifier);
+
+            StatCalculator.MergeDamageModifiers(modifiers);
+            StatCalculator.MergeDefenceModifiers(modifiers);
+            StatCalculator.MergeAilmentModifiers(modifiers);
+
+            return StatCalculator.GetStat(modifiers, statType);
         }
     }
 }

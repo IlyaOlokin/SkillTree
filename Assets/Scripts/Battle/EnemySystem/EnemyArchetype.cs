@@ -219,6 +219,7 @@ namespace Battle
         [Range(0f, 1f)] public float evasion;
         [Range(0f, 1f)] public float barrierCapacity;
         [Range(0f, 1f)] public float barrierCount;
+        [Range(0f, 1f)] public float healthRegeneration;
         [Range(0f, 1f)] public float blockChance;
         [Range(0f, 1f)] public float elementalResistance;
         [Range(0f, 1f)] public float fireResistance;
@@ -233,6 +234,7 @@ namespace Battle
                 ref evasion,
                 ref barrierCapacity,
                 ref barrierCount,
+                ref healthRegeneration,
                 ref blockChance,
                 ref elementalResistance,
                 ref fireResistance,
@@ -247,6 +249,7 @@ namespace Battle
             Add(entries, StatType.Evasion, evasion);
             Add(entries, StatType.BarrierCapacity, barrierCapacity);
             Add(entries, StatType.BarrierCount, barrierCount);
+            Add(entries, StatType.HealthRegenerationPerSecond, healthRegeneration);
             Add(entries, StatType.BlockChance, blockChance);
             Add(entries, StatType.ElementalResistance, elementalResistance);
             Add(entries, StatType.FireResistance, fireResistance);
@@ -477,6 +480,34 @@ namespace Battle
             weight7 = weights[7];
             weight8 = weights[8];
             weight9 = weights[9];
+        }
+
+        public static void NormalizeToOne(
+            ref float weight0,
+            ref float weight1,
+            ref float weight2,
+            ref float weight3,
+            ref float weight4,
+            ref float weight5,
+            ref float weight6,
+            ref float weight7,
+            ref float weight8,
+            ref float weight9,
+            ref float weight10)
+        {
+            float[] weights = { weight0, weight1, weight2, weight3, weight4, weight5, weight6, weight7, weight8, weight9, weight10 };
+            NormalizeToOne(weights);
+            weight0 = weights[0];
+            weight1 = weights[1];
+            weight2 = weights[2];
+            weight3 = weights[3];
+            weight4 = weights[4];
+            weight5 = weights[5];
+            weight6 = weights[6];
+            weight7 = weights[7];
+            weight8 = weights[8];
+            weight9 = weights[9];
+            weight10 = weights[10];
         }
 
         public static void NormalizeToOne(
