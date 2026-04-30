@@ -14,5 +14,6 @@ namespace Battle
         Sunder = 9,
         Distract = 10,
         BarrierRestorationPowerBuff = 11,
+        EvasiveMomentum = 12,
     }
 }

@@ -240,15 +240,24 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3214420366987265
-    m_Localized: While you have Profaned Health, take 50% more Damage"
+    m_Localized: While you have Profaned Health, take 50% more Damage
     m_Metadata:
       m_Items: []
   - m_Id: 5085118307897344
-    m_Localized: Grants 30% increased Ailment Power and 20% increased Mystic Damage
-      for 6 seconds.
+    m_Localized: Grants 30% increased {ailment|Ailment} Power and 20% increased {mystic|Mystic}
+      Damage for 6 seconds.
     m_Metadata:
       m_Items: []
   - m_Id: 5086869182353408
+    m_Localized: Each stack has its own duration.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5342847077322752
+    m_Localized: Grants 5% More Crit Chance and 20% less {evasion|Evasion} per stack
+      for 6 seconds, up to 3 stacks.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5346512051769344
     m_Localized: Each stack has its own duration.
     m_Metadata:
       m_Items: []

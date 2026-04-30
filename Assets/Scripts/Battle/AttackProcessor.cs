@@ -23,12 +23,13 @@ namespace Battle
             
             List<Modifier> mods = attackerUnit.GetAllModifiers();
             
-            Overcharge.ApplyOverchargeEffect(defender, mods);
-            
             foreach (Modifier mod in mods)
             {
                 if (mod.IsInPriority(ModifierPriority.OnAttack) && mod.IsApplicable(attackerUnit)) mod.ApplyEffect(damageInfo);
             }
+            
+            Overcharge.ApplyOverchargeEffect(defender, mods);
+            
             StatCalculator.LightRecalculateAttackStats(damageInfo.BaseUnitModifiers);
             
             DamageCalculator.CalculateAttackDamage(damageInfo);

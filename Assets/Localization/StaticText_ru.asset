@@ -26,6 +26,14 @@ MonoBehaviour:
     m_Localized: 'Barrier Capacity:'
     m_Metadata:
       m_Items: []
+  - m_Id: 5378079138648064
+    m_Localized: LMB to allocate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5378556970536960
+    m_Localized: RMB to deallocate
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

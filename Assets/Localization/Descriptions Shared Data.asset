@@ -241,6 +241,14 @@ MonoBehaviour:
     m_Key: description.barrierSurge2
     m_Metadata:
       m_Items: []
+  - m_Id: 5342847077322752
+    m_Key: description.evasiveMomentum1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5346512051769344
+    m_Key: description.evasiveMomentum2
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

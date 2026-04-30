@@ -1464,6 +1464,15 @@ MonoBehaviour:
     m_Localized: Each restored {barrier|Barrier} grants {barrierSurge|Barrier Surge}
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311680
+    m_Localized: 'On {evade|Evade}: gain [[0]]% Attack Progress and {evasiveMomentum|Evasive
+      Momentum}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311681
+    m_Localized: '[[0]]% more Damage per unique {ailment|Ailment} on target'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

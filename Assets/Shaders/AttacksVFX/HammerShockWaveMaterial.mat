@@ -53,7 +53,7 @@ Material:
     - _EdgeSoftness: 0.2
     - _EndRadius: 0.262
     - _EndScale: 0.98
-    - _Life: 0.607
+    - _Life: 1
     - _NoiseFlow: 2
     - _NoiseTiling: 2
     - _RadialDistort: 0.036

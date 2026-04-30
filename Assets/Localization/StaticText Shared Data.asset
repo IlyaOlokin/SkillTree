@@ -25,6 +25,14 @@ MonoBehaviour:
       Power Label
     m_Metadata:
       m_Items: []
+  - m_Id: 5378079138648064
+    m_Key: MainMenu/Canvas/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5378556970536960
+    m_Key: MainMenu/Canvas (1)/Text (TMP)
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
