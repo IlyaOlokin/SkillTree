@@ -61,13 +61,10 @@ namespace TooltipSystem
         {
             bool isPercent = StatTypeDisplayRules.IsPercentStat(statType);
             float displayValue = isPercent ? value * 100f : value;
-            bool isDoubleDigit = Mathf.Abs(displayValue) >= 10f;
-            float roundedValue = isDoubleDigit
-                ? Mathf.Round(displayValue)
-                : Mathf.Round(displayValue * 10f) / 10f;
+            float roundedValue = Mathf.Round(displayValue * 100f) / 100f;
 
             string text = roundedValue.ToString(
-                isDoubleDigit ? "0" : "0.#",
+                "0.##",
                 CultureInfo.InvariantCulture);
 
             return isPercent ? $"{text}%" : text;
@@ -75,7 +72,7 @@ namespace TooltipSystem
 
         private static string FormatFactor(float value)
         {
-            return value.ToString("0.###", CultureInfo.InvariantCulture);
+            return value.ToString("0.##", CultureInfo.InvariantCulture);
         }
     }
 }

@@ -1467,6 +1467,10 @@ MonoBehaviour:
     m_Key: modifier.moreDamagePerUniqueAilmentOnTarget.description
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311682
+    m_Key: modifier.fixedAttackSpeed.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -1473,6 +1473,10 @@ MonoBehaviour:
     m_Localized: '[[0]]% more Damage per unique {ailment|Ailment} on target'
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311682
+    m_Localized: Your {attackSpeed|Attack Speed} is fixed at [[0]]
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

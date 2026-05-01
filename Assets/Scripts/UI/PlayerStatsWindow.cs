@@ -79,22 +79,28 @@ public class PlayerStatsWindow : MonoBehaviour
                 ? GameLocalization.LocalizeValueOrKey(GameLocalization.ContentTable, statText.overrideText)
                 : GameLocalization.LocalizeEnum(statText.stat);
             statText.labelText.text = $"{label}:";
-            statText.valueText.text = FormatStatValue(displayValue, isPercent, prefix, suffix);
+            statText.valueText.text = FormatStatValue(displayValue, isPercent, prefix, suffix, GetStatDecimalPlaces(statText.stat));
         }
     }
     
-    private string FormatStatValue(float value, bool isPercent, string prefix = "", string suffix = "")
+    private string FormatStatValue(float value, bool isPercent, string prefix = "", string suffix = "", int decimalPlaces = 1)
     {
         bool isDoubleDigit = Mathf.Abs(value) >= 10f;
-        float roundedValue = isDoubleDigit
+        float multiplier = Mathf.Pow(10f, decimalPlaces);
+        float roundedValue = isDoubleDigit && decimalPlaces <= 1
             ? Mathf.Round(value)
-            : Mathf.Round(value * 10f) / 10f;
+            : Mathf.Round(value * multiplier) / multiplier;
 
         string numberText = roundedValue.ToString(
-            isDoubleDigit ? "0" : "0.#",
+            isDoubleDigit && decimalPlaces <= 1 ? "0" : $"0.{new string('#', decimalPlaces)}",
             CultureInfo.InvariantCulture);
 
         return isPercent ? $"{prefix}{numberText}%{suffix}" : $"{prefix}{numberText}{suffix}";
+    }
+
+    private int GetStatDecimalPlaces(StatType stat)
+    {
+        return stat == StatType.AttackSpeed ? 2 : 1;
     }
     
     private float CalculateDisplayValue(StatType stat, float rawValue, bool isPercent)
@@ -135,7 +141,7 @@ public class PlayerStatsWindow : MonoBehaviour
         float critDamageBonus = _player.BaseUnitModifiers.GetStatValue(StatType.CritDamageBonus);
         DPSText.text = $"{FormatStatValue(damage * attackSpeed * (1 + critChance * critDamageBonus), false)}";
         DamageText.text = $"{FormatStatValue(damage, false)}";
-        AttackSpeedText.text = $"{FormatStatValue(attackSpeed, false)}";
+        AttackSpeedText.text = $"{FormatStatValue(attackSpeed, false, decimalPlaces: GetStatDecimalPlaces(StatType.AttackSpeed))}";
         CritChanceText.text = $"{FormatStatValue(CalculateDisplayValue(StatType.CritChance, critChance, true), true)}";
         CritDamageBonusText.text = $"{FormatStatValue(CalculateDisplayValue(StatType.CritDamageBonus, critDamageBonus, true), true)}";
     }
