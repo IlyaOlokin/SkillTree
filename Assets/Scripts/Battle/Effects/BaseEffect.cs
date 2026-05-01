@@ -18,6 +18,7 @@ namespace Battle
         {
             return false;
         }
+        public virtual void Consume(Unit unit){}
         public virtual void OnRemove(Unit unit){}
 
         public virtual TooltipDescriptionData GetDescription()

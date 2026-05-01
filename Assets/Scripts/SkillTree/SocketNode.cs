@@ -71,7 +71,7 @@ namespace SkillTree
 
         public override IReadOnlyList<string> GetTooltipDescriptions()
         {
-            List<string> descriptions = new(base.GetTooltipDescriptions());
+            List<string> descriptions = GetModifierTooltipDescriptions();
             AppendSocketNodeDescription(descriptions);
 
             if (!HasGem)
@@ -85,6 +85,7 @@ namespace SkillTree
                         "Allocate this node before socketing a {gem|Gem}."));
                 }
 
+                AppendInactiveNoEffectDescription(descriptions);
                 return descriptions;
             }
 
@@ -106,6 +107,7 @@ namespace SkillTree
                 descriptions.Add(gemDescriptions[i]);
             }
 
+            AppendInactiveNoEffectDescription(descriptions);
             return descriptions;
         }
 

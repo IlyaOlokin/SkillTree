@@ -261,6 +261,10 @@ MonoBehaviour:
     m_Localized: Each stack has its own duration.
     m_Metadata:
       m_Items: []
+  - m_Id: 5346512051769345
+    m_Localized: This node is inactive and grants no effects
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

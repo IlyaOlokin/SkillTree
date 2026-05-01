@@ -38,6 +38,22 @@ namespace Battle
             return IsUsed;
         }
 
+        public override void Consume(Unit unit)
+        {
+            IsUsed = true;
+        }
+
+        public void ApplyAttackBonus(DamageInfo damageInfo)
+        {
+            if (IsUsed)
+            {
+                return;
+            }
+
+            MoreDamage?.ApplyEffect(damageInfo);
+            MoreCritDamageBonus?.ApplyEffect(damageInfo);
+        }
+
         public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)
         {
             if (damageInfo.DamageInstance.Damage[DamageType.Lightning] <= 0) return;
@@ -47,18 +63,24 @@ namespace Battle
             {
                 if (Random.Range(0f, 1f) < defender.BaseUnitModifiers.GetStatValue(StatType.OverchargeAvoidanceChance))
                     return;
-                defender.effectController.AddEffect(new Overcharge(damageInfo, defender));
+                Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Overcharge>() ? attacker : defender;
+                effectTarget.effectController.AddEffect(new Overcharge(damageInfo, effectTarget));
             }
         }
         
-        public static void ApplyOverchargeEffect(ITarget defender, List<Modifier> mods)
+        public static void ApplyOverchargeEffect(AttackContext context)
         {
+            if (context?.Defender?.UnitObject == null)
+            {
+                return;
+            }
+
+            ITarget defender = context.Defender;
             foreach (var overchargeEffect in defender.UnitObject.effectController.GetAllEffectsOfType<Overcharge>())
             {
                 var overcharge = (Overcharge)overchargeEffect.Effect;
-                mods.Add(overcharge.MoreDamage);
-                mods.Add(overcharge.MoreCritDamageBonus);
-                overcharge.IsUsed = true;
+                overcharge.ApplyAttackBonus(context.DamageInfo);
+                context.QueueEffectConsumption(defender.UnitObject, overchargeEffect);
             }
         }
     }

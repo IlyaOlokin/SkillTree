@@ -249,6 +249,10 @@ MonoBehaviour:
     m_Key: description.evasiveMomentum2
     m_Metadata:
       m_Items: []
+  - m_Id: 5346512051769345
+    m_Key: node.inactiveNoEffect
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

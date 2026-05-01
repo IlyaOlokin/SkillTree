@@ -58,11 +58,13 @@ namespace Battle
             return BASE_REDUCED_ACCURACY * power * (1f - mitigation);
         }
 
-        public static void Apply(Unit _, DamageInfo damageInfo, Unit defender)
+        public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)
         {
+            Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Distract>() ? attacker : defender;
+
             if (damageInfo.AttackEffectPayload.IsGuaranteed<Distract>())
             {
-                defender.effectController.AddEffect(new Distract(damageInfo, defender));
+                effectTarget.effectController.AddEffect(new Distract(damageInfo, effectTarget));
                 return;
             }
 
@@ -74,7 +76,7 @@ namespace Battle
 
             if (Random.Range(0f, 1f) < chance)
             {
-                defender.effectController.AddEffect(new Distract(damageInfo, defender));
+                effectTarget.effectController.AddEffect(new Distract(damageInfo, effectTarget));
             }
         }
     }

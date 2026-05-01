@@ -1471,6 +1471,14 @@ MonoBehaviour:
     m_Key: modifier.fixedAttackSpeed.description
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311683
+    m_Key: modifier.consumeSelfOverchargeOnAttack.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311684
+    m_Key: modifier.redirectOverchargeToSelf.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

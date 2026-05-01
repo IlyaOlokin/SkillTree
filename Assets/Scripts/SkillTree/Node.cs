@@ -13,6 +13,7 @@ namespace SkillTree
     public class Node : MonoBehaviour, ITooltipDescriptionProvider
     { 
         private const string TooltipTitleLocalizationKey = "node.title.default";
+        private const string InactiveNoEffectLocalizationKey = "node.inactiveNoEffect";
 
         [Inject] private UnitLevel _unitLevel;
         [SerializeField] [HideInInspector] private string saveId;
@@ -110,12 +111,8 @@ namespace SkillTree
         
         public virtual IReadOnlyList<string> GetTooltipDescriptions()
         {
-            List<string> descriptions = new List<string>(Modifiers.Count);
-            foreach (var modifier in Modifiers)
-            {
-                descriptions.Add(modifier.GetDescription());
-            }
-
+            List<string> descriptions = GetModifierTooltipDescriptions();
+            AppendInactiveNoEffectDescription(descriptions);
             return descriptions;
         }
 
@@ -132,6 +129,27 @@ namespace SkillTree
         protected void RaiseNodeChanged()
         {
             OnNodeChanged?.Invoke(this);
+        }
+
+        protected List<string> GetModifierTooltipDescriptions()
+        {
+            List<string> descriptions = new List<string>(Modifiers.Count);
+            foreach (var modifier in Modifiers)
+            {
+                descriptions.Add(modifier.GetDescription());
+            }
+
+            return descriptions;
+        }
+
+        protected void AppendInactiveNoEffectDescription(List<string> descriptions)
+        {
+            if (!IsAllocated || IsActive)
+                return;
+
+            descriptions.Add(GameLocalization.Get(
+                InactiveNoEffectLocalizationKey,
+                "This node is inactive and grants no effects"));
         }
 
         public void SetAllocatedFromSave(bool allocated)

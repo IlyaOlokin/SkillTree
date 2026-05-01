@@ -18,7 +18,7 @@ MonoBehaviour:
     waveIndex: 1
     bossCount: 1
     totalEnemiesInWave: 3
-    maxBossAffixes: 0
+    maxBossAffixes: 1
     bossArchetypes:
     - {fileID: 11400000, guid: 8f95762fe49734246b2741631c0fb152, type: 2}
     secondEnemyArchetypes:

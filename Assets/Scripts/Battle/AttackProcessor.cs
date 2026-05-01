@@ -10,10 +10,12 @@ namespace Battle
         {
             // All Modifiers are applied on unit update
             int attackerStateHashBefore = attackerUnit.BaseUnitModifiers.ComputeDeterministicHash(); // Diagnostics
+            AttackContext context = new AttackContext(attackerUnit, defender, damageInfo);
             
             //Evasion
             if (Evasion.ApplyEvasion(defender.UnitObject, attackerUnit))
             {
+                context.IsEvaded = true;
                 defender.OnHitEvaded(damageInfo.DamageInstance);
                 AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics
                 return;
@@ -21,33 +23,20 @@ namespace Battle
 
             attackerUnit.OnHitLanded(defender);
             
-            List<Modifier> mods = attackerUnit.GetAllModifiers();
-            
-            foreach (Modifier mod in mods)
-            {
-                if (mod.IsInPriority(ModifierPriority.OnAttack) && mod.IsApplicable(attackerUnit)) mod.ApplyEffect(damageInfo);
-            }
-            
-            Overcharge.ApplyOverchargeEffect(defender, mods);
+            Overcharge.ApplyOverchargeEffect(context);
+            RunModifiers(attackerUnit.GetAllModifiers(), ModifierPriority.OnAttack, attackerUnit, context);
             
             StatCalculator.LightRecalculateAttackStats(damageInfo.BaseUnitModifiers);
             
             DamageCalculator.CalculateAttackDamage(damageInfo);
 
-            foreach (Modifier mod in defender.UnitObject.GetAllModifiers())
-            {
-                if (mod.IsInPriority(ModifierPriority.IncomingPreMitigation) && mod.IsApplicable(defender.UnitObject))
-                    mod.ApplyEffect(damageInfo);
-            }
+            RunModifiers(defender.UnitObject.GetAllModifiers(), ModifierPriority.IncomingPreMitigation, defender.UnitObject, context);
             
             //Mitigation
             Armor.ApplyArmorMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);
             Resistance.ApplyResistanceMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);
             
-            foreach (Modifier mod in defender.UnitObject.GetAllModifiers())
-            {
-                if (mod.IsInPriority(ModifierPriority.OnGettingHit) && mod.IsApplicable(defender.UnitObject)) mod.ApplyEffect(damageInfo);
-            }
+            RunModifiers(defender.UnitObject.GetAllModifiers(), ModifierPriority.OnGettingHit, defender.UnitObject, context);
             
             // Ailments
             Bleed.Apply(attackerUnit, damageInfo, defender.UnitObject);
@@ -60,7 +49,9 @@ namespace Battle
             //Block
             if (Block.ApplyBlock(defender.UnitObject))
             {
+                context.IsBlocked = true;
                 defender.OnHitBlock(damageInfo.DamageInstance);
+                context.ConsumeQueuedEffects();
                 AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics
                 return;
             }
@@ -73,7 +64,19 @@ namespace Battle
                 attackerUnit.OnCritLanded(defender);
             }
             attackerUnit.DamageDealt(damageDealt);
+            context.ConsumeQueuedEffects();
             AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics
+        }
+
+        private static void RunModifiers(List<Modifier> mods, ModifierPriority priority, Unit owner, AttackContext context)
+        {
+            foreach (Modifier mod in mods)
+            {
+                if (mod.IsInPriority(priority) && mod.IsApplicable(owner))
+                {
+                    mod.ApplyEffect(context);
+                }
+            }
         }
 
         [System.Diagnostics.Conditional("UNITY_EDITOR")]

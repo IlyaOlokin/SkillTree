@@ -55,7 +55,8 @@ namespace Battle
             damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.ChillChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
-                defender.effectController.AddEffect(new Chill(damageInfo, defender, BASE_DURATION));
+                Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Chill>() ? attacker : defender;
+                effectTarget.effectController.AddEffect(new Chill(damageInfo, effectTarget, BASE_DURATION));
             }
         }
     }

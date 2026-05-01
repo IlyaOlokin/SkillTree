@@ -28,6 +28,10 @@ namespace SkillTree
         // Attack modifiers must mutate only damageInfo.BaseUnitModifiers snapshot.
         // Do not mutate damageInfo.Owner.BaseUnitModifiers here.
         public virtual void ApplyEffect(DamageInfo damageInfo) { }
+        public virtual void ApplyEffect(AttackContext context)
+        {
+            ApplyEffect(context?.DamageInfo);
+        }
 
         public virtual string GetDescription()
         {
