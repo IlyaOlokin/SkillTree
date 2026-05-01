@@ -13,16 +13,19 @@ namespace Visual
         [SerializeField] private UnitNotificationEffect unitNotificationEffect;
         [SerializeField] private UnitVisualEffectsController effectsController;
         [SerializeField] private UnitVisualHitEffectController hitEffectController;
+        [SerializeField] private UnitVisualAttackAnimationController attackAnimationController = new UnitVisualAttackAnimationController();
 
         void Awake()
         {
             AssignBattleCameraToWorldCanvases();
+            attackAnimationController?.Initialize(transform, gameObject);
             effectsController?.Initialize(_tooltipUI);
             hitEffectController?.Initialize();
 
             
             unit.health.OnHealthChangedDelta += DisplayHealthChangedNotification;
             unit.OnGettingHit += DisplayGettingHitEffect;
+            unit.OnAttack += DisplayAttackAnimation;
             unit.OnEvade += DisplayEvadeNotification;
             unit.OnBlock += DisplayBlockNotification;
             
@@ -33,6 +36,7 @@ namespace Visual
             if (unit != null)
             {
                 unit.OnGettingHit -= DisplayGettingHitEffect;
+                unit.OnAttack -= DisplayAttackAnimation;
                 unit.OnEvade -= DisplayEvadeNotification;
                 unit.OnBlock -= DisplayBlockNotification;
             }
@@ -44,6 +48,12 @@ namespace Visual
 
             effectsController?.ClearAllEffectIcons();
             hitEffectController?.Dispose();
+            attackAnimationController?.Dispose();
+        }
+
+        private void OnDisable()
+        {
+            attackAnimationController?.Dispose();
         }
 
         private void Update()
@@ -80,6 +90,16 @@ namespace Visual
         private void DisplayGettingHitEffect(DamageInfo damageInfo)
         {
             hitEffectController?.PlayHitEffect(damageInfo);
+        }
+
+        private void DisplayAttackAnimation(ITarget target)
+        {
+            attackAnimationController?.PlayAttackAnimation(target);
+        }
+
+        public void PlayAttackAnimation(Vector2 direction)
+        {
+            attackAnimationController?.PlayAttackAnimation(direction);
         }
 
         private void AssignBattleCameraToWorldCanvases()

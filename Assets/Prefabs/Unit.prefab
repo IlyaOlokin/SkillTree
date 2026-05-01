@@ -144,9 +144,23 @@ MonoBehaviour:
     wobbleZStrength: 8
     wobbleVibrato: 12
     wobbleRandomness: 40
+    scaleTransform: {fileID: 4898353647290124260}
+    hitScaleMultiplier: 0.92
+    scaleInDuration: 0.04
+    scaleOutDuration: 0.1
     hitEffectPrefab: {fileID: 6806784275801492771, guid: 9500bebcd2beec742a9ff7b81db92c7a, type: 3}
     hitEffectLifetimeFallback: 1
     hitEffectDestroyCheckDelay: 0.2
+  attackAnimationController:
+    attackVisualTransform: {fileID: 4898353647290124260}
+    attackMoveDirection: {x: 1, y: 0}
+    windupDistance: 0.16
+    dashDistance: 0.66
+    strikeRotationZRange: {x: 18, y: 28}
+    windupRotationZ: 10
+    windupDuration: 0.05
+    strikeDuration: 0.15
+    returnDuration: 0.2
 --- !u!1 &4997412355767574011
 GameObject:
   m_ObjectHideFlags: 0

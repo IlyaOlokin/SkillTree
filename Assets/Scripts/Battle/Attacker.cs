@@ -155,6 +155,7 @@ namespace Battle
 
         private void AttackTarget()
         {
+            _owner.OnAttackStarted(Target);
             _attackSnapshot.CopyFrom(_owner.BaseUnitModifiers);
             _attackDamageInfo.Reset(_owner, _attackSnapshot);
             

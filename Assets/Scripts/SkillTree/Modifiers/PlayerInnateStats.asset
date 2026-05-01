@@ -32,7 +32,4 @@ MonoBehaviour:
   - modifierType: 0
     statType: 17
     value: 0.5
-  - modifierType: 0
-    statType: 40
-    value: 100
   runtimeModifiers: []

@@ -125,8 +125,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5186857671638254335}
     - target: {fileID: 5751231110311033075, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: attackMoveDirection.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5751231110311033075, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: attackMoveDirection.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5751231110311033075, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
       propertyPath: effectsController.effectIconsStep.x
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5751231110311033075, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: attackAnimationController.attackMoveDirection.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5751231110311033075, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
+      propertyPath: attackAnimationController.attackMoveDirection.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7052957071513661914, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
       propertyPath: m_Enabled

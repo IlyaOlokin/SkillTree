@@ -19,6 +19,11 @@ namespace Visual
         [SerializeField] private float wobbleZStrength = 8f;
         [SerializeField] private int wobbleVibrato = 12;
         [SerializeField] private float wobbleRandomness = 40f;
+        [Header("Scale")]
+        [SerializeField] private Transform scaleTransform;
+        [SerializeField] private float hitScaleMultiplier = 0.92f;
+        [SerializeField] private float scaleInDuration = 0.04f;
+        [SerializeField] private float scaleOutDuration = 0.1f;
 
         [Header("Hit")]
         [SerializeField] private GameObject hitEffectPrefab;
@@ -27,7 +32,9 @@ namespace Visual
 
         private Color _baseColor;
         private Quaternion _baseWobbleLocalRotation;
+        private Vector3 _baseScale;
         private bool _isInitialized;
+        private bool _isReplacingHitSequence;
 
         private Sequence _hitSequence;
 
@@ -40,6 +47,12 @@ namespace Visual
 
             _baseColor = unitVisual != null ? unitVisual.color : Color.white;
             _baseWobbleLocalRotation = wobbleTransform != null ? wobbleTransform.localRotation : Quaternion.identity;
+            if (scaleTransform == null)
+            {
+                scaleTransform = wobbleTransform;
+            }
+
+            _baseScale = scaleTransform != null ? scaleTransform.localScale : Vector3.one;
             _isInitialized = true;
         }
 
@@ -78,7 +91,10 @@ namespace Visual
 
         private void UnitFlash()
         {
+            _isReplacingHitSequence = true;
             _hitSequence?.Kill();
+            _isReplacingHitSequence = false;
+
             unitVisual.color = _baseColor;
             ResetWobbleRotation();
 
@@ -95,9 +111,24 @@ namespace Visual
                     wobbleRandomness));
             }
 
+            if (scaleTransform != null)
+            {
+                _hitSequence.Join(scaleTransform
+                    .DOScale(_baseScale * Mathf.Max(0f, hitScaleMultiplier), scaleInDuration)
+                    .SetEase(Ease.OutQuad));
+            }
+
             _hitSequence.Append(unitVisual.DOColor(_baseColor, flashOutDuration).SetEase(Ease.InQuad));
-            _hitSequence.OnComplete(ResetWobbleRotation);
-            _hitSequence.OnKill(ResetWobbleRotation);
+
+            if (scaleTransform != null)
+            {
+                _hitSequence.Join(scaleTransform
+                    .DOScale(_baseScale, scaleOutDuration)
+                    .SetEase(Ease.OutQuad));
+            }
+
+            _hitSequence.OnComplete(ResetTransformEffects);
+            _hitSequence.OnKill(ResetTransformEffectsOnKill);
         }
 
         public void Dispose()
@@ -109,6 +140,7 @@ namespace Visual
             }
 
             ResetWobbleRotation();
+            ResetScale();
         }
 
         private static bool HasDamage(DamageInstance damageInstance)
@@ -137,6 +169,32 @@ namespace Visual
             }
 
             wobbleTransform.localRotation = _baseWobbleLocalRotation;
+        }
+
+        private void ResetScale()
+        {
+            if (scaleTransform == null)
+            {
+                return;
+            }
+
+            scaleTransform.localScale = _baseScale;
+        }
+
+        private void ResetTransformEffects()
+        {
+            ResetWobbleRotation();
+            ResetScale();
+        }
+
+        private void ResetTransformEffectsOnKill()
+        {
+            if (_isReplacingHitSequence)
+            {
+                return;
+            }
+
+            ResetTransformEffects();
         }
     }
 }

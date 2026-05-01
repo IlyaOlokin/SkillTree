@@ -30,6 +30,7 @@ namespace Battle
         public event Action OnStatsRecalculated;
 
         public event Action<DamageInfo> OnGettingHit;
+        public event Action<ITarget> OnAttack;
         public event Action<ITarget> OnHit;
         public event Action<ITarget> OnCrit;
         
@@ -88,6 +89,11 @@ namespace Battle
             DamageInstance receivedDamage = health.TakeDamage(damageInfo.DamageInstance);
             OnGettingHit?.Invoke(damageInfo);
             return receivedDamage;
+        }
+
+        public void OnAttackStarted(ITarget target)
+        {
+            OnAttack?.Invoke(target);
         }
 
         public void OnHitLanded(ITarget target)
