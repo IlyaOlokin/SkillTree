@@ -15,5 +15,7 @@ namespace Battle
         Distract = 10,
         BarrierRestorationPowerBuff = 11,
         EvasiveMomentum = 12,
+        Pain = 13,
+        Scar = 14,
     }
 }

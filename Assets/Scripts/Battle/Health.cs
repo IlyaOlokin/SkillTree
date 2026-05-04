@@ -76,12 +76,29 @@ namespace Battle
 
         public void TakeHeal(float amount, bool displayHeal = true)
         {
+            amount = ApplyHealingReceivedModifier(amount);
+            if (amount <= 0f)
+            {
+                return;
+            }
+
             float previousHealth = CurrentHealth;
             CurrentHealth += amount;
             if (displayHeal) OnHealthChangedDelta?.Invoke(previousHealth - CurrentHealth);
             OnHealthChanged?.Invoke();
             OnProfanedHealthChanged?.Invoke();
             ValidateAbsorptionDeathThreshold();
+        }
+
+        private float ApplyHealingReceivedModifier(float amount)
+        {
+            if (amount <= 0f || _owner?.BaseUnitModifiers == null)
+            {
+                return amount;
+            }
+
+            float healingReceived = _owner.BaseUnitModifiers.GetStatValue(StatType.HealingReceived);
+            return amount * Mathf.Max(0f, 1f + healingReceived);
         }
 
         public DamageInstance TakeDamage(DamageInstance damageInstance, bool displayDamage = true)

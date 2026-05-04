@@ -24,6 +24,7 @@ namespace Battle
             attackerUnit.OnHitLanded(defender);
             
             Overcharge.ApplyOverchargeEffect(context);
+            Pain.ApplyPainEffect(context);
             RunModifiers(attackerUnit.GetAllModifiers(), ModifierPriority.OnAttack, attackerUnit, context);
             
             StatCalculator.LightRecalculateAttackStats(damageInfo.BaseUnitModifiers);

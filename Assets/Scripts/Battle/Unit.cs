@@ -31,10 +31,12 @@ namespace Battle
         public event Action OnStatsRecalculated;
 
         public event Action<DamageInfo> OnGettingHit;
+        public event Action<DamageInfo, float> OnHealthDamageTaken;
         public event Action<ITarget> OnAttack;
         public event Action<ITarget> OnHit;
         public event Action<ITarget> OnCrit;
         public event Action<WeaponType> OnWeaponTypeChanged;
+        public event Action<float> OnPainConsumed;
         
         public event Action OnEvade;
         public event Action OnBlock;
@@ -89,8 +91,14 @@ namespace Battle
         {
             barrier.TakeDamage(damageInfo.DamageInstance);
             mysticHealth.ApplyMysticDamageAsAbsorption(damageInfo.DamageInstance);
+            float healthBeforeDamage = health.CurrentHealth;
             DamageInstance receivedDamage = health.TakeDamage(damageInfo.DamageInstance);
+            float healthLost = Mathf.Max(0f, healthBeforeDamage - health.CurrentHealth);
             OnGettingHit?.Invoke(damageInfo);
+            if (healthLost > 0f)
+            {
+                OnHealthDamageTaken?.Invoke(damageInfo, healthLost);
+            }
             return receivedDamage;
         }
 
@@ -120,6 +128,11 @@ namespace Battle
         public void OnCritLanded(ITarget target)
         {
             OnCrit?.Invoke(target);
+        }
+
+        public void PainConsumed(float amount)
+        {
+            OnPainConsumed?.Invoke(Mathf.Max(0f, amount));
         }
 
         public void ReceiveDoT(DamageInstance damageInstance)

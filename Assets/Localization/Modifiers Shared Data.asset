@@ -1479,6 +1479,14 @@ MonoBehaviour:
     m_Key: modifier.redirectOverchargeToSelf.description
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311685
+    m_Key: modifier.damageTakenAsPain.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311686
+    m_Key: modifier.painConsumedGrantsScar.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

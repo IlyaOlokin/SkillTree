@@ -37,7 +37,8 @@ public static class StatTypeDisplayRules
         StatType.OverchargeAvoidanceChance,
         StatType.AilmentGuard,
         StatType.MysticCleansePerSecond,
-        StatType.ProfanedHealthPercent
+        StatType.ProfanedHealthPercent,
+        StatType.HealingReceived
     };
 
     public static bool IsPercentStat(StatType statType)

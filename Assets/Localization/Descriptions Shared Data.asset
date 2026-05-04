@@ -253,6 +253,30 @@ MonoBehaviour:
     m_Key: node.inactiveNoEffect
     m_Metadata:
       m_Items: []
+  - m_Id: 5346512051769347
+    m_Key: description.pain1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6770548061376512
+    m_Key: description.pain2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6773358702235648
+    m_Key: description.pain3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6773414712971264
+    m_Key: description.pain4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6805220107620352
+    m_Key: description.scar1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6805365104709632
+    m_Key: description.scar2
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

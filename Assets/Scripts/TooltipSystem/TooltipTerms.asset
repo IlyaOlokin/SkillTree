@@ -65,3 +65,7 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: b1380fb513aa21e458864d01c4de0d16, type: 2}
   - id: evasiveMomentum
     description: {fileID: 11400000, guid: cc8d49826f5ba46478aab87b6004385c, type: 2}
+  - id: pain
+    description: {fileID: 11400000, guid: f9937123c9c6d8b4a8b54b6e0da115d5, type: 2}
+  - id: scar
+    description: {fileID: 11400000, guid: b556eb52e02d75b4cb620ce5690a17c2, type: 2}

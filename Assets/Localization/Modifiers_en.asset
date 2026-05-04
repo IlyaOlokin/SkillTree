@@ -1474,15 +1474,26 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311682
-    m_Localized: Your {attackSpeed|Attack Speed} is fixed at [[0]]
+    m_Localized: 'Your {attackSpeed|Attack Speed} is fixed at [[0]]'
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311683
-    m_Localized: Your attacks consume {overcharge|Overcharge} on you to empower the attack
+    m_Localized: Your attacks consume {overcharge|Overcharge} on you to empower the
+      attack
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311684
-    m_Localized: '{overcharge|Overcharge} you would apply to enemies is applied to you instead'
+    m_Localized: '{overcharge|Overcharge} you would apply to enemies is applied to
+      you instead'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311685
+    m_Localized: +[[0]]% to {pain|Pain} gained
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311686
+    m_Localized: When {pain|Pain} is consumed, gain {scar|Scar} equal to [[0]]% of
+      consumed {pain|Pain}.
     m_Metadata:
       m_Items: []
   references:

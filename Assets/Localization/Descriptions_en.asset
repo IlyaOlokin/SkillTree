@@ -265,6 +265,33 @@ MonoBehaviour:
     m_Localized: This node is inactive and grants no effects
     m_Metadata:
       m_Items: []
+  - m_Id: 5346512051769347
+    m_Localized: Gain percentage of lost Health as Pain.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6770548061376512
+    m_Localized: Pain is consumed by your next attack to gain increased Damage equal
+      to current Pain percentage of your Maximum Health.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6773358702235648
+    m_Localized: Damage over Time does not grant Pain.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6773414712971264
+    m_Localized: Pain gained while on Low Life is doubled.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6805220107620352
+    m_Localized: Scar grants increased {armor|Armor} and {ailmentGuard|Ailment Guard}
+      equal to its percentage of your Maximum Health, but reduces Healing received
+      by the same amount.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6805365104709632
+    m_Localized: Scar duration is 6 seconds
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

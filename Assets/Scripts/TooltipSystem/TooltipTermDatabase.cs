@@ -86,5 +86,4 @@ namespace TooltipSystem
         public string id;
         public TooltipDescriptionData description;
     }
-
 }
