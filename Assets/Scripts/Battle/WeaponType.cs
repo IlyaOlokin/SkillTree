@@ -6,8 +6,8 @@ namespace Battle
     {
         Unarmed,
         Sword,
-        Bow,
-        Staff
+        Staff,
+        Hammer
     }
 }
 

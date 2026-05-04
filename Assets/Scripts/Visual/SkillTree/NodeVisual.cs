@@ -38,6 +38,12 @@ namespace Visual
             }
         }
 
+        public void SetDefaultNodeIcon(Sprite icon)
+        {
+            _defaultNodeIcon = icon;
+            RefreshNodeIcon();
+        }
+
         private void Awake()
         {
             _defaultNodeIcon = nodeImage != null ? nodeImage.sprite : null;

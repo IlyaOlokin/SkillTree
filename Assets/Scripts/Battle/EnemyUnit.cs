@@ -24,6 +24,7 @@ namespace Battle
         {
             SpawnData = data;
             innateModifiers = data.Modifiers;
+            SetWeaponType(data.Archetype != null ? data.Archetype.weaponType : WeaponType.Unarmed);
            
             RaiseOnModsChanged();
             ResetCombatState();

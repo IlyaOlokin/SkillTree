@@ -118,6 +118,7 @@ public class EnemyArchetypeEditor : Editor
         EditorGUILayout.LabelField("General", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("powerMultiplier"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("baseAttackSpeed"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("weaponType"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("extraModifiers"), true);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("possibleAffixes"), true);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("itemDropTable"));

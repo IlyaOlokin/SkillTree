@@ -15,7 +15,7 @@ MonoBehaviour:
   locationId: forest-3
   displayName: Forest
   description: 
-  mapIcon: {fileID: 21300000, guid: b753c88a6aeb2674fa1d4f0a4c0a285a, type: 3}
+  mapIcon: {fileID: -7713157828157735119, guid: 9fd9dd6a76bf9444da478d9905524c10, type: 3}
   enemyDatabase: {fileID: 11400000, guid: 75e51ac5d07785043b7c33854d13ba57, type: 2}
   levelRewards:
   - levelNumber: 5

@@ -149,6 +149,9 @@ MonoBehaviour:
     scaleInDuration: 0.04
     scaleOutDuration: 0.1
     hitEffectPrefab: {fileID: 6806784275801492771, guid: 9500bebcd2beec742a9ff7b81db92c7a, type: 3}
+    swordHitEffectPrefab: {fileID: 6806784275801492771, guid: 9500bebcd2beec742a9ff7b81db92c7a, type: 3}
+    staffHitEffectPrefab: {fileID: 6806784275801492771, guid: 9500bebcd2beec742a9ff7b81db92c7a, type: 3}
+    hammerHitEffectPrefab: {fileID: 6806784275801492771, guid: 887bbeb4abb54154a94c331afcefdc99, type: 3}
     hitEffectLifetimeFallback: 1
     hitEffectDestroyCheckDelay: 0.2
   attackAnimationController:

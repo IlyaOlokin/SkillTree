@@ -16,6 +16,7 @@ namespace Battle
         [SerializeField] public EffectController effectController;
         [SerializeField] protected BaseInnateModifiers baseInnateModifiers;
         [SerializeField] protected BaseInnateModifiers innateModifiers;
+        [SerializeField] private WeaponType weaponType = WeaponType.Unarmed;
 
         public BaseUnitModifiers BaseUnitModifiers;
 
@@ -33,12 +34,14 @@ namespace Battle
         public event Action<ITarget> OnAttack;
         public event Action<ITarget> OnHit;
         public event Action<ITarget> OnCrit;
+        public event Action<WeaponType> OnWeaponTypeChanged;
         
         public event Action OnEvade;
         public event Action OnBlock;
         public event Action<Unit> OnDeath;
 
         public MysticHealth MysticHealth => mysticHealth;
+        public WeaponType WeaponType => weaponType;
 
         public Unit UnitObject
         {
@@ -103,6 +106,15 @@ namespace Battle
 
         public void DamageDealt(DamageInstance damageInstance)
         {
+        }
+
+        public void SetWeaponType(WeaponType newWeaponType)
+        {
+            if (weaponType == newWeaponType)
+                return;
+
+            weaponType = newWeaponType;
+            OnWeaponTypeChanged?.Invoke(weaponType);
         }
 
         public void OnCritLanded(ITarget target)

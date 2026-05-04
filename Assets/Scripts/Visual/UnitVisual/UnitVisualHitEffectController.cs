@@ -27,6 +27,9 @@ namespace Visual
 
         [Header("Hit")]
         [SerializeField] private GameObject hitEffectPrefab;
+        [SerializeField] private GameObject swordHitEffectPrefab;
+        [SerializeField] private GameObject staffHitEffectPrefab;
+        [SerializeField] private GameObject hammerHitEffectPrefab;
         [SerializeField] private float hitEffectLifetimeFallback = 1f;
         [SerializeField] private float hitEffectDestroyCheckDelay = 0.2f;
 
@@ -60,26 +63,27 @@ namespace Visual
         {
             Initialize();
 
-            if (unitVisual == null || !HasDamage(damageInfo.DamageInstance))
+            if (unitVisual == null || damageInfo == null || !HasDamage(damageInfo.DamageInstance))
             {
                 return;
             }
 
             UnitFlash();
-            HitEffect();
+            HitEffect(damageInfo.Owner != null ? damageInfo.Owner.WeaponType : WeaponType.Unarmed);
         }
 
-        private void HitEffect()
+        private void HitEffect(WeaponType attackerWeaponType)
         {
-            if (hitEffectPrefab == null || unitVisual == null)
+            GameObject effectPrefab = GetHitEffectPrefab(attackerWeaponType);
+            if (effectPrefab == null || unitVisual == null)
             {
                 return;
             }
 
             var hitEffectInstance = Object.Instantiate(
-                hitEffectPrefab,
+                effectPrefab,
                 unitVisual.bounds.center,
-                hitEffectPrefab.transform.rotation);
+                effectPrefab.transform.rotation);
             var autoDestroy = hitEffectInstance.GetComponent<AutoDestroyVisualEffect>();
             if (autoDestroy == null)
             {
@@ -87,6 +91,17 @@ namespace Visual
             }
 
             autoDestroy.Initialize(hitEffectLifetimeFallback, hitEffectDestroyCheckDelay);
+        }
+
+        private GameObject GetHitEffectPrefab(WeaponType attackerWeaponType)
+        {
+            return attackerWeaponType switch
+            {
+                WeaponType.Sword => swordHitEffectPrefab != null ? swordHitEffectPrefab : hitEffectPrefab,
+                WeaponType.Staff => staffHitEffectPrefab != null ? staffHitEffectPrefab : hitEffectPrefab,
+                WeaponType.Hammer => hammerHitEffectPrefab != null ? hammerHitEffectPrefab : hitEffectPrefab,
+                _ => hitEffectPrefab
+            };
         }
 
         private void UnitFlash()

@@ -75,6 +75,9 @@ namespace SaveSystem
             LoadActiveProfile();
             Subscribe();
             Application.quitting += HandleApplicationQuitting;
+#if UNITY_WEBGL && !UNITY_EDITOR
+            Application.focusChanged += HandleApplicationFocusChanged;
+#endif
         }
 
         public void Tick()
@@ -94,6 +97,9 @@ namespace SaveSystem
         public void Dispose()
         {
             Application.quitting -= HandleApplicationQuitting;
+#if UNITY_WEBGL && !UNITY_EDITOR
+            Application.focusChanged -= HandleApplicationFocusChanged;
+#endif
             Unsubscribe();
         }
 
@@ -281,6 +287,18 @@ namespace SaveSystem
             _cloudSettingsService.Save();
             _localSettingsService.Save();
         }
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+        private void HandleApplicationFocusChanged(bool hasFocus)
+        {
+            if (hasFocus)
+                return;
+
+            SaveDirtyDocuments();
+            _cloudSettingsService.Save();
+            _localSettingsService.Save();
+        }
+#endif
 
         private void HandlePlayerChanged()
         {

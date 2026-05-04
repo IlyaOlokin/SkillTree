@@ -45,6 +45,16 @@ public class PlayerDeathWindowController : MonoBehaviour
         {
             _player.OnDeath += HandlePlayerDeath;
         }
+
+        if (_enemySpawner != null)
+        {
+            _enemySpawner.OnBattleActivityChanged += HandleBattleActivityChanged;
+        }
+
+        if (locationFlowController != null)
+        {
+            locationFlowController.OnModeChanged += HandleLocationModeChanged;
+        }
     }
 
     private void OnDisable()
@@ -53,28 +63,32 @@ public class PlayerDeathWindowController : MonoBehaviour
         {
             _player.OnDeath -= HandlePlayerDeath;
         }
+
+        if (_enemySpawner != null)
+        {
+            _enemySpawner.OnBattleActivityChanged -= HandleBattleActivityChanged;
+        }
+
+        if (locationFlowController != null)
+        {
+            locationFlowController.OnModeChanged -= HandleLocationModeChanged;
+        }
     }
 
     public void RestartBattle()
     {
-        _deathSequence?.Kill();
-        HideInstant();
-        window.SetActive(false);
+        CloseDeathWindow();
 
         _player.gameObject.SetActive(true);
         _player.ResetCombatState();
 
         _enemySpawner.RestartCurrentLevel();
         _battleTickSystem.Resume();
-        
-        OnDeathWindowClosed?.Invoke();
     }
 
     public void ExitLocation()
     {
-        _deathSequence?.Kill();
-        HideInstant();
-        window.SetActive(false);
+        CloseDeathWindow();
 
         _player.gameObject.SetActive(true);
         _player.ResetCombatState();
@@ -88,8 +102,6 @@ public class PlayerDeathWindowController : MonoBehaviour
             _enemySpawner.ExitBattle();
             _battleTickSystem.Pause();
         }
-
-        OnDeathWindowClosed?.Invoke();
     }
 
     private void HandlePlayerDeath(Unit unit)
@@ -98,6 +110,22 @@ public class PlayerDeathWindowController : MonoBehaviour
         PlayDeathAnimation();
         window.SetActive(true);
         OnDeathWindowOpened?.Invoke();
+    }
+
+    private void HandleBattleActivityChanged(bool isBattleActive)
+    {
+        if (!isBattleActive)
+        {
+            CloseDeathWindow();
+        }
+    }
+
+    private void HandleLocationModeChanged(LocationFlowController.FlowMode mode)
+    {
+        if (mode == LocationFlowController.FlowMode.Map)
+        {
+            CloseDeathWindow();
+        }
     }
 
     private void OnDestroy()
@@ -141,6 +169,24 @@ public class PlayerDeathWindowController : MonoBehaviour
             var color = text.color;
             color.a = 0f;
             text.color = color;
+        }
+    }
+
+    private void CloseDeathWindow()
+    {
+        bool wasOpen = window != null && window.activeSelf;
+
+        _deathSequence?.Kill();
+        HideInstant();
+
+        if (window != null)
+        {
+            window.SetActive(false);
+        }
+
+        if (wasOpen)
+        {
+            OnDeathWindowClosed?.Invoke();
         }
     }
 

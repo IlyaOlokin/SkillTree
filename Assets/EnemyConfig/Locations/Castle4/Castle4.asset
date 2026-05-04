@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d219f318536ff974580c180788e87719, type: 3}
+  m_Name: Castle4
+  m_EditorClassIdentifier: 
+  locationId: Castle-4
+  displayName: Castle
+  description: 
+  mapIcon: {fileID: 1262853243375832970, guid: 9fd9dd6a76bf9444da478d9905524c10, type: 3}
+  enemyDatabase: {fileID: 11400000, guid: 3894181d881efb541979c7a858827df3, type: 2}
+  levelRewards:
+  - levelNumber: 5
+    itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
+    amount: 2

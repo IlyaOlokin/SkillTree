@@ -22,6 +22,7 @@ namespace SaveSystem
         {
             string rawText = _codec.Encode(documentType, documentVersion, data);
             WriteAllTextWithBackups(path, rawText);
+            WebGLPersistentStorageSync.Flush();
         }
 
         public bool TryLoadDocument<T>(
@@ -69,6 +70,7 @@ namespace SaveSystem
             DeleteIfExists(path + BackupOneSuffix);
             DeleteIfExists(path + BackupTwoSuffix);
             DeleteIfExists(path + TempSuffix);
+            WebGLPersistentStorageSync.Flush();
         }
 
         private static void WriteAllTextWithBackups(string path, string rawText)

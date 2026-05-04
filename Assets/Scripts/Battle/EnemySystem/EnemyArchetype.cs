@@ -36,6 +36,7 @@ namespace Battle
 
         [Header("Attack")]
         public float baseAttackSpeed = 1f;
+        public WeaponType weaponType = WeaponType.Sword;
 
         [Header("Affixes")]
         public List<EnemyAffix> possibleAffixes = new();

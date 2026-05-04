@@ -15,9 +15,9 @@ MonoBehaviour:
   entries:
   - itemDefinition: {fileID: 11400000, guid: 4a211faeb581cc3409ad6fbbbba5b328, type: 2}
     stackSize: 1
-    baseDropChance: 0.01
+    baseDropChance: 0.05
     powerForMaxBonus: 100
-    maxPowerBonusChance: 0
+    maxPowerBonusChance: 0.05
     normalRarityMultiplier: 1
     magicRarityMultiplier: 1.1
     rareRarityMultiplier: 1.25
