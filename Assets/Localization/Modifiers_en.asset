@@ -1496,6 +1496,16 @@ MonoBehaviour:
       consumed {pain|Pain}.
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311687
+    m_Localized: '{chill|Chill} also applies 20% decreased {evasion|Evasion} and
+      50% decreased Health Regeneration'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311688
+    m_Localized: Gain {criticalMomentum|Critical Momentum} on Crit. Lose all stacks
+      after a non-Crit hit.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

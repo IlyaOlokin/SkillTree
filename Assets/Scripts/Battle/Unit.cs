@@ -35,6 +35,7 @@ namespace Battle
         public event Action<ITarget> OnAttack;
         public event Action<ITarget> OnHit;
         public event Action<ITarget> OnCrit;
+        public event Action<ITarget> OnNonCrit;
         public event Action<WeaponType> OnWeaponTypeChanged;
         public event Action<float> OnPainConsumed;
         
@@ -128,6 +129,11 @@ namespace Battle
         public void OnCritLanded(ITarget target)
         {
             OnCrit?.Invoke(target);
+        }
+
+        public void OnNonCritLanded(ITarget target)
+        {
+            OnNonCrit?.Invoke(target);
         }
 
         public void PainConsumed(float amount)

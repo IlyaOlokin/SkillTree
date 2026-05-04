@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using SkillTree;
 
 namespace Battle
 {
@@ -7,11 +8,14 @@ namespace Battle
     {
         private readonly HashSet<Type> _guaranteedEffects = new HashSet<Type>();
         private readonly HashSet<Type> _effectsRedirectedToOwner = new HashSet<Type>();
+        private readonly Dictionary<Type, List<ModifierContainer>> _effectModifiers =
+            new Dictionary<Type, List<ModifierContainer>>();
 
         public void Reset()
         {
             _guaranteedEffects.Clear();
             _effectsRedirectedToOwner.Clear();
+            _effectModifiers.Clear();
         }
 
         public void Guarantee<T>() where T : BaseEffect
@@ -34,6 +38,43 @@ namespace Battle
             return IsRedirectedToOwner(typeof(T));
         }
 
+        public void AddEffectModifier<T>(ModifierContainer modifier) where T : BaseEffect
+        {
+            AddEffectModifier(typeof(T), modifier);
+        }
+
+        public void AddEffectModifier(Type effectType, ModifierContainer modifier)
+        {
+            if (effectType == null || modifier == null)
+            {
+                return;
+            }
+
+            if (!_effectModifiers.TryGetValue(effectType, out List<ModifierContainer> modifiers))
+            {
+                modifiers = new List<ModifierContainer>();
+                _effectModifiers.Add(effectType, modifiers);
+            }
+
+            modifiers.Add(CloneModifier(modifier));
+        }
+
+        public IReadOnlyList<ModifierContainer> GetEffectModifiers<T>() where T : BaseEffect
+        {
+            return GetEffectModifiers(typeof(T));
+        }
+
+        public IReadOnlyList<ModifierContainer> GetEffectModifiers(Type effectType)
+        {
+            if (effectType == null ||
+                !_effectModifiers.TryGetValue(effectType, out List<ModifierContainer> modifiers))
+            {
+                return Array.Empty<ModifierContainer>();
+            }
+
+            return modifiers;
+        }
+
         public bool IsGuaranteed(Type effectType)
         {
             if (effectType == null)
@@ -52,6 +93,11 @@ namespace Battle
             }
 
             return _effectsRedirectedToOwner.Contains(effectType);
+        }
+
+        private static ModifierContainer CloneModifier(ModifierContainer modifier)
+        {
+            return new ModifierContainer(modifier.modifierType, modifier.statType, modifier.value);
         }
     }
 }

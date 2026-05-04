@@ -64,6 +64,10 @@ namespace Battle
             {
                 attackerUnit.OnCritLanded(defender);
             }
+            else
+            {
+                attackerUnit.OnNonCritLanded(defender);
+            }
             attackerUnit.DamageDealt(damageDealt);
             context.ConsumeQueuedEffects();
             AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics

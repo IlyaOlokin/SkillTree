@@ -72,6 +72,20 @@ namespace Battle
             return result;
         }
 
+        public void RemoveEffectsOfType<T>()
+        {
+            for (int i = Effects.Count - 1; i >= 0; i--)
+            {
+                if (Effects[i].Effect.GetType() != typeof(T))
+                {
+                    continue;
+                }
+
+                Effects[i].Effect.OnRemove(_owner);
+                Effects.RemoveAt(i);
+            }
+        }
+
         public void ClearAllEffects()
         {
             for (int i = Effects.Count - 1; i >= 0; i--)

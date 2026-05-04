@@ -17,5 +17,6 @@ namespace Battle
         EvasiveMomentum = 12,
         Pain = 13,
         Scar = 14,
+        CriticalMomentum = 15,
     }
 }

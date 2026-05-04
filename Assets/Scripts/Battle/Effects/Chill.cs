@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Battle;
 using SkillTree;
 using UnityEngine;
@@ -13,20 +14,19 @@ namespace Battle
         
         private float _chillPower;
 
-        private BaseModifier _cachedModifier;
+        private readonly List<ModifierContainer> _modifierContainers = new List<ModifierContainer>();
+        private readonly List<BaseModifier> _cachedModifiers = new List<BaseModifier>();
         
         private Chill(DamageInfo damageInfo, Unit defender, float duration)
         {
             Duration = duration * (1f - defender.BaseUnitModifiers.GetStatValue(StatType.ChillDurationReduction));
-            CalculateChillPower(damageInfo);
+            CalculateChillPowerMultiplier(damageInfo);
+            SetModifierContainers(damageInfo.AttackEffectPayload.GetEffectModifiers<Chill>());
         }
         
         public override void OnApply(Unit unit)
         {
-            _cachedModifier = ScriptableObject.CreateInstance<BaseModifier>();
-            _cachedModifier.modifierContainer =
-                new ModifierContainer(ModifierType.Increased, StatType.AttackSpeed, _chillPower);
-            unit.AddOuterModifier(_cachedModifier);
+            ApplyModifiers(unit);
         }
 
         public override void OnStack(Unit unit, BaseEffect newEffect, ActiveEffect existing)
@@ -34,18 +34,82 @@ namespace Battle
             existing.TimeLeft = Mathf.Max(newEffect.Duration, existing.TimeLeft);
             if (newEffect is Chill chill)
             {
+                RemoveModifiers(unit);
                 _chillPower = chill._chillPower;
+                CopyModifierContainers(chill._modifierContainers);
+                ApplyModifiers(unit);
             }
         }
 
         public override void OnRemove(Unit unit)
         {
-            unit.RemoveOuterModifier(_cachedModifier);
+            RemoveModifiers(unit);
         }
 
-        public void CalculateChillPower(DamageInfo damageInfo)
+        public void CalculateChillPowerMultiplier(DamageInfo damageInfo)
         {
-            _chillPower = CHILL_BASE_SLOW * (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.ChillPower));
+            _chillPower = 1f + damageInfo.BaseUnitModifiers.GetStatValue(StatType.ChillPower);
+        }
+
+        private void SetModifierContainers(IReadOnlyList<ModifierContainer> additionalModifiers)
+        {
+            _modifierContainers.Clear();
+            _modifierContainers.Add(new ModifierContainer(
+                ModifierType.Increased,
+                StatType.AttackSpeed,
+                ScaleByChillPower(CHILL_BASE_SLOW)));
+
+            for (int i = 0; i < additionalModifiers.Count; i++)
+            {
+                ModifierContainer modifier = additionalModifiers[i];
+                _modifierContainers.Add(new ModifierContainer(
+                    modifier.modifierType,
+                    modifier.statType,
+                    ScaleByChillPower(modifier.value)));
+            }
+        }
+
+        private void CopyModifierContainers(IReadOnlyList<ModifierContainer> modifiers)
+        {
+            _modifierContainers.Clear();
+            for (int i = 0; i < modifiers.Count; i++)
+            {
+                ModifierContainer modifier = modifiers[i];
+                _modifierContainers.Add(new ModifierContainer(
+                    modifier.modifierType,
+                    modifier.statType,
+                    modifier.value));
+            }
+        }
+
+        private void ApplyModifiers(Unit unit)
+        {
+            for (int i = 0; i < _modifierContainers.Count; i++)
+            {
+                BaseModifier modifier = ScriptableObject.CreateInstance<BaseModifier>();
+                ModifierContainer modifierContainer = _modifierContainers[i];
+                modifier.modifierContainer = new ModifierContainer(
+                    modifierContainer.modifierType,
+                    modifierContainer.statType,
+                    modifierContainer.value);
+                _cachedModifiers.Add(modifier);
+                unit.AddOuterModifier(modifier);
+            }
+        }
+
+        private void RemoveModifiers(Unit unit)
+        {
+            for (int i = 0; i < _cachedModifiers.Count; i++)
+            {
+                unit.RemoveOuterModifier(_cachedModifiers[i]);
+            }
+
+            _cachedModifiers.Clear();
+        }
+
+        private float ScaleByChillPower(float value)
+        {
+            return value * _chillPower;
         }
         
         public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)

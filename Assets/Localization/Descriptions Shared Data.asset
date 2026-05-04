@@ -277,6 +277,10 @@ MonoBehaviour:
     m_Key: description.scar2
     m_Metadata:
       m_Items: []
+  - m_Id: 6805365104709633
+    m_Key: description.criticalMomentum1
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

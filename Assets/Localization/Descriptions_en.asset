@@ -292,6 +292,10 @@ MonoBehaviour:
     m_Localized: Scar duration is 6 seconds
     m_Metadata:
       m_Items: []
+  - m_Id: 6805365104709633
+    m_Localized: Each stack grants 10% more Crit Damage Bonus and 10% less Crit Chance
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
