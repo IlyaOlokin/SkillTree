@@ -1495,6 +1495,86 @@ MonoBehaviour:
     m_Key: modifier.criticalMomentumOnCrit.description
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311689
+    m_Key: modifier.fullLife.withModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311690
+    m_Key: modifier.fullLife.noModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311691
+    m_Key: modifier.container.added.ExposeChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311692
+    m_Key: modifier.container.increased.ExposeChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311693
+    m_Key: modifier.container.decreased.ExposeChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311694
+    m_Key: modifier.container.more.ExposeChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311695
+    m_Key: modifier.container.less.ExposeChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311696
+    m_Key: modifier.container.none.ExposeChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311697
+    m_Key: modifier.container.added.ExposePower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311698
+    m_Key: modifier.container.increased.ExposePower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311699
+    m_Key: modifier.container.decreased.ExposePower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311700
+    m_Key: modifier.container.more.ExposePower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311701
+    m_Key: modifier.container.less.ExposePower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311702
+    m_Key: modifier.container.none.ExposePower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311703
+    m_Key: modifier.container.added.ExposeMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311704
+    m_Key: modifier.container.increased.ExposeMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311705
+    m_Key: modifier.container.decreased.ExposeMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311706
+    m_Key: modifier.container.more.ExposeMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311707
+    m_Key: modifier.container.less.ExposeMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311708
+    m_Key: modifier.container.none.ExposeMitigation
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

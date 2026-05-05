@@ -35,6 +35,7 @@ MonoBehaviour:
     evasion: 0
     barrierCapacity: 0
     barrierCount: 0
+    healthRegeneration: 0
     blockChance: 1
     elementalResistance: 0
     fireResistance: 0
@@ -43,23 +44,25 @@ MonoBehaviour:
     mysticCleanse: 0
   utility:
     physical:
-      power: 0.08333332
-      mitigation: 0.08333332
-      chance: 0.08333332
+      power: 0.08333334
+      mitigation: 0.08333334
+      chance: 0.08333334
     fire:
-      power: 0.08333332
-      mitigation: 0.08333332
-      chance: 0.08333332
+      power: 0.08333334
+      mitigation: 0.08333334
+      chance: 0.08333334
     cold:
-      power: 0.08333332
-      mitigation: 0.08333332
-      chance: 0.08333332
+      power: 0.08333334
+      mitigation: 0.08333334
+      chance: 0.08333334
     lightning:
-      power: 0.08333332
-      mitigation: 0.08333332
-      chance: 0.08333332
+      power: 0.08333334
+      mitigation: 0.08333334
+      chance: 0.08333334
+  waveWeight: 0.4
   powerMultiplier: 1.05
   baseAttackSpeed: 0.12
+  weaponType: 1
   possibleAffixes:
   - {fileID: 11400000, guid: c2bdd953a1ec2154d927e63e023d1378, type: 2}
   - {fileID: 11400000, guid: a817d26638ef9fe4795561ee24da464a, type: 2}

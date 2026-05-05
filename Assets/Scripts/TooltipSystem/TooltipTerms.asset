@@ -71,3 +71,5 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: b556eb52e02d75b4cb620ce5690a17c2, type: 2}
   - id: criticalMomentum
     description: {fileID: 11400000, guid: da7273edd3d9eed4ab0b35eaf381af45, type: 2}
+  - id: expose
+    description: {fileID: 11400000, guid: 06bc3437db8838041a00b0ea3cc16dc4, type: 2}

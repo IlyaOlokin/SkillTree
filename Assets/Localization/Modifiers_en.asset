@@ -1506,6 +1506,86 @@ MonoBehaviour:
       after a non-Crit hit.
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311689
+    m_Localized: 'While on Full Life, [[0]]'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311690
+    m_Localized: While on Full Life, applies modifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311691
+    m_Localized: '[[0]] to {expose|Expose} Chance'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311692
+    m_Localized: '[[0]]% increased {expose|Expose} Chance'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311693
+    m_Localized: '[[0]]% decreased {expose|Expose} Chance'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311694
+    m_Localized: '[[0]]% more {expose|Expose} Chance'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311695
+    m_Localized: '[[0]]% less {expose|Expose} Chance'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311696
+    m_Localized: You have no {expose|Expose} Chance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311697
+    m_Localized: '[[0]] to {expose|Expose} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311698
+    m_Localized: '[[0]]% increased {expose|Expose} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311699
+    m_Localized: '[[0]]% decreased {expose|Expose} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311700
+    m_Localized: '[[0]]% more {expose|Expose} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311701
+    m_Localized: '[[0]]% less {expose|Expose} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311702
+    m_Localized: You have no {expose|Expose} {power|Power}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311703
+    m_Localized: '[[0]] to {expose|Expose} Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311704
+    m_Localized: '[[0]]% increased {expose|Expose} Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311705
+    m_Localized: '[[0]]% decreased {expose|Expose} Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311706
+    m_Localized: '[[0]]% more {expose|Expose} Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311707
+    m_Localized: '[[0]]% less {expose|Expose} Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311708
+    m_Localized: You have no {expose|Expose} Mitigation
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

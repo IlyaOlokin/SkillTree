@@ -59,6 +59,7 @@ MonoBehaviour:
       power: 0
       mitigation: 0
       chance: 0
+  waveWeight: 0.4
   powerMultiplier: 1
   baseAttackSpeed: 0.13
   weaponType: 1

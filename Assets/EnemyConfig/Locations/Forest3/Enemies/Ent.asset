@@ -44,23 +44,25 @@ MonoBehaviour:
     mysticCleanse: 0
   utility:
     physical:
-      power: 0.08333334
-      mitigation: 0.08333334
-      chance: 0.08333334
+      power: 0.08333332
+      mitigation: 0.08333332
+      chance: 0.08333332
     fire:
-      power: 0.08333334
-      mitigation: 0.08333334
-      chance: 0.08333334
+      power: 0.08333332
+      mitigation: 0.08333332
+      chance: 0.08333332
     cold:
-      power: 0.08333334
-      mitigation: 0.08333334
-      chance: 0.08333334
+      power: 0.08333332
+      mitigation: 0.08333332
+      chance: 0.08333332
     lightning:
-      power: 0.08333334
-      mitigation: 0.08333334
-      chance: 0.08333334
+      power: 0.08333332
+      mitigation: 0.08333332
+      chance: 0.08333332
+  waveWeight: 0.7
   powerMultiplier: 1.2
   baseAttackSpeed: 0.1
+  weaponType: 1
   possibleAffixes:
   - {fileID: 11400000, guid: c2bdd953a1ec2154d927e63e023d1378, type: 2}
   - {fileID: 11400000, guid: a817d26638ef9fe4795561ee24da464a, type: 2}

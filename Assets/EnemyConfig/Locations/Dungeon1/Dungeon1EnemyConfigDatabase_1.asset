@@ -18,13 +18,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 745d5db079a5d4342917b0a6d3d3ad04, type: 2}
   - {fileID: 11400000, guid: 287d7324b51110b45bfd876022012a3e, type: 2}
   levelPowers:
-  - 8
-  - 11
-  - 14
-  - 16
-  - 18
+  - 12
+  - 17
+  - 24
+  - 30
+  - 36
   startingLevel: 1
-  wavesToUnlockNextLevel: 3
+  wavesToUnlockNextLevel: 2
   respawnDelay: 1
   maxEnemiesPerWave: 3
   rarityBalance: {fileID: 11400000, guid: e06ecfd8fa36bd64ab614c313d620730, type: 2}

@@ -186,7 +186,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 248729670127616
-    m_Localized: Sunder lasts 2 seconds
+    m_Localized: Sunder lasts 5 seconds
     m_Metadata:
       m_Items: []
   - m_Id: 292686433226752
@@ -294,6 +294,18 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 6805365104709633
     m_Localized: Each stack grants 10% more Crit Damage Bonus and 10% less Crit Chance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7253607030329344
+    m_Localized: It reduces {ailmentGuard|Ailment Guard} by 30%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7253576491601920
+    m_Localized: Distract is an {effect|Effect} that can be applied to units
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7255200857460736
+    m_Localized: Expose lasts 5 seconds
     m_Metadata:
       m_Items: []
   references:

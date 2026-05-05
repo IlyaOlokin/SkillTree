@@ -116,6 +116,7 @@ public class EnemyArchetypeEditor : Editor
     private void DrawGeneralProperties()
     {
         EditorGUILayout.LabelField("General", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("waveWeight"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("powerMultiplier"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("baseAttackSpeed"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("weaponType"));
@@ -260,7 +261,8 @@ public class EnemyArchetypeEditor : Editor
             return;
         }
 
-        float basePower = archetype.PreviewPower;
+        float wavePower = archetype.PreviewPower;
+        float basePower = wavePower * archetype.WaveWeight;
         float previewPower = EnemyPowerCalculator.Calculate(basePower, archetype.PreviewRarity, archetype, false);
         float totalCategoryWeight = archetype.GetTotalCategoryWeight();
 
@@ -268,6 +270,8 @@ public class EnemyArchetypeEditor : Editor
         {
             EditorGUILayout.ObjectField("Preview Database", database, typeof(EnemyConfigDatabase), false);
             EditorGUILayout.ObjectField("Stat Budget Config", database != null ? database.StatBudgetConfig : null, typeof(EnemyStatBudgetConfig), false);
+            EditorGUILayout.FloatField("Wave Power", wavePower);
+            EditorGUILayout.FloatField("Wave Weight", archetype.WaveWeight);
             EditorGUILayout.FloatField("Base Power", basePower);
             EditorGUILayout.FloatField("Preview Power", previewPower);
         }

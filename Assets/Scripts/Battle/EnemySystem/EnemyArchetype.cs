@@ -32,6 +32,7 @@ namespace Battle
         public EnemyUtilityWeights utility = new();
 
         [Header("Power")]
+        [SerializeField, Range(0.01f, 1f)] private float waveWeight = 0.33f;
         [Min(0f)] [SerializeField] private float powerMultiplier = 1f;
 
         [Header("Attack")]
@@ -53,6 +54,7 @@ namespace Battle
         [SerializeField] private EnemyRarity previewRarity = EnemyRarity.Normal;
 
         public ItemDropTable ItemDropTable => itemDropTable;
+        public float WaveWeight => Mathf.Clamp(waveWeight, 0.01f, 1f);
         public float PowerMultiplier => Mathf.Max(0f, powerMultiplier);
         public EnemyConfigDatabase PreviewDatabaseOverride => previewDatabaseOverride;
         public float PreviewPower => Mathf.Max(0.01f, previewPower);
@@ -69,6 +71,7 @@ namespace Battle
             offenceWeight = Mathf.Clamp01(offenceWeight);
             defenceWeight = Mathf.Clamp01(defenceWeight);
             utilityWeight = Mathf.Clamp01(utilityWeight);
+            waveWeight = Mathf.Clamp(waveWeight, 0.01f, 1f);
             powerMultiplier = Mathf.Max(0f, powerMultiplier);
             previewPower = Mathf.Max(0.01f, previewPower);
 

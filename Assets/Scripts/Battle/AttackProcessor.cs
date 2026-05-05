@@ -46,6 +46,7 @@ namespace Battle
             Overcharge.Apply(attackerUnit, damageInfo, defender.UnitObject);
             Sunder.Apply(attackerUnit, damageInfo, defender.UnitObject);
             Distract.Apply(attackerUnit, damageInfo, defender.UnitObject);
+            Expose.Apply(attackerUnit, damageInfo, defender.UnitObject);
 
             //Block
             if (Block.ApplyBlock(defender.UnitObject))

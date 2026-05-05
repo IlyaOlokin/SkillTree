@@ -19,11 +19,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 19dc45619d45ea74890736c13d8eee1a, type: 2}
   - {fileID: 11400000, guid: f0adc999c1e229c45bca498b3ac4a816, type: 2}
   levelPowers:
-  - 80
   - 84
-  - 88
-  - 91
-  - 95
+  - 86
+  - 99
+  - 102
+  - 105
   startingLevel: 1
   wavesToUnlockNextLevel: 3
   respawnDelay: 1

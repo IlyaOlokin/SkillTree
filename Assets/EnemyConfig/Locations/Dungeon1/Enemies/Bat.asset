@@ -35,6 +35,7 @@ MonoBehaviour:
     evasion: 1
     barrierCapacity: 0
     barrierCount: 0
+    healthRegeneration: 0
     blockChance: 0
     elementalResistance: 0
     fireResistance: 0
@@ -58,8 +59,10 @@ MonoBehaviour:
       power: 0
       mitigation: 0
       chance: 0
+  waveWeight: 0.2
   powerMultiplier: 1
   baseAttackSpeed: 0.18
+  weaponType: 1
   possibleAffixes:
   - {fileID: 11400000, guid: c2bdd953a1ec2154d927e63e023d1378, type: 2}
   - {fileID: 11400000, guid: a817d26638ef9fe4795561ee24da464a, type: 2}

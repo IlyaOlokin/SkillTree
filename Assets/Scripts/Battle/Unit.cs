@@ -186,6 +186,11 @@ namespace Battle
             OnStatsRecalculated?.Invoke();
         }
 
+        public void RequestModRecalculation()
+        {
+            RaiseOnModsChanged();
+        }
+
         public void CombatTick(float deltaTime, CombatTickPhase phase)
         {
             switch (phase)
@@ -295,6 +300,11 @@ namespace Battle
         public bool IsOnLowLife()
         {
             return health.CurrentHealth <= health.MaxHealth * 0.5f;
+        }
+
+        public bool IsOnFullLife()
+        {
+            return health.CurrentHealth01 > 0.999f;
         }
 
         protected virtual void OnDestroy()

@@ -43,6 +43,9 @@ public enum StatType
     DistractChance = 56,
     DistractPower = 57,
     DistractMitigation = 58,
+    ExposeChance = 61,
+    ExposePower = 62,
+    ExposeMitigation = 63,
     
     // Crit
     CritChance = 16,

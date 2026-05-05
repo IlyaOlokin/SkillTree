@@ -20,6 +20,16 @@ namespace Battle
             float totalPower)
         {
             var archetype = _database.GetRandomArchetype(context, rarity, enemyIndex);
+            return CreateEnemyStats(context, rarity, archetype, power, totalPower);
+        }
+
+        public EnemySpawnData CreateEnemyStats(
+            WaveContext context,
+            EnemyRarity rarity,
+            EnemyArchetype archetype,
+            float power,
+            float totalPower)
+        {
             if (archetype == null)
                 return null;
 

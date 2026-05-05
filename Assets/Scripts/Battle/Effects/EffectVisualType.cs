@@ -18,5 +18,6 @@ namespace Battle
         Pain = 13,
         Scar = 14,
         CriticalMomentum = 15,
+        Expose = 16,
     }
 }

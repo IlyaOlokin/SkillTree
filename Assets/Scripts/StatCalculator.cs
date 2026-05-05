@@ -15,6 +15,8 @@ public static class StatCalculator
         StatType.SunderPower,
         StatType.DistractChance,
         StatType.DistractPower,
+        StatType.ExposeChance,
+        StatType.ExposePower,
         StatType.IgnitePower,
         StatType.ChillPower,
         StatType.OverchargePower,
