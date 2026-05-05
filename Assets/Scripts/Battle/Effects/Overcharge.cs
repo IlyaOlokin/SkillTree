@@ -14,6 +14,7 @@ namespace Battle
 
         public override bool IsStackable { get; set; } = false;
         public override EffectVisualType VisualType => EffectVisualType.Overcharge;
+        public override bool CanDisplayMultipleIcons => false;
 
         public Overcharge(DamageInfo damageInfo, Unit defender)
         {
@@ -36,6 +37,25 @@ namespace Battle
         public override bool IsReadyToBeRemoved(Unit unit)
         {
             return IsUsed;
+        }
+
+        public override string GetIconText(IReadOnlyList<ActiveEffect> activeEffects)
+        {
+            if (activeEffects == null)
+            {
+                return string.Empty;
+            }
+
+            int count = 0;
+            for (int i = 0; i < activeEffects.Count; i++)
+            {
+                if (activeEffects[i]?.Effect is Overcharge overcharge && !overcharge.IsUsed)
+                {
+                    count++;
+                }
+            }
+
+            return count > 1 ? count.ToString() : string.Empty;
         }
 
         public override void Consume(Unit unit)

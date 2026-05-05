@@ -46,6 +46,11 @@ namespace Battle
             RemoveModifiers(unit);
         }
 
+        public override string GetIconText(IReadOnlyList<ActiveEffect> activeEffects)
+        {
+            return string.Empty;
+        }
+
         public void CalculateChillPowerMultiplier(DamageInfo damageInfo)
         {
             _chillPower = 1f + damageInfo.BaseUnitModifiers.GetStatValue(StatType.ChillPower);

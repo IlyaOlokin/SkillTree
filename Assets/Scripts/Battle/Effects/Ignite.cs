@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Battle
@@ -29,6 +30,11 @@ namespace Battle
             float igniteDamage = _totalDamage * BASE_TOTAL_DAMAGE_PERCENTAGE_PER_SECOND * dt;
             if (_totalDamage < 1) igniteDamage = 1 * dt; // ?????????
             ApplyIgniteDamage(unit, igniteDamage);
+        }
+
+        public override string GetIconText(IReadOnlyList<ActiveEffect> activeEffects)
+        {
+            return Mathf.CeilToInt(_totalDamage).ToString();
         }
 
         public override bool IsReadyToBeRemoved(Unit unit)

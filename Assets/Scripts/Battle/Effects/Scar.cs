@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Globalization;
 using SkillTree;
 using UnityEngine;
 
@@ -10,9 +12,11 @@ namespace Battle
         private BaseModifier _armorModifier;
         private BaseModifier _ailmentGuardModifier;
         private BaseModifier _healingReceivedModifier;
+        private float _scarPercent;
 
         public override bool IsStackable { get; set; } = false;
         public override EffectVisualType VisualType => EffectVisualType.Scar;
+        public override bool CanDisplayMultipleIcons => true;
 
         public Scar(float duration, float amount)
         {
@@ -22,15 +26,15 @@ namespace Battle
 
         public override void OnApply(Unit unit)
         {
-            float scarPercent = CalculateScarPercent(unit);
-            if (scarPercent <= 0f)
+            _scarPercent = CalculateScarPercent(unit);
+            if (_scarPercent <= 0f)
             {
                 return;
             }
 
-            _armorModifier = CreateModifier(ModifierType.Increased, StatType.Armor, scarPercent);
-            _ailmentGuardModifier = CreateModifier(ModifierType.Added, StatType.AilmentGuard, scarPercent);
-            _healingReceivedModifier = CreateModifier(ModifierType.Added, StatType.HealingReceived, -scarPercent);
+            _armorModifier = CreateModifier(ModifierType.Increased, StatType.Armor, _scarPercent);
+            _ailmentGuardModifier = CreateModifier(ModifierType.Added, StatType.AilmentGuard, _scarPercent);
+            _healingReceivedModifier = CreateModifier(ModifierType.Added, StatType.HealingReceived, -_scarPercent);
 
             unit.AddOuterModifier(_armorModifier);
             unit.AddOuterModifier(_ailmentGuardModifier);
@@ -40,6 +44,13 @@ namespace Battle
         public override void OnRemove(Unit unit)
         {
             RemoveModifiers(unit);
+        }
+
+        public override string GetIconText(IReadOnlyList<ActiveEffect> activeEffects)
+        {
+            return _scarPercent > 0f
+                ? _scarPercent.ToString("0.#%", CultureInfo.InvariantCulture)
+                : string.Empty;
         }
 
         protected override string GetDescriptionId()

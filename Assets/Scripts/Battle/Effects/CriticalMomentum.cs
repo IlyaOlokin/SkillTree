@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SkillTree;
 using UnityEngine;
 
@@ -51,6 +52,11 @@ namespace Battle
             RemoveCurrentModifiers(unit);
             _critChanceModifier = null;
             _critDamageBonusModifier = null;
+        }
+
+        public override string GetIconText(IReadOnlyList<ActiveEffect> activeEffects)
+        {
+            return _stacks > 1 ? _stacks.ToString() : string.Empty;
         }
 
         protected override string GetDescriptionId()

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SkillTree;
 using UnityEngine;
 
@@ -49,6 +50,11 @@ namespace Battle
             {
                 unit.RemoveOuterModifier(_cachedModifier);
             }
+        }
+
+        public override string GetIconText(IReadOnlyList<ActiveEffect> activeEffects)
+        {
+            return string.Empty;
         }
 
         private static float CalculateArmorReduction(DamageInfo damageInfo, Unit defender)

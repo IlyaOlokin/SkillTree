@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using LocalizationSupport;
 using SkillTree;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace Battle
     {
         public float Amount { get; private set; }
         public bool IsUsed { get; private set; }
+        private Unit _owner;
 
         public override bool IsStackable { get; set; } = true;
         public override EffectVisualType VisualType => EffectVisualType.Pain;
@@ -16,6 +18,11 @@ namespace Battle
         public Pain(float amount)
         {
             Amount = Mathf.Max(0f, amount);
+        }
+
+        public override void OnApply(Unit unit)
+        {
+            _owner = unit;
         }
 
         public override void OnStack(Unit unit, BaseEffect newEffect, ActiveEffect existing)
@@ -37,6 +44,17 @@ namespace Battle
         {
             unit?.PainConsumed(Amount);
             IsUsed = true;
+        }
+
+        public override string GetIconText(IReadOnlyList<ActiveEffect> activeEffects)
+        {
+            if (_owner?.health == null || _owner.health.MaxHealth <= 0f || Amount <= 0f)
+            {
+                return string.Empty;
+            }
+
+            float painPercent = Amount / _owner.health.MaxHealth;
+            return painPercent.ToString("0.#%", CultureInfo.InvariantCulture);
         }
 
         public void ApplyAttackBonus(DamageInfo damageInfo, Unit owner)

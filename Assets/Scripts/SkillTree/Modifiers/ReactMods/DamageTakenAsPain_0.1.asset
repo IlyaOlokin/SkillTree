@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: DamageTakenAsPain_0.1
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 00000000
-  healthLostAsPain: 0.1
+  healthLostAsPain: 1

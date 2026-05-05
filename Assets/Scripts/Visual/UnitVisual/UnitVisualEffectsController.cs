@@ -1,6 +1,7 @@
 using Battle;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TooltipSystem;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -10,14 +11,27 @@ namespace Visual
     [Serializable]
     public class UnitVisualEffectsController
     {
+        private class EffectIconGroup
+        {
+            public readonly string Key;
+            public readonly List<ActiveEffect> ActiveEffects = new List<ActiveEffect>();
+            public UnitEffectIconView IconView;
+
+            public EffectIconGroup(string key)
+            {
+                Key = key;
+            }
+        }
+
         [SerializeField] private RectTransform effectIconsRoot;
         [SerializeField] private UnitEffectIconView effectIconPrefab;
         [SerializeField] private Vector2 effectsIconsStartOffset;
         [SerializeField] private Vector2 effectIconsStep = new Vector2(72f, 0f);
         [SerializeField] private EffectIconsConfig effectIconsConfig;
 
-        private readonly Dictionary<ActiveEffect, UnitEffectIconView> _effectIcons = new Dictionary<ActiveEffect, UnitEffectIconView>();
-        private readonly List<ActiveEffect> _iconsToRemove = new List<ActiveEffect>();
+        private readonly Dictionary<string, EffectIconGroup> _effectIconGroups = new Dictionary<string, EffectIconGroup>();
+        private readonly List<EffectIconGroup> _orderedIconGroups = new List<EffectIconGroup>();
+        private readonly List<string> _iconsToRemove = new List<string>();
         private TooltipUI _tooltipUI;
 
         public void Initialize(TooltipUI tooltipUI)
@@ -35,10 +49,41 @@ namespace Visual
 
             var activeEffects = unit.effectController.Effects;
 
-            _iconsToRemove.Clear();
-            foreach (var pair in _effectIcons)
+            foreach (var pair in _effectIconGroups)
             {
-                if (!activeEffects.Contains(pair.Key))
+                pair.Value.ActiveEffects.Clear();
+            }
+
+            _orderedIconGroups.Clear();
+
+            for (int i = 0; i < activeEffects.Count; i++)
+            {
+                var activeEffect = activeEffects[i];
+                string key = GetEffectIconGroupKey(activeEffect);
+                if (!_effectIconGroups.TryGetValue(key, out var iconGroup))
+                {
+                    iconGroup = new EffectIconGroup(key);
+                    iconGroup.IconView = CreateEffectIcon();
+                    if (iconGroup.IconView == null)
+                    {
+                        continue;
+                    }
+
+                    _effectIconGroups.Add(key, iconGroup);
+                }
+
+                if (iconGroup.ActiveEffects.Count == 0)
+                {
+                    _orderedIconGroups.Add(iconGroup);
+                }
+
+                iconGroup.ActiveEffects.Add(activeEffect);
+            }
+
+            _iconsToRemove.Clear();
+            foreach (var pair in _effectIconGroups)
+            {
+                if (pair.Value.ActiveEffects.Count == 0)
                 {
                     _iconsToRemove.Add(pair.Key);
                 }
@@ -49,45 +94,33 @@ namespace Visual
                 RemoveEffectIcon(_iconsToRemove[i]);
             }
 
-            for (int i = 0; i < activeEffects.Count; i++)
+            for (int i = 0; i < _orderedIconGroups.Count; i++)
             {
-                var activeEffect = activeEffects[i];
-                if (!_effectIcons.TryGetValue(activeEffect, out var iconView))
-                {
-                    iconView = CreateEffectIcon(activeEffect);
-                    if (iconView == null)
-                    {
-                        continue;
-                    }
-
-                    _effectIcons.Add(activeEffect, iconView);
-                }
-
-                UpdateIconTimer(activeEffect, iconView);
-                PositionEffectIcon(iconView, i);
+                var iconGroup = _orderedIconGroups[i];
+                UpdateEffectIcon(iconGroup);
+                PositionEffectIcon(iconGroup.IconView, i);
             }
         }
 
         public void ClearAllEffectIcons()
         {
-            foreach (var pair in _effectIcons)
+            foreach (var pair in _effectIconGroups)
             {
-                if (pair.Value != null)
+                if (pair.Value.IconView != null)
                 {
-                    Object.Destroy(pair.Value.gameObject);
+                    Object.Destroy(pair.Value.IconView.gameObject);
                 }
             }
 
-            _effectIcons.Clear();
+            _effectIconGroups.Clear();
+            _orderedIconGroups.Clear();
             _iconsToRemove.Clear();
         }
 
-        private UnitEffectIconView CreateEffectIcon(ActiveEffect activeEffect)
+        private UnitEffectIconView CreateEffectIcon()
         {
             var iconView = Object.Instantiate(effectIconPrefab, effectIconsRoot);
             iconView.Initialize(_tooltipUI);
-            iconView.SetIcon(ResolveEffectIcon(activeEffect.Effect));
-            iconView.SetEffect(activeEffect.Effect);
             return iconView;
         }
 
@@ -101,16 +134,18 @@ namespace Visual
             iconView.RectTransform.anchoredPosition = effectsIconsStartOffset + effectIconsStep * index;
         }
 
-        private static void UpdateIconTimer(ActiveEffect activeEffect, UnitEffectIconView iconView)
+        private void UpdateEffectIcon(EffectIconGroup iconGroup)
         {
-            float duration = activeEffect.Effect.Duration;
-            if (duration > 0f)
+            if (iconGroup == null || iconGroup.IconView == null || iconGroup.ActiveEffects.Count == 0)
             {
-                iconView.SetTimerProgress(activeEffect.TimeLeft / duration);
                 return;
             }
 
-            iconView.SetTimerProgress(1f);
+            BaseEffect effect = iconGroup.ActiveEffects[0].Effect;
+            iconGroup.IconView.SetIcon(ResolveEffectIcon(effect));
+            iconGroup.IconView.SetEffects(iconGroup.ActiveEffects);
+            iconGroup.IconView.SetValueText(effect != null ? effect.GetIconText(iconGroup.ActiveEffects) : string.Empty);
+            iconGroup.IconView.SetTimerProgress(effect != null ? effect.GetIconTimerProgress(iconGroup.ActiveEffects) : 1f);
         }
 
         private Sprite ResolveEffectIcon(BaseEffect effect)
@@ -123,19 +158,35 @@ namespace Visual
             return effectIconsConfig.GetIcon(effect.VisualType);
         }
 
-        private void RemoveEffectIcon(ActiveEffect activeEffect)
+        private static string GetEffectIconGroupKey(ActiveEffect activeEffect)
         {
-            if (!_effectIcons.TryGetValue(activeEffect, out var iconView))
+            if (activeEffect?.Effect == null)
+            {
+                return "null";
+            }
+
+            BaseEffect effect = activeEffect.Effect;
+            if (effect.CanDisplayMultipleIcons)
+            {
+                return $"effect:{RuntimeHelpers.GetHashCode(activeEffect)}";
+            }
+
+            return $"group:{effect.GetIconDisplayKey()}";
+        }
+
+        private void RemoveEffectIcon(string key)
+        {
+            if (!_effectIconGroups.TryGetValue(key, out var iconGroup))
             {
                 return;
             }
 
-            if (iconView != null)
+            if (iconGroup.IconView != null)
             {
-                Object.Destroy(iconView.gameObject);
+                Object.Destroy(iconGroup.IconView.gameObject);
             }
 
-            _effectIcons.Remove(activeEffect);
+            _effectIconGroups.Remove(key);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SkillTree;
 using UnityEngine;
 
@@ -57,6 +58,11 @@ namespace Battle
         }
 
         public override bool IsReadyToBeRemoved(Unit unit) => _isReadyToBeRemoved;
+
+        public override string GetIconText(IReadOnlyList<ActiveEffect> activeEffects)
+        {
+            return _stacks > 1 ? _stacks.ToString() : string.Empty;
+        }
 
         public override void OnRemove(Unit unit)
         {

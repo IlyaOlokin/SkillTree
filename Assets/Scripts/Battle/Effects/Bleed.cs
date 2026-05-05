@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Battle
@@ -10,6 +11,7 @@ namespace Battle
 
         public override bool IsStackable { get; set; } = false;
         public override EffectVisualType VisualType => EffectVisualType.Bleed;
+        public override bool CanDisplayMultipleIcons => true;
 
         private Bleed(DamageInfo damageInfo, Unit defender, float physicalDamageDealt, float duration)
         {
@@ -28,6 +30,17 @@ namespace Battle
             }
 
             unit.ReceiveDoT(damage);
+        }
+
+        public override string GetIconText(IReadOnlyList<ActiveEffect> activeEffects)
+        {
+            if (activeEffects == null || activeEffects.Count == 0 || Duration <= 0f)
+            {
+                return string.Empty;
+            }
+
+            float remainingDamage = _totalDamage * Mathf.Clamp01(activeEffects[0].TimeLeft / Duration);
+            return Mathf.CeilToInt(remainingDamage).ToString();
         }
         
         private float CalculateTotalDamage(DamageInfo damageInfo, Unit defender, float physicalDamageDealt)

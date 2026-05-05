@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Battle;
+using TMPro;
 using TooltipSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,11 +13,13 @@ namespace Visual
     {
         [SerializeField] private Image iconImage;
         [SerializeField] private Image borderTimerImage;
+        [SerializeField] private TMP_Text valueText;
+        [SerializeField] private Image valueTextBackground;
 
         public RectTransform RectTransform { get; private set; }
         
         private TooltipUI _tooltipUI;
-        private BaseEffect _effect;
+        private IReadOnlyList<ActiveEffect> _activeEffects = Array.Empty<ActiveEffect>();
 
         private void Awake()
         {
@@ -52,15 +55,31 @@ namespace Visual
             }
         }
 
-        public void SetEffect(BaseEffect effect)
+        public void SetValueText(string text)
         {
-            _effect = effect;
+            bool hasText = !string.IsNullOrWhiteSpace(text);
+            if (valueTextBackground != null)
+            {
+                valueTextBackground.enabled = hasText;
+            }
+
+            if (valueText == null)
+            {
+                return;
+            }
+
+            valueText.text = hasText ? text : string.Empty;
+        }
+
+        public void SetEffects(IReadOnlyList<ActiveEffect> activeEffects)
+        {
+            _activeEffects = activeEffects ?? Array.Empty<ActiveEffect>();
         }
 
         public IReadOnlyList<string> GetTooltipDescriptions()
         {
-            return _effect != null
-                ? _effect.GetTooltipDescriptions()
+            return TryGetPrimaryEffect(out var effect)
+                ? effect.GetTooltipDescriptions()
                 : Array.Empty<string>();
         }
 
@@ -76,7 +95,7 @@ namespace Visual
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (_tooltipUI == null || _effect == null)
+            if (_tooltipUI == null || !TryGetPrimaryEffect(out _))
             {
                 return;
             }
@@ -92,6 +111,18 @@ namespace Visual
             }
 
             _tooltipUI.RequestHideTooltip(this);
+        }
+
+        private bool TryGetPrimaryEffect(out BaseEffect effect)
+        {
+            if (_activeEffects != null && _activeEffects.Count > 0)
+            {
+                effect = _activeEffects[0].Effect;
+                return effect != null;
+            }
+
+            effect = null;
+            return false;
         }
     }
 }

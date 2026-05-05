@@ -138,7 +138,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -20, y: 12.310001}
+  m_AnchoredPosition: {x: -20, y: 13.8}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2829443504071485654
@@ -764,6 +764,7 @@ MonoBehaviour:
   effectController: {fileID: 1375113619294594638}
   baseInnateModifiers: {fileID: 11400000, guid: b6defa9947d3b4448be5e8d11b6147e7, type: 2}
   innateModifiers: {fileID: 0}
+  weaponType: 0
 --- !u!70 &539331122762860407
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using LocalizationSupport;
 using TooltipSystem;
 
@@ -9,6 +10,7 @@ namespace Battle
     {
         public abstract bool IsStackable { get; set; }
         public virtual EffectVisualType VisualType => EffectVisualType.None;
+        public virtual bool CanDisplayMultipleIcons => false;
         public float Duration = -1;
 
         public virtual void OnApply(Unit unit){}
@@ -20,6 +22,61 @@ namespace Battle
         }
         public virtual void Consume(Unit unit){}
         public virtual void OnRemove(Unit unit){}
+
+        public virtual string GetIconDisplayKey()
+        {
+            return GetType().FullName;
+        }
+
+        public virtual string GetIconText(IReadOnlyList<ActiveEffect> activeEffects)
+        {
+            if (activeEffects == null || activeEffects.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            if (activeEffects.Count > 1)
+            {
+                return activeEffects.Count.ToString();
+            }
+
+            ActiveEffect activeEffect = activeEffects[0];
+            if (activeEffect?.Effect != null && activeEffect.Effect.Duration > 0f)
+            {
+                float timeLeft = Math.Max(0f, activeEffect.TimeLeft);
+                return timeLeft.ToString("0.0", CultureInfo.InvariantCulture);
+            }
+
+            return string.Empty;
+        }
+        
+        public virtual float GetIconTimerProgress(IReadOnlyList<ActiveEffect> activeEffects)
+        {
+            if (activeEffects == null || activeEffects.Count == 0)
+            {
+                return 1f;
+            }
+
+            float closestProgress = 1f;
+            bool hasTimedEffect = false;
+            for (int i = 0; i < activeEffects.Count; i++)
+            {
+                ActiveEffect activeEffect = activeEffects[i];
+                if (activeEffect?.Effect == null || activeEffect.Effect.Duration <= 0f)
+                {
+                    continue;
+                }
+
+                float progress = activeEffect.TimeLeft / activeEffect.Effect.Duration;
+                if (!hasTimedEffect || progress < closestProgress)
+                {
+                    closestProgress = progress;
+                    hasTimedEffect = true;
+                }
+            }
+
+            return hasTimedEffect ? closestProgress : 1f;
+        }
 
         public virtual TooltipDescriptionData GetDescription()
         {
@@ -63,6 +120,3 @@ namespace Battle
         }
     }
 }
-
-
-
