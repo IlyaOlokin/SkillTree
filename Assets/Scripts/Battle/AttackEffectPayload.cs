@@ -7,6 +7,7 @@ namespace Battle
     public sealed class AttackEffectPayload
     {
         private readonly HashSet<Type> _guaranteedEffects = new HashSet<Type>();
+        private readonly HashSet<Type> _suppressedEffects = new HashSet<Type>();
         private readonly HashSet<Type> _effectsRedirectedToOwner = new HashSet<Type>();
         private readonly Dictionary<Type, List<ModifierContainer>> _effectModifiers =
             new Dictionary<Type, List<ModifierContainer>>();
@@ -14,6 +15,7 @@ namespace Battle
         public void Reset()
         {
             _guaranteedEffects.Clear();
+            _suppressedEffects.Clear();
             _effectsRedirectedToOwner.Clear();
             _effectModifiers.Clear();
         }
@@ -21,6 +23,11 @@ namespace Battle
         public void Guarantee<T>() where T : BaseEffect
         {
             _guaranteedEffects.Add(typeof(T));
+        }
+
+        public void Suppress<T>() where T : BaseEffect
+        {
+            _suppressedEffects.Add(typeof(T));
         }
 
         public void RedirectToOwner<T>() where T : BaseEffect
@@ -31,6 +38,11 @@ namespace Battle
         public bool IsGuaranteed<T>() where T : BaseEffect
         {
             return IsGuaranteed(typeof(T));
+        }
+
+        public bool IsSuppressed<T>() where T : BaseEffect
+        {
+            return IsSuppressed(typeof(T));
         }
 
         public bool IsRedirectedToOwner<T>() where T : BaseEffect
@@ -83,6 +95,16 @@ namespace Battle
             }
 
             return _guaranteedEffects.Contains(effectType);
+        }
+
+        public bool IsSuppressed(Type effectType)
+        {
+            if (effectType == null)
+            {
+                return false;
+            }
+
+            return _suppressedEffects.Contains(effectType);
         }
 
         public bool IsRedirectedToOwner(Type effectType)

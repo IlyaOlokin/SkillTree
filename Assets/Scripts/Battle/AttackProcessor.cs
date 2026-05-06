@@ -60,6 +60,7 @@ namespace Battle
             
             //Damage
             DamageInstance damageDealt = defender.ReceiveDamage(damageInfo);
+            context.ResolveSuccessfulHitSideEffects();
             LifeSteal.Apply(attackerUnit, damageDealt);
             if (damageInfo.IsCritical)
             {

@@ -15,10 +15,10 @@ MonoBehaviour:
   minLevel: 1
   maxLevel: 0
   allowedRarities: 
-  healthWeight: 0.21676874
-  offenceWeight: 0.26176235
-  defenceWeight: 0.2884689
-  utilityWeight: 0.233
+  healthWeight: 0.21676877
+  offenceWeight: 0.26176238
+  defenceWeight: 0.28846893
+  utilityWeight: 0.23300003
   health:
     maxHealth: 1
   offence:
@@ -62,7 +62,7 @@ MonoBehaviour:
   waveWeight: 1
   powerMultiplier: 0.8
   baseAttackSpeed: 0.13
-  weaponType: 1
+  weaponType: 2
   possibleAffixes:
   - {fileID: 11400000, guid: c2bdd953a1ec2154d927e63e023d1378, type: 2}
   - {fileID: 11400000, guid: a817d26638ef9fe4795561ee24da464a, type: 2}

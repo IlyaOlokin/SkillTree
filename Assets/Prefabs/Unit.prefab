@@ -137,7 +137,7 @@ MonoBehaviour:
   hitEffectController:
     unitVisual: {fileID: 2034453496676864404}
     wobbleTransform: {fileID: 4898353647290124260}
-    flashColor: {r: 1, g: 1, b: 1, a: 1}
+    flashColor: {r: 0.7924528, g: 0.7924528, b: 0.7924528, a: 1}
     flashInDuration: 0.03
     flashOutDuration: 0.06
     wobbleDuration: 0.18
@@ -150,10 +150,17 @@ MonoBehaviour:
     scaleOutDuration: 0.1
     hitEffectPrefab: {fileID: 6806784275801492771, guid: 9500bebcd2beec742a9ff7b81db92c7a, type: 3}
     swordHitEffectPrefab: {fileID: 6806784275801492771, guid: 9500bebcd2beec742a9ff7b81db92c7a, type: 3}
-    staffHitEffectPrefab: {fileID: 6806784275801492771, guid: 9500bebcd2beec742a9ff7b81db92c7a, type: 3}
+    staffHitEffectPrefab: {fileID: 6806784275801492771, guid: 4145653bd5c4dbd42a50a374f279484d, type: 3}
     hammerHitEffectPrefab: {fileID: 6806784275801492771, guid: 887bbeb4abb54154a94c331afcefdc99, type: 3}
     hitEffectLifetimeFallback: 1
     hitEffectDestroyCheckDelay: 0.2
+    physicalDamageFlag: Physical
+    fireDamageFlag: Fire
+    coldDamageFlag: Cold
+    lightningDamageFlag: Lightning
+    lightDamageFlag: Light
+    darknessDamageFlag: Darkness
+    dominantBaseDamageTypeProperty: DominantBaseDamageType
   attackAnimationController:
     attackVisualTransform: {fileID: 4898353647290124260}
     attackMoveDirection: {x: 1, y: 0}

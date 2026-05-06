@@ -62,7 +62,7 @@ MonoBehaviour:
   waveWeight: 1
   powerMultiplier: 0.8
   baseAttackSpeed: 0.13
-  weaponType: 1
+  weaponType: 3
   possibleAffixes:
   - {fileID: 11400000, guid: c2bdd953a1ec2154d927e63e023d1378, type: 2}
   - {fileID: 11400000, guid: a817d26638ef9fe4795561ee24da464a, type: 2}

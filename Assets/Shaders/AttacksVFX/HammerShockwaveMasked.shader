@@ -10,6 +10,11 @@ Shader "SkillTree/VFX/HammerShockwaveMasked"
 
         [HDR]_BottomColor ("Bottom Color", Color) = (0.62, 0.62, 0.62, 1)
         [HDR]_TopColor ("Top Color", Color) = (1, 1, 1, 1)
+        [HDR]_PhysicalColor ("Physical Color", Color) = (1.377358, 1.377358, 1.377358, 1)
+        [HDR]_FireColor ("Fire Color", Color) = (3.207547, 0.3372529, 0, 1)
+        [HDR]_ColdColor ("Cold Color", Color) = (0.2616589, 1.23218, 3.698113, 1)
+        [HDR]_LightningColor ("Lightning Color", Color) = (3.773585, 2.050125, 0.1957992, 1)
+        _DominantBaseDamageType ("Dominant Base Damage Type", Float) = 0
         _Life ("Life 0..1", Range(0, 1)) = 0
 
         _StartRadius ("Start Radius", Range(0.01, 0.8)) = 0.16
@@ -78,6 +83,11 @@ Shader "SkillTree/VFX/HammerShockwaveMasked"
                 float4 _MainTex_ST;
                 half4 _BottomColor;
                 half4 _TopColor;
+                half4 _PhysicalColor;
+                half4 _FireColor;
+                half4 _ColdColor;
+                half4 _LightningColor;
+                float _DominantBaseDamageType;
                 float _Life;
                 float _StartRadius;
                 float _EndRadius;
@@ -139,6 +149,49 @@ Shader "SkillTree/VFX/HammerShockwaveMasked"
                 return Luma(SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, frac(uv)).rgb);
             }
 
+            float3 GetDominantDamageColor(float dominantBaseDamageType)
+            {
+                if (dominantBaseDamageType < 0.5)
+                {
+                    return float3(-1.0, -1.0, -1.0);
+                }
+
+                if (dominantBaseDamageType < 1.5)
+                {
+                    return _PhysicalColor.rgb;
+                }
+
+                if (dominantBaseDamageType < 2.5)
+                {
+                    return _FireColor.rgb;
+                }
+
+                if (dominantBaseDamageType < 3.5)
+                {
+                    return _ColdColor.rgb;
+                }
+
+                return _LightningColor.rgb;
+            }
+
+            void ResolveLayerColors(out float3 bottomLayerColor, out float3 topLayerColor)
+            {
+                float3 dominantDamageColor = GetDominantDamageColor(_DominantBaseDamageType);
+                if (dominantDamageColor.x < 0.0)
+                {
+                    bottomLayerColor = _BottomColor.rgb;
+                    topLayerColor = _TopColor.rgb;
+                    return;
+                }
+
+                float bottomLuma = max(Luma(_BottomColor.rgb), 0.0001);
+                float topLuma = max(Luma(_TopColor.rgb), 0.0001);
+                float maxLayerLuma = max(bottomLuma, topLuma);
+
+                bottomLayerColor = dominantDamageColor * (bottomLuma / maxLayerLuma);
+                topLayerColor = dominantDamageColor * (topLuma / maxLayerLuma);
+            }
+
             float2 BuildLayerUv(
                 float outputRadius,
                 float2 radialDir,
@@ -177,6 +230,10 @@ Shader "SkillTree/VFX/HammerShockwaveMasked"
 
             half4 frag(Varyings input) : SV_Target
             {
+                float3 bottomLayerColor;
+                float3 topLayerColor;
+                ResolveLayerColors(bottomLayerColor, topLayerColor);
+
                 float life = saturate(_Life);
                 float easedLife = EaseOutCubic(life);
                 float lifeAlpha = smoothstep(0.0, 0.06, life) * (1.0 - smoothstep(0.82, 1.0, life));
@@ -260,7 +317,7 @@ Shader "SkillTree/VFX/HammerShockwaveMasked"
                     discard;
                 }
 
-                float3 combinedColor = (_BottomColor.rgb * bottomAlpha + _TopColor.rgb * topAlpha) / max(bottomAlpha + topAlpha, 0.0001);
+                float3 combinedColor = (bottomLayerColor * bottomAlpha + topLayerColor * topAlpha) / max(bottomAlpha + topAlpha, 0.0001);
                 combinedColor *= input.color.rgb;
 
                 return half4(combinedColor, finalAlpha);

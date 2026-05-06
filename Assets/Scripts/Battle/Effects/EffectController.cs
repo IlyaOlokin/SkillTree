@@ -40,13 +40,15 @@ namespace Battle
 
                 e.Effect.OnTick(_owner, deltaTime);
 
+                if (e.Effect.IsReadyToBeRemoved(_owner))
+                {
+                    e.Effect.OnRemove(_owner);
+                    Effects.RemoveAt(i);
+                    continue;
+                }
+
                 if (e.TimeLeft < 0)
                 {
-                    if (Effects[i].Effect.IsReadyToBeRemoved(_owner))
-                    {
-                        e.Effect.OnRemove(_owner);
-                        Effects.RemoveAt(i);
-                    }
                     continue;
                 }
 
@@ -84,6 +86,23 @@ namespace Battle
                 Effects[i].Effect.OnRemove(_owner);
                 Effects.RemoveAt(i);
             }
+        }
+
+        public void RemoveEffect(ActiveEffect activeEffect)
+        {
+            if (activeEffect == null)
+            {
+                return;
+            }
+
+            int index = Effects.IndexOf(activeEffect);
+            if (index < 0)
+            {
+                return;
+            }
+
+            Effects[index].Effect.OnRemove(_owner);
+            Effects.RemoveAt(index);
         }
 
         public void ClearAllEffects()

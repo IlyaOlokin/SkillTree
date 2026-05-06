@@ -1575,6 +1575,10 @@ MonoBehaviour:
     m_Key: modifier.container.none.ExposeMitigation
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311709
+    m_Key: modifier.critDetonatesBleed.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

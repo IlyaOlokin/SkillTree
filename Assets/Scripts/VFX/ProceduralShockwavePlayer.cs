@@ -7,6 +7,7 @@ namespace VFX
     public class ProceduralShockwavePlayer : MonoBehaviour
     {
         private static readonly int LifePropertyId = Shader.PropertyToID("_Life");
+        private static readonly int DominantBaseDamageTypePropertyId = Shader.PropertyToID("_DominantBaseDamageType");
 
         [SerializeField] private Renderer targetRenderer;
         [SerializeField] private float duration = 1f;
@@ -16,6 +17,7 @@ namespace VFX
         private MaterialPropertyBlock _propertyBlock;
         private float _elapsed;
         private bool _isPlaying;
+        private int _dominantBaseDamageType;
 
         public bool IsPlaying => _isPlaying;
 
@@ -33,6 +35,7 @@ namespace VFX
 
             _propertyBlock = new MaterialPropertyBlock();
             SetLife(0f);
+            SetDominantBaseDamageType(_dominantBaseDamageType);
         }
 
         private void OnEnable()
@@ -95,6 +98,20 @@ namespace VFX
         {
             _elapsed = Mathf.Clamp01(life) * Mathf.Max(duration, 0f);
             SetLife(life);
+        }
+
+        public void SetDominantBaseDamageType(int dominantBaseDamageType)
+        {
+            _dominantBaseDamageType = dominantBaseDamageType;
+
+            if (targetRenderer == null)
+            {
+                return;
+            }
+
+            targetRenderer.GetPropertyBlock(_propertyBlock);
+            _propertyBlock.SetInt(DominantBaseDamageTypePropertyId, _dominantBaseDamageType);
+            targetRenderer.SetPropertyBlock(_propertyBlock);
         }
 
         private void SetLife(float life)

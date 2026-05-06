@@ -66,6 +66,7 @@ namespace Battle
 
         public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)
         {
+            if (damageInfo.AttackEffectPayload.IsSuppressed<Sunder>()) return;
             Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Sunder>() ? attacker : defender;
 
             if (damageInfo.AttackEffectPayload.IsGuaranteed<Sunder>())

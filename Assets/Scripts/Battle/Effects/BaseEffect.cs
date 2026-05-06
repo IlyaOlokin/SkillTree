@@ -21,6 +21,10 @@ namespace Battle
             return false;
         }
         public virtual void Consume(Unit unit){}
+        public virtual void Consume(Unit unit, ActiveEffect activeEffect)
+        {
+            Consume(unit);
+        }
         public virtual void OnRemove(Unit unit){}
 
         public virtual string GetIconDisplayKey()

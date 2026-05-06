@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Battle
@@ -5,6 +6,7 @@ namespace Battle
     public sealed class AttackContext
     {
         private readonly List<QueuedEffectConsumption> _effectsToConsume = new List<QueuedEffectConsumption>();
+        private readonly List<Action> _postSuccessfulHitActions = new List<Action>();
 
         public Unit Attacker { get; }
         public ITarget Defender { get; }
@@ -45,10 +47,34 @@ namespace Battle
             for (int i = 0; i < _effectsToConsume.Count; i++)
             {
                 QueuedEffectConsumption queued = _effectsToConsume[i];
-                queued.ActiveEffect.Effect.Consume(queued.Owner);
+                queued.ActiveEffect.Effect.Consume(queued.Owner, queued.ActiveEffect);
+                if (queued.ActiveEffect.Effect.IsReadyToBeRemoved(queued.Owner))
+                {
+                    queued.Owner?.effectController?.RemoveEffect(queued.ActiveEffect);
+                }
             }
 
             _effectsToConsume.Clear();
+        }
+
+        public void QueuePostSuccessfulHitAction(Action action)
+        {
+            if (action == null)
+            {
+                return;
+            }
+
+            _postSuccessfulHitActions.Add(action);
+        }
+
+        public void ResolveSuccessfulHitSideEffects()
+        {
+            for (int i = 0; i < _postSuccessfulHitActions.Count; i++)
+            {
+                _postSuccessfulHitActions[i]?.Invoke();
+            }
+
+            _postSuccessfulHitActions.Clear();
         }
     }
 

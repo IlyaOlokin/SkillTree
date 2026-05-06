@@ -7,7 +7,7 @@ namespace Battle
     {
         private const float BASE_DAMAGE_PERCENTAGE = 0.3f;
         private const float BASE_DURATION = 5f;
-        private readonly float _totalDamage;
+        private float _remainingDamage;
 
         public override bool IsStackable { get; set; } = false;
         public override EffectVisualType VisualType => EffectVisualType.Bleed;
@@ -15,21 +15,47 @@ namespace Battle
 
         private Bleed(DamageInfo damageInfo, Unit defender, float physicalDamageDealt, float duration)
         {
-            _totalDamage = CalculateTotalDamage(damageInfo, defender, physicalDamageDealt);
+            _remainingDamage = CalculateTotalDamage(damageInfo, defender, physicalDamageDealt);
             Duration = duration;
         }
 
         public override void OnTick(Unit unit, float dt)
         {
-            float bleedDamage = _totalDamage * (1 / BASE_DURATION) * dt;
-
-            DamageInstance damage = new DamageInstance();
-            if (!damage.Damage.TryAdd(DamageType.Physical, bleedDamage))
+            if (_remainingDamage <= 0f)
             {
-                damage.Damage[DamageType.Physical] += bleedDamage;
+                return;
             }
 
-            unit.ReceiveDoT(damage);
+            float bleedDamage = _remainingDamage * (1f / Mathf.Max(BASE_DURATION, Mathf.Epsilon)) * dt;
+
+            ApplyBleedDamage(unit, bleedDamage);
+        }
+
+        public override bool IsReadyToBeRemoved(Unit unit)
+        {
+            return _remainingDamage <= 0f;
+        }
+
+        public void TriggerBurst(Unit unit, ActiveEffect activeEffect, float percent)
+        {
+            if (unit == null || activeEffect == null || _remainingDamage <= 0f)
+            {
+                return;
+            }
+
+            float clampedPercent = Mathf.Clamp01(percent);
+            if (clampedPercent <= 0f)
+            {
+                return;
+            }
+
+            float burstDamage = _remainingDamage * clampedPercent;
+            ApplyBleedDamage(unit, burstDamage);
+
+            if (_remainingDamage <= 0f)
+            {
+                activeEffect.TimeLeft = 0f;
+            }
         }
 
         public override string GetIconText(IReadOnlyList<ActiveEffect> activeEffects)
@@ -39,8 +65,7 @@ namespace Battle
                 return string.Empty;
             }
 
-            float remainingDamage = _totalDamage * Mathf.Clamp01(activeEffects[0].TimeLeft / Duration);
-            return Mathf.CeilToInt(remainingDamage).ToString();
+            return Mathf.CeilToInt(_remainingDamage).ToString();
         }
         
         private float CalculateTotalDamage(DamageInfo damageInfo, Unit defender, float physicalDamageDealt)
@@ -53,6 +78,7 @@ namespace Battle
         
         public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)
         {
+            if (damageInfo.AttackEffectPayload.IsSuppressed<Bleed>()) return;
             if (damageInfo.DamageInstance.Damage[DamageType.Physical] <= 0) return;
             Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Bleed>() ? attacker : defender;
 
@@ -68,6 +94,20 @@ namespace Battle
             {
                 effectTarget.effectController.AddEffect(new Bleed(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Physical], BASE_DURATION));
             }
+        }
+
+        private void ApplyBleedDamage(Unit unit, float requestedDamage)
+        {
+            if (requestedDamage <= 0f || _remainingDamage <= 0f)
+            {
+                return;
+            }
+
+            float damageToDeal = Mathf.Min(requestedDamage, _remainingDamage);
+            DamageInstance damage = new DamageInstance();
+            damage.Damage[DamageType.Physical] = damageToDeal;
+            _remainingDamage -= damageToDeal;
+            unit.ReceiveDoT(damage);
         }
 
     }

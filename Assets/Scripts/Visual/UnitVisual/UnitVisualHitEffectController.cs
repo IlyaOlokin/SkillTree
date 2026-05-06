@@ -2,6 +2,8 @@ using Battle;
 using DG.Tweening;
 using System;
 using UnityEngine;
+using UnityEngine.VFX;
+using VFX;
 using Object = UnityEngine.Object;
 
 namespace Visual
@@ -32,12 +34,22 @@ namespace Visual
         [SerializeField] private GameObject hammerHitEffectPrefab;
         [SerializeField] private float hitEffectLifetimeFallback = 1f;
         [SerializeField] private float hitEffectDestroyCheckDelay = 0.2f;
+        [Header("VFX Damage Flags")]
+        [SerializeField] private string physicalDamageFlag = "Physical";
+        [SerializeField] private string fireDamageFlag = "Fire";
+        [SerializeField] private string coldDamageFlag = "Cold";
+        [SerializeField] private string lightningDamageFlag = "Lightning";
+        [SerializeField] private string lightDamageFlag = "Light";
+        [SerializeField] private string darknessDamageFlag = "Darkness";
+        [SerializeField] private string dominantBaseDamageTypeProperty = "DominantBaseDamageType";
 
         private Color _baseColor;
         private Quaternion _baseWobbleLocalRotation;
         private Vector3 _baseScale;
         private bool _isInitialized;
         private bool _isReplacingHitSequence;
+        private VisualEffect[] _spawnedHitEffectsBuffer = Array.Empty<VisualEffect>();
+        private ProceduralShockwavePlayer[] _spawnedShockwavePlayersBuffer = Array.Empty<ProceduralShockwavePlayer>();
 
         private Sequence _hitSequence;
 
@@ -69,11 +81,12 @@ namespace Visual
             }
 
             UnitFlash();
-            HitEffect(damageInfo.Owner != null ? damageInfo.Owner.WeaponType : WeaponType.Unarmed);
+            HitEffect(damageInfo);
         }
 
-        private void HitEffect(WeaponType attackerWeaponType)
+        private void HitEffect(DamageInfo damageInfo)
         {
+            WeaponType attackerWeaponType = damageInfo.Owner != null ? damageInfo.Owner.WeaponType : WeaponType.Unarmed;
             GameObject effectPrefab = GetHitEffectPrefab(attackerWeaponType);
             if (effectPrefab == null || unitVisual == null)
             {
@@ -90,6 +103,7 @@ namespace Visual
                 autoDestroy = hitEffectInstance.AddComponent<AutoDestroyVisualEffect>();
             }
 
+            ApplyDamageTypeFlags(hitEffectInstance, damageInfo);
             autoDestroy.Initialize(hitEffectLifetimeFallback, hitEffectDestroyCheckDelay);
         }
 
@@ -174,6 +188,147 @@ namespace Visual
             }
 
             return false;
+        }
+
+        private void ApplyDamageTypeFlags(GameObject hitEffectInstance, DamageInfo damageInfo)
+        {
+            if (hitEffectInstance == null || damageInfo?.DamageInstance?.Damage == null)
+            {
+                return;
+            }
+
+            _spawnedHitEffectsBuffer = hitEffectInstance.GetComponentsInChildren<VisualEffect>(true);
+            bool physical = false;
+            bool fire = false;
+            bool cold = false;
+            bool lightning = false;
+            bool light = false;
+            bool darkness = false;
+            int dominantBaseDamageType = 0;
+
+            GetDamagePresenceFlags(
+                damageInfo.DamageInstance,
+                ref physical,
+                ref fire,
+                ref cold,
+                ref lightning,
+                ref light,
+                ref darkness);
+            dominantBaseDamageType = GetDominantBaseDamageType(damageInfo.DamageInstance);
+
+            for (int i = 0; i < _spawnedHitEffectsBuffer.Length; i++)
+            {
+                var visualEffect = _spawnedHitEffectsBuffer[i];
+                if (visualEffect == null)
+                {
+                    continue;
+                }
+
+                SetDamageFlag(visualEffect, physicalDamageFlag, physical);
+                SetDamageFlag(visualEffect, fireDamageFlag, fire);
+                SetDamageFlag(visualEffect, coldDamageFlag, cold);
+                SetDamageFlag(visualEffect, lightningDamageFlag, lightning);
+                SetDamageFlag(visualEffect, lightDamageFlag, light);
+                SetDamageFlag(visualEffect, darknessDamageFlag, darkness);
+                SetDamageTypeProperty(visualEffect, dominantBaseDamageTypeProperty, dominantBaseDamageType);
+            }
+
+            _spawnedShockwavePlayersBuffer = hitEffectInstance.GetComponentsInChildren<ProceduralShockwavePlayer>(true);
+            for (int i = 0; i < _spawnedShockwavePlayersBuffer.Length; i++)
+            {
+                var shockwavePlayer = _spawnedShockwavePlayersBuffer[i];
+                if (shockwavePlayer == null)
+                {
+                    continue;
+                }
+
+                shockwavePlayer.SetDominantBaseDamageType(dominantBaseDamageType);
+            }
+        }
+
+        private static void GetDamagePresenceFlags(
+            DamageInstance damageInstance,
+            ref bool physical,
+            ref bool fire,
+            ref bool cold,
+            ref bool lightning,
+            ref bool light,
+            ref bool darkness)
+        {
+            physical = GetDamageValue(damageInstance, DamageType.Physical) > 0f;
+            fire = GetDamageValue(damageInstance, DamageType.Fire) > 0f;
+            cold = GetDamageValue(damageInstance, DamageType.Cold) > 0f;
+            lightning = GetDamageValue(damageInstance, DamageType.Lightning) > 0f;
+            light = GetDamageValue(damageInstance, DamageType.Light) > 0f;
+            darkness = GetDamageValue(damageInstance, DamageType.Darkness) > 0f;
+        }
+
+        private static float GetDamageValue(DamageInstance damageInstance, DamageType damageType)
+        {
+            if (damageInstance?.Damage == null)
+            {
+                return 0f;
+            }
+
+            return damageInstance.Damage.TryGetValue(damageType, out float value) ? value : 0f;
+        }
+
+        private static int GetDominantBaseDamageType(DamageInstance damageInstance)
+        {
+            DamageType dominantDamageType = DamageType.Physical;
+            float dominantDamageValue = GetDamageValue(damageInstance, dominantDamageType);
+
+            UpdateDominantBaseDamageType(damageInstance, DamageType.Fire, ref dominantDamageType, ref dominantDamageValue);
+            UpdateDominantBaseDamageType(damageInstance, DamageType.Cold, ref dominantDamageType, ref dominantDamageValue);
+            UpdateDominantBaseDamageType(damageInstance, DamageType.Lightning, ref dominantDamageType, ref dominantDamageValue);
+
+            if (dominantDamageValue <= 0f)
+            {
+                return 0;
+            }
+
+            return dominantDamageType switch
+            {
+                DamageType.Physical => 1,
+                DamageType.Fire => 2,
+                DamageType.Cold => 3,
+                DamageType.Lightning => 4,
+                _ => 0
+            };
+        }
+
+        private static void UpdateDominantBaseDamageType(
+            DamageInstance damageInstance,
+            DamageType damageType,
+            ref DamageType dominantDamageType,
+            ref float dominantDamageValue)
+        {
+            float damageValue = GetDamageValue(damageInstance, damageType);
+            if (damageValue > dominantDamageValue)
+            {
+                dominantDamageType = damageType;
+                dominantDamageValue = damageValue;
+            }
+        }
+
+        private static void SetDamageFlag(VisualEffect visualEffect, string propertyName, bool value)
+        {
+            if (visualEffect == null || string.IsNullOrWhiteSpace(propertyName) || !visualEffect.HasBool(propertyName))
+            {
+                return;
+            }
+
+            visualEffect.SetBool(propertyName, value);
+        }
+
+        private static void SetDamageTypeProperty(VisualEffect visualEffect, string propertyName, int value)
+        {
+            if (visualEffect == null || string.IsNullOrWhiteSpace(propertyName) || !visualEffect.HasInt(propertyName))
+            {
+                return;
+            }
+
+            visualEffect.SetInt(propertyName, value);
         }
 
         private void ResetWobbleRotation()
