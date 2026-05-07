@@ -74,6 +74,24 @@ namespace Battle
             return result;
         }
 
+        public bool HasEffectOfVisualType(EffectVisualType effectType)
+        {
+            if (effectType == EffectVisualType.None)
+            {
+                return false;
+            }
+
+            foreach (ActiveEffect activeEffect in Effects)
+            {
+                if (activeEffect?.Effect != null && activeEffect.Effect.VisualType == effectType)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void RemoveEffectsOfType<T>()
         {
             for (int i = Effects.Count - 1; i >= 0; i--)

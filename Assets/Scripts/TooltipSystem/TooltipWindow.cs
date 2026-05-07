@@ -182,44 +182,48 @@ public class TooltipWindow : MonoBehaviour
 
     private string WrapText(string text)
     {
-        if (string.IsNullOrWhiteSpace(text) || maxCharactersPerLine <= 0 || text.Length <= maxCharactersPerLine)
+        if (string.IsNullOrWhiteSpace(text) || maxCharactersPerLine <= 0 ||
+            GetVisibleTextLength(text) <= maxCharactersPerLine)
         {
             return text;
         }
 
-        string[] words = text.Split(' ');
         StringBuilder builder = new StringBuilder(text.Length + text.Length / maxCharactersPerLine);
         int currentLineLength = 0;
+        int currentIndex = 0;
 
-        foreach (string word in words)
+        while (TryReadNextWord(text, ref currentIndex, out string word))
         {
-            if (string.IsNullOrEmpty(word))
-            {
-                continue;
-            }
+            int wordVisibleLength = GetVisibleTextLength(word);
 
             if (currentLineLength == 0)
             {
-                currentLineLength = AppendWord(builder, word, currentLineLength);
+                currentLineLength = AppendWord(builder, word, currentLineLength, wordVisibleLength);
                 continue;
             }
 
-            if (currentLineLength + 1 + word.Length > maxCharactersPerLine)
+            if (currentLineLength + 1 + wordVisibleLength > maxCharactersPerLine)
             {
                 builder.AppendLine();
-                currentLineLength = AppendWord(builder, word, 0);
+                currentLineLength = AppendWord(builder, word, 0, wordVisibleLength);
                 continue;
             }
 
             builder.Append(' ');
-            currentLineLength = AppendWord(builder, word, currentLineLength + 1);
+            currentLineLength = AppendWord(builder, word, currentLineLength + 1, wordVisibleLength);
         }
 
         return builder.ToString();
     }
 
-    private int AppendWord(StringBuilder builder, string word, int currentLineLength)
+    private int AppendWord(StringBuilder builder, string word, int currentLineLength, int wordVisibleLength)
     {
+        if (wordVisibleLength <= maxCharactersPerLine || ContainsMarkup(word))
+        {
+            builder.Append(word);
+            return currentLineLength + wordVisibleLength;
+        }
+
         int startIndex = 0;
         while (word.Length - startIndex > maxCharactersPerLine)
         {
@@ -237,5 +241,108 @@ public class TooltipWindow : MonoBehaviour
         int appendedLength = word.Length - startIndex;
         builder.Append(word, startIndex, appendedLength);
         return currentLineLength + appendedLength;
+    }
+
+    private static bool TryReadNextWord(string text, ref int currentIndex, out string word)
+    {
+        while (currentIndex < text.Length && char.IsWhiteSpace(text[currentIndex]))
+        {
+            currentIndex++;
+        }
+
+        int startIndex = currentIndex;
+        while (currentIndex < text.Length)
+        {
+            char currentCharacter = text[currentIndex];
+            if (char.IsWhiteSpace(currentCharacter))
+            {
+                break;
+            }
+
+            if (currentCharacter == '{')
+            {
+                int tokenEndIndex = text.IndexOf('}', currentIndex + 1);
+                if (tokenEndIndex >= 0)
+                {
+                    currentIndex = tokenEndIndex + 1;
+                    continue;
+                }
+            }
+
+            if (currentCharacter == '<')
+            {
+                int tagEndIndex = text.IndexOf('>', currentIndex + 1);
+                if (tagEndIndex >= 0)
+                {
+                    currentIndex = tagEndIndex + 1;
+                    continue;
+                }
+            }
+
+            currentIndex++;
+        }
+
+        word = startIndex < currentIndex
+            ? text.Substring(startIndex, currentIndex - startIndex)
+            : string.Empty;
+
+        return !string.IsNullOrEmpty(word);
+    }
+
+    private static int GetVisibleTextLength(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return 0;
+        }
+
+        int visibleLength = 0;
+        int currentIndex = 0;
+
+        while (currentIndex < text.Length)
+        {
+            char currentCharacter = text[currentIndex];
+            if (currentCharacter == '{')
+            {
+                int tokenEndIndex = text.IndexOf('}', currentIndex + 1);
+                if (tokenEndIndex >= 0)
+                {
+                    string tokenContent = text.Substring(currentIndex + 1, tokenEndIndex - currentIndex - 1);
+                    int separatorIndex = tokenContent.IndexOf('|');
+                    if (separatorIndex >= 0)
+                    {
+                        string linkText = tokenContent.Substring(separatorIndex + 1).Trim();
+                        visibleLength += GetVisibleTextLength(linkText);
+                    }
+                    else
+                    {
+                        visibleLength += tokenEndIndex - currentIndex + 1;
+                    }
+
+                    currentIndex = tokenEndIndex + 1;
+                    continue;
+                }
+            }
+
+            if (currentCharacter == '<')
+            {
+                int tagEndIndex = text.IndexOf('>', currentIndex + 1);
+                if (tagEndIndex >= 0)
+                {
+                    currentIndex = tagEndIndex + 1;
+                    continue;
+                }
+            }
+
+            visibleLength++;
+            currentIndex++;
+        }
+
+        return visibleLength;
+    }
+
+    private static bool ContainsMarkup(string word)
+    {
+        return word.IndexOf('{') >= 0 || word.IndexOf('<') >= 0;
     }
 }

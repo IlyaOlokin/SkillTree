@@ -91,27 +91,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602949
-    m_Localized: '[[0]] to Elemental Damage'
+    m_Localized: '[[0]] to {elemental|Elemental} Damage'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602950
-    m_Localized: '[[0]]% increased Elemental Damage'
+    m_Localized: '[[0]]% increased {elemental|Elemental} Damage'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602951
-    m_Localized: '[[0]]% decreased Elemental Damage'
+    m_Localized: '[[0]]% decreased {elemental|Elemental} Damage'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602952
-    m_Localized: '[[0]]% more Elemental Damage'
+    m_Localized: '[[0]]% more {elemental|Elemental} Damage'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602953
-    m_Localized: '[[0]]% less Elemental Damage'
+    m_Localized: '[[0]]% less {elemental|Elemental} Damage'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602954
-    m_Localized: You have no Elemental Damage
+    m_Localized: You have no {elemental|Elemental} Damage
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602955
@@ -937,27 +937,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991595
-    m_Localized: '[[0]] to Elemental {resistance|Resistance}'
+    m_Localized: '[[0]] to {elemental|Elemental} {resistance|Resistance}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991596
-    m_Localized: '[[0]]% increased Elemental {resistance|Resistance}'
+    m_Localized: '[[0]]% increased {elemental|Elemental} {resistance|Resistance}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991597
-    m_Localized: '[[0]]% decreased Elemental {resistance|Resistance}'
+    m_Localized: '[[0]]% decreased {elemental|Elemental} {resistance|Resistance}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991598
-    m_Localized: '[[0]]% more Elemental {resistance|Resistance}'
+    m_Localized: '[[0]]% more {elemental|Elemental} {resistance|Resistance}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991599
-    m_Localized: '[[0]]% less Elemental {resistance|Resistance}'
+    m_Localized: '[[0]]% less {elemental|Elemental} {resistance|Resistance}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991600
-    m_Localized: You have no Elemental {resistance|Resistance}
+    m_Localized: You have no {elemental|Elemental} {resistance|Resistance}
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991601
@@ -1033,27 +1033,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991619
-    m_Localized: '[[0]] to Max Elemental {resistance|Resistance}'
+    m_Localized: '[[0]] to Max {elemental|Elemental} {resistance|Resistance}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991620
-    m_Localized: '[[0]]% increased Max Elemental {resistance|Resistance}'
+    m_Localized: '[[0]]% increased Max {elemental|Elemental} {resistance|Resistance}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991621
-    m_Localized: '[[0]]% decreased Max Elemental {resistance|Resistance}'
+    m_Localized: '[[0]]% decreased Max {elemental|Elemental} {resistance|Resistance}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991622
-    m_Localized: '[[0]]% more Max Elemental {resistance|Resistance}'
+    m_Localized: '[[0]]% more Max {elemental|Elemental} {resistance|Resistance}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991623
-    m_Localized: '[[0]]% less Max Elemental {resistance|Resistance}'
+    m_Localized: '[[0]]% less Max {elemental|Elemental} {resistance|Resistance}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991624
-    m_Localized: You have no Max Elemental {resistance|Resistance}
+    m_Localized: You have no Max {elemental|Elemental} {resistance|Resistance}
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991625
@@ -1587,7 +1587,66 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311709
-    m_Localized: Crits against targets with {bleed|Bleed} instantly deal all remaining {bleed|Bleed} damage and grant [[0]]% Attack Progress. That hit cannot apply new {bleed|Bleed}.
+    m_Localized: Crits against targets with {bleed|Bleed} instantly deal all remaining
+      {bleed|Bleed} damage and grant [[0]]% Attack Progress. That hit cannot apply
+      new {bleed|Bleed}.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311710
+    m_Localized: '[[0]]% more {evasion|Evasion} per active {barrier|Barrier}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311711
+    m_Localized: '[[0]] Damage to your highest {elemental|Elemental} Damage type
+      if it is higher than the others'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311712
+    m_Localized: '{bleed|Bleed}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311713
+    m_Localized: '{ignite|Ignite}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311714
+    m_Localized: '{chill|Chill}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311715
+    m_Localized: '{overcharge|Overcharge}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311716
+    m_Localized: '{sunder|Sunder}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311717
+    m_Localized: '{distract|Distract}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311718
+    m_Localized: '{barrierSurge|Barrier Surge}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311719
+    m_Localized: '{evasiveMomentum|Evasive Momentum}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311720
+    m_Localized: '{pain|Pain}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311721
+    m_Localized: '{scar|Scar}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311722
+    m_Localized: '{criticalMomentum|Critical Momentum}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311723
+    m_Localized: '{expose|Expose}'
     m_Metadata:
       m_Items: []
   references:

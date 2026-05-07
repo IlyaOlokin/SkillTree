@@ -1579,6 +1579,62 @@ MonoBehaviour:
     m_Key: modifier.critDetonatesBleed.description
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311710
+    m_Key: modifier.moreEvasionPerActiveBarrier.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311711
+    m_Key: modifier.addedDamageToHighestElement.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311712
+    m_Key: effect.Bleed.linkedName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311713
+    m_Key: effect.Ignite.linkedName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311714
+    m_Key: effect.Chill.linkedName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311715
+    m_Key: effect.Overcharge.linkedName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311716
+    m_Key: effect.Sunder.linkedName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311717
+    m_Key: effect.Distract.linkedName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311718
+    m_Key: effect.BarrierRestorationPowerBuff.linkedName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311719
+    m_Key: effect.EvasiveMomentum.linkedName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311720
+    m_Key: effect.Pain.linkedName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311721
+    m_Key: effect.Scar.linkedName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311722
+    m_Key: effect.CriticalMomentum.linkedName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311723
+    m_Key: effect.Expose.linkedName
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
