@@ -72,40 +72,19 @@ namespace SkillTree
 
         public override IReadOnlyList<string> GetTooltipDescriptions()
         {
+            if (HasGem)
+                return socketedGem.GetTooltipDescriptions(ModifierPowerContext.FromNode(this));
+
             List<string> descriptions = GetModifierTooltipDescriptions();
             AppendSocketNodeDescription(descriptions);
 
-            if (!HasGem)
-            {
-                descriptions.Add(GameLocalization.Get("node.socket.empty", "Empty Socket"));
-
-                if (!IsActive)
-                {
-                    descriptions.Add(GameLocalization.Get(
-                        "node.socket.allocateBeforeSocketing",
-                        "Allocate this node before socketing a {gem|Gem}."));
-                }
-
-                AppendInactiveNoEffectDescription(descriptions);
-                return descriptions;
-            }
-
-            descriptions.Add(GameLocalization.Format(
-                "node.socket.socketedGem",
-                "Socketed Gem: [[0]]",
-                socketedGem.DisplayName));
+            descriptions.Add(GameLocalization.Get("node.socket.empty", "Empty Socket"));
 
             if (!IsActive)
             {
                 descriptions.Add(GameLocalization.Get(
-                    "node.socket.inactiveGem",
-                    "Socketed {gem|Gem} is inactive until this node is allocated."));
-            }
-
-            IReadOnlyList<string> gemDescriptions = socketedGem.GetTooltipDescriptions(ModifierPowerContext.FromNode(this));
-            for (int i = 0; i < gemDescriptions.Count; i++)
-            {
-                descriptions.Add(gemDescriptions[i]);
+                    "node.socket.allocateBeforeSocketing",
+                    "Allocate this node before socketing a {gem|Gem}."));
             }
 
             AppendInactiveNoEffectDescription(descriptions);

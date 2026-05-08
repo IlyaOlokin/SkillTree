@@ -117,7 +117,12 @@ namespace SkillTree
             foreach (Node node in EnumerateNodes())
             {
                 if (node.IsAllocated)
+                {
                     saveData.allocatedNodeIds.Add(nodeIds[node]);
+
+                    if (node.IsIndependentlyAllocated)
+                        saveData.independentlyAllocatedNodeIds.Add(nodeIds[node]);
+                }
 
                 if (!Mathf.Approximately(node.PermanentPower, node.DefaultPermanentPower))
                 {
@@ -158,6 +163,7 @@ namespace SkillTree
             Dictionary<Node, string> resolvedNodeIds = BuildResolvedNodeIds();
             Dictionary<string, Node> nodesById = BuildNodeLookup();
             HashSet<string> allocatedNodeIds = saveData?.ToAllocatedNodeSet() ?? new HashSet<string>();
+            HashSet<string> independentlyAllocatedNodeIds = saveData?.ToIndependentlyAllocatedNodeSet() ?? new HashSet<string>();
             Dictionary<string, float> nodePowersById = saveData?.ToNodePowerMap() ?? new Dictionary<string, float>(StringComparer.Ordinal);
 
             foreach (Node node in nodesById.Values)
@@ -169,7 +175,8 @@ namespace SkillTree
                 node.SetPermanentPowerFromSave(nodePowersById.TryGetValue(nodeId, out float permanentPower)
                     ? permanentPower
                     : node.DefaultPermanentPower);
-                node.SetAllocatedFromSave(allocatedNodeIds.Contains(resolvedNodeIds[node]));
+                bool isAllocated = allocatedNodeIds.Contains(resolvedNodeIds[node]);
+                node.SetAllocatedFromSave(isAllocated, isAllocated && independentlyAllocatedNodeIds.Contains(resolvedNodeIds[node]));
             }
 
             if (saveData?.socketedGems != null)

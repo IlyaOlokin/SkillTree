@@ -19,12 +19,14 @@ namespace SkillTree
         [Inject] private UnitLevel _unitLevel;
         [SerializeField] [HideInInspector] private string saveId;
         [SerializeField] [HideInInspector] private bool defaultIsAllocated;
+        [SerializeField] [HideInInspector] private bool independentlyAllocated;
         
         public virtual bool IsAllocated { get; private set; }
         public virtual bool IsActive { get; private set; }
         [SerializeField] private int nodeCost = 1;
         [SerializeField] private float permanentPower;
         [SerializeField] private bool preventPowerChanges;
+        [SerializeField] private bool preventIndependentAllocation;
         [SerializeField] [HideInInspector] private float defaultPermanentPower;
         [SerializeField] private List<Node> connectedNodes = new List<Node>();
         public IReadOnlyList<Node> ConnectedNodes => connectedNodes;
@@ -40,6 +42,8 @@ namespace SkillTree
         public float Power => permanentPower + RuntimePower;
         public float PowerMultiplier => ModifierPowerContext.GetMultiplier(Power);
         public virtual bool CanChangePower => !preventPowerChanges;
+        public bool PreventIndependentAllocation => preventIndependentAllocation;
+        public bool IsIndependentlyAllocated => independentlyAllocated;
 
         public event Action<Node> OnAllocatedChanged;
         public event Action<Node> OnActiveChanged;
@@ -52,6 +56,13 @@ namespace SkillTree
         public bool CanBeAllocated()
         {
             return !IsAllocated && HasRootConnection() && (AdditionalAllocatedCondition == null || AdditionalAllocatedCondition());
+        }
+
+        public bool CanBeIndependentlyAllocated()
+        {
+            return !IsAllocated
+                   && !preventIndependentAllocation
+                   && (AdditionalAllocatedCondition == null || AdditionalAllocatedCondition());
         }
         
         public bool HasEnoughSkillPoints()
@@ -66,7 +77,7 @@ namespace SkillTree
 
         public bool HasActiveRootConnection()
         {
-            return HasRootConnection();
+            return independentlyAllocated || HasRootConnection();
         }
 
 
@@ -77,6 +88,7 @@ namespace SkillTree
                 return;
             
             IsAllocated = true;
+            independentlyAllocated = false;
             SetActiveInternal(AdditionalActivationCondition == null || AdditionalActivationCondition(), false);
             
             OnAllocatedChanged?.Invoke(this);
@@ -84,9 +96,25 @@ namespace SkillTree
             RaiseNodeChanged();
         }
 
+        public bool TryAllocateIndependently()
+        {
+            if (!CanBeIndependentlyAllocated())
+                return false;
+
+            IsAllocated = true;
+            independentlyAllocated = true;
+            SetActiveInternal(AdditionalActivationCondition == null || AdditionalActivationCondition(), false);
+
+            OnAllocatedChanged?.Invoke(this);
+            OnAnyNodeAllocatedChanged?.Invoke(this);
+            RaiseNodeChanged();
+            return true;
+        }
+
         public void Deallocate()
         {
             if (!IsAllocated) return;
+            if (independentlyAllocated) return;
 
             bool wasActive = IsActive;
             IsAllocated = false;
@@ -94,21 +122,14 @@ namespace SkillTree
 
             if (wasActive)
             {
-                bool allowDeallocation = true;
                 foreach (var node in ConnectedNodes)
                 {
-                    if (!node.HasRootConnection() && node.IsActive)
+                    if (!CanActiveComponentStayAllocatedWithoutThisNode(node))
                     {
-                        allowDeallocation = false;
-                        break;
+                        IsAllocated = true;
+                        SetActiveInternal(true, false);
+                        return;
                     }
-                }
-
-                if (!allowDeallocation)
-                {
-                    IsAllocated = true;
-                    SetActiveInternal(true, false);
-                    return;
                 }
             }
 
@@ -176,10 +197,17 @@ namespace SkillTree
 
         public void SetAllocatedFromSave(bool allocated)
         {
+            SetAllocatedFromSave(allocated, false);
+        }
+
+        public void SetAllocatedFromSave(bool allocated, bool allocatedIndependently)
+        {
             bool wasAllocated = IsAllocated;
+            bool wasIndependentlyAllocated = independentlyAllocated;
             IsAllocated = allocated;
+            independentlyAllocated = allocated && allocatedIndependently;
             SetActiveInternal(allocated && (AdditionalActivationCondition == null || AdditionalActivationCondition()), false);
-            if (allocated || wasAllocated != allocated)
+            if (allocated || wasAllocated != allocated || wasIndependentlyAllocated != independentlyAllocated)
             {
                 OnAllocatedChanged?.Invoke(this);
                 OnAnyNodeAllocatedChanged?.Invoke(this);
@@ -284,6 +312,41 @@ namespace SkillTree
                 .Select(t => $"{t.name}[{t.GetSiblingIndex()}]"));
             return $"{gameObject.scene.path}:{hierarchyPath}";
         }
+
+        private bool CanActiveComponentStayAllocatedWithoutThisNode(Node startNode)
+        {
+            if (startNode == null || !startNode.IsActive)
+                return true;
+
+            bool hasRoot = false;
+            bool hasRootDependentNode = false;
+            HashSet<Node> visited = new();
+            Stack<Node> stack = new();
+            stack.Push(startNode);
+
+            while (stack.Count > 0)
+            {
+                Node current = stack.Pop();
+                if (current == null || !current.IsActive || !visited.Add(current))
+                    continue;
+
+                if (current is RootNode)
+                {
+                    hasRoot = true;
+                    continue;
+                }
+
+                if (!current.IsIndependentlyAllocated)
+                    hasRootDependentNode = true;
+
+                foreach (Node next in current.ConnectedNodes)
+                {
+                    if (next != null && next.IsActive)
+                        stack.Push(next);
+                }
+            }
+
+            return hasRoot || !hasRootDependentNode;
+        }
     }
 }
-

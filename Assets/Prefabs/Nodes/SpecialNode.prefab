@@ -52,7 +52,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saveId: 
   defaultIsAllocated: 0
+  independentlyAllocated: 0
   nodeCost: 1
+  permanentPower: 0
+  preventPowerChanges: 1
+  preventIndependentAllocation: 1
+  defaultPermanentPower: 0
   connectedNodes: []
   <Modifiers>k__BackingField: []
 --- !u!58 &4119631117331947586
