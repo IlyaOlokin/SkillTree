@@ -9,6 +9,11 @@ namespace SkillTree
     public class PercentHealthRegeneration : Modifier
     {
         [SerializeField] private float healthRegenerationPercentage;
+
+        public void Initialize(float value)
+        {
+            healthRegenerationPercentage = Mathf.Max(0f, value);
+        }
         
         public override void ApplyEffect(Unit unit)
         {

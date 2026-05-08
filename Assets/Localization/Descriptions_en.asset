@@ -308,6 +308,14 @@ MonoBehaviour:
     m_Localized: Expose lasts 5 seconds
     m_Metadata:
       m_Items: []
+  - m_Id: 7255200857460737
+    m_Localized: Critical Regeneration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7255200857460738
+    m_Localized: Grants 3% of Maximum Health regeneration per second for 5 seconds.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

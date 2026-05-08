@@ -24,43 +24,92 @@ public class PlayerStatsWindow : MonoBehaviour
     [SerializeField] private TMP_Text MysticLabelText;
     [SerializeField] private TMP_Text MysticValueText;
     [SerializeField] private MysticColorsConfig mysticColorsConfig;
+    private bool _isSubscribed;
     
-    void Start()
+    private void Start()
     {
-        _player.OnStatsRecalculated += UpdateTexts;
-        _player.UnitLevel.OnLevelUp += UpdateLevelText;
-        LocalizationSettings.SelectedLocaleChanged += HandleLocaleChanged;
-        UpdateTexts();
-        UpdateLevelText(1);
+        Subscribe();
+        RefreshTexts();
+    }
+
+    private void OnEnable()
+    {
+        Subscribe();
+        RefreshTexts();
     }
 
     private void OnDisable()
     {
-        if (LocalizationSettings.HasSettings)
-        {
-            LocalizationSettings.SelectedLocaleChanged -= HandleLocaleChanged;
-        }
+        Unsubscribe();
     }
 
     private void OnDestroy()
     {
+        Unsubscribe();
+    }
+
+    private void Subscribe()
+    {
+        if (_isSubscribed || _player == null)
+            return;
+
+        _player.OnStatsRecalculated += UpdateTexts;
+        if (_player.UnitLevel != null)
+        {
+            _player.UnitLevel.OnLevelUp += UpdateLevelText;
+        }
+
+        LocalizationSettings.SelectedLocaleChanged += HandleLocaleChanged;
+        _isSubscribed = true;
+    }
+
+    private void Unsubscribe()
+    {
+        if (!_isSubscribed)
+            return;
+
         if (_player != null)
         {
             _player.OnStatsRecalculated -= UpdateTexts;
-            _player.UnitLevel.OnLevelUp -= UpdateLevelText;
+            if (_player.UnitLevel != null)
+            {
+                _player.UnitLevel.OnLevelUp -= UpdateLevelText;
+            }
         }
+
+        if (LocalizationSettings.HasSettings)
+        {
+            LocalizationSettings.SelectedLocaleChanged -= HandleLocaleChanged;
+        }
+
+        _isSubscribed = false;
+    }
+
+    private void RefreshTexts()
+    {
+        if (_player == null || _player.BaseUnitModifiers == null || _player.UnitLevel == null)
+            return;
+
+        _player.RequestModRecalculation();
+        UpdateTexts();
+        UpdateLevelText(_player.UnitLevel.Level);
     }
 
     private void UpdateLevelText(int level)
     {
+        if (_player == null || _player.UnitLevel == null)
+            return;
+
         lvlText.text = GameLocalization.Format(
             "ui.playerStats.level",
             "Level: [[0]]",
             _player.UnitLevel.Level);
     }
    
-    void UpdateTexts()
+    private void UpdateTexts()
     {
+        if (_player == null || _player.BaseUnitModifiers == null)
+            return;
 
         UpdateDamageTexts();
         UpdateMysticTexts();
@@ -167,11 +216,21 @@ public class PlayerStatsWindow : MonoBehaviour
             MysticLabelText.text = GameLocalization.Get("ui.playerStats.mystic", "Mystic");
         }
 
-        MysticValueText.text = FormatStatValue(Mathf.Abs(signedMysticDamage), false);
+        if (MysticValueText != null)
+        {
+            MysticValueText.text = FormatStatValue(Mathf.Abs(signedMysticDamage), false);
+        }
 
         Color textColor = GetMysticColor(signedMysticDamage);
-        MysticLabelText.color = textColor;
-        MysticValueText.color = textColor;
+        if (MysticLabelText != null)
+        {
+            MysticLabelText.color = textColor;
+        }
+
+        if (MysticValueText != null)
+        {
+            MysticValueText.color = textColor;
+        }
     }
 
     private Color GetMysticColor(float signedMysticDamage)
@@ -247,8 +306,7 @@ public class PlayerStatsWindow : MonoBehaviour
 
     private void HandleLocaleChanged(Locale _)
     {
-        UpdateTexts();
-        UpdateLevelText(_player != null ? _player.UnitLevel.Level : 0);
+        RefreshTexts();
     }
 }
 

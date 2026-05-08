@@ -2,11 +2,11 @@ Shader "SkillTree/VFX/HammerShockwaveMasked"
 {
     Properties
     {
-        [PerRendererData] _MainTex ("Sprite", 2D) = "white" {}
+        [NoScaleOffset] [PerRendererData] _MainTex ("Sprite", 2D) = "white" {}
 
-        _BottomMask ("Bottom Mask", 2D) = "white" {}
-        _TopMask ("Top Mask", 2D) = "white" {}
-        _NoiseTex ("Noise", 2D) = "gray" {}
+        [NoScaleOffset] _BottomMask ("Bottom Mask", 2D) = "white" {}
+        [NoScaleOffset] _TopMask ("Top Mask", 2D) = "white" {}
+        [NoScaleOffset] _NoiseTex ("Noise", 2D) = "gray" {}
 
         [HDR]_BottomColor ("Bottom Color", Color) = (0.62, 0.62, 0.62, 1)
         [HDR]_TopColor ("Top Color", Color) = (1, 1, 1, 1)
@@ -80,7 +80,6 @@ Shader "SkillTree/VFX/HammerShockwaveMasked"
             SAMPLER(sampler_NoiseTex);
 
             CBUFFER_START(UnityPerMaterial)
-                float4 _MainTex_ST;
                 half4 _BottomColor;
                 half4 _TopColor;
                 half4 _PhysicalColor;
@@ -223,7 +222,7 @@ Shader "SkillTree/VFX/HammerShockwaveMasked"
             {
                 Varyings output;
                 output.positionHCS = TransformObjectToHClip(input.positionOS.xyz);
-                output.uv = input.uv * _MainTex_ST.xy + _MainTex_ST.zw;
+                output.uv = input.uv;
                 output.color = input.color;
                 return output;
             }

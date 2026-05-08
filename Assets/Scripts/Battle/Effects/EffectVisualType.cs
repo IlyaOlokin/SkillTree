@@ -19,5 +19,6 @@ namespace Battle
         Scar = 14,
         CriticalMomentum = 15,
         Expose = 16,
+        CriticalRegeneration = 17,
     }
 }

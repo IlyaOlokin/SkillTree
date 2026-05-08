@@ -42,7 +42,7 @@ namespace Battle
             if (startInMapMode)
             {
                 enemySpawner.ExitBattle();
-                ApplyMode(FlowMode.Map);
+                _mode = FlowMode.Map;
                 return;
             }
 
@@ -68,6 +68,7 @@ namespace Battle
                 return;
 
             _player.gameObject.SetActive(true);
+            _player.RequestModRecalculation();
             _player.ResetCombatState();
             _battleTickSystem.Resume();
             enemySpawner.EnterBattle();
@@ -81,8 +82,9 @@ namespace Battle
 
             _battleTickSystem.Pause();
             enemySpawner.ExitBattle();
+            _player.gameObject.SetActive(true);
+            _player.RequestModRecalculation();
             _player.ResetCombatState();
-            _player.gameObject.SetActive(false);
             ApplyMode(FlowMode.Map);
         }
 

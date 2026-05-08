@@ -188,6 +188,12 @@ namespace Battle
 
         public void RequestModRecalculation()
         {
+            if (!_isRegisteredInBattleTickSystem || _battleTickSystem == null || _battleTickSystem.IsPaused)
+            {
+                OnModsChanged?.Invoke();
+                return;
+            }
+
             RaiseOnModsChanged();
         }
 

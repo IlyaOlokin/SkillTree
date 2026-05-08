@@ -293,6 +293,14 @@ MonoBehaviour:
     m_Key: description.expose3
     m_Metadata:
       m_Items: []
+  - m_Id: 7255200857460737
+    m_Key: effect.criticalRegeneration.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7255200857460738
+    m_Key: description.criticalRegeneration1
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

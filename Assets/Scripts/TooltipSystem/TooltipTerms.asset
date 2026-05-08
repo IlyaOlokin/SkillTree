@@ -73,3 +73,5 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: da7273edd3d9eed4ab0b35eaf381af45, type: 2}
   - id: expose
     description: {fileID: 11400000, guid: 06bc3437db8838041a00b0ea3cc16dc4, type: 2}
+  - id: criticalRegeneration
+    description: {fileID: 11400000, guid: 5a90ceb52fd203d4998983acc1a21461, type: 2}

@@ -1649,6 +1649,22 @@ MonoBehaviour:
     m_Localized: '{expose|Expose}'
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311724
+    m_Localized: 'On Crit: gain {criticalRegeneration|Critical Regeneration}.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311725
+    m_Localized: '{criticalRegeneration|Critical Regeneration}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311726
+    m_Localized: Adds '[[0]]' per Player Level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311727
+    m_Localized: Applies modifier per Player Level
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
