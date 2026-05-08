@@ -53,26 +53,30 @@ namespace SkillTree
             UpdateTree();
         }
 
-        public List<Modifier> CollectAllModifiers()
+        public List<CollectedModifier> CollectAllModifiers()
         {
-            List<Modifier> modifiers = new List<Modifier>();
+            List<CollectedModifier> modifiers = new List<CollectedModifier>();
 
             foreach (var allocatedNode in _allocatedNodes)
             {
+                ModifierPowerContext powerContext = ModifierPowerContext.FromNode(allocatedNode);
                 foreach (var modifier in allocatedNode.Modifiers)
                 {
-                    modifiers.Add(modifier);
+                    modifiers.Add(new CollectedModifier(modifier, powerContext));
                 }
 
                 if (allocatedNode is SocketNode socketNode)
                 {
-                    modifiers.AddRange(socketNode.GetActiveModifiers());
+                    foreach (Modifier modifier in socketNode.GetActiveModifiers())
+                    {
+                        modifiers.Add(new CollectedModifier(modifier, powerContext));
+                    }
                 }
             }
 
             foreach (var bonusZone in bonusZones)
             {
-                modifiers.Add(bonusZone.CollectModifier());
+                modifiers.Add(CollectedModifier.WithoutPower(bonusZone.CollectModifier()));
             }
             
             return modifiers;
@@ -115,6 +119,15 @@ namespace SkillTree
                 if (node.IsAllocated)
                     saveData.allocatedNodeIds.Add(nodeIds[node]);
 
+                if (!Mathf.Approximately(node.PermanentPower, node.DefaultPermanentPower))
+                {
+                    saveData.nodePowers.Add(new NodePowerSaveData
+                    {
+                        nodeId = nodeIds[node],
+                        permanentPower = node.PermanentPower
+                    });
+                }
+
                 if (node is not SocketNode socketNode || !socketNode.HasGem)
                     continue;
 
@@ -145,12 +158,17 @@ namespace SkillTree
             Dictionary<Node, string> resolvedNodeIds = BuildResolvedNodeIds();
             Dictionary<string, Node> nodesById = BuildNodeLookup();
             HashSet<string> allocatedNodeIds = saveData?.ToAllocatedNodeSet() ?? new HashSet<string>();
+            Dictionary<string, float> nodePowersById = saveData?.ToNodePowerMap() ?? new Dictionary<string, float>(StringComparer.Ordinal);
 
             foreach (Node node in nodesById.Values)
             {
                 if (node is SocketNode socketNode)
                     socketNode.SetSocketedGemFromSave(null);
 
+                string nodeId = resolvedNodeIds[node];
+                node.SetPermanentPowerFromSave(nodePowersById.TryGetValue(nodeId, out float permanentPower)
+                    ? permanentPower
+                    : node.DefaultPermanentPower);
                 node.SetAllocatedFromSave(allocatedNodeIds.Contains(resolvedNodeIds[node]));
             }
 
@@ -221,6 +239,15 @@ namespace SkillTree
             {
                 if (node.DefaultIsAllocated)
                     saveData.allocatedNodeIds.Add(nodeIds[node]);
+
+                if (!Mathf.Approximately(node.DefaultPermanentPower, 0f))
+                {
+                    saveData.nodePowers.Add(new NodePowerSaveData
+                    {
+                        nodeId = nodeIds[node],
+                        permanentPower = node.DefaultPermanentPower
+                    });
+                }
 
                 if (node is SocketNode socketNode && socketNode.DefaultSocketedGem != null)
                 {

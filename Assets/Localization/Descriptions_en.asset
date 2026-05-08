@@ -265,6 +265,10 @@ MonoBehaviour:
     m_Localized: This node is inactive and grants no effects
     m_Metadata:
       m_Items: []
+  - m_Id: 5346512051769346
+    m_Localized: This node's Power cannot be changed
+    m_Metadata:
+      m_Items: []
   - m_Id: 5346512051769347
     m_Localized: Gain percentage of lost Health as Pain.
     m_Metadata:

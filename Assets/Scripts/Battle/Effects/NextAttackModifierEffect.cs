@@ -1,4 +1,5 @@
 using SkillTree;
+using UnityEngine;
 
 namespace Battle
 {
@@ -6,6 +7,7 @@ namespace Battle
     {
         private readonly Unit _owner;
         private readonly Modifier _modifier;
+        private readonly bool _ownsModifier;
         private readonly System.Action<ITarget> _onHitHandler;
         private bool _isUsed;
         private bool _isApplied;
@@ -15,10 +17,11 @@ namespace Battle
         public override EffectVisualType VisualType => EffectVisualType.NextAttackModifierEffect;
         
 
-        public NextAttackModifierEffect(Unit owner, Modifier modifier)
+        public NextAttackModifierEffect(Unit owner, Modifier modifier, bool ownsModifier = false)
         {
             _owner = owner;
             _modifier = modifier;
+            _ownsModifier = ownsModifier;
             _onHitHandler = HandleHit;
             _owner.OnHit += _onHitHandler;
         }
@@ -50,6 +53,11 @@ namespace Battle
             {
                 unit.RemoveOuterModifier(_modifier);
                 _isApplied = false;
+            }
+
+            if (_ownsModifier && _modifier != null)
+            {
+                Object.Destroy(_modifier);
             }
         }
 

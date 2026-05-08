@@ -32,12 +32,28 @@ namespace SkillTree
                 new ModifierContainer(ModifierType.Added, highestElementDamageStat, addedDamage));
         }
 
-        public override string GetDescription()
+        public override void ApplyEffect(Unit unit, ModifierPowerContext powerContext)
+        {
+            if (unit?.BaseUnitModifiers == null)
+            {
+                return;
+            }
+
+            if (!TryGetHighestElementDamageStat(unit.BaseUnitModifiers, out StatType highestElementDamageStat))
+            {
+                return;
+            }
+
+            unit.BaseUnitModifiers.ChangeModifierValue(
+                new ModifierContainer(ModifierType.Added, highestElementDamageStat, powerContext.Scale(addedDamage)));
+        }
+
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             return GameLocalization.FormatModifier(
                 "modifier.addedDamageToHighestElement.description",
                 "[[0]] Damage to your highest Elemental Damage type if it is higher than the others",
-                FormatAddedValue(addedDamage));
+                FormatAddedValue(powerContext.Scale(addedDamage)));
         }
 
         private static bool TryGetHighestElementDamageStat(BaseUnitModifiers sourceModifiers, out StatType statType)

@@ -12,15 +12,22 @@ namespace SkillTree
 
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
         {
+            return CreateRuntimeBinding(unit, ModifierPowerContext.None);
+        }
+
+        public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit, ModifierPowerContext powerContext)
+        {
             EffectController effectController = unit.effectController;
             if (effectController == null)
             {
                 return null;
             }
 
+            float scaledPainConsumedAsScar = powerContext.Scale(painConsumedAsScar);
+
             void HandlePainConsumed(float consumedPain)
             {
-                float scarAmount = Mathf.Max(0f, consumedPain) * painConsumedAsScar;
+                float scarAmount = Mathf.Max(0f, consumedPain) * scaledPainConsumedAsScar;
                 if (scarAmount <= 0f)
                 {
                     return;
@@ -34,12 +41,12 @@ namespace SkillTree
                 () => unit.OnPainConsumed -= HandlePainConsumed);
         }
 
-        public override string GetDescription()
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             return GameLocalization.FormatModifier(
                 "modifier.painConsumedGrantsScar.description",
                 "When {pain|Pain} is consumed, gain {scar|Scar} equal to [[0]]% of consumed {pain|Pain} for [[1]] seconds. {scar|Scar} grants increased {armor|Armor} and {ailmentGuard|Ailment Guard} equal to its percentage of your Maximum Health, but reduces Healing received by the same amount.",
-                painConsumedAsScar * 100f,
+                powerContext.Scale(painConsumedAsScar) * 100f,
                 duration);
         }
     }

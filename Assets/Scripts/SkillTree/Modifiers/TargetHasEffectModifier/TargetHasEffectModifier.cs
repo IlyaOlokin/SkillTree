@@ -26,8 +26,31 @@ namespace SkillTree
             damageInfo.BaseUnitModifiers.ChangeModifierValue(modifierContainer);
         }
 
-        public override string GetDescription()
+        public override void ApplyEffect(DamageInfo damageInfo, ModifierPowerContext powerContext)
         {
+            Unit targetUnit = damageInfo?.Target?.UnitObject;
+            if (targetUnit?.effectController == null || modifierContainer == null)
+            {
+                return;
+            }
+
+            if (!targetUnit.effectController.HasEffectOfVisualType(targetEffect))
+            {
+                return;
+            }
+
+            damageInfo.BaseUnitModifiers.ChangeModifierValue(powerContext.Scale(modifierContainer));
+        }
+
+        public override string GetDescription(ModifierPowerContext powerContext)
+        {
+            if (modifierContainer == null)
+            {
+                return GameLocalization.GetModifier(
+                    "modifier.modifierContainerIfTargetHasEffect.noModifier",
+                    "Applies modifier if target has effect");
+            }
+
             string plainEffectName = GameLocalization.GetContent(
                 $"effect.{targetEffect}.name",
                 GameLocalization.HumanizeIdentifier(targetEffect.ToString()));
@@ -38,7 +61,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.modifierContainerIfTargetHasEffect.description",
                 "[[0]] if target has [[1]]",
-                modifierContainer.GetDescription(),
+                powerContext.Scale(modifierContainer).GetDescription(),
                 effectName);
         }
     }

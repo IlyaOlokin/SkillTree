@@ -31,12 +31,29 @@ namespace SkillTree
             unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer);
         }
 
-        public override string GetDescription()
+        public override void ApplyEffect(Unit unit, ModifierPowerContext powerContext)
         {
+            if (modifierContainer == null)
+            {
+                return;
+            }
+
+            unit.BaseUnitModifiers.ChangeModifierValue(powerContext.Scale(modifierContainer));
+        }
+
+        public override string GetDescription(ModifierPowerContext powerContext)
+        {
+            if (modifierContainer == null)
+            {
+                return GameLocalization.GetModifier(
+                    "modifier.noArmor.noModifier",
+                    "While you have no Armor, applies modifier");
+            }
+
             return GameLocalization.FormatModifier(
                 "modifier.noArmor.withModifier",
                 "While you have no Armor, [[0]]",
-                modifierContainer.GetDescription());
+                powerContext.Scale(modifierContainer).GetDescription());
         }
     }
 }

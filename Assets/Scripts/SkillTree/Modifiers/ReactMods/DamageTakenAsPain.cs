@@ -11,15 +11,22 @@ namespace SkillTree
 
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
         {
+            return CreateRuntimeBinding(unit, ModifierPowerContext.None);
+        }
+
+        public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit, ModifierPowerContext powerContext)
+        {
             EffectController effectController = unit.effectController;
             if (effectController == null)
             {
                 return null;
             }
 
+            float scaledHealthLostAsPain = powerContext.Scale(healthLostAsPain);
+
             void HandleHealthDamageTaken(DamageInfo _, float healthLost)
             {
-                float painAmount = Pain.CalculateGainFromHealthLost(unit, healthLost, healthLostAsPain);
+                float painAmount = Pain.CalculateGainFromHealthLost(unit, healthLost, scaledHealthLostAsPain);
                 if (painAmount <= 0f)
                 {
                     return;
@@ -33,12 +40,12 @@ namespace SkillTree
                 () => unit.OnHealthDamageTaken -= HandleHealthDamageTaken);
         }
 
-        public override string GetDescription()
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             return GameLocalization.FormatModifier(
                 "modifier.damageTakenAsPain.description",
                 "After an attack hit makes you lose Health, gain {pain|Pain} equal to [[0]]% of that lost Health. Damage over Time does not grant {pain|Pain}.",
-                healthLostAsPain * 100f);
+                powerContext.Scale(healthLostAsPain) * 100f);
         }
     }
 }

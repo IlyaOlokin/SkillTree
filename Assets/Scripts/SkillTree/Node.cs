@@ -14,6 +14,7 @@ namespace SkillTree
     { 
         private const string TooltipTitleLocalizationKey = "node.title.default";
         private const string InactiveNoEffectLocalizationKey = "node.inactiveNoEffect";
+        private const string PowerChangeForbiddenLocalizationKey = "node.powerChangeForbidden";
 
         [Inject] private UnitLevel _unitLevel;
         [SerializeField] [HideInInspector] private string saveId;
@@ -22,6 +23,9 @@ namespace SkillTree
         public virtual bool IsAllocated { get; private set; }
         public virtual bool IsActive { get; private set; }
         [SerializeField] private int nodeCost = 1;
+        [SerializeField] private float permanentPower;
+        [SerializeField] private bool preventPowerChanges;
+        [SerializeField] [HideInInspector] private float defaultPermanentPower;
         [SerializeField] private List<Node> connectedNodes = new List<Node>();
         public IReadOnlyList<Node> ConnectedNodes => connectedNodes;
 
@@ -30,6 +34,12 @@ namespace SkillTree
         public string ExplicitSaveId => saveId;
         public string FallbackSaveId => BuildFallbackSaveId();
         public bool DefaultIsAllocated => defaultIsAllocated;
+        public float PermanentPower => permanentPower;
+        public float DefaultPermanentPower => defaultPermanentPower;
+        public float RuntimePower { get; private set; }
+        public float Power => permanentPower + RuntimePower;
+        public float PowerMultiplier => ModifierPowerContext.GetMultiplier(Power);
+        public virtual bool CanChangePower => !preventPowerChanges;
 
         public event Action<Node> OnAllocatedChanged;
         public event Action<Node> OnActiveChanged;
@@ -112,6 +122,7 @@ namespace SkillTree
         public virtual IReadOnlyList<string> GetTooltipDescriptions()
         {
             List<string> descriptions = GetModifierTooltipDescriptions();
+            AppendPowerChangeForbiddenDescription(descriptions);
             AppendInactiveNoEffectDescription(descriptions);
             return descriptions;
         }
@@ -134,9 +145,10 @@ namespace SkillTree
         protected List<string> GetModifierTooltipDescriptions()
         {
             List<string> descriptions = new List<string>(Modifiers.Count);
+            ModifierPowerContext powerContext = ModifierPowerContext.FromNode(this);
             foreach (var modifier in Modifiers)
             {
-                descriptions.Add(modifier.GetDescription());
+                descriptions.Add(modifier.GetDescription(powerContext));
             }
 
             return descriptions;
@@ -150,6 +162,16 @@ namespace SkillTree
             descriptions.Add(GameLocalization.Get(
                 InactiveNoEffectLocalizationKey,
                 "This node is inactive and grants no effects"));
+        }
+
+        protected void AppendPowerChangeForbiddenDescription(List<string> descriptions)
+        {
+            if (CanChangePower)
+                return;
+
+            descriptions.Add(GameLocalization.Get(
+                PowerChangeForbiddenLocalizationKey,
+                "This node's Power cannot be changed"));
         }
 
         public void SetAllocatedFromSave(bool allocated)
@@ -187,9 +209,57 @@ namespace SkillTree
             saveId = Guid.NewGuid().ToString("N");
         }
 
+        public void IncreasePermanentPower(float amount)
+        {
+            SetPermanentPower(permanentPower + amount);
+        }
+
+        public void SetPermanentPower(float value)
+        {
+            if (!CanChangePower)
+                return;
+
+            if (Mathf.Approximately(permanentPower, value))
+                return;
+
+            permanentPower = value;
+            RaiseNodeChanged();
+        }
+
+        public void SetPermanentPowerFromSave(float value)
+        {
+            permanentPower = value;
+            RuntimePower = 0f;
+        }
+
+        public void ChangeRuntimePower(float delta)
+        {
+            if (!CanChangePower)
+                return;
+
+            if (Mathf.Approximately(delta, 0f))
+                return;
+
+            RuntimePower += delta;
+            RaiseNodeChanged();
+        }
+
+        public void SetRuntimePower(float value)
+        {
+            if (!CanChangePower)
+                return;
+
+            if (Mathf.Approximately(RuntimePower, value))
+                return;
+
+            RuntimePower = value;
+            RaiseNodeChanged();
+        }
+
         protected virtual void OnValidate()
         {
             defaultIsAllocated = IsAllocated;
+            defaultPermanentPower = permanentPower;
         }
 
         private void SetActiveInternal(bool active, bool notify)

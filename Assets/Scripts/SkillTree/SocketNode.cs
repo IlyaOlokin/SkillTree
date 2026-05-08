@@ -24,6 +24,7 @@ namespace SkillTree
         public GemInstance DefaultSocketedGem => defaultSocketedGem;
         public bool HasGem => IsValidGem(socketedGem);
         public bool IsGemActive => IsActive && HasGem;
+        public override bool CanChangePower => false;
 
         private void Awake()
         {
@@ -101,7 +102,7 @@ namespace SkillTree
                     "Socketed {gem|Gem} is inactive until this node is allocated."));
             }
 
-            IReadOnlyList<string> gemDescriptions = socketedGem.GetTooltipDescriptions();
+            IReadOnlyList<string> gemDescriptions = socketedGem.GetTooltipDescriptions(ModifierPowerContext.FromNode(this));
             for (int i = 0; i < gemDescriptions.Count; i++)
             {
                 descriptions.Add(gemDescriptions[i]);
@@ -146,7 +147,7 @@ namespace SkillTree
         {
             for (int i = _runtimeGemModifiers.Count - 1; i >= 0; i--)
             {
-                ModifierRollUtility.DestroyModifier(_runtimeGemModifiers[i]);
+                GemModifierUtility.DestroyRuntimeModifier(_runtimeGemModifiers[i]);
             }
 
             _runtimeGemModifiers.Clear();

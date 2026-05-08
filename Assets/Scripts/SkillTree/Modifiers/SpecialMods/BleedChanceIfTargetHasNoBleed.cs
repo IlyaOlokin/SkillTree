@@ -26,12 +26,29 @@ namespace SkillTree
                 new ModifierContainer(ModifierType.Added, StatType.BleedChance, addedBleedChance));
         }
 
-        public override string GetDescription()
+        public override void ApplyEffect(DamageInfo damageInfo, ModifierPowerContext powerContext)
+        {
+            Unit targetUnit = damageInfo.Target?.UnitObject;
+            if (targetUnit?.effectController == null)
+            {
+                return;
+            }
+
+            if (targetUnit.effectController.GetAllEffectsOfType<Bleed>().Count > 0)
+            {
+                return;
+            }
+
+            damageInfo.BaseUnitModifiers.ChangeModifierValue(
+                new ModifierContainer(ModifierType.Added, StatType.BleedChance, powerContext.Scale(addedBleedChance)));
+        }
+
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             return GameLocalization.FormatModifier(
                 "modifier.bleedChanceIfTargetHasNoBleed.description",
                 "+[[0]]% {bleed|Bleed} Chance if target has no {bleed|Bleed}",
-                addedBleedChance * 100f);
+                powerContext.Scale(addedBleedChance) * 100f);
         }
     }
 }

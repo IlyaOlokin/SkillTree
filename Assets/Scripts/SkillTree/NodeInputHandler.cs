@@ -10,6 +10,7 @@ namespace SkillTree
     public class NodeInputHandler : MonoBehaviour
     {
         [Inject] private GemPlacementService _gemPlacementService;
+        [Inject] private NodeItemUseService _nodeItemUseService;
         [Inject] private TooltipUI _tooltipUI;
         private Node _node;
         private SkillTreeFogOfWarController _fogOfWarController;
@@ -29,6 +30,15 @@ namespace SkillTree
 
             if (Input.GetMouseButtonDown(0))
             {
+                if (_gemPlacementService != null
+                    && _gemPlacementService.SelectionState.HasSelectedNodeItem)
+                {
+                    if (_nodeItemUseService != null && _nodeItemUseService.TryUseSelectedItemOnNode(_node))
+                        _tooltipUI?.RefreshCurrentTooltip();
+
+                    return;
+                }
+
                 if (_node is SocketNode socketNode
                     && socketNode.IsActive
                     && _gemPlacementService != null
@@ -45,17 +55,17 @@ namespace SkillTree
             }
             else if (Input.GetMouseButtonDown(1))
             {
-                if (_gemPlacementService != null && _gemPlacementService.SelectionState.HasSelectedGem)
+                if (_node is SocketNode socketNode && socketNode.HasGem && _gemPlacementService != null)
                 {
-                    _gemPlacementService.ClearSelection();
+                    if (_gemPlacementService.TryExtractGemAndSelect(socketNode))
+                        _tooltipUI?.RefreshCurrentTooltip();
+
                     return;
                 }
 
-                if (_node is SocketNode socketNode && socketNode.HasGem && _gemPlacementService != null)
+                if (_gemPlacementService != null && _gemPlacementService.SelectionState.HasSelectedItem)
                 {
-                    if (_gemPlacementService.TryExtractGem(socketNode))
-                        _tooltipUI?.RefreshCurrentTooltip();
-
+                    _gemPlacementService.ClearSelection();
                     return;
                 }
 

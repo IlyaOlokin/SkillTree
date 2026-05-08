@@ -37,7 +37,12 @@ namespace SkillTree
             unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer);
         }
 
-        public override string GetDescription()
+        public override void ApplyEffect(Unit unit, ModifierPowerContext powerContext)
+        {
+            unit.BaseUnitModifiers.ChangeModifierValue(powerContext.Scale(modifierContainer));
+        }
+
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             if (modifierContainer == null)
             {
@@ -49,7 +54,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.fullLife.withModifier",
                 "While on Full Life, [[0]]",
-                modifierContainer.GetDescription());
+                powerContext.Scale(modifierContainer).GetDescription());
         }
     }
 }

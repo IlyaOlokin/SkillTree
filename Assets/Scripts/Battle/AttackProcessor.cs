@@ -75,9 +75,9 @@ namespace Battle
             AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics
         }
 
-        private static void RunModifiers(List<Modifier> mods, ModifierPriority priority, Unit owner, AttackContext context)
+        private static void RunModifiers(List<CollectedModifier> mods, ModifierPriority priority, Unit owner, AttackContext context)
         {
-            foreach (Modifier mod in mods)
+            foreach (CollectedModifier mod in mods)
             {
                 if (mod.IsInPriority(priority) && mod.IsApplicable(owner))
                 {

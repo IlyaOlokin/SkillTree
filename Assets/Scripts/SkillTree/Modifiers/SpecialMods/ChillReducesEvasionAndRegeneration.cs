@@ -32,11 +32,30 @@ namespace SkillTree
                     HealthRegenerationReduction));
         }
 
-        public override string GetDescription()
+        public override void ApplyEffect(AttackContext context, ModifierPowerContext powerContext)
         {
-            return GameLocalization.GetModifier(
-                "modifier.chillReducesEvasionAndRegeneration.description",
-                "{chill|Chill} also applies 20% decreased {evasion|Evasion} and 50% decreased Health Regeneration");
+            AttackEffectPayload payload = context?.DamageInfo?.AttackEffectPayload;
+            if (payload == null)
+            {
+                return;
+            }
+
+            payload.AddEffectModifier<Chill>(
+                new ModifierContainer(ModifierType.Increased, StatType.Evasion, powerContext.Scale(EvasionReduction)));
+            payload.AddEffectModifier<Chill>(
+                new ModifierContainer(
+                    ModifierType.Increased,
+                    StatType.HealthRegenerationPerSecond,
+                    powerContext.Scale(HealthRegenerationReduction)));
+        }
+
+        public override string GetDescription(ModifierPowerContext powerContext)
+        {
+            return GameLocalization.FormatModifier(
+                "modifier.chillReducesEvasionAndRegeneration.poweredDescription",
+                "{chill|Chill} also applies [[0]]% decreased {evasion|Evasion} and [[1]]% decreased Health Regeneration",
+                Mathf.Abs(powerContext.Scale(EvasionReduction) * 100f),
+                Mathf.Abs(powerContext.Scale(HealthRegenerationReduction) * 100f));
         }
     }
 }

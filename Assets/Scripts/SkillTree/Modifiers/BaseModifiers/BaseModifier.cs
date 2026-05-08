@@ -14,15 +14,25 @@ namespace SkillTree
         {
             unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer);
         }
+
+        public override void ApplyEffect(Unit unit, ModifierPowerContext powerContext)
+        {
+            unit.BaseUnitModifiers.ChangeModifierValue(powerContext.Scale(modifierContainer));
+        }
         
         public override void ApplyEffect(DamageInfo damageInfo)
         {
             damageInfo.BaseUnitModifiers.ChangeModifierValue(modifierContainer);
         }
 
-        public override string GetDescription()
+        public override void ApplyEffect(DamageInfo damageInfo, ModifierPowerContext powerContext)
         {
-            return modifierContainer.GetDescription();
+            damageInfo.BaseUnitModifiers.ChangeModifierValue(powerContext.Scale(modifierContainer));
+        }
+
+        public override string GetDescription(ModifierPowerContext powerContext)
+        {
+            return powerContext.Scale(modifierContainer).GetDescription();
         }
         
     }

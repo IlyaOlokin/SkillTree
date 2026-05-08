@@ -11,15 +11,22 @@ namespace SkillTree
 
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
         {
+            return CreateRuntimeBinding(unit, ModifierPowerContext.None);
+        }
+
+        public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit, ModifierPowerContext powerContext)
+        {
             Attacker owner = unit.attacker;
             if (!owner)
             {
                 return null;
             }
 
+            float scaledAttackProgressGain = powerContext.Scale(attackProgressGain);
+
             void HandleGettingHit(DamageInfo _)
             {
-                owner.ModifyAttackProgress(attackProgressGain);
+                owner.ModifyAttackProgress(scaledAttackProgressGain);
             }
 
             return new DelegateModifierRuntimeBinding(
@@ -27,12 +34,12 @@ namespace SkillTree
                 () => unit.OnGettingHit -= HandleGettingHit);
         }
 
-        public override string GetDescription()
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             return GameLocalization.FormatModifier(
                 "modifier.gainAttackProgressOnHit.description",
                 "On Getting Hit: gain [[0]]% Attack Progress",
-                attackProgressGain * 100f);
+                powerContext.Scale(attackProgressGain) * 100f);
         }
     }
 }

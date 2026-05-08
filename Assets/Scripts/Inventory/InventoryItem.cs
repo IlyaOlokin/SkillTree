@@ -21,6 +21,7 @@ namespace InventorySystem
         public int MaxStack => itemType == InventoryItemType.Generic && itemDefinition != null ? itemDefinition.MaxStack : 1;
         public bool IsStackable => itemType == InventoryItemType.Generic && itemDefinition != null && MaxStack > 1;
         public bool CanBeUsed => itemType == InventoryItemType.Generic && itemDefinition != null && itemDefinition.CanBeUsed;
+        public bool CanBeUsedOnNode => itemType == InventoryItemType.Generic && itemDefinition != null && itemDefinition.CanBeUsedOnNode;
         public bool ConsumeOnUse => itemType == InventoryItemType.Generic && itemDefinition != null && itemDefinition.ConsumeOnUse;
         public bool IsEmpty => itemType switch
         {

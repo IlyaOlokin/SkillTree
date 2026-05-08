@@ -56,7 +56,23 @@ namespace SkillTree
             unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer * playerLevel);
         }
 
-        public override string GetDescription()
+        public override void ApplyEffect(Unit unit, ModifierPowerContext powerContext)
+        {
+            if (modifierContainer == null)
+            {
+                return;
+            }
+
+            int playerLevel = GetPlayerLevel(unit);
+            if (playerLevel <= 0)
+            {
+                return;
+            }
+
+            unit.BaseUnitModifiers.ChangeModifierValue(powerContext.Scale(modifierContainer) * playerLevel);
+        }
+
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             if (modifierContainer == null)
             {
@@ -68,7 +84,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.modifierPerPlayerLevel.withModifier",
                 "Adds '[[0]]' per Player Level",
-                modifierContainer.GetDescription());
+                powerContext.Scale(modifierContainer).GetDescription());
         }
 
         private static int GetPlayerLevel(Unit unit)

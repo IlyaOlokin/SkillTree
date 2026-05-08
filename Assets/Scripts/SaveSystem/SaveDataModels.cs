@@ -61,6 +61,7 @@ namespace SaveSystem
         public List<string> allocatedNodeIds = new();
         public List<string> discoveredFogNodeIds = new();
         public List<SocketedGemSaveData> socketedGems = new();
+        public List<NodePowerSaveData> nodePowers = new();
 
         public HashSet<string> ToAllocatedNodeSet()
         {
@@ -68,6 +69,31 @@ namespace SaveSystem
                 ? new HashSet<string>(allocatedNodeIds, StringComparer.Ordinal)
                 : new HashSet<string>(StringComparer.Ordinal);
         }
+
+        public Dictionary<string, float> ToNodePowerMap()
+        {
+            Dictionary<string, float> powers = new(StringComparer.Ordinal);
+            if (nodePowers == null)
+                return powers;
+
+            for (int i = 0; i < nodePowers.Count; i++)
+            {
+                NodePowerSaveData nodePower = nodePowers[i];
+                if (nodePower == null || string.IsNullOrWhiteSpace(nodePower.nodeId))
+                    continue;
+
+                powers[nodePower.nodeId] = nodePower.permanentPower;
+            }
+
+            return powers;
+        }
+    }
+
+    [Serializable]
+    public class NodePowerSaveData
+    {
+        public string nodeId;
+        public float permanentPower;
     }
 
     [Serializable]
@@ -132,7 +158,6 @@ namespace SaveSystem
     {
         public string instanceId;
         public string definitionId;
-        public List<float> rolledValues = new();
     }
 
     [Serializable]

@@ -32,7 +32,12 @@ namespace SkillTree
             }
         }
 
-        public override string GetDescription()
+        public override void ApplyEffect(AttackContext context, ModifierPowerContext powerContext)
+        {
+            ApplyEffect(context);
+        }
+
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             return GameLocalization.GetModifier(
                 "modifier.consumeSelfOverchargeOnAttack.description",

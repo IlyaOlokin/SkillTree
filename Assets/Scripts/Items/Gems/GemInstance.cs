@@ -12,7 +12,6 @@ namespace Gems
     {
         [SerializeField] private string instanceId;
         [SerializeField] private GemDefinition definition;
-        [SerializeField] private List<float> rolledValues = new();
 
         public string InstanceId => instanceId;
         public GemDefinition Definition => definition;
@@ -22,7 +21,6 @@ namespace Gems
         public string Description => definition != null ? definition.Description : string.Empty;
         public Sprite Icon => definition != null ? definition.Icon : null;
         public GemKind Kind => definition != null ? definition.Kind : GemKind.LocalModifiers;
-        public IReadOnlyList<float> RolledValues => rolledValues;
 
         public static GemInstance Create(GemDefinition definition)
         {
@@ -31,34 +29,13 @@ namespace Gems
             return instance;
         }
 
-        public static GemInstance Restore(GemDefinition definition, string savedInstanceId, IReadOnlyList<float> savedRolledValues)
+        public static GemInstance Restore(GemDefinition definition, string savedInstanceId)
         {
-            GemInstance instance = new GemInstance
+            return new GemInstance
             {
                 definition = definition,
-                instanceId = string.IsNullOrWhiteSpace(savedInstanceId) ? Guid.NewGuid().ToString("N") : savedInstanceId,
-                rolledValues = savedRolledValues != null ? new List<float>(savedRolledValues) : new List<float>()
+                instanceId = string.IsNullOrWhiteSpace(savedInstanceId) ? Guid.NewGuid().ToString("N") : savedInstanceId
             };
-
-            instance.EnsureRollCount();
-            return instance;
-        }
-
-        public void Reroll()
-        {
-            if (definition == null)
-            {
-                rolledValues.Clear();
-                return;
-            }
-
-            rolledValues.Clear();
-            IReadOnlyList<GemModifierRollDefinition> rollDefinitions = definition.ModifierRollDefinitions;
-            for (int i = 0; i < rollDefinitions.Count; i++)
-            {
-                GemModifierRollDefinition rollDefinition = rollDefinitions[i];
-                rolledValues.Add(rollDefinition != null ? rollDefinition.RollValue() : 0f);
-            }
         }
 
         public List<Modifier> CreateRuntimeModifiers()
@@ -67,23 +44,25 @@ namespace Gems
             if (definition == null)
                 return modifiers;
 
-            EnsureRollCount();
-            IReadOnlyList<GemModifierRollDefinition> rollDefinitions = definition.ModifierRollDefinitions;
-            for (int i = 0; i < rollDefinitions.Count; i++)
+            IReadOnlyList<Modifier> modifierTemplates = definition.ModifierTemplates;
+            for (int i = 0; i < modifierTemplates.Count; i++)
             {
-                GemModifierRollDefinition rollDefinition = rollDefinitions[i];
-                if (rollDefinition == null)
+                Modifier modifier = GemModifierUtility.CreateRuntimeModifier(modifierTemplates[i]);
+                if (modifier == null)
                     continue;
 
-                Modifier modifier = rollDefinition.CreateRolledModifier(rolledValues[i]);
-                if (modifier != null)
-                    modifiers.Add(modifier);
+                modifiers.Add(modifier);
             }
 
             return modifiers;
         }
 
         public IReadOnlyList<string> GetTooltipDescriptions()
+        {
+            return GetTooltipDescriptions(ModifierPowerContext.None);
+        }
+
+        public IReadOnlyList<string> GetTooltipDescriptions(ModifierPowerContext powerContext)
         {
             List<string> descriptions = new();
 
@@ -93,15 +72,14 @@ namespace Gems
             if (definition == null)
                 return descriptions;
 
-            EnsureRollCount();
-            IReadOnlyList<GemModifierRollDefinition> rollDefinitions = definition.ModifierRollDefinitions;
-            for (int i = 0; i < rollDefinitions.Count; i++)
+            IReadOnlyList<Modifier> modifierTemplates = definition.ModifierTemplates;
+            for (int i = 0; i < modifierTemplates.Count; i++)
             {
-                GemModifierRollDefinition rollDefinition = rollDefinitions[i];
-                if (rollDefinition == null)
+                Modifier modifier = modifierTemplates[i];
+                if (modifier == null)
                     continue;
 
-                string description = rollDefinition.CreateRolledDescription(rolledValues[i]);
+                string description = modifier.GetDescription(powerContext);
                 if (!string.IsNullOrWhiteSpace(description))
                     descriptions.Add(description);
             }
@@ -113,26 +91,6 @@ namespace Gems
         {
             definition = gemDefinition;
             instanceId = Guid.NewGuid().ToString("N");
-            Reroll();
-        }
-
-        private void EnsureRollCount()
-        {
-            if (definition == null)
-            {
-                rolledValues.Clear();
-                return;
-            }
-
-            IReadOnlyList<GemModifierRollDefinition> rollDefinitions = definition.ModifierRollDefinitions;
-            while (rolledValues.Count < rollDefinitions.Count)
-            {
-                GemModifierRollDefinition rollDefinition = rollDefinitions[rolledValues.Count];
-                rolledValues.Add(rollDefinition != null ? rollDefinition.RollValue() : 0f);
-            }
-
-            if (rolledValues.Count > rollDefinitions.Count)
-                rolledValues.RemoveRange(rollDefinitions.Count, rolledValues.Count - rollDefinitions.Count);
         }
 
         public GemInstanceSaveData CaptureSaveData()
@@ -140,8 +98,7 @@ namespace Gems
             return new GemInstanceSaveData
             {
                 instanceId = instanceId,
-                definitionId = definition != null ? definition.SaveDefinitionId : string.Empty,
-                rolledValues = new List<float>(rolledValues)
+                definitionId = definition != null ? definition.SaveDefinitionId : string.Empty
             };
         }
     }

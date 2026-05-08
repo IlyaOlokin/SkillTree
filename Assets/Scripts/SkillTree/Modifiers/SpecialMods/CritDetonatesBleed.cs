@@ -11,6 +11,16 @@ namespace SkillTree
 
         public override void ApplyEffect(AttackContext context)
         {
+            ApplyEffect(context, attackProgressGain);
+        }
+
+        public override void ApplyEffect(AttackContext context, ModifierPowerContext powerContext)
+        {
+            ApplyEffect(context, powerContext.Scale(attackProgressGain));
+        }
+
+        private void ApplyEffect(AttackContext context, float poweredAttackProgressGain)
+        {
             if (context?.DamageInfo == null || !context.DamageInfo.IsCritical)
             {
                 return;
@@ -39,7 +49,7 @@ namespace SkillTree
                 var currentBleedEffects = targetUnit.effectController.GetAllEffectsOfType<Bleed>();
                 
                 if (currentBleedEffects.Count > 0)
-                    context.Attacker?.attacker?.ModifyAttackProgress(attackProgressGain);
+                    context.Attacker?.attacker?.ModifyAttackProgress(poweredAttackProgressGain);
                 
                 for (int i = 0; i < currentBleedEffects.Count; i++)
                 {
@@ -51,12 +61,12 @@ namespace SkillTree
             });
         }
 
-        public override string GetDescription()
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             return GameLocalization.FormatModifier(
                 "modifier.critDetonatesBleed.description",
                 "Crits against targets with {bleed|Bleed} instantly deal all remaining {bleed|Bleed} damage and grant [[0]]% Attack Progress. That hit cannot apply new {bleed|Bleed}.",
-                attackProgressGain * 100f);
+                powerContext.Scale(attackProgressGain) * 100f);
         }
     }
 }

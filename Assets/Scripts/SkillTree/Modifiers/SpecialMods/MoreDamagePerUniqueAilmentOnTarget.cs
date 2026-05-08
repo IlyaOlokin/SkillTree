@@ -27,12 +27,30 @@ namespace SkillTree
                 new ModifierContainer(ModifierType.More, StatType.Damage, moreDamagePerAilment * uniqueAilmentCount));
         }
 
-        public override string GetDescription()
+        public override void ApplyEffect(DamageInfo damageInfo, ModifierPowerContext powerContext)
+        {
+            Unit targetUnit = damageInfo?.Target?.UnitObject;
+            if (targetUnit?.effectController == null)
+            {
+                return;
+            }
+
+            int uniqueAilmentCount = CountUniqueAilments(targetUnit.effectController);
+            if (uniqueAilmentCount <= 0)
+            {
+                return;
+            }
+
+            damageInfo.BaseUnitModifiers.ChangeModifierValue(
+                new ModifierContainer(ModifierType.More, StatType.Damage, powerContext.Scale(moreDamagePerAilment) * uniqueAilmentCount));
+        }
+
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             return GameLocalization.FormatModifier(
                 "modifier.moreDamagePerUniqueAilmentOnTarget.description",
                 "[[0]]% more Damage per unique {ailment|Ailment} on target",
-                moreDamagePerAilment * 100f);
+                powerContext.Scale(moreDamagePerAilment) * 100f);
         }
 
         private static int CountUniqueAilments(EffectController effectController)

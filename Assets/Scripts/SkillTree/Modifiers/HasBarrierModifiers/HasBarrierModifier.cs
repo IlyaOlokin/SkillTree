@@ -17,7 +17,12 @@ namespace SkillTree
                 unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer);
             }
 
-            public override string GetDescription()
+            public override void ApplyEffect(Unit unit, ModifierPowerContext powerContext)
+            {
+                unit.BaseUnitModifiers.ChangeModifierValue(powerContext.Scale(modifierContainer));
+            }
+
+            public override string GetDescription(ModifierPowerContext powerContext)
             {
                 if (modifierContainer == null)
                 {
@@ -29,7 +34,7 @@ namespace SkillTree
                 return GameLocalization.FormatModifier(
                     "modifier.hasBarrier.withModifier",
                     "While Barrier is active, [[0]]",
-                    modifierContainer.GetDescription());
+                    powerContext.Scale(modifierContainer).GetDescription());
             }
 
         

@@ -23,7 +23,7 @@ public static class StatCalculator
         StatType.BleedPower
     };
 
-    public static void RecalculateStats(Unit unit, List<Modifier> mods)
+    public static void RecalculateStats(Unit unit, List<CollectedModifier> mods)
     {
         foreach (var mod in mods)
         {

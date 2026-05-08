@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using LocalizationSupport;
+using SkillTree;
 using UnityEngine;
 
 namespace Items
@@ -22,6 +23,7 @@ namespace Items
         public Sprite Icon => icon;
         public int MaxStack => Mathf.Max(1, maxStack);
         public virtual bool CanBeUsed => false;
+        public virtual bool CanBeUsedOnNode => false;
         public virtual bool ConsumeOnUse => false;
 
         public virtual IReadOnlyList<string> GetTooltipDescriptions()
@@ -33,6 +35,11 @@ namespace Items
         }
 
         public virtual bool TryUse(ItemUseContext context)
+        {
+            return false;
+        }
+
+        public virtual bool TryUseOnNode(ItemUseContext context, Node node)
         {
             return false;
         }

@@ -26,6 +26,10 @@ MonoBehaviour:
     m_Localized: 
     m_Metadata:
       m_Items: []
+  - m_Id: 5346512051769346
+    m_Localized: This node's Power cannot be changed
+    m_Metadata:
+      m_Items: []
   - m_Id: 6770548061376512
     m_Localized: 
     m_Metadata:

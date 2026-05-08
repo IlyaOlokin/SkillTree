@@ -21,6 +21,14 @@ namespace SkillTree
             }
         }
 
+        public override void ApplyEffect(Unit unit, ModifierPowerContext powerContext)
+        {
+            foreach (var modifier in baseModifiers)
+            {
+                unit.BaseUnitModifiers.ChangeModifierValue(powerContext.Scale(modifier));
+            }
+        }
+
         public IReadOnlyList<Modifier> GetRuntimeModifiers()
         {
             return runtimeModifiers;

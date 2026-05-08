@@ -43,13 +43,26 @@ namespace UI
 
         public void HandleSlotClicked(int slotIndex)
         {
-            _gemPlacementService?.ToggleGemSlotSelection(slotIndex);
+            InventoryItem item = _playerInventory != null ? _playerInventory.PeekItem(slotIndex) : null;
+            if (item == null || item.IsEmpty)
+                return;
+
+            if (item.ItemType == InventoryItemType.Gem || item.CanBeUsedOnNode)
+            {
+                _gemPlacementService?.ToggleSlotSelection(slotIndex);
+                return;
+            }
+
+            if (_itemUseService != null && _itemUseService.TryUseItem(slotIndex))
+                _tooltipUI?.RefreshCurrentTooltip();
         }
 
         public void HandleSlotRightClicked(int slotIndex)
         {
-            if (_itemUseService.TryUseItem(slotIndex))
-                _tooltipUI?.RefreshCurrentTooltip();
+            if (_selectionState == null || !_selectionState.HasSelectedItem)
+                return;
+
+            _selectionState.ClearSelection();
         }
 
         public void RefreshAll()

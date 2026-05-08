@@ -58,11 +58,9 @@ MonoBehaviour:
   socketedGem:
     instanceId: 
     definition: {fileID: 0}
-    rolledValues: []
   defaultSocketedGem:
     instanceId: 
     definition: {fileID: 0}
-    rolledValues: []
 --- !u!58 &4119631117331947586
 CircleCollider2D:
   m_ObjectHideFlags: 0

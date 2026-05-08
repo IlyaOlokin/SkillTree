@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Items;
+using SkillTree;
 using UnityEngine;
 
 namespace Gems
@@ -8,10 +9,10 @@ namespace Gems
     public class GemDefinition : ItemDefinition
     {
         [SerializeField] private GemKind kind = GemKind.LocalModifiers;
-        [SerializeField] private List<GemModifierRollDefinition> modifierRollDefinitions = new();
+        [SerializeField] private List<Modifier> modifierTemplates = new();
 
         public GemKind Kind => kind;
-        public IReadOnlyList<GemModifierRollDefinition> ModifierRollDefinitions => modifierRollDefinitions;
+        public IReadOnlyList<Modifier> ModifierTemplates => modifierTemplates;
 
         public GemInstance CreateInstance()
         {
@@ -25,13 +26,13 @@ namespace Gems
             if (!string.IsNullOrWhiteSpace(Description))
                 descriptions.Add(Description);
 
-            for (int i = 0; i < modifierRollDefinitions.Count; i++)
+            for (int i = 0; i < modifierTemplates.Count; i++)
             {
-                GemModifierRollDefinition definition = modifierRollDefinitions[i];
-                if (definition?.ModifierTemplate == null)
+                Modifier modifier = modifierTemplates[i];
+                if (modifier == null)
                     continue;
 
-                descriptions.Add(definition.ModifierTemplate.GetDescription());
+                descriptions.Add(modifier.GetDescription(ModifierPowerContext.None));
             }
 
             return descriptions;

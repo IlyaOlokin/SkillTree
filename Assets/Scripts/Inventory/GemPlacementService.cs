@@ -29,6 +29,16 @@ namespace InventorySystem
             SelectionState.ToggleSlotSelection(slotIndex);
         }
 
+        public bool TrySelectSlot(int slotIndex)
+        {
+            return SelectionState.TrySelectSlot(slotIndex);
+        }
+
+        public void ToggleSlotSelection(int slotIndex)
+        {
+            SelectionState.ToggleSlotSelection(slotIndex);
+        }
+
         public void ClearSelection()
         {
             SelectionState.ClearSelection();
@@ -56,6 +66,18 @@ namespace InventorySystem
                 return false;
 
             return _inventorySocketService.TryExtractGem(_inventory, socketNode, out _);
+        }
+
+        public bool TryExtractGemAndSelect(SocketNode socketNode)
+        {
+            if (socketNode == null)
+                return false;
+
+            if (!_inventorySocketService.TryExtractGem(_inventory, socketNode, out int targetSlotIndex))
+                return false;
+
+            SelectionState.TrySelectSlot(targetSlotIndex);
+            return true;
         }
     }
 }

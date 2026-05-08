@@ -13,21 +13,26 @@ namespace SkillTree
 
         public override void ApplyEffect(Unit unit)
         {
+            ApplyEffect(unit, ModifierPowerContext.None);
+        }
+
+        public override void ApplyEffect(Unit unit, ModifierPowerContext powerContext)
+        {
             if (unit.attributes == null)
             {
                 return;
             }
 
-            unit.attributes.ChangeAttributePower(attributeType, multiplier);
+            unit.attributes.ChangeAttributePower(attributeType, GetPoweredMultiplier(powerContext));
         }
 
-        public override string GetDescription()
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
-            base.GetDescription();
-            float percentChange = (multiplier - 1f) * 100f;
+            float poweredMultiplier = GetPoweredMultiplier(powerContext);
+            float percentChange = (poweredMultiplier - 1f) * 100f;
             string localizedAttribute = GameLocalization.LocalizeEnum(attributeType);
 
-            if (multiplier <= 0f)
+            if (poweredMultiplier <= 0f)
             {
                 return GameLocalization.FormatModifier(
                     "modifier.attributePower.noBonuses",
@@ -50,6 +55,11 @@ namespace SkillTree
                 "Each bonus to [[0]] is [[1]]",
                 localizedAttribute,
                 effectiveness);
+        }
+
+        private float GetPoweredMultiplier(ModifierPowerContext powerContext)
+        {
+            return powerContext.Scale(multiplier);
         }
     }
 }

@@ -21,7 +21,6 @@ namespace SkillTree
                 if (this.damageType.HasFlag(damageType))
                 {
                     damageInfo.DamageInstance.Damage[damageType] *= 1f - mitigationValue;
-                    Debug.Log($"{damageType} mitigated");
                 }
             }
         }

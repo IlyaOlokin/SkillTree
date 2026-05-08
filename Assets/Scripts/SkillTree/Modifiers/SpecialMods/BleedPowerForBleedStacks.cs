@@ -27,12 +27,30 @@ namespace SkillTree
                 new ModifierContainer(ModifierType.Added, StatType.BleedPower, AddedValue * bleedStacks));
         }
 
-        public override string GetDescription()
+        public override void ApplyEffect(DamageInfo damageInfo, ModifierPowerContext powerContext)
+        {
+            var targetUnit = damageInfo.Target?.UnitObject;
+            if (targetUnit?.effectController == null)
+            {
+                return;
+            }
+
+            int bleedStacks = targetUnit.effectController.GetAllEffectsOfType<Bleed>().Count;
+            if (bleedStacks <= 0)
+            {
+                return;
+            }
+
+            damageInfo.BaseUnitModifiers.ChangeModifierValue(
+                new ModifierContainer(ModifierType.Added, StatType.BleedPower, powerContext.Scale(AddedValue) * bleedStacks));
+        }
+
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             return GameLocalization.FormatModifier(
                 "modifier.bleedPowerForStacks.description",
                 "+[[0]]% Bleed Power per Bleed stack on target",
-                AddedValue * 100f);
+                powerContext.Scale(AddedValue) * 100f);
         }
     }
 

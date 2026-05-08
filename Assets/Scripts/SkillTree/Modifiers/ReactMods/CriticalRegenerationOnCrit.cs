@@ -12,17 +12,24 @@ namespace SkillTree
 
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
         {
+            return CreateRuntimeBinding(unit, ModifierPowerContext.None);
+        }
+
+        public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit, ModifierPowerContext powerContext)
+        {
             EffectController effectController = unit.effectController;
             if (effectController == null)
             {
                 return null;
             }
 
+            float scaledRegeneration = powerContext.Scale(maxHealthRegenerationPerSecond);
+
             void HandleCrit(ITarget _)
             {
                 effectController.AddEffect(new CriticalRegeneration(
                     duration,
-                    maxHealthRegenerationPerSecond));
+                    scaledRegeneration));
             }
 
             return new DelegateModifierRuntimeBinding(
@@ -30,12 +37,12 @@ namespace SkillTree
                 () => unit.OnCrit -= HandleCrit);
         }
 
-        public override string GetDescription()
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             return GameLocalization.FormatModifier(
                 "modifier.criticalRegenerationOnCrit.description",
                 "On Crit: gain {criticalRegeneration|Critical Regeneration}, granting [[0]]% of Maximum Health regeneration per second for [[1]] seconds. Each stack has its own duration.",
-                maxHealthRegenerationPerSecond * 100f,
+                powerContext.Scale(maxHealthRegenerationPerSecond) * 100f,
                 duration);
         }
     }

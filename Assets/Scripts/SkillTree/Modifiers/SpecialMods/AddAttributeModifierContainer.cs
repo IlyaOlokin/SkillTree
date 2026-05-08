@@ -21,7 +21,17 @@ namespace SkillTree
             unit.attributes.AddRuntimeModifier(attributeType, modifierContainer, attributesPerStack);
         }
 
-        public override string GetDescription()
+        public override void ApplyEffect(Unit unit, ModifierPowerContext powerContext)
+        {
+            if (unit.attributes == null)
+            {
+                return;
+            }
+
+            unit.attributes.AddRuntimeModifier(attributeType, powerContext.Scale(modifierContainer), attributesPerStack);
+        }
+
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             string localizedAttribute = GameLocalization.LocalizeEnum(attributeType);
 
@@ -38,14 +48,14 @@ namespace SkillTree
                 return GameLocalization.FormatModifier(
                     "modifier.addAttributeModifierContainer.single",
                     "Adds '[[0]]' per 1 [[1]]",
-                    modifierContainer.GetDescription(),
+                    powerContext.Scale(modifierContainer).GetDescription(),
                     localizedAttribute);
             }
 
             return GameLocalization.FormatModifier(
                 "modifier.addAttributeModifierContainer.multi",
                 "Adds '[[0]]' per [[1]] [[2]]",
-                modifierContainer.GetDescription(),
+                powerContext.Scale(modifierContainer).GetDescription(),
                 attributesPerStack,
                 localizedAttribute);
         }

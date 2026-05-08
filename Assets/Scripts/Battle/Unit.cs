@@ -221,7 +221,7 @@ namespace Battle
         private void RecalculateMods()
         {
             ResetUnit();
-            List<Modifier> mods = GetAllModifiers();
+            List<CollectedModifier> mods = GetAllModifiers();
             StatCalculator.RecalculateStats(this, mods);
             BindModifierRuntimes(mods);
 
@@ -248,7 +248,7 @@ namespace Battle
             innateModifiers.ApplyEffect(this);
         }
 
-        private void BindModifierRuntimes(List<Modifier> mods)
+        private void BindModifierRuntimes(List<CollectedModifier> mods)
         {
             foreach (var mod in mods)
             {
@@ -269,20 +269,28 @@ namespace Battle
             _modifierRuntimeBindings.Clear();
         }
 
-        public List<Modifier> GetAllModifiers()
+        public List<CollectedModifier> GetAllModifiers()
         {
-            List<Modifier> mods = new List<Modifier>();
-            mods.AddRange(baseInnateModifiers.GetRuntimeModifiers());
-            mods.AddRange(innateModifiers.GetRuntimeModifiers());
+            List<CollectedModifier> mods = new List<CollectedModifier>();
+            AddWithoutPower(mods, baseInnateModifiers.GetRuntimeModifiers());
+            AddWithoutPower(mods, innateModifiers.GetRuntimeModifiers());
 
             if (this is PlayerUnit playerUnit)
             {
                 mods.AddRange(playerUnit.SkillTree.CollectAllModifiers());
             }
 
-            mods.AddRange(_outerModifiers);
+            AddWithoutPower(mods, _outerModifiers);
 
             return mods;
+        }
+
+        private static void AddWithoutPower(List<CollectedModifier> target, IEnumerable<Modifier> modifiers)
+        {
+            foreach (Modifier modifier in modifiers)
+            {
+                target.Add(CollectedModifier.WithoutPower(modifier));
+            }
         }
 
         public void AddOuterModifier(Modifier mod)

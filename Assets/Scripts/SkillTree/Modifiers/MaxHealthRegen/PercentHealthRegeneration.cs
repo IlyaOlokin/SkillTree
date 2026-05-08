@@ -21,12 +21,19 @@ namespace SkillTree
             unit.BaseUnitModifiers.ChangeModifierValue(new ModifierContainer(ModifierType.Added, StatType.HealthRegenerationPerSecond, regen));
         }
 
-        public override string GetDescription()
+        public override void ApplyEffect(Unit unit, ModifierPowerContext powerContext)
+        {
+            float regen = StatCalculator.GetStat(unit.BaseUnitModifiers, StatType.MaximumHealth)
+                * powerContext.Scale(healthRegenerationPercentage);
+            unit.BaseUnitModifiers.ChangeModifierValue(new ModifierContainer(ModifierType.Added, StatType.HealthRegenerationPerSecond, regen));
+        }
+
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             return GameLocalization.FormatModifier(
                 "modifier.healthRegen.percent",
                 "+[[0]]% of Maximum Health regeneration per second",
-                healthRegenerationPercentage * 100f);
+                powerContext.Scale(healthRegenerationPercentage) * 100f);
         }
     }
 }

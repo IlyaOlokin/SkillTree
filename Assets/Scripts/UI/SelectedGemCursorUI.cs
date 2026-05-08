@@ -1,7 +1,7 @@
-using Gems;
 using InventorySystem;
-using TMPro;
+using SkillTree;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
@@ -35,8 +35,14 @@ namespace UI
 
         private void Update()
         {
-            if (_selectionState == null || !_selectionState.HasSelectedGem)
+            if (_selectionState == null || !_selectionState.HasSelectedItem)
                 return;
+
+            if (Input.GetMouseButtonDown(1) && !IsPointerHandledElsewhere())
+            {
+                _selectionState.ClearSelection();
+                return;
+            }
             
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
                     canvasRectTransform,
@@ -48,30 +54,36 @@ namespace UI
             root.anchoredPosition = localPoint;
         }
 
-        private void LateUpdate()
-        {
-            if (_selectionState == null || !_selectionState.HasSelectedGem)
-                return;
-
-            if (!Input.GetMouseButtonDown(1))
-                return;
-
-            _selectionState.ClearSelection();
-        }
-
         private void RefreshState()
         {
-            GemInstance selectedGem = _selectionState != null ? _selectionState.SelectedGem : null;
-            bool hasGem = selectedGem != null;
+            InventoryItem selectedItem = _selectionState != null ? _selectionState.SelectedItem : null;
+            bool hasSelectedItem = selectedItem != null && !selectedItem.IsEmpty;
 
             if (root != null)
-                root.gameObject.SetActive(hasGem);
+                root.gameObject.SetActive(hasSelectedItem);
 
-            if (!hasGem)
+            if (!hasSelectedItem)
                 return;
 
             if (iconImage != null)
-                iconImage.sprite = selectedGem.Icon;
+                iconImage.sprite = selectedItem.Icon;
+        }
+
+        private static bool IsPointerHandledElsewhere()
+        {
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+                return true;
+
+            Camera worldCamera = Camera.main;
+            if (worldCamera == null)
+                return false;
+
+            Ray ray = worldCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.GetComponentInParent<Node>() != null)
+                return true;
+
+            RaycastHit2D hit2D = Physics2D.GetRayIntersection(ray);
+            return hit2D.collider != null && hit2D.collider.GetComponentInParent<Node>() != null;
         }
     }
 }

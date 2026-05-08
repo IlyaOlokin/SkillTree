@@ -264,7 +264,7 @@ namespace SaveSystem
                 return null;
             }
 
-            return GemInstance.Restore(definition, saveData.instanceId, saveData.rolledValues);
+            return GemInstance.Restore(definition, saveData.instanceId);
         }
 
         private ItemDefinition RestoreItemDefinition(string definitionId)

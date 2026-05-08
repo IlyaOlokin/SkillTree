@@ -13,6 +13,8 @@ namespace InventorySystem
         public InventoryItem SelectedItem => _inventory != null ? _inventory.PeekItem(SelectedSlotIndex) : null;
         public Gems.GemInstance SelectedGem => SelectedItem?.ItemType == InventoryItemType.Gem ? SelectedItem.Gem : null;
         public bool HasSelectedGem => SelectedGem != null;
+        public bool HasSelectedNodeItem => SelectedItem?.CanBeUsedOnNode == true;
+        public bool HasSelectedItem => HasSelectedGem || HasSelectedNodeItem;
 
         public InventorySelectionState(PlayerInventory inventory)
         {
@@ -24,10 +26,10 @@ namespace InventorySystem
         public bool TrySelectSlot(int slotIndex)
         {
             InventoryItem item = _inventory != null ? _inventory.PeekItem(slotIndex) : null;
-            if (item == null || item.ItemType != InventoryItemType.Gem || item.Gem == null)
+            if (item == null || item.IsEmpty || (item.ItemType != InventoryItemType.Gem && !item.CanBeUsedOnNode))
                 return false;
 
-            if (SelectedSlotIndex == slotIndex && HasSelectedGem)
+            if (SelectedSlotIndex == slotIndex && HasSelectedItem)
                 return true;
 
             SelectedSlotIndex = slotIndex;
@@ -37,7 +39,7 @@ namespace InventorySystem
 
         public void ToggleSlotSelection(int slotIndex)
         {
-            if (SelectedSlotIndex == slotIndex && HasSelectedGem)
+            if (SelectedSlotIndex == slotIndex && HasSelectedItem)
             {
                 ClearSelection();
                 return;
@@ -57,7 +59,7 @@ namespace InventorySystem
 
         public bool IsSelected(int slotIndex)
         {
-            return SelectedSlotIndex == slotIndex && HasSelectedGem;
+            return SelectedSlotIndex == slotIndex && HasSelectedItem;
         }
 
         public void Dispose()
@@ -71,7 +73,7 @@ namespace InventorySystem
             if (!HasSelectedSlot)
                 return;
 
-            if (SelectedGem == null)
+            if (!HasSelectedItem)
             {
                 SelectedSlotIndex = -1;
                 RaiseSelectionChanged();

@@ -9,6 +9,93 @@ using UnityEngine.Serialization;
 
 namespace SkillTree
 {
+    public readonly struct ModifierPowerContext
+    {
+        public static readonly ModifierPowerContext None = new ModifierPowerContext(null, 0f);
+
+        public readonly Node SourceNode;
+        public readonly float Power;
+
+        public ModifierPowerContext(Node sourceNode, float power)
+        {
+            SourceNode = sourceNode;
+            Power = power;
+        }
+
+        public float Multiplier => GetMultiplier(Power);
+
+        public static ModifierPowerContext FromNode(Node node)
+        {
+            return node != null
+                ? new ModifierPowerContext(node, node.Power)
+                : None;
+        }
+
+        public static float GetMultiplier(float power)
+        {
+            return Mathf.Max(0f, 1f + power);
+        }
+
+        public ModifierContainer Scale(ModifierContainer modifierContainer)
+        {
+            return modifierContainer != null
+                ? modifierContainer * Multiplier
+                : null;
+        }
+
+        public float Scale(float value)
+        {
+            return value * Multiplier;
+        }
+
+        public float ScaleMultiplier(float multiplier)
+        {
+            return 1f + (multiplier - 1f) * Multiplier;
+        }
+    }
+
+    public readonly struct CollectedModifier
+    {
+        public readonly Modifier Modifier;
+        public readonly ModifierPowerContext PowerContext;
+
+        public CollectedModifier(Modifier modifier, ModifierPowerContext powerContext)
+        {
+            Modifier = modifier;
+            PowerContext = powerContext;
+        }
+
+        public static CollectedModifier WithoutPower(Modifier modifier)
+        {
+            return new CollectedModifier(modifier, ModifierPowerContext.None);
+        }
+
+        public bool IsApplicable(Unit unit)
+        {
+            return Modifier != null && Modifier.IsApplicable(unit);
+        }
+
+        public bool IsInPriority(ModifierPriority priority)
+        {
+            return Modifier != null && Modifier.IsInPriority(priority);
+        }
+
+        public void ApplyEffect(Unit unit)
+        {
+            Modifier?.ApplyEffect(unit, PowerContext);
+        }
+
+        public void ApplyEffect(AttackContext context)
+        {
+            Modifier?.ApplyEffect(context, PowerContext);
+        }
+
+        public IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
+        {
+            return Modifier?.CreateRuntimeBinding(unit, PowerContext);
+        }
+    }
+
     public abstract class Modifier : ScriptableObject
     {
         [field: SerializeField]
@@ -20,22 +107,45 @@ namespace SkillTree
         public virtual void OnCollected(){}
         public virtual void OnReset(){}
         public virtual IModifierRuntimeBinding CreateRuntimeBinding(Unit unit) => null;
+        public virtual IModifierRuntimeBinding CreateRuntimeBinding(Unit unit, ModifierPowerContext powerContext)
+        {
+            return CreateRuntimeBinding(unit);
+        }
         
         public virtual bool IsApplicable(Unit unit) => true;
         public virtual bool IsInPriority(ModifierPriority priority) => Priorities.Contains(priority);
 
         public virtual void ApplyEffect(Unit unit) { }
+        public virtual void ApplyEffect(Unit unit, ModifierPowerContext powerContext)
+        {
+            ApplyEffect(unit);
+        }
+
         // Attack modifiers must mutate only damageInfo.BaseUnitModifiers snapshot.
         // Do not mutate damageInfo.Owner.BaseUnitModifiers here.
         public virtual void ApplyEffect(DamageInfo damageInfo) { }
+        public virtual void ApplyEffect(DamageInfo damageInfo, ModifierPowerContext powerContext)
+        {
+            ApplyEffect(damageInfo);
+        }
+
         public virtual void ApplyEffect(AttackContext context)
         {
             ApplyEffect(context?.DamageInfo);
+        }
+        public virtual void ApplyEffect(AttackContext context, ModifierPowerContext powerContext)
+        {
+            ApplyEffect(context?.DamageInfo, powerContext);
         }
 
         public virtual string GetDescription()
         {
             return GameLocalization.GetModifier("modifier.emptyDescription", "Empty description");
+        }
+
+        public virtual string GetDescription(ModifierPowerContext powerContext)
+        {
+            return GetDescription();
         }
 
         public void SetPriorities(List<ModifierPriority> priorities)

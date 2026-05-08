@@ -49,12 +49,26 @@ namespace SkillTree
                 moreEvasionPerActiveBarrier * activeBarrierCount));
         }
 
-        public override string GetDescription()
+        public override void ApplyEffect(Unit unit, ModifierPowerContext powerContext)
+        {
+            int activeBarrierCount = Mathf.Max(0, unit?.barrier?.BarrierCount ?? 0);
+            if (activeBarrierCount <= 0)
+            {
+                return;
+            }
+
+            unit.BaseUnitModifiers.ChangeModifierValue(new ModifierContainer(
+                ModifierType.More,
+                StatType.Evasion,
+                powerContext.Scale(moreEvasionPerActiveBarrier) * activeBarrierCount));
+        }
+
+        public override string GetDescription(ModifierPowerContext powerContext)
         {
             return GameLocalization.FormatModifier(
                 "modifier.moreEvasionPerActiveBarrier.description",
                 "[[0]]% more {evasion|Evasion} per active {barrier|Barrier}",
-                moreEvasionPerActiveBarrier * 100f);
+                powerContext.Scale(moreEvasionPerActiveBarrier) * 100f);
         }
     }
 }
