@@ -46,7 +46,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.blockEmpowersNextAttack.description",
                 "After {block|Block}: next attack gains +[[0]]% more Physical Damage and always applies {bleed|Bleed}",
-                powerContext.Scale(morePhysicalDamage) * 100f);
+                powerContext.HighlightValue(powerContext.Scale(morePhysicalDamage) * 100f));
         }
 
         private Modifier CreateRuntimeEffectModifier(ModifierPowerContext powerContext, out bool ownsModifier)

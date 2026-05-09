@@ -1651,6 +1651,106 @@ MonoBehaviour:
     m_Key: modifier.modifierPerPlayerLevel.noModifier
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311728
+    m_Key: modifier.reduceTargetAttackProgressOnHit.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311729
+    m_Key: modifier.container.added.ElementalResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311730
+    m_Key: modifier.container.increased.ElementalResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311731
+    m_Key: modifier.container.decreased.ElementalResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311732
+    m_Key: modifier.container.more.ElementalResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311733
+    m_Key: modifier.container.less.ElementalResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311734
+    m_Key: modifier.container.none.ElementalResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311735
+    m_Key: modifier.container.added.FireResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311736
+    m_Key: modifier.container.increased.FireResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311737
+    m_Key: modifier.container.decreased.FireResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311738
+    m_Key: modifier.container.more.FireResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311739
+    m_Key: modifier.container.less.FireResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311740
+    m_Key: modifier.container.none.FireResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311741
+    m_Key: modifier.container.added.ColdResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311742
+    m_Key: modifier.container.increased.ColdResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311743
+    m_Key: modifier.container.decreased.ColdResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311744
+    m_Key: modifier.container.more.ColdResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311745
+    m_Key: modifier.container.less.ColdResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311746
+    m_Key: modifier.container.none.ColdResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311747
+    m_Key: modifier.container.added.LightningResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311748
+    m_Key: modifier.container.increased.LightningResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311749
+    m_Key: modifier.container.decreased.LightningResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311750
+    m_Key: modifier.container.more.LightningResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311751
+    m_Key: modifier.container.less.LightningResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311752
+    m_Key: modifier.container.none.LightningResistancePenetration
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

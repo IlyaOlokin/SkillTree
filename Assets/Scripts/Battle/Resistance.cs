@@ -3,26 +3,59 @@ using UnityEngine;
 
 public static class Resistance
 {
-    public static void ApplyResistanceMitigation(DamageInstance DamageInstance, Unit defender, Unit attackerUnit)
+    public static void ApplyResistanceMitigation(DamageInfo damageInfo, Unit defender)
     {
-        var elementalResistance = Mathf.Min(
-            defender.BaseUnitModifiers.GetStatValue(StatType.ElementalResistance),
-            defender.BaseUnitModifiers.GetStatValue(StatType.MaxElementalResistance));
+        if (damageInfo?.DamageInstance == null || defender?.BaseUnitModifiers == null)
+        {
+            return;
+        }
 
-        var fireResistance = Mathf.Min(
-            defender.BaseUnitModifiers.GetStatValue(StatType.FireResistance),
-            defender.BaseUnitModifiers.GetStatValue(StatType.MaxFireResistance));
+        BaseUnitModifiers attackerModifiers = damageInfo.BaseUnitModifiers;
+        var elementalResistance = GetEffectiveResistance(
+            defender,
+            attackerModifiers,
+            StatType.ElementalResistance,
+            StatType.MaxElementalResistance,
+            StatType.ElementalResistancePenetration);
 
-        var coldResistance = Mathf.Min(
-            defender.BaseUnitModifiers.GetStatValue(StatType.ColdResistance),
-            defender.BaseUnitModifiers.GetStatValue(StatType.MaxColdResistance));
+        var fireResistance = GetEffectiveResistance(
+            defender,
+            attackerModifiers,
+            StatType.FireResistance,
+            StatType.MaxFireResistance,
+            StatType.FireResistancePenetration);
 
-        var lightningResistance = Mathf.Min(
-            defender.BaseUnitModifiers.GetStatValue(StatType.LightningResistance),
-            defender.BaseUnitModifiers.GetStatValue(StatType.MaxLightningResistance));
+        var coldResistance = GetEffectiveResistance(
+            defender,
+            attackerModifiers,
+            StatType.ColdResistance,
+            StatType.MaxColdResistance,
+            StatType.ColdResistancePenetration);
 
-        DamageInstance.Damage[DamageType.Fire] *= (1 - elementalResistance) * (1 - fireResistance);
-        DamageInstance.Damage[DamageType.Cold] *= (1 - elementalResistance) * (1 - coldResistance);
-        DamageInstance.Damage[DamageType.Lightning] *= (1 - elementalResistance) * (1 - lightningResistance);
+        var lightningResistance = GetEffectiveResistance(
+            defender,
+            attackerModifiers,
+            StatType.LightningResistance,
+            StatType.MaxLightningResistance,
+            StatType.LightningResistancePenetration);
+
+        damageInfo.DamageInstance.Damage[DamageType.Fire] *= (1 - elementalResistance) * (1 - fireResistance);
+        damageInfo.DamageInstance.Damage[DamageType.Cold] *= (1 - elementalResistance) * (1 - coldResistance);
+        damageInfo.DamageInstance.Damage[DamageType.Lightning] *= (1 - elementalResistance) * (1 - lightningResistance);
+    }
+
+    private static float GetEffectiveResistance(
+        Unit defender,
+        BaseUnitModifiers attackerModifiers,
+        StatType resistanceStat,
+        StatType maxResistanceStat,
+        StatType penetrationStat)
+    {
+        var cappedResistance = Mathf.Min(
+            defender.BaseUnitModifiers.GetStatValue(resistanceStat),
+            defender.BaseUnitModifiers.GetStatValue(maxResistanceStat));
+
+        float penetration = attackerModifiers?.GetStatValue(penetrationStat) ?? 0f;
+        return Mathf.Max(0f, cappedResistance - Mathf.Max(0f, penetration));
     }
 }

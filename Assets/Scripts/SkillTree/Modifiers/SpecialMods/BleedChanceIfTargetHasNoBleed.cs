@@ -48,7 +48,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.bleedChanceIfTargetHasNoBleed.description",
                 "+[[0]]% {bleed|Bleed} Chance if target has no {bleed|Bleed}",
-                powerContext.Scale(addedBleedChance) * 100f);
+                powerContext.HighlightValue(powerContext.Scale(addedBleedChance) * 100f));
         }
     }
 }

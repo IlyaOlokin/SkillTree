@@ -66,7 +66,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.critDetonatesBleed.description",
                 "Crits against targets with {bleed|Bleed} instantly deal all remaining {bleed|Bleed} damage and grant [[0]]% Attack Progress. That hit cannot apply new {bleed|Bleed}.",
-                powerContext.Scale(attackProgressGain) * 100f);
+                powerContext.HighlightValue(powerContext.Scale(attackProgressGain) * 100f));
         }
     }
 }

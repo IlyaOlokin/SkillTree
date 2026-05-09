@@ -35,7 +35,7 @@ namespace Battle
             
             //Mitigation
             Armor.ApplyArmorMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);
-            Resistance.ApplyResistanceMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);
+            Resistance.ApplyResistanceMitigation(damageInfo, defender.UnitObject);
             
             RunModifiers(defender.UnitObject.GetAllModifiers(), ModifierPriority.OnGettingHit, defender.UnitObject, context);
             

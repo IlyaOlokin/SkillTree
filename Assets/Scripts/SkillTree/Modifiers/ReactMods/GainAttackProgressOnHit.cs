@@ -39,7 +39,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.gainAttackProgressOnHit.description",
                 "On Getting Hit: gain [[0]]% Attack Progress",
-                powerContext.Scale(attackProgressGain) * 100f);
+                powerContext.HighlightValue(powerContext.Scale(attackProgressGain) * 100f));
         }
     }
 }

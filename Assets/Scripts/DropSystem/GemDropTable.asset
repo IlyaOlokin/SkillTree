@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: GemDropTable
   m_EditorClassIdentifier: 
   entries:
-  - itemDefinition: {fileID: 11400000, guid: 8b27fcb8c610aa547af2679f875e8ee4, type: 2}
+  - itemDefinition: {fileID: 11400000, guid: 4cae05f83ff29a440a33b69e16874a18, type: 2}
     stackSize: 1
-    baseDropChance: 0.05
+    baseDropChance: 1
     powerForMaxBonus: 100
     maxPowerBonusChance: 0.05
     normalRarityMultiplier: 1

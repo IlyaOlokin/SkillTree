@@ -46,7 +46,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.painConsumedGrantsScar.description",
                 "When {pain|Pain} is consumed, gain {scar|Scar} equal to [[0]]% of consumed {pain|Pain} for [[1]] seconds. {scar|Scar} grants increased {armor|Armor} and {ailmentGuard|Ailment Guard} equal to its percentage of your Maximum Health, but reduces Healing received by the same amount.",
-                powerContext.Scale(painConsumedAsScar) * 100f,
+                powerContext.HighlightValue(powerContext.Scale(painConsumedAsScar) * 100f),
                 duration);
         }
     }

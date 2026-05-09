@@ -43,7 +43,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.igniteBurstOnHit.description",
                 "On Hit: trigger [[0]]% of current {ignite|Ignite} damage instantly",
-                powerContext.Scale(burstPercent) * 100f);
+                powerContext.HighlightValue(powerContext.Scale(burstPercent) * 100f));
         }
     }
 }

@@ -171,6 +171,11 @@ MonoBehaviour:
     windupDuration: 0.05
     strikeDuration: 0.15
     returnDuration: 0.2
+  idleBreathingController:
+    breathingTransform: {fileID: 4898353647290124260}
+    inhaleScaleMultiplier: {x: 1.015, y: 1.035, z: 1}
+    inhaleDuration: 1.1
+    ease: 4
 --- !u!1 &4997412355767574011
 GameObject:
   m_ObjectHideFlags: 0

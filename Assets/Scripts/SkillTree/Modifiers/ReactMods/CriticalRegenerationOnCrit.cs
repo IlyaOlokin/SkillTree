@@ -42,7 +42,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.criticalRegenerationOnCrit.description",
                 "On Crit: gain {criticalRegeneration|Critical Regeneration}, granting [[0]]% of Maximum Health regeneration per second for [[1]] seconds. Each stack has its own duration.",
-                powerContext.Scale(maxHealthRegenerationPerSecond) * 100f,
+                powerContext.HighlightValue(powerContext.Scale(maxHealthRegenerationPerSecond) * 100f),
                 duration);
         }
     }

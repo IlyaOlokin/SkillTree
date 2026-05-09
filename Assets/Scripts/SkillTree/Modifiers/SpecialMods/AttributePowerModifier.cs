@@ -44,11 +44,11 @@ namespace SkillTree
                 ? GameLocalization.FormatModifier(
                     "modifier.attributePower.moreEffective",
                     "[[0]]% more effective",
-                    percentChange)
+                    powerContext.HighlightValue(percentChange))
                 : GameLocalization.FormatModifier(
                     "modifier.attributePower.lessEffective",
                     "[[0]]% less effective",
-                    -percentChange);
+                    powerContext.HighlightValue(-percentChange));
 
             return GameLocalization.FormatModifier(
                 "modifier.attributePower.description",

@@ -320,6 +320,22 @@ MonoBehaviour:
     m_Localized: Grants 3% of Maximum Health regeneration per second for 5 seconds.
     m_Metadata:
       m_Items: []
+  - m_Id: 7255200857460739
+    m_Localized: Elemental Resistance Penetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7255200857460740
+    m_Localized: Fire Resistance Penetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7255200857460741
+    m_Localized: Cold Resistance Penetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7255200857460742
+    m_Localized: Lightning Resistance Penetration
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

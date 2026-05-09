@@ -54,8 +54,8 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.chillReducesEvasionAndRegeneration.poweredDescription",
                 "{chill|Chill} also applies [[0]]% decreased {evasion|Evasion} and [[1]]% decreased Health Regeneration",
-                Mathf.Abs(powerContext.Scale(EvasionReduction) * 100f),
-                Mathf.Abs(powerContext.Scale(HealthRegenerationReduction) * 100f));
+                powerContext.HighlightValue(Mathf.Abs(powerContext.Scale(EvasionReduction) * 100f)),
+                powerContext.HighlightValue(Mathf.Abs(powerContext.Scale(HealthRegenerationReduction) * 100f)));
         }
     }
 }

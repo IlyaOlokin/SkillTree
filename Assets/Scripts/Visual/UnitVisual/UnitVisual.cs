@@ -14,11 +14,13 @@ namespace Visual
         [SerializeField] private UnitVisualEffectsController effectsController;
         [SerializeField] private UnitVisualHitEffectController hitEffectController;
         [SerializeField] private UnitVisualAttackAnimationController attackAnimationController = new UnitVisualAttackAnimationController();
+        [SerializeField] private UnitVisualIdleBreathingController idleBreathingController = new UnitVisualIdleBreathingController();
 
         void Awake()
         {
             AssignBattleCameraToWorldCanvases();
             attackAnimationController?.Initialize(transform, gameObject);
+            idleBreathingController?.Initialize(transform, gameObject);
             effectsController?.Initialize(_tooltipUI);
             hitEffectController?.Initialize();
 
@@ -29,6 +31,11 @@ namespace Visual
             unit.OnEvade += DisplayEvadeNotification;
             unit.OnBlock += DisplayBlockNotification;
             
+        }
+
+        private void OnEnable()
+        {
+            idleBreathingController?.Play();
         }
 
         private void OnDestroy()
@@ -49,11 +56,13 @@ namespace Visual
             effectsController?.ClearAllEffectIcons();
             hitEffectController?.Dispose();
             attackAnimationController?.Dispose();
+            idleBreathingController?.Dispose();
         }
 
         private void OnDisable()
         {
             attackAnimationController?.Dispose();
+            idleBreathingController?.Dispose();
         }
 
         private void Update()

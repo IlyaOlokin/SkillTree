@@ -305,6 +305,22 @@ MonoBehaviour:
     m_Key: description.criticalRegeneration1
     m_Metadata:
       m_Items: []
+  - m_Id: 7255200857460739
+    m_Key: enum.StatType.ElementalResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7255200857460740
+    m_Key: enum.StatType.FireResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7255200857460741
+    m_Key: enum.StatType.ColdResistancePenetration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7255200857460742
+    m_Key: enum.StatType.LightningResistancePenetration
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

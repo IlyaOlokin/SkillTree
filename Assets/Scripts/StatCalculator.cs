@@ -20,7 +20,11 @@ public static class StatCalculator
         StatType.IgnitePower,
         StatType.ChillPower,
         StatType.OverchargePower,
-        StatType.BleedPower
+        StatType.BleedPower,
+        StatType.ElementalResistancePenetration,
+        StatType.FireResistancePenetration,
+        StatType.ColdResistancePenetration,
+        StatType.LightningResistancePenetration
     };
 
     public static void RecalculateStats(Unit unit, List<CollectedModifier> mods)

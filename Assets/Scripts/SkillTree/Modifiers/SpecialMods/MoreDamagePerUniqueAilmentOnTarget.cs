@@ -50,7 +50,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.moreDamagePerUniqueAilmentOnTarget.description",
                 "[[0]]% more Damage per unique {ailment|Ailment} on target",
-                powerContext.Scale(moreDamagePerAilment) * 100f);
+                powerContext.HighlightValue(powerContext.Scale(moreDamagePerAilment) * 100f));
         }
 
         private static int CountUniqueAilments(EffectController effectController)

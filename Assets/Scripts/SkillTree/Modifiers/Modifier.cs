@@ -11,6 +11,7 @@ namespace SkillTree
 {
     public readonly struct ModifierPowerContext
     {
+        public const string PoweredValueColorHex = "#9BEA7A";
         public static readonly ModifierPowerContext None = new ModifierPowerContext(null, 0f);
 
         public readonly Node SourceNode;
@@ -23,6 +24,7 @@ namespace SkillTree
         }
 
         public float Multiplier => GetMultiplier(Power);
+        public bool HasPositivePower => Power > 0f;
 
         public static ModifierPowerContext FromNode(Node node)
         {
@@ -39,7 +41,7 @@ namespace SkillTree
         public ModifierContainer Scale(ModifierContainer modifierContainer)
         {
             return modifierContainer != null
-                ? modifierContainer * Multiplier
+                ? (modifierContainer * Multiplier).WithHighlightedValue(HasPositivePower)
                 : null;
         }
 
@@ -51,6 +53,13 @@ namespace SkillTree
         public float ScaleMultiplier(float multiplier)
         {
             return 1f + (multiplier - 1f) * Multiplier;
+        }
+
+        public object HighlightValue(object value)
+        {
+            return HasPositivePower
+                ? $"<color={PoweredValueColorHex}>{value}</color>"
+                : value;
         }
     }
 
@@ -160,12 +169,19 @@ namespace SkillTree
         public ModifierType modifierType;
         public StatType statType;
         public float value;
+        private readonly bool highlightValue;
 
         public ModifierContainer(ModifierType modifierType, StatType statType, float value)
+            : this(modifierType, statType, value, false)
+        {
+        }
+
+        private ModifierContainer(ModifierType modifierType, StatType statType, float value, bool highlightValue)
         {
             this.modifierType = modifierType;
             this.statType = statType;
             this.value = value;
+            this.highlightValue = highlightValue;
         }
 
         public static ModifierContainer operator *(ModifierContainer src, float value)
@@ -173,7 +189,13 @@ namespace SkillTree
             return new ModifierContainer(
                 src.modifierType,
                 src.statType,
-                src.value * value);
+                src.value * value,
+                src.highlightValue);
+        }
+
+        public ModifierContainer WithHighlightedValue(bool shouldHighlight)
+        {
+            return new ModifierContainer(modifierType, statType, value, shouldHighlight);
         }
 
         public string GetDescription()
@@ -228,11 +250,18 @@ namespace SkillTree
 
             return modifierType switch
             {
-                ModifierType.Added => new object[] { FormatAddedValue() },
-                ModifierType.Increased => new object[] { Mathf.Abs(value * 100f) },
-                ModifierType.More => new object[] { Mathf.Abs(value * 100f) },
+                ModifierType.Added => new object[] { FormatPoweredValue(FormatAddedValue()) },
+                ModifierType.Increased => new object[] { FormatPoweredValue(Mathf.Abs(value * 100f)) },
+                ModifierType.More => new object[] { FormatPoweredValue(Mathf.Abs(value * 100f)) },
                 _ => Array.Empty<object>()
             };
+        }
+
+        private object FormatPoweredValue(object formattedValue)
+        {
+            return highlightValue
+                ? $"<color={ModifierPowerContext.PoweredValueColorHex}>{formattedValue}</color>"
+                : formattedValue;
         }
 
         private string FormatAddedValue()

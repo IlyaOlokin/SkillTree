@@ -68,7 +68,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.moreEvasionPerActiveBarrier.description",
                 "[[0]]% more {evasion|Evasion} per active {barrier|Barrier}",
-                powerContext.Scale(moreEvasionPerActiveBarrier) * 100f);
+                powerContext.HighlightValue(powerContext.Scale(moreEvasionPerActiveBarrier) * 100f));
         }
     }
 }

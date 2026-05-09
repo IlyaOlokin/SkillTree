@@ -50,7 +50,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.bleedPowerForStacks.description",
                 "+[[0]]% Bleed Power per Bleed stack on target",
-                powerContext.Scale(AddedValue) * 100f);
+                powerContext.HighlightValue(powerContext.Scale(AddedValue) * 100f));
         }
     }
 

@@ -218,10 +218,15 @@ public class TooltipWindow : MonoBehaviour
 
     private int AppendWord(StringBuilder builder, string word, int currentLineLength, int wordVisibleLength)
     {
-        if (wordVisibleLength <= maxCharactersPerLine || ContainsMarkup(word))
+        if (wordVisibleLength <= maxCharactersPerLine || ContainsTooltipToken(word))
         {
             builder.Append(word);
             return currentLineLength + wordVisibleLength;
+        }
+
+        if (ContainsRichTextTag(word))
+        {
+            return AppendLongWordPreservingRichText(builder, word, currentLineLength);
         }
 
         int startIndex = 0;
@@ -241,6 +246,38 @@ public class TooltipWindow : MonoBehaviour
         int appendedLength = word.Length - startIndex;
         builder.Append(word, startIndex, appendedLength);
         return currentLineLength + appendedLength;
+    }
+
+    private int AppendLongWordPreservingRichText(StringBuilder builder, string word, int currentLineLength)
+    {
+        int lineLength = currentLineLength;
+        int currentIndex = 0;
+
+        while (currentIndex < word.Length)
+        {
+            if (TryReadRichTextTag(word, currentIndex, out int tagEndIndex))
+            {
+                builder.Append(word, currentIndex, tagEndIndex - currentIndex + 1);
+                currentIndex = tagEndIndex + 1;
+                continue;
+            }
+
+            if (lineLength >= maxCharactersPerLine)
+            {
+                if (builder.Length > 0 && builder[builder.Length - 1] != '\n')
+                {
+                    builder.AppendLine();
+                }
+
+                lineLength = 0;
+            }
+
+            builder.Append(word[currentIndex]);
+            currentIndex++;
+            lineLength++;
+        }
+
+        return lineLength;
     }
 
     private static bool TryReadNextWord(string text, ref int currentIndex, out string word)
@@ -341,8 +378,26 @@ public class TooltipWindow : MonoBehaviour
         return visibleLength;
     }
 
-    private static bool ContainsMarkup(string word)
+    private static bool ContainsTooltipToken(string word)
     {
-        return word.IndexOf('{') >= 0 || word.IndexOf('<') >= 0;
+        return word.IndexOf('{') >= 0;
+    }
+
+    private static bool ContainsRichTextTag(string word)
+    {
+        return word.IndexOf('<') >= 0;
+    }
+
+    private static bool TryReadRichTextTag(string text, int startIndex, out int tagEndIndex)
+    {
+        tagEndIndex = -1;
+
+        if (startIndex < 0 || startIndex >= text.Length || text[startIndex] != '<')
+        {
+            return false;
+        }
+
+        tagEndIndex = text.IndexOf('>', startIndex + 1);
+        return tagEndIndex >= 0;
     }
 }

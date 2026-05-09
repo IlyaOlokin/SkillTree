@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c76c461b883c8424faf6e64e45981b52, type: 3}
   m_Name: IndependentNodeAllocationItem
   m_EditorClassIdentifier: 
-  saveDefinitionId: 
+  saveDefinitionId: 2cc90d6750c941a79ea071118848e99d
   displayName: 
   description: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 539d7b32281ceb54a8a1dedce046ff5c, type: 3}
   maxStack: 1

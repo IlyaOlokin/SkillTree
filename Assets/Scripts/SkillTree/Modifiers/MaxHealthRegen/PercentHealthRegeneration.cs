@@ -33,7 +33,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.healthRegen.percent",
                 "+[[0]]% of Maximum Health regeneration per second",
-                powerContext.Scale(healthRegenerationPercentage) * 100f);
+                powerContext.HighlightValue(powerContext.Scale(healthRegenerationPercentage) * 100f));
         }
     }
 }

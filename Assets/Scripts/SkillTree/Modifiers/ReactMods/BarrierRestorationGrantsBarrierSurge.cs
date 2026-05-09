@@ -44,8 +44,8 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.barrierRestorationGrantsBarrierSurge.description",
                 "Each restored {barrier|Barrier} grants [[0]]% increased Ailment Power and [[1]]% increased Mystic Damage for [[2]] seconds. Each stack has its own duration.",
-                powerContext.Scale(increasedAilmentPower) * 100f,
-                powerContext.Scale(increasedMysticDamage) * 100f,
+                powerContext.HighlightValue(powerContext.Scale(increasedAilmentPower) * 100f),
+                powerContext.HighlightValue(powerContext.Scale(increasedMysticDamage) * 100f),
                 duration);
         }
     }

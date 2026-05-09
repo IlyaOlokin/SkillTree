@@ -285,6 +285,14 @@ public class PlayerStatsWindow : MonoBehaviour
                 return "+";
             case StatType.OverchargePower:
                 return "+";
+            case StatType.ElementalResistancePenetration:
+                return "+";
+            case StatType.FireResistancePenetration:
+                return "+";
+            case StatType.ColdResistancePenetration:
+                return "+";
+            case StatType.LightningResistancePenetration:
+                return "+";
             
             default:
                 return string.Empty;

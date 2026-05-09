@@ -45,7 +45,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.damageTakenAsPain.description",
                 "After an attack hit makes you lose Health, gain {pain|Pain} equal to [[0]]% of that lost Health. Damage over Time does not grant {pain|Pain}.",
-                powerContext.Scale(healthLostAsPain) * 100f);
+                powerContext.HighlightValue(powerContext.Scale(healthLostAsPain) * 100f));
         }
     }
 }

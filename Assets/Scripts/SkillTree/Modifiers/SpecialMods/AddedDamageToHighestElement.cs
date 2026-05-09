@@ -53,7 +53,7 @@ namespace SkillTree
             return GameLocalization.FormatModifier(
                 "modifier.addedDamageToHighestElement.description",
                 "[[0]] Damage to your highest Elemental Damage type if it is higher than the others",
-                FormatAddedValue(powerContext.Scale(addedDamage)));
+                powerContext.HighlightValue(FormatAddedValue(powerContext.Scale(addedDamage))));
         }
 
         private static bool TryGetHighestElementDamageStat(BaseUnitModifiers sourceModifiers, out StatType statType)
