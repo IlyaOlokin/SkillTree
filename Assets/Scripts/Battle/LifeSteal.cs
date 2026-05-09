@@ -4,12 +4,19 @@ namespace Battle
 {
     public static class LifeSteal
     {
-        public static void Apply(Unit attacker, DamageInstance damageInstance)
+        public static void Apply(Unit attacker, DamageInfo damageInfo, DamageInstance damageInstance)
         {
-            float lifeSteel = attacker.BaseUnitModifiers.GetStatValue(StatType.LifeSteal);
+            Apply(attacker, damageInfo?.BaseUnitModifiers ?? attacker?.BaseUnitModifiers, damageInstance);
+        }
+
+        private static void Apply(Unit attacker, BaseUnitModifiers baseUnitModifiers, DamageInstance damageInstance)
+        {
+            if (attacker == null || baseUnitModifiers == null || damageInstance == null) return;
+
+            float lifeSteel = StatCalculator.GetStat(baseUnitModifiers, StatType.LifeSteal);
             if (lifeSteel <= 0) return;
             
-            DamageType damageType = (DamageType) attacker.BaseUnitModifiers.GetStatValue(StatType.LifeSteelTypeMask);
+            DamageType damageType = (DamageType)StatCalculator.GetStat(baseUnitModifiers, StatType.LifeSteelTypeMask);
 
             float totalValidDamage = 0;
             foreach (var damage in damageInstance.Damage)
