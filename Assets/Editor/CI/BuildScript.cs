@@ -10,12 +10,12 @@ public static class BuildScript
     public static void BuildWindows()
     {
         Debug.Log("BUILD SCRIPT STARTED: WINDOWS");
-        
+
         string root = Directory.GetParent(Application.dataPath).FullName;
 
         Build(
             BuildTarget.StandaloneWindows64,
-            Path.Combine(root, "Builds/Windows"),
+            Path.Combine(root, "Builds", "Windows"),
             "Game.exe"
         );
     }
@@ -23,64 +23,88 @@ public static class BuildScript
     public static void BuildWebGL()
     {
         Debug.Log("BUILD SCRIPT STARTED: WEBGL");
-        
+
         string root = Directory.GetParent(Application.dataPath).FullName;
-        
+
         Build(
             BuildTarget.WebGL,
-            Path.Combine(root, "Builds/Windows"),
+            Path.Combine(root, "Builds", "WebGL"),
             null
         );
     }
 
     private static void Build(BuildTarget target, string outputDir, string exeName)
     {
-        string version = GetArg("-buildVersion", "0.0.0");
-        string buildNumber = GetArg("-buildNumber", "0");
-
-        PlayerSettings.bundleVersion = version;
-
-        string fullOutputPath = Path.GetFullPath(outputDir);
-
-        if (Directory.Exists(fullOutputPath))
-            Directory.Delete(fullOutputPath, true);
-
-        Directory.CreateDirectory(fullOutputPath);
-
-        string locationPathName = target == BuildTarget.StandaloneWindows64
-            ? Path.Combine(fullOutputPath, exeName)
-            : fullOutputPath;
-
-        string[] scenes = EditorBuildSettings.scenes
-            .Where(scene => scene.enabled)
-            .Select(scene => scene.path)
-            .ToArray();
-
-        if (scenes.Length == 0)
-            throw new Exception("No enabled scenes in Build Settings.");
-
-        BuildPlayerOptions options = new BuildPlayerOptions
+        try
         {
-            scenes = scenes,
-            locationPathName = locationPathName,
-            target = target,
-            options = BuildOptions.None
-        };
+            string version = GetArg("-buildVersion", "0.0.0");
+            string buildNumber = GetArg("-buildNumber", "0");
 
-        Debug.Log($"Starting build: {target}");
-        Debug.Log($"Version: {version}");
-        Debug.Log($"Build number: {buildNumber}");
-        Debug.Log($"Output: {locationPathName}");
+            Debug.Log($"Build target: {target}");
+            Debug.Log($"Build version: {version}");
+            Debug.Log($"Build number: {buildNumber}");
+            Debug.Log($"Output directory: {outputDir}");
 
-        BuildReport report = BuildPipeline.BuildPlayer(options);
-        BuildSummary summary = report.summary;
+            PlayerSettings.bundleVersion = version;
 
-        Debug.Log($"Build result: {summary.result}");
-        Debug.Log($"Build size: {summary.totalSize} bytes");
-        Debug.Log($"Build time: {summary.totalTime}");
+            if (Directory.Exists(outputDir))
+            {
+                Debug.Log($"Deleting old build directory: {outputDir}");
+                Directory.Delete(outputDir, true);
+            }
 
-        if (summary.result != BuildResult.Succeeded)
-            throw new Exception($"Build failed: {summary.result}");
+            Directory.CreateDirectory(outputDir);
+
+            string locationPathName = target == BuildTarget.StandaloneWindows64
+                ? Path.Combine(outputDir, exeName)
+                : outputDir;
+
+            string[] scenes = EditorBuildSettings.scenes
+                .Where(scene => scene.enabled)
+                .Select(scene => scene.path)
+                .ToArray();
+
+            if (scenes.Length == 0)
+            {
+                throw new Exception("No enabled scenes in Build Settings.");
+            }
+
+            Debug.Log("Scenes:");
+            foreach (string scene in scenes)
+            {
+                Debug.Log(scene);
+            }
+
+            BuildPlayerOptions options = new BuildPlayerOptions
+            {
+                scenes = scenes,
+                locationPathName = locationPathName,
+                target = target,
+                options = BuildOptions.None
+            };
+
+            BuildReport report = BuildPipeline.BuildPlayer(options);
+            BuildSummary summary = report.summary;
+
+            Debug.Log($"Build result: {summary.result}");
+            Debug.Log($"Build size: {summary.totalSize}");
+            Debug.Log($"Build time: {summary.totalTime}");
+            Debug.Log($"Build output path: {summary.outputPath}");
+
+            if (summary.result != BuildResult.Succeeded)
+            {
+                throw new Exception($"Build failed with result: {summary.result}");
+            }
+
+            Debug.Log("BUILD SCRIPT FINISHED SUCCESSFULLY");
+            EditorApplication.Exit(0);
+        }
+        catch (Exception exception)
+        {
+            Debug.LogError("BUILD SCRIPT FAILED");
+            Debug.LogException(exception);
+            EditorApplication.Exit(1);
+        }
     }
 
     private static string GetArg(string name, string defaultValue)
@@ -90,7 +114,9 @@ public static class BuildScript
         for (int i = 0; i < args.Length - 1; i++)
         {
             if (args[i] == name)
+            {
                 return args[i + 1];
+            }
         }
 
         return defaultValue;
