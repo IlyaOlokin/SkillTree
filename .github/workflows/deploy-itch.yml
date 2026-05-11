@@ -42,11 +42,11 @@ jobs:
           path: BuildsToDeploy/WebGL
 
       - name: Validate Butler
-        shell: pwsh
+        shell: powershell
         run: butler -V
 
       - name: Push Windows build
-        shell: pwsh
+        shell: powershell
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
         run: |
@@ -56,7 +56,7 @@ jobs:
             --userversion "${{ github.event.inputs.version }}"
 
       - name: Push WebGL build
-        shell: pwsh
+        shell: powershell
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
         run: |
