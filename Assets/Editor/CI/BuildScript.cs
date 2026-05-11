@@ -9,6 +9,8 @@ public static class BuildScript
 {
     public static void BuildWindows()
     {
+        Debug.Log("BUILD SCRIPT STARTED: WINDOWS");
+        
         string root = Directory.GetParent(Application.dataPath).FullName;
 
         Build(
@@ -20,6 +22,8 @@ public static class BuildScript
 
     public static void BuildWebGL()
     {
+        Debug.Log("BUILD SCRIPT STARTED: WEBGL");
+        
         string root = Directory.GetParent(Application.dataPath).FullName;
         
         Build(
