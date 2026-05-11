@@ -18,6 +18,7 @@ permissions:
 env:
   ITCH_USER: ${{ vars.ITCH_USER }}
   ITCH_GAME: ${{ vars.ITCH_GAME }}
+  BUTLER_PATH: C:\Tools\butler\butler.exe
 
 jobs:
   deploy:
@@ -41,30 +42,15 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: BuildsToDeploy/WebGL
 
-      - name: Install Butler
-        shell: powershell
-        run: |
-          $butlerDir = "$env:USERPROFILE\butler"
-          $butlerZip = "$env:TEMP\butler.zip"
-
-          if (!(Test-Path "$butlerDir\butler.exe")) {
-            New-Item -ItemType Directory -Force -Path $butlerDir | Out-Null
-
-            Invoke-WebRequest `
-              -Uri "https://broth.itch.ovh/butler/windows-amd64/LATEST/archive/default" `
-              -OutFile $butlerZip
-
-            Expand-Archive `
-              -Path $butlerZip `
-              -DestinationPath $butlerDir `
-              -Force
-          }
-
-          echo "$butlerDir" >> $env:GITHUB_PATH
-
       - name: Validate Butler
         shell: powershell
-        run: butler -V
+        run: |
+          if (!(Test-Path "${{ env.BUTLER_PATH }}")) {
+            Write-Error "Butler not found at ${{ env.BUTLER_PATH }}"
+            exit 1
+          }
+
+          & "${{ env.BUTLER_PATH }}" -V
 
       - name: Validate itch variables
         shell: powershell
@@ -79,13 +65,27 @@ jobs:
             exit 1
           }
 
+          if ("${{ secrets.BUTLER_API_KEY }}" -eq "") {
+            Write-Error "BUTLER_API_KEY secret is empty"
+            exit 1
+          }
+
+      - name: Show downloaded artifacts
+        shell: powershell
+        run: |
+          Write-Host "Windows build:"
+          Get-ChildItem "BuildsToDeploy\Windows" -Recurse
+
+          Write-Host "WebGL build:"
+          Get-ChildItem "BuildsToDeploy\WebGL" -Recurse
+
       - name: Push Windows build
         shell: powershell
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
         run: |
-          butler push `
-            "BuildsToDeploy/Windows" `
+          & "${{ env.BUTLER_PATH }}" push `
+            "BuildsToDeploy\Windows" `
             "${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:windows" `
             --userversion "${{ github.event.inputs.version }}"
 
@@ -94,7 +94,7 @@ jobs:
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
         run: |
-          butler push `
-            "BuildsToDeploy/WebGL" `
+          & "${{ env.BUTLER_PATH }}" push `
+            "BuildsToDeploy\WebGL" `
             "${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:webgl" `
             --userversion "${{ github.event.inputs.version }}"
