@@ -1,0 +1,63 @@
+name: Manual Deploy to itch.io
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_run_id:
+        description: "GitHub Actions run id from Manual Unity Build"
+        required: true
+      version:
+        description: "Game version, same as build version"
+        required: true
+        default: "0.1.0"
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  ITCH_USER: ${{ vars.ITCH_USER }}
+  ITCH_GAME: ${{ vars.ITCH_GAME }}
+
+jobs:
+  deploy:
+    name: Deploy existing build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ github.event.inputs.version }}-StandaloneWindows64
+          run-id: ${{ github.event.inputs.build_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: builds/windows
+
+      - name: Download WebGL artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ github.event.inputs.version }}-WebGL
+          run-id: ${{ github.event.inputs.build_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: builds/webgl
+
+      - name: Setup Butler
+        uses: remarkablegames/setup-butler@v3
+
+      - name: Push Windows build
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          butler push \
+            builds/windows \
+            "$ITCH_USER/$ITCH_GAME:windows" \
+            --userversion "${{ github.event.inputs.version }}"
+
+      - name: Push WebGL build
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          butler push \
+            builds/webgl \
+            "$ITCH_USER/$ITCH_GAME:webgl" \
+            --userversion "${{ github.event.inputs.version }}"
