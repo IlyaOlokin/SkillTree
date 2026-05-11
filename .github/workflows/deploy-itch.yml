@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       build_run_id:
-        description: "GitHub Actions run id from Manual Unity Build"
+        description: "Run ID from Manual Unity Build"
         required: true
       version:
-        description: "Game version, same as build version"
+        description: "Game version"
         required: true
         default: "0.1.0"
 
@@ -21,8 +21,8 @@ env:
 
 jobs:
   deploy:
-    name: Deploy existing build
-    runs-on: ubuntu-latest
+    name: Deploy existing artifacts
+    runs-on: [self-hosted, Windows, unity6]
 
     steps:
       - name: Download Windows artifact
@@ -31,7 +31,7 @@ jobs:
           name: ${{ github.event.inputs.version }}-StandaloneWindows64
           run-id: ${{ github.event.inputs.build_run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path: builds/windows
+          path: BuildsToDeploy/Windows
 
       - name: Download WebGL artifact
         uses: actions/download-artifact@v4
@@ -39,25 +39,28 @@ jobs:
           name: ${{ github.event.inputs.version }}-WebGL
           run-id: ${{ github.event.inputs.build_run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path: builds/webgl
+          path: BuildsToDeploy/WebGL
 
-      - name: Setup Butler
-        uses: remarkablegames/setup-butler@v3
+      - name: Validate Butler
+        shell: pwsh
+        run: butler -V
 
       - name: Push Windows build
+        shell: pwsh
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
         run: |
-          butler push \
-            builds/windows \
-            "$ITCH_USER/$ITCH_GAME:windows" \
+          butler push `
+            "BuildsToDeploy/Windows" `
+            "${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:windows" `
             --userversion "${{ github.event.inputs.version }}"
 
       - name: Push WebGL build
+        shell: pwsh
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
         run: |
-          butler push \
-            builds/webgl \
-            "$ITCH_USER/$ITCH_GAME:webgl" \
+          butler push `
+            "BuildsToDeploy/WebGL" `
+            "${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:webgl" `
             --userversion "${{ github.event.inputs.version }}"
