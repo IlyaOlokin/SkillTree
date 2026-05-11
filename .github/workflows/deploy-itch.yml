@@ -41,9 +41,43 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: BuildsToDeploy/WebGL
 
+      - name: Install Butler
+        shell: powershell
+        run: |
+          $butlerDir = "$env:USERPROFILE\butler"
+          $butlerZip = "$env:TEMP\butler.zip"
+
+          if (!(Test-Path "$butlerDir\butler.exe")) {
+            New-Item -ItemType Directory -Force -Path $butlerDir | Out-Null
+
+            Invoke-WebRequest `
+              -Uri "https://broth.itch.ovh/butler/windows-amd64/LATEST/archive/default" `
+              -OutFile $butlerZip
+
+            Expand-Archive `
+              -Path $butlerZip `
+              -DestinationPath $butlerDir `
+              -Force
+          }
+
+          echo "$butlerDir" >> $env:GITHUB_PATH
+
       - name: Validate Butler
         shell: powershell
         run: butler -V
+
+      - name: Validate itch variables
+        shell: powershell
+        run: |
+          if ("${{ env.ITCH_USER }}" -eq "") {
+            Write-Error "ITCH_USER variable is empty"
+            exit 1
+          }
+
+          if ("${{ env.ITCH_GAME }}" -eq "") {
+            Write-Error "ITCH_GAME variable is empty"
+            exit 1
+          }
 
       - name: Push Windows build
         shell: powershell
