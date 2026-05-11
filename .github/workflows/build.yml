@@ -12,55 +12,108 @@ permissions:
   contents: read
 
 env:
-  UNITY_PROJECT_PATH: ${{ vars.UNITY_PROJECT_PATH || '.' }}
+  UNITY_PATH: C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Unity.exe
+  PROJECT_PATH: ${{ github.workspace }}
 
 jobs:
-  build:
-    name: Build ${{ matrix.targetPlatform }}
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        targetPlatform:
-          - StandaloneWindows64
-          - WebGL
+  build-windows:
+    name: Build Windows
+    runs-on: [self-hosted, Windows, unity6]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
           lfs: true
+          clean: false
 
-      - name: Cache Unity Library
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.UNITY_PROJECT_PATH }}/Library
-          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles(format('{0}/Packages/packages-lock.json', env.UNITY_PROJECT_PATH)) }}
-          restore-keys: |
-            Library-${{ matrix.targetPlatform }}-
-            Library-
+      - name: Git LFS pull
+        shell: pwsh
+        run: git lfs pull
 
-      - name: Build Unity project
-        uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          projectPath: ${{ env.UNITY_PROJECT_PATH }}
-          targetPlatform: ${{ matrix.targetPlatform }}
-          versioning: Custom
-          version: ${{ github.event.inputs.version }}
+      - name: Clean previous builds
+        shell: pwsh
+        run: |
+          if (Test-Path "Builds") {
+            Remove-Item "Builds" -Recurse -Force
+          }
 
-      - name: Show build files
-        run: find build -maxdepth 4 -type f | sort
+      - name: Build Windows
+        shell: pwsh
+        run: |
+          & "${{ env.UNITY_PATH }}" `
+            -batchmode `
+            -quit `
+            -nographics `
+            -projectPath "${{ env.PROJECT_PATH }}" `
+            -buildTarget StandaloneWindows64 `
+            -executeMethod BuildScript.BuildWindows `
+            -buildVersion "${{ github.event.inputs.version }}" `
+            -buildNumber "${{ github.run_number }}" `
+            -logFile "${{ github.workspace }}\unity-windows-build.log"
 
-      - name: Upload build artifact
+      - name: Upload Unity log
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.inputs.version }}-${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}
+          name: unity-windows-log
+          path: unity-windows-build.log
+
+      - name: Upload Windows build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.inputs.version }}-StandaloneWindows64
+          path: Builds/Windows
+          if-no-files-found: error
+          retention-days: 30
+
+  build-webgl:
+    name: Build WebGL
+    runs-on: [self-hosted, Windows, unity6]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          clean: false
+
+      - name: Git LFS pull
+        shell: pwsh
+        run: git lfs pull
+
+      - name: Clean previous builds
+        shell: pwsh
+        run: |
+          if (Test-Path "Builds\WebGL") {
+            Remove-Item "Builds\WebGL" -Recurse -Force
+          }
+
+      - name: Build WebGL
+        shell: pwsh
+        run: |
+          & "${{ env.UNITY_PATH }}" `
+            -batchmode `
+            -quit `
+            -nographics `
+            -projectPath "${{ env.PROJECT_PATH }}" `
+            -buildTarget WebGL `
+            -executeMethod BuildScript.BuildWebGL `
+            -buildVersion "${{ github.event.inputs.version }}" `
+            -buildNumber "${{ github.run_number }}" `
+            -logFile "${{ github.workspace }}\unity-webgl-build.log"
+
+      - name: Upload Unity log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unity-webgl-log
+          path: unity-webgl-build.log
+
+      - name: Upload WebGL build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.inputs.version }}-WebGL
+          path: Builds/WebGL
           if-no-files-found: error
           retention-days: 30
