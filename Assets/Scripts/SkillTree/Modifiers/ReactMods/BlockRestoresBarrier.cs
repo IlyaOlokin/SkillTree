@@ -1,90 +1,36 @@
-using System;
-using System.IO;
-using System.Linq;
-using UnityEditor;
-using UnityEditor.Build.Reporting;
+using Battle;
+using LocalizationSupport;
 using UnityEngine;
 
-public static class BuildScript
+namespace SkillTree
 {
-    public static void BuildWindows()
+    [CreateAssetMenu(menuName = "Modifiers/Reactive/Block Restores Barrier", fileName = "New BlockRestoresBarrier")]
+    public class BlockRestoresBarrier : Modifier
     {
-        Build(
-            BuildTarget.StandaloneWindows64,
-            "Builds/Windows",
-            "Game.exe"
-        );
-    }
+        private const int BarrierRestoreAmount = 1;
 
-    public static void BuildWebGL()
-    {
-        Build(
-            BuildTarget.WebGL,
-            "Builds/WebGL",
-            null
-        );
-    }
-
-    private static void Build(BuildTarget target, string outputDir, string exeName)
-    {
-        string version = GetArg("-buildVersion", "0.0.0");
-        string buildNumber = GetArg("-buildNumber", "0");
-
-        PlayerSettings.bundleVersion = version;
-
-        string fullOutputPath = Path.GetFullPath(outputDir);
-
-        if (Directory.Exists(fullOutputPath))
-            Directory.Delete(fullOutputPath, true);
-
-        Directory.CreateDirectory(fullOutputPath);
-
-        string locationPathName = target == BuildTarget.StandaloneWindows64
-            ? Path.Combine(fullOutputPath, exeName)
-            : fullOutputPath;
-
-        string[] scenes = EditorBuildSettings.scenes
-            .Where(scene => scene.enabled)
-            .Select(scene => scene.path)
-            .ToArray();
-
-        if (scenes.Length == 0)
-            throw new Exception("No enabled scenes in Build Settings.");
-
-        BuildPlayerOptions options = new BuildPlayerOptions
+        public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
         {
-            scenes = scenes,
-            locationPathName = locationPathName,
-            target = target,
-            options = BuildOptions.None
-        };
+            if (unit?.barrier == null)
+            {
+                return null;
+            }
 
-        Debug.Log($"Starting build: {target}");
-        Debug.Log($"Version: {version}");
-        Debug.Log($"Build number: {buildNumber}");
-        Debug.Log($"Output: {locationPathName}");
+            void HandleBlock()
+            {
+                unit.barrier.Restore(BarrierRestoreAmount);
+            }
 
-        BuildReport report = BuildPipeline.BuildPlayer(options);
-        BuildSummary summary = report.summary;
-
-        Debug.Log($"Build result: {summary.result}");
-        Debug.Log($"Build size: {summary.totalSize} bytes");
-        Debug.Log($"Build time: {summary.totalTime}");
-
-        if (summary.result != BuildResult.Succeeded)
-            throw new Exception($"Build failed: {summary.result}");
-    }
-
-    private static string GetArg(string name, string defaultValue)
-    {
-        string[] args = Environment.GetCommandLineArgs();
-
-        for (int i = 0; i < args.Length - 1; i++)
-        {
-            if (args[i] == name)
-                return args[i + 1];
+            return new DelegateModifierRuntimeBinding(
+                () => unit.OnBlock += HandleBlock,
+                () => unit.OnBlock -= HandleBlock);
         }
 
-        return defaultValue;
+        public override string GetDescription()
+        {
+            return GameLocalization.GetModifier(
+                "modifier.blockRestoresBarrier.description",
+                "After {block|Block}: restore 1 {barrier|Barrier}");
+        }
     }
 }
