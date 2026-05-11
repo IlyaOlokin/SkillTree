@@ -31,11 +31,11 @@ jobs:
         shell: powershell
         run: git lfs pull
 
-      - name: Clean previous builds
+      - name: Clean Windows build
         shell: powershell
         run: |
-          if (Test-Path "Builds") {
-            Remove-Item "Builds" -Recurse -Force
+          if (Test-Path "Builds\Windows") {
+            Remove-Item "Builds\Windows" -Recurse -Force
           }
 
       - name: Build Windows
@@ -44,7 +44,6 @@ jobs:
           & "${{ env.UNITY_PATH }}" `
             -batchmode `
             -quit `
-            -nographics `
             -projectPath "${{ env.PROJECT_PATH }}" `
             -buildTarget StandaloneWindows64 `
             -executeMethod BuildScript.BuildWindows `
@@ -52,12 +51,27 @@ jobs:
             -buildNumber "${{ github.run_number }}" `
             -logFile "${{ github.workspace }}\unity-windows-build.log"
 
-      - name: Upload Unity log
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
+      - name: Print Windows Unity log
+        if: always()
+        shell: powershell
+        run: |
+          if (Test-Path "unity-windows-build.log") {
+            Get-Content "unity-windows-build.log" -Tail 500
+          } else {
+            Write-Host "unity-windows-build.log not found"
+          }
+
+      - name: Upload Windows Unity log
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: unity-windows-log
           path: unity-windows-build.log
+          if-no-files-found: warn
 
       - name: Upload Windows build
         uses: actions/upload-artifact@v4
@@ -82,7 +96,7 @@ jobs:
         shell: powershell
         run: git lfs pull
 
-      - name: Clean previous builds
+      - name: Clean WebGL build
         shell: powershell
         run: |
           if (Test-Path "Builds\WebGL") {
@@ -95,7 +109,6 @@ jobs:
           & "${{ env.UNITY_PATH }}" `
             -batchmode `
             -quit `
-            -nographics `
             -projectPath "${{ env.PROJECT_PATH }}" `
             -buildTarget WebGL `
             -executeMethod BuildScript.BuildWebGL `
@@ -103,12 +116,27 @@ jobs:
             -buildNumber "${{ github.run_number }}" `
             -logFile "${{ github.workspace }}\unity-webgl-build.log"
 
-      - name: Upload Unity log
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
+      - name: Print WebGL Unity log
+        if: always()
+        shell: powershell
+        run: |
+          if (Test-Path "unity-webgl-build.log") {
+            Get-Content "unity-webgl-build.log" -Tail 500
+          } else {
+            Write-Host "unity-webgl-build.log not found"
+          }
+
+      - name: Upload WebGL Unity log
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: unity-webgl-log
           path: unity-webgl-build.log
+          if-no-files-found: warn
 
       - name: Upload WebGL build
         uses: actions/upload-artifact@v4
