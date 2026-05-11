@@ -9,18 +9,22 @@ public static class BuildScript
 {
     public static void BuildWindows()
     {
+        string root = Directory.GetParent(Application.dataPath).FullName;
+
         Build(
             BuildTarget.StandaloneWindows64,
-            "Builds/Windows",
+            Path.Combine(root, "Builds/Windows"),
             "Game.exe"
         );
     }
 
     public static void BuildWebGL()
     {
+        string root = Directory.GetParent(Application.dataPath).FullName;
+        
         Build(
             BuildTarget.WebGL,
-            "Builds/WebGL",
+            Path.Combine(root, "Builds/Windows"),
             null
         );
     }
