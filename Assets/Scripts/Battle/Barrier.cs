@@ -123,5 +123,31 @@ namespace Battle
             _cooldownProgress = 0f;
             OnBarrierCountChanged?.Invoke();
         }
+
+        public int Restore(int amount)
+        {
+            if (amount <= 0 || IsFull)
+            {
+                return 0;
+            }
+
+            int previousBarrierCount = _barrierCount;
+            _barrierCount = Mathf.Min(_barrierCount + amount, _maxBarrierCount);
+            int restoredAmount = _barrierCount - previousBarrierCount;
+
+            if (restoredAmount <= 0)
+            {
+                return 0;
+            }
+
+            OnBarrierCountChanged?.Invoke();
+
+            for (int i = 0; i < restoredAmount; i++)
+            {
+                OnBarrierRestored?.Invoke();
+            }
+
+            return restoredAmount;
+        }
     }
 }

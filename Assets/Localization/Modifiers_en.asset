@@ -1765,6 +1765,10 @@ MonoBehaviour:
     m_Localized: You have no Lightning {resistance|Resistance} Penetration
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311753
+    m_Localized: 'After {block|Block}: restore 1 {barrier|Barrier}'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

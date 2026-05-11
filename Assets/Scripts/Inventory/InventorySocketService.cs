@@ -20,38 +20,64 @@ namespace InventorySystem
             if (!socketNode.HasGem)
                 return TryInsertIntoEmptySocket(inventory, slotIndex, socketNode);
 
-            return TrySwapGem(inventory, slotIndex, socketNode, item.Gem);
+            return TrySwapGem(inventory, slotIndex, socketNode);
         }
 
         private static bool TryInsertIntoEmptySocket(PlayerInventory inventory, int slotIndex, SocketNode socketNode)
         {
-            if (!inventory.TryRemoveItem(slotIndex, out InventoryItem removedItem))
+            InventoryItem item = inventory.PeekItem(slotIndex);
+            GemInstance socketGem = CreateSocketGemInstance(item);
+            if (socketGem == null)
                 return false;
 
-            if (socketNode.TryInsertGem(removedItem.Gem))
+            if (!inventory.TryConsumeItem(slotIndex, 1))
+                return false;
+
+            if (socketNode.TryInsertGem(socketGem))
                 return true;
 
-            inventory.TrySetItem(slotIndex, removedItem, out _);
+            inventory.TryAddItem(InventoryItem.FromGem(socketGem), out _);
             return false;
         }
 
-        private static bool TrySwapGem(PlayerInventory inventory, int slotIndex, SocketNode socketNode, GemInstance selectedGem)
+        private static bool TrySwapGem(PlayerInventory inventory, int slotIndex, SocketNode socketNode)
         {
+            InventoryItem selectedItem = inventory.PeekItem(slotIndex);
+            GemInstance socketGem = CreateSocketGemInstance(selectedItem);
+            if (socketGem == null)
+                return false;
+
             if (!socketNode.TryRemoveGem(out GemInstance socketedGem))
                 return false;
 
-            if (!socketNode.TryInsertGem(selectedGem))
+            if (!socketNode.TryInsertGem(socketGem))
             {
                 socketNode.TryInsertGem(socketedGem);
                 return false;
             }
 
-            if (inventory.TrySetItem(slotIndex, InventoryItem.FromGem(socketedGem), out _))
+            if (!inventory.TryConsumeItem(slotIndex, 1))
+            {
+                socketNode.TryRemoveGem(out _);
+                socketNode.TryInsertGem(socketedGem);
+                return false;
+            }
+
+            if (inventory.TryAddItem(InventoryItem.FromGem(socketedGem), out _))
                 return true;
 
             socketNode.TryRemoveGem(out _);
             socketNode.TryInsertGem(socketedGem);
+            inventory.TryAddItem(InventoryItem.FromGem(socketGem), out _);
             return false;
+        }
+
+        private static GemInstance CreateSocketGemInstance(InventoryItem item)
+        {
+            if (item?.Gem == null)
+                return null;
+
+            return item.Gem.Definition != null ? item.Gem.Definition.CreateInstance() : item.Gem;
         }
 
         public bool TryExtractGem(PlayerInventory inventory, SocketNode socketNode, out int targetSlotIndex)

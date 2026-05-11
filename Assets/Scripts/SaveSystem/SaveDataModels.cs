@@ -153,7 +153,7 @@ namespace SaveSystem
         {
             return itemType switch
             {
-                InventoryItemType.Gem when gem != null => InventoryItem.FromGem(gemResolver?.Invoke(gem)),
+                InventoryItemType.Gem when gem != null => InventoryItem.FromGem(gemResolver?.Invoke(gem), stackCount),
                 InventoryItemType.Generic when !string.IsNullOrWhiteSpace(itemDefinitionId) =>
                     InventoryItem.FromItemDefinition(itemResolver?.Invoke(itemDefinitionId), stackCount),
                 _ => null

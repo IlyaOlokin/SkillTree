@@ -16,13 +16,13 @@ namespace InventorySystem
 
         public InventoryItemType ItemType => itemType;
         public GemInstance Gem => gem;
-        public ItemDefinition ItemDefinition => itemDefinition;
-        public int StackCount => itemType == InventoryItemType.Generic && itemDefinition != null ? Mathf.Max(1, stackCount) : (IsEmpty ? 0 : 1);
-        public int MaxStack => itemType == InventoryItemType.Generic && itemDefinition != null ? itemDefinition.MaxStack : 1;
-        public bool IsStackable => itemType == InventoryItemType.Generic && itemDefinition != null && MaxStack > 1;
-        public bool CanBeUsed => itemType == InventoryItemType.Generic && itemDefinition != null && itemDefinition.CanBeUsed;
-        public bool CanBeUsedOnNode => itemType == InventoryItemType.Generic && itemDefinition != null && itemDefinition.CanBeUsedOnNode;
-        public bool ConsumeOnUse => itemType == InventoryItemType.Generic && itemDefinition != null && itemDefinition.ConsumeOnUse;
+        public ItemDefinition ItemDefinition => itemDefinition != null ? itemDefinition : gem?.Definition;
+        public int StackCount => ItemDefinition != null ? Mathf.Max(1, stackCount) : (IsEmpty ? 0 : 1);
+        public int MaxStack => ItemDefinition != null ? ItemDefinition.MaxStack : 1;
+        public bool IsStackable => ItemDefinition != null && MaxStack > 1;
+        public bool CanBeUsed => ItemDefinition != null && ItemDefinition.CanBeUsed;
+        public bool CanBeUsedOnNode => ItemDefinition != null && ItemDefinition.CanBeUsedOnNode;
+        public bool ConsumeOnUse => ItemDefinition != null && ItemDefinition.ConsumeOnUse;
         public bool IsEmpty => itemType switch
         {
             InventoryItemType.Gem => gem == null,
@@ -44,12 +44,16 @@ namespace InventorySystem
             _ => null
         };
 
-        public static InventoryItem FromGem(GemInstance gemInstance)
+        public static InventoryItem FromGem(GemInstance gemInstance, int amount = 1)
         {
+            GemDefinition definition = gemInstance?.Definition;
+
             return new InventoryItem
             {
                 itemType = InventoryItemType.Gem,
-                gem = gemInstance
+                gem = gemInstance,
+                itemDefinition = definition,
+                stackCount = definition != null ? Mathf.Clamp(amount, 1, definition.MaxStack) : 1
             };
         }
 
@@ -59,7 +63,7 @@ namespace InventorySystem
                 return null;
 
             if (definition is GemDefinition gemDefinition)
-                return FromGem(gemDefinition.CreateInstance());
+                return FromGem(gemDefinition.CreateInstance(), amount);
 
             return new InventoryItem
             {
@@ -73,7 +77,7 @@ namespace InventorySystem
         {
             return itemType switch
             {
-                InventoryItemType.Gem when gem != null => FromGem(gem),
+                InventoryItemType.Gem when gem != null => FromGem(gem, overrideStackCount ?? StackCount),
                 InventoryItemType.Generic when itemDefinition != null => FromItemDefinition(itemDefinition, overrideStackCount ?? StackCount),
                 _ => null
             };
@@ -84,9 +88,9 @@ namespace InventorySystem
             return other != null &&
                    !IsEmpty &&
                    !other.IsEmpty &&
-                   itemType == InventoryItemType.Generic &&
-                   other.itemType == InventoryItemType.Generic &&
-                   itemDefinition == other.itemDefinition &&
+                   itemType == other.itemType &&
+                   ItemDefinition != null &&
+                   ItemDefinition == other.ItemDefinition &&
                    IsStackable &&
                    StackCount < MaxStack;
         }
@@ -107,10 +111,7 @@ namespace InventorySystem
             if (amount <= 0)
                 return false;
 
-            if (itemType == InventoryItemType.Gem)
-                return amount == 1;
-
-            if (itemType != InventoryItemType.Generic || itemDefinition == null || stackCount < amount)
+            if (ItemDefinition == null || StackCount < amount)
                 return false;
 
             stackCount -= amount;

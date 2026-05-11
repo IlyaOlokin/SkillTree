@@ -131,16 +131,6 @@ namespace InventorySystem
             if (item == null || item.IsEmpty)
                 return false;
 
-            if (item.ItemType == InventoryItemType.Gem)
-            {
-                if (amount != 1)
-                    return false;
-
-                slots[slotIndex].Clear();
-                RaiseInventoryChanged();
-                return true;
-            }
-
             if (!item.TryConsumeUnits(amount))
                 return false;
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using InventorySystem;
 using TooltipSystem;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ namespace UI
     {
         [Header("View")]
         [SerializeField] private Image iconImage;
+        [SerializeField] private TMP_Text stackCountText;
         [SerializeField] private GameObject selectionHighlight;
         [SerializeField] private GameObject emptyState;
 
@@ -42,6 +44,14 @@ namespace UI
             {
                 iconImage.enabled = item?.Icon != null;
                 iconImage.sprite = item?.Icon;
+            }
+
+            if (stackCountText != null)
+            {
+                int stackCount = item?.StackCount ?? 0;
+                bool shouldShowStackCount = stackCount > 1;
+                stackCountText.gameObject.SetActive(shouldShowStackCount);
+                stackCountText.text = shouldShowStackCount ? stackCount.ToString() : string.Empty;
             }
 
             if (selectionHighlight != null)

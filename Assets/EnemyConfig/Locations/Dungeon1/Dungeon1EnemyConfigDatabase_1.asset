@@ -24,7 +24,7 @@ MonoBehaviour:
   - 30
   - 36
   startingLevel: 1
-  wavesToUnlockNextLevel: 2
+  wavesToUnlockNextLevel: 1
   respawnDelay: 1
   maxEnemiesPerWave: 3
   rarityBalance: {fileID: 11400000, guid: e06ecfd8fa36bd64ab614c313d620730, type: 2}

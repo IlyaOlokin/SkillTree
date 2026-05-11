@@ -1751,6 +1751,10 @@ MonoBehaviour:
     m_Key: modifier.container.none.LightningResistancePenetration
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311753
+    m_Key: modifier.blockRestoresBarrier.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

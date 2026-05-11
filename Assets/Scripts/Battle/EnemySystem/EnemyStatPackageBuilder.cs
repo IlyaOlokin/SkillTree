@@ -23,7 +23,7 @@ namespace Battle
             ApplyArchetypeModifiers(package.Modifiers, archetype);
             ApplyAttackSpeed(package.Modifiers, archetype, applyRandomVariance);
             ApplyAccuracy(package.Modifiers, totalPower);
-            //ApplyRarityScaling(package.Modifiers, rarity);
+            ApplyRarityScaling(package.Modifiers, rarity);
             ApplyAffixes(package.Modifiers, archetype, rarity, affixCountOverride);
             
             return package;
@@ -175,21 +175,16 @@ namespace Battle
             switch (rarity)
             {
                 case EnemyRarity.Magic:
-                    Add(package, ModifierType.Increased, StatType.Damage, 0.15f);
                     break;
 
                 case EnemyRarity.Rare:
-                    Add(package, ModifierType.Increased, StatType.Damage, 0.05f);
-                    Add(package, ModifierType.Increased, StatType.MaximumHealth, 0.25f);
                     break;
 
                 case EnemyRarity.Elite:
-                    Add(package, ModifierType.More, StatType.Damage, 0.1f);
                     break;
 
                 case EnemyRarity.Boss:
-                    Add(package, ModifierType.More, StatType.Damage, 0.5f);
-                    Add(package, ModifierType.More, StatType.MaximumHealth, 0.2f);
+                    Add(package, ModifierType.More, StatType.MaximumHealth, -0.2f);
                     break;
             }
         }

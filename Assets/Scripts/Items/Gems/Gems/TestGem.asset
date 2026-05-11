@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: TestGem
   description: 
   icon: {fileID: 21300000, guid: 34f4291c2694575439bf2ef25f29aaa3, type: 3}
-  maxStack: 1
+  maxStack: 99
   kind: 0
   modifierTemplates:
   - {fileID: 11400000, guid: 80289d26f8df9ae4fbb21b4c8ee2c964, type: 2}

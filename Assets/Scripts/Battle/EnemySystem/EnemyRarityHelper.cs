@@ -12,8 +12,8 @@ namespace Battle
                 EnemyRarity.Normal => 1f,
                 EnemyRarity.Magic => 1.2f,
                 EnemyRarity.Rare => 1.5f,
-                EnemyRarity.Elite => 2f,
-                EnemyRarity.Boss => 3f,
+                EnemyRarity.Elite => 1.8f,
+                EnemyRarity.Boss => 2.5f,
                 _ => 1f
             };
         }
