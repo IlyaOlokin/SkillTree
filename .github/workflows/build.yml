@@ -28,18 +28,18 @@ jobs:
           clean: false
 
       - name: Git LFS pull
-        shell: pwsh
+        shell: powershell
         run: git lfs pull
 
       - name: Clean previous builds
-        shell: pwsh
+        shell: powershell
         run: |
           if (Test-Path "Builds") {
             Remove-Item "Builds" -Recurse -Force
           }
 
       - name: Build Windows
-        shell: pwsh
+        shell: powershell
         run: |
           & "${{ env.UNITY_PATH }}" `
             -batchmode `
@@ -79,18 +79,18 @@ jobs:
           clean: false
 
       - name: Git LFS pull
-        shell: pwsh
+        shell: powershell
         run: git lfs pull
 
       - name: Clean previous builds
-        shell: pwsh
+        shell: powershell
         run: |
           if (Test-Path "Builds\WebGL") {
             Remove-Item "Builds\WebGL" -Recurse -Force
           }
 
       - name: Build WebGL
-        shell: pwsh
+        shell: powershell
         run: |
           & "${{ env.UNITY_PATH }}" `
             -batchmode `
