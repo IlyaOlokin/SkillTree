@@ -89,7 +89,7 @@ namespace Battle
             }
 
             float damagePercentOfMaxHealth = damageInfo.DamageInstance.Damage[DamageType.Physical] / defender.health.MaxHealth;
-            damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.BleedChance);
+            damagePercentOfMaxHealth *= 1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.BleedChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
                 effectTarget.effectController.AddEffect(new Bleed(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Physical], BASE_DURATION));

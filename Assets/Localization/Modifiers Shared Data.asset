@@ -1755,6 +1755,38 @@ MonoBehaviour:
     m_Key: modifier.blockRestoresBarrier.description
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311754
+    m_Key: modifier.criticalHitModifierContainer.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311755
+    m_Key: modifier.criticalHitModifierContainer.noModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311756
+    m_Key: modifier.container.added.AilmentChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311757
+    m_Key: modifier.container.increased.AilmentChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311758
+    m_Key: modifier.container.decreased.AilmentChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311759
+    m_Key: modifier.container.more.AilmentChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311760
+    m_Key: modifier.container.less.AilmentChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311761
+    m_Key: modifier.container.none.AilmentChance
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

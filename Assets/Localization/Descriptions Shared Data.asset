@@ -321,6 +321,10 @@ MonoBehaviour:
     m_Key: enum.StatType.LightningResistancePenetration
     m_Metadata:
       m_Items: []
+  - m_Id: 7255200857460743
+    m_Key: enum.StatType.AilmentChance
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

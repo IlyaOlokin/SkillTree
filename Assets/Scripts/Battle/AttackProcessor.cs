@@ -26,9 +26,11 @@ namespace Battle
             Overcharge.ApplyOverchargeEffect(context);
             Pain.ApplyPainEffect(context);
             RunModifiers(attackerUnit.GetAllModifiers(), ModifierPriority.OnAttack, attackerUnit, context);
-            
-            StatCalculator.LightRecalculateAttackStats(damageInfo.BaseUnitModifiers);
-            
+
+            StatCalculator.RecalculateAttackStat(damageInfo.BaseUnitModifiers, StatType.CritChance);
+            DamageCalculator.RollCriticalHit(damageInfo);
+            RunModifiers(attackerUnit.GetAllModifiers(), ModifierPriority.AfterCriticalHit, attackerUnit, context);
+
             DamageCalculator.CalculateAttackDamage(damageInfo);
 
             RunModifiers(defender.UnitObject.GetAllModifiers(), ModifierPriority.IncomingPreMitigation, defender.UnitObject, context);

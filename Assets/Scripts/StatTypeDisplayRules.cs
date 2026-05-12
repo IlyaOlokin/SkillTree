@@ -7,6 +7,7 @@ public static class StatTypeDisplayRules
         StatType.CritChance,
         StatType.CritDamageBonus,
         StatType.LifeSteal,
+        StatType.AilmentChance,
         StatType.BleedChance,
         StatType.IgniteChance,
         StatType.ChillChance,

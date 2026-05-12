@@ -9,4 +9,5 @@ public enum ModifierPriority
     OnGettingHit = 4,
     PreAttribute2 = 5,
     IncomingPreMitigation = 6,
+    AfterCriticalHit = 7,
 }

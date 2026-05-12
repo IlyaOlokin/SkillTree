@@ -1769,6 +1769,38 @@ MonoBehaviour:
     m_Localized: 'After {block|Block}: restore 1 {barrier|Barrier}'
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311754
+    m_Localized: Critical hits have [[0]]
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311755
+    m_Localized: Critical hits have an unconfigured modifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311756
+    m_Localized: '[[0]] to {ailmentChance|Ailment Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311757
+    m_Localized: '[[0]]% increased {ailmentChance|Ailment Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311758
+    m_Localized: '[[0]]% decreased {ailmentChance|Ailment Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311759
+    m_Localized: '[[0]]% more {ailmentChance|Ailment Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311760
+    m_Localized: '[[0]]% less {ailmentChance|Ailment Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311761
+    m_Localized: You have no {ailmentChance|Ailment Chance}
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -25,6 +25,8 @@ public enum StatType
     OverchargePower = 14,
     BleedPower = 15,
     
+    AilmentChance = 68,
+    
     IgniteChance = 38,
     ChillChance = 39,
     OverchargeChance = 40,
@@ -36,7 +38,7 @@ public enum StatType
     OverchargeAvoidanceChance = 49,
     BleedMitigation = 50,
 
-    // Fixed-effect debuffs (separate from ailments, not affected by AilmentPower/AilmentGuard)
+    // Fixed-effect debuffs (separate from ailments, not affected by AilmentPower/AilmentGuard/AilmentChance)
     SunderChance = 53,
     SunderPower = 54,
     SunderMitigation = 55,

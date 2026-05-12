@@ -122,7 +122,7 @@ namespace Battle
             if (damageInfo.AttackEffectPayload.IsSuppressed<Chill>()) return;
             if (damageInfo.DamageInstance.Damage[DamageType.Cold] <= 0) return;
             float damagePercentOfMaxHealth = damageInfo.DamageInstance.Damage[DamageType.Cold] / defender.health.MaxHealth;
-            damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.ChillChance);
+            damagePercentOfMaxHealth *= 1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.ChillChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
                 Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Chill>() ? attacker : defender;

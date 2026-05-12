@@ -79,7 +79,7 @@ namespace Battle
             if (damageInfo.AttackEffectPayload.IsSuppressed<Overcharge>()) return;
             if (damageInfo.DamageInstance.Damage[DamageType.Lightning] <= 0) return;
             float damagePercentOfMaxHealth = damageInfo.DamageInstance.Damage[DamageType.Lightning] / defender.health.MaxHealth;
-            damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.OverchargeChance);
+            damagePercentOfMaxHealth *= 1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.OverchargeChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
                 if (Random.Range(0f, 1f) < defender.BaseUnitModifiers.GetStatValue(StatType.OverchargeAvoidanceChance))

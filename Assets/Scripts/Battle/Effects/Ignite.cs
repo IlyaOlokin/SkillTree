@@ -66,7 +66,7 @@ namespace Battle
             if (damageInfo.AttackEffectPayload.IsSuppressed<Ignite>()) return;
             if (damageInfo.DamageInstance.Damage[DamageType.Fire] <= 0) return;
             float damagePercentOfMaxHealth = damageInfo.DamageInstance.Damage[DamageType.Fire] / defender.health.MaxHealth;
-            damagePercentOfMaxHealth *= 1 + attacker.BaseUnitModifiers.GetStatValue(StatType.IgniteChance);
+            damagePercentOfMaxHealth *= 1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.IgniteChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
                 Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Ignite>() ? attacker : defender;

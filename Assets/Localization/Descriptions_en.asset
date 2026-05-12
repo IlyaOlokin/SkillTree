@@ -336,6 +336,10 @@ MonoBehaviour:
     m_Localized: Lightning Resistance Penetration
     m_Metadata:
       m_Items: []
+  - m_Id: 7255200857460743
+    m_Localized: Ailment Chance
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
