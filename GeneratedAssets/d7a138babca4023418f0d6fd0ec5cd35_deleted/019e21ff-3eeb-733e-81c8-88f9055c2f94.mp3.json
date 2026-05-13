@@ -1,0 +1,15 @@
+{
+    "asset": "d7a138babca4023418f0d6fd0ec5cd35",
+    "fileName": "019e21ff-3eeb-733e-81c8-88f9055c2f94.mp3",
+    "prompt": "Powerful stylized sword slash hit for an action RPG. Fast cleaving attack cutting through flesh and cloth, no metal impact. Strong emphasis on the initial transient: sharp, punchy, juicy, and extremely satisfying. Start with a crisp slicing attack, followed by a tight flesh cut and aggressive air whoosh fused into the hit. The sound should feel swift, deadly, and responsive with excellent gameplay readability. Add subtle fabric movement and light wet texture, but keep it stylized, clean, and not gore-heavy. Avoid metallic clangs, muddy bass, and long reverb. AAA hack-and-slash style, polished and cinematic while remaining gameplay-focused. Short duration, with a clean mix and strong attack definition.",
+    "negativePrompt": "",
+    "model": "google-lyria-3-pro",
+    "modelName": "Google Lyria 3 Pro",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "duration": 0.5,
+    "autoTrim": false,
+    "hasReference": false,
+    "voice": ""
+}

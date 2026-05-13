@@ -340,6 +340,18 @@ MonoBehaviour:
     m_Localized: Ailment Chance
     m_Metadata:
       m_Items: []
+  - m_Id: 7255200857460744
+    m_Localized: Relentless Momentum
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7255200857460745
+    m_Localized: Each stack grants 5% increased Attack Speed and 5% increased Damage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10152012756946944
+    m_Localized: Maximum 10 stacks.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

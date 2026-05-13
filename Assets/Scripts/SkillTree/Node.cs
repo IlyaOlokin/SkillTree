@@ -82,11 +82,11 @@ namespace SkillTree
         }
 
 
-        public void Allocate()
+        public bool Allocate()
         {
-            if (!CanBeAllocated()) return;
+            if (!CanBeAllocated()) return false;
             if (!_unitLevel.TrySpendSkillPoints(nodeCost))
-                return;
+                return false;
             
             IsAllocated = true;
             independentlyAllocated = false;
@@ -95,6 +95,7 @@ namespace SkillTree
             OnAllocatedChanged?.Invoke(this);
             OnAnyNodeAllocatedChanged?.Invoke(this);
             RaiseNodeChanged();
+            return true;
         }
 
         public bool TryAllocateIndependently()

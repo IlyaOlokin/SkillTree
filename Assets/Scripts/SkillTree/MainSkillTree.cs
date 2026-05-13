@@ -4,6 +4,7 @@ using Battle;
 using Gems;
 using SaveSystem;
 using UnityEngine;
+using Zenject;
 
 
 namespace SkillTree
@@ -12,25 +13,35 @@ namespace SkillTree
     {
         public event Action OnSkillTreeChanged;
         public event Action<Node> OnAnyNodeChanged;
+        public event Action OnAllocationQueueChanged;
 
+        [Inject(Optional = true)] private UnitLevel _unitLevel;
         [SerializeField] private Node root;
         [SerializeField] private List<BonusZone> bonusZones;
         [SerializeField] private SkillTreeFogOfWarController fogOfWarController;
         private List<Node> _allocatedNodes = new List<Node>();
+        private readonly List<Node> _allocationQueue = new();
+        private bool _isProcessingAllocationQueue;
 
         private void Awake()
         {
             SubscribeAllFromRoot(root, RaiseAnyNodeChanged);
             OnAnyNodeChanged += ProcessNodeAllocation;
+            if (_unitLevel != null)
+                _unitLevel.OnSkillPointsChanged += ProcessQueuedAllocations;
+
             RebuildAllocatedNodes();
             fogOfWarController?.Bind(this, root);
             fogOfWarController?.SetDiscoveredNodes(_allocatedNodes);
+            ProcessQueuedAllocations();
         }
 
         private void OnDestroy()
         {
             UnsubscribeAllFromRoot(root, RaiseAnyNodeChanged);
             OnAnyNodeChanged -= ProcessNodeAllocation;
+            if (_unitLevel != null)
+                _unitLevel.OnSkillPointsChanged -= ProcessQueuedAllocations;
         }
 
         private void UpdateTree()
@@ -50,7 +61,59 @@ namespace SkillTree
                 _allocatedNodes.Remove(node);
             }
 
+            if (node.IsAllocated && RemoveQueuedNode(node))
+                RaiseAllocationQueueChanged();
+
             UpdateTree();
+        }
+
+        public bool TryAllocateOrQueue(Node node)
+        {
+            if (node == null)
+                return false;
+
+            if (node.CanBeAllocated() && node.HasEnoughSkillPoints())
+                return node.Allocate();
+
+            return TryQueueNodeForAllocation(node);
+        }
+
+        public bool TryQueueNodeForAllocation(Node node)
+        {
+            if (!CanQueueNodeForAllocation(node))
+                return false;
+
+            _allocationQueue.Add(node);
+            RaiseAllocationQueueChanged();
+            RaiseOnSkillTreeChanged();
+            ProcessQueuedAllocations();
+            return true;
+        }
+
+        public bool CancelQueuedAllocation(Node node)
+        {
+            int queuedIndex = _allocationQueue.IndexOf(node);
+            if (queuedIndex < 0)
+                return false;
+
+            if (!CanRemoveQueuedNodeAt(queuedIndex))
+                return false;
+
+            _allocationQueue.RemoveAt(queuedIndex);
+            RaiseAllocationQueueChanged();
+            RaiseOnSkillTreeChanged();
+            return true;
+        }
+
+        public int GetQueuedAllocationOrder(Node node)
+        {
+            int index = _allocationQueue.IndexOf(node);
+            return index >= 0 ? index + 1 : 0;
+        }
+
+        public bool IsNodeQueuedForAllocation(Node node)
+        {
+            return _allocationQueue.Contains(node);
         }
 
         public List<CollectedModifier> CollectAllModifiers()
@@ -143,6 +206,13 @@ namespace SkillTree
                 });
             }
 
+            for (int i = 0; i < _allocationQueue.Count; i++)
+            {
+                Node queuedNode = _allocationQueue[i];
+                if (queuedNode != null && nodeIds.TryGetValue(queuedNode, out string queuedNodeId))
+                    saveData.allocationQueueNodeIds.Add(queuedNodeId);
+            }
+
             if (fogOfWarController != null)
             {
                 foreach (Node discoveredNode in fogOfWarController.GetDiscoveredNodes())
@@ -196,7 +266,10 @@ namespace SkillTree
             }
 
             RebuildAllocatedNodes();
+            RestoreAllocationQueue(saveData, nodesById);
+            ProcessQueuedAllocations();
             ApplyFogOfWarSaveData(saveData, nodesById, resolvedNodeIds);
+            RaiseAllocationQueueChanged();
             RaiseOnSkillTreeChanged();
         }
 
@@ -343,6 +416,183 @@ namespace SkillTree
             }
 
             return resolvedIds;
+        }
+
+        private bool CanQueueNodeForAllocation(Node node)
+        {
+            if (node == null || node.IsAllocated || _allocationQueue.Contains(node))
+                return false;
+
+            if (node.AdditionalAllocatedCondition != null && !node.AdditionalAllocatedCondition())
+                return false;
+
+            return node.CanBeAllocated() || HasAllocatedOrQueuedPathToRoot(node);
+        }
+
+        private void ProcessQueuedAllocations(int _)
+        {
+            ProcessQueuedAllocations();
+        }
+
+        private void ProcessQueuedAllocations()
+        {
+            if (_isProcessingAllocationQueue)
+                return;
+
+            _isProcessingAllocationQueue = true;
+            bool queueChanged = false;
+
+            try
+            {
+                while (_allocationQueue.Count > 0)
+                {
+                    Node node = _allocationQueue[0];
+                    if (node == null || node.IsAllocated)
+                    {
+                        _allocationQueue.RemoveAt(0);
+                        queueChanged = true;
+                        continue;
+                    }
+
+                    if (!node.CanBeAllocated() || !node.HasEnoughSkillPoints())
+                        break;
+
+                    _allocationQueue.RemoveAt(0);
+                    queueChanged = true;
+
+                    if (!node.Allocate() && !node.IsAllocated)
+                    {
+                        _allocationQueue.Insert(0, node);
+                        queueChanged = false;
+                        break;
+                    }
+                }
+            }
+            finally
+            {
+                _isProcessingAllocationQueue = false;
+            }
+
+            if (!queueChanged)
+                return;
+
+            RaiseAllocationQueueChanged();
+            RaiseOnSkillTreeChanged();
+        }
+
+        private bool HasAllocatedOrQueuedPathToRoot(Node startNode)
+        {
+            HashSet<Node> visited = new();
+            Stack<Node> stack = new();
+            stack.Push(startNode);
+
+            while (stack.Count > 0)
+            {
+                Node current = stack.Pop();
+                if (current == null || !visited.Add(current))
+                    continue;
+
+                if (current is RootNode)
+                    return true;
+
+                foreach (Node next in current.ConnectedNodes)
+                {
+                    if (next != null && (next.IsActive || _allocationQueue.Contains(next)))
+                        stack.Push(next);
+                }
+            }
+
+            return false;
+        }
+
+        private bool CanRemoveQueuedNodeAt(int removalIndex)
+        {
+            HashSet<Node> simulatedActiveNodes = new();
+            foreach (Node node in EnumerateNodes())
+            {
+                if (node != null && node.IsActive)
+                    simulatedActiveNodes.Add(node);
+            }
+
+            for (int i = 0; i < _allocationQueue.Count; i++)
+            {
+                if (i == removalIndex)
+                    continue;
+
+                Node queuedNode = _allocationQueue[i];
+                if (queuedNode == null || queuedNode.IsAllocated)
+                    continue;
+
+                if (!CanQueuedNodeEventuallyAllocate(queuedNode, simulatedActiveNodes))
+                    return false;
+
+                simulatedActiveNodes.Add(queuedNode);
+            }
+
+            return true;
+        }
+
+        private bool CanQueuedNodeEventuallyAllocate(Node node, HashSet<Node> simulatedActiveNodes)
+        {
+            if (node == null || node.IsAllocated)
+                return false;
+
+            if (node.AdditionalAllocatedCondition != null && !node.AdditionalAllocatedCondition())
+                return false;
+
+            return HasPathToRootThroughNodes(node, simulatedActiveNodes);
+        }
+
+        private bool HasPathToRootThroughNodes(Node startNode, HashSet<Node> passableNodes)
+        {
+            HashSet<Node> visited = new();
+            Stack<Node> stack = new();
+            stack.Push(startNode);
+
+            while (stack.Count > 0)
+            {
+                Node current = stack.Pop();
+                if (current == null || !visited.Add(current))
+                    continue;
+
+                if (current is RootNode)
+                    return true;
+
+                foreach (Node next in current.ConnectedNodes)
+                {
+                    if (next != null && passableNodes.Contains(next))
+                        stack.Push(next);
+                }
+            }
+
+            return false;
+        }
+
+        private void RestoreAllocationQueue(SkillTreeSaveData saveData, Dictionary<string, Node> nodesById)
+        {
+            _allocationQueue.Clear();
+            if (saveData?.allocationQueueNodeIds == null)
+                return;
+
+            for (int i = 0; i < saveData.allocationQueueNodeIds.Count; i++)
+            {
+                string nodeId = saveData.allocationQueueNodeIds[i];
+                if (string.IsNullOrWhiteSpace(nodeId) || !nodesById.TryGetValue(nodeId, out Node node))
+                    continue;
+
+                if (CanQueueNodeForAllocation(node))
+                    _allocationQueue.Add(node);
+            }
+        }
+
+        private bool RemoveQueuedNode(Node node)
+        {
+            return node != null && _allocationQueue.Remove(node);
+        }
+
+        private void RaiseAllocationQueueChanged()
+        {
+            OnAllocationQueueChanged?.Invoke();
         }
     }
 }

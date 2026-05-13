@@ -20,5 +20,6 @@ namespace Battle
         CriticalMomentum = 15,
         Expose = 16,
         CriticalRegeneration = 17,
+        RelentlessMomentum = 18,
     }
 }

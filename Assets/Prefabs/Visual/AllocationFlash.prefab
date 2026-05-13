@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6876706280290098237}
   - component: {fileID: 6400422815264999468}
+  - component: {fileID: 4188663719851068578}
   m_Layer: 0
   m_Name: AllocationFlash
   m_TagString: Untagged
@@ -91,3 +92,16 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &4188663719851068578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8661695784256652463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c966c450c21b2d74588f88f16eab5a8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Visual.NodeAllocationEffect
+  allocationEffect: {fileID: 6400422815264999468}

@@ -13,10 +13,10 @@ namespace Battle
         {
             if (attacker == null || baseUnitModifiers == null || damageInstance == null) return;
 
-            float lifeSteel = StatCalculator.GetStat(baseUnitModifiers, StatType.LifeSteal);
-            if (lifeSteel <= 0) return;
+            float lifeSteal = StatCalculator.GetStat(baseUnitModifiers, StatType.LifeSteal);
+            if (lifeSteal <= 0) return;
             
-            DamageType damageType = (DamageType)StatCalculator.GetStat(baseUnitModifiers, StatType.LifeSteelTypeMask);
+            DamageType damageType = (DamageType)StatCalculator.GetStat(baseUnitModifiers, StatType.LifeStealTypeMask);
 
             float totalValidDamage = 0;
             foreach (var damage in damageInstance.Damage)
@@ -27,7 +27,7 @@ namespace Battle
                 }
             }
             
-            attacker.ReceiveHeal(totalValidDamage * lifeSteel);
+            attacker.ReceiveHeal(totalValidDamage * lifeSteal);
         }
     }
 }

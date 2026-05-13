@@ -1,5 +1,5 @@
+using System;
 using System.Collections;
-using SkillTree;
 using UnityEngine;
 
 namespace Visual
@@ -9,57 +9,61 @@ namespace Visual
         private static readonly int ProgressId = Shader.PropertyToID("_Progress");
 
         [SerializeField] private Renderer allocationEffect;
-        [SerializeField, Min(0.01f)] private float duration = 1.25f;
 
-        private Node _node;
         private MaterialPropertyBlock _propertyBlock;
         private Coroutine _playRoutine;
+        private Action<NodeAllocationEffect> _completeCallback;
 
         private void Awake()
         {
-            _node = GetComponent<Node>();
-            _propertyBlock = new MaterialPropertyBlock();
-            SetProgress(0f);
-            
-            if (_node != null)
+            if (allocationEffect == null)
             {
-                _node.OnAllocatedChanged += HandleAllocatedChanged;
+                allocationEffect = GetComponentInChildren<Renderer>(true);
             }
+
+            if (GetComponent<SkillTree.Node>() != null)
+            {
+                if (allocationEffect != null)
+                {
+                    allocationEffect.gameObject.SetActive(false);
+                }
+
+                enabled = false;
+                return;
+            }
+
+            _propertyBlock = new MaterialPropertyBlock();
+            SetProgress(1f);
         }
 
         private void OnDestroy()
         {
             StopPlayback();
-
-            if (_node != null)
-            {
-                _node.OnAllocatedChanged -= HandleAllocatedChanged;
-            }
         }
 
-        private void HandleAllocatedChanged(Node n)
-        {
-            if (n.IsApplyingSavedState)
-            {
-                SetProgress(1f);
-                return;
-            }
-
-            if (n.IsAllocated)
-            {
-                Play();
-            }
-        }
-
-        private void Play()
+        public void Play(float duration, Action<NodeAllocationEffect> completeCallback)
         {
             StopPlayback();
-            _playRoutine = StartCoroutine(PlayRoutine());
+
+            _completeCallback = completeCallback;
+            gameObject.SetActive(true);
+            _playRoutine = StartCoroutine(PlayRoutine(duration));
         }
 
-        private IEnumerator PlayRoutine()
+        public void StopPlayback()
+        {
+            if (_playRoutine == null) return;
+
+            StopCoroutine(_playRoutine);
+            _playRoutine = null;
+            _completeCallback = null;
+            SetProgress(1f);
+        }
+
+        private IEnumerator PlayRoutine(float duration)
         {
             float time = 0f;
+            duration = Mathf.Max(0.01f, duration);
             SetProgress(0f);
 
             while (time < duration)
@@ -71,15 +75,9 @@ namespace Visual
 
             SetProgress(1f);
             _playRoutine = null;
-        }
-
-        private void StopPlayback()
-        {
-            if (_playRoutine == null) return;
-
-            StopCoroutine(_playRoutine);
-            _playRoutine = null;
-            SetProgress(1f);
+            Action<NodeAllocationEffect> callback = _completeCallback;
+            _completeCallback = null;
+            callback?.Invoke(this);
         }
 
         private void SetProgress(float progress)

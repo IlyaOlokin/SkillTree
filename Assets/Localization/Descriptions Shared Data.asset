@@ -325,6 +325,20 @@ MonoBehaviour:
     m_Key: enum.StatType.AilmentChance
     m_Metadata:
       m_Items: []
+  - m_Id: 7255200857460744
+    m_Key: effect.relentlessMomentum.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7255200857460745
+    m_Key: description.relentlessMomentum1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10152012756946944
+    m_Key: 'description.relentlessMomentum2
+
+'
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

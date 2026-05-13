@@ -48,3 +48,5 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 99bc2afc253791e40a2b78d0bc2ef348, type: 3}
   - effectType: 15
     icon: {fileID: 21300000, guid: f01d661fe4334474ab1c79e3817558c9, type: 3}
+  - effectType: 18
+    icon: {fileID: 21300000, guid: ef9fda4cfefba8444893e5618720827a, type: 3}

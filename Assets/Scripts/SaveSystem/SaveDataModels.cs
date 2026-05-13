@@ -60,6 +60,7 @@ namespace SaveSystem
     {
         public List<string> allocatedNodeIds = new();
         public List<string> independentlyAllocatedNodeIds = new();
+        public List<string> allocationQueueNodeIds = new();
         public List<string> discoveredFogNodeIds = new();
         public List<SocketedGemSaveData> socketedGems = new();
         public List<NodePowerSaveData> nodePowers = new();

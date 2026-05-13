@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.AI.Sound::Unity.AI.Sound.Services.SessionPersistence.SoundGeneratorSettings
   m_Session:
     settings:
-      lastSelectedModelID: elevenlabs-sound-effects-v2
+      lastSelectedModelID: google-lyria-3-clip
       previewSettings:
         sizeFactor: 1
       microphoneSettings:

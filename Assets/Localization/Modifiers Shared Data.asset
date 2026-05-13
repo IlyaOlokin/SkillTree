@@ -1096,27 +1096,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991589
-    m_Key: modifier.container.added.LifeSteelTypeMask
+    m_Key: modifier.container.added.LifeStealTypeMask
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991590
-    m_Key: modifier.container.increased.LifeSteelTypeMask
+    m_Key: modifier.container.increased.LifeStealTypeMask
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991591
-    m_Key: modifier.container.decreased.LifeSteelTypeMask
+    m_Key: modifier.container.decreased.LifeStealTypeMask
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991592
-    m_Key: modifier.container.more.LifeSteelTypeMask
+    m_Key: modifier.container.more.LifeStealTypeMask
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991593
-    m_Key: modifier.container.less.LifeSteelTypeMask
+    m_Key: modifier.container.less.LifeStealTypeMask
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991594
-    m_Key: modifier.container.none.LifeSteelTypeMask
+    m_Key: modifier.container.none.LifeStealTypeMask
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991595
@@ -1785,6 +1785,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 5084156906311761
     m_Key: modifier.container.none.AilmentChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311762
+    m_Key: modifier.mergeBleedStacks.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311763
+    m_Key: modifier.relentlessMomentumOnHit.description
     m_Metadata:
       m_Items: []
   m_Metadata:

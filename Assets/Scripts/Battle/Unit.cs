@@ -38,6 +38,7 @@ namespace Battle
         public event Action<ITarget> OnNonCrit;
         public event Action<WeaponType> OnWeaponTypeChanged;
         public event Action<float> OnPainConsumed;
+        public event Action<Unit> OnBleedApplied;
         
         public event Action OnEvade;
         public event Action OnBlock;
@@ -139,6 +140,16 @@ namespace Battle
         public void PainConsumed(float amount)
         {
             OnPainConsumed?.Invoke(Mathf.Max(0f, amount));
+        }
+
+        public void BleedApplied(Unit target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            OnBleedApplied?.Invoke(target);
         }
 
         public void ReceiveDoT(DamageInstance damageInstance)

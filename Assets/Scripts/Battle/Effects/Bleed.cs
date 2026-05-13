@@ -12,10 +12,17 @@ namespace Battle
         public override bool IsStackable { get; set; } = false;
         public override EffectVisualType VisualType => EffectVisualType.Bleed;
         public override bool CanDisplayMultipleIcons => true;
+        public float RemainingDamage => _remainingDamage;
 
         private Bleed(DamageInfo damageInfo, Unit defender, float physicalDamageDealt, float duration)
         {
             _remainingDamage = CalculateTotalDamage(damageInfo, defender, physicalDamageDealt);
+            Duration = duration;
+        }
+
+        private Bleed(float remainingDamage, float duration)
+        {
+            _remainingDamage = Mathf.Max(0f, remainingDamage);
             Duration = duration;
         }
 
@@ -85,6 +92,7 @@ namespace Battle
             if (damageInfo.AttackEffectPayload.IsGuaranteed<Bleed>())
             {
                 effectTarget.effectController.AddEffect(new Bleed(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Physical], BASE_DURATION));
+                attacker.BleedApplied(effectTarget);
                 return;
             }
 
@@ -93,7 +101,44 @@ namespace Battle
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
                 effectTarget.effectController.AddEffect(new Bleed(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Physical], BASE_DURATION));
+                attacker.BleedApplied(effectTarget);
             }
+        }
+
+        public static void TryMergeStacks(Unit unit, int stackThreshold, float moreDamage)
+        {
+            if (unit?.effectController == null || stackThreshold <= 1)
+            {
+                return;
+            }
+
+            List<ActiveEffect> bleedEffects = unit.effectController.GetAllEffectsOfType<Bleed>();
+            if (bleedEffects.Count < stackThreshold)
+            {
+                return;
+            }
+
+            float mergedDamage = 0f;
+            for (int i = 0; i < bleedEffects.Count; i++)
+            {
+                if (bleedEffects[i].Effect is Bleed bleed)
+                {
+                    mergedDamage += bleed.RemainingDamage;
+                }
+            }
+
+            for (int i = bleedEffects.Count - 1; i >= 0; i--)
+            {
+                unit.effectController.RemoveEffect(bleedEffects[i]);
+            }
+
+            if (mergedDamage <= 0f)
+            {
+                return;
+            }
+
+            float damageMultiplier = 1f + Mathf.Max(0f, moreDamage);
+            unit.effectController.AddEffect(new Bleed(mergedDamage * damageMultiplier, BASE_DURATION));
         }
 
         private void ApplyBleedDamage(Unit unit, float requestedDamage)

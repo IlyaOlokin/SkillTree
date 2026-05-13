@@ -40,6 +40,11 @@ namespace SkillTree
 
         public ModifierContainer Scale(ModifierContainer modifierContainer)
         {
+            if (modifierContainer != null && IsTypeMaskStat(modifierContainer.statType))
+            {
+                return modifierContainer;
+            }
+
             return modifierContainer != null
                 ? (modifierContainer * Multiplier).WithHighlightedValue(HasPositivePower)
                 : null;
@@ -60,6 +65,12 @@ namespace SkillTree
             return HasPositivePower
                 ? $"<color={PoweredValueColorHex}>{value}</color>"
                 : value;
+        }
+
+        private static bool IsTypeMaskStat(StatType statType)
+        {
+            return statType == StatType.BarrierDamageTypeMask
+                || statType == StatType.LifeStealTypeMask;
         }
     }
 
@@ -200,10 +211,106 @@ namespace SkillTree
 
         public string GetDescription()
         {
+            if (statType == StatType.BarrierDamageTypeMask)
+            {
+                return GetBarrierDamageTypeMaskDescription();
+            }
+
+            if (statType == StatType.LifeStealTypeMask)
+            {
+                return GetLifeStealTypeMaskDescription();
+            }
+
             string descriptionKey = GetDescriptionKey();
             string fallbackTemplate = GetFallbackTemplate();
             object[] arguments = GetDescriptionArguments();
             return GameLocalization.FormatModifier(descriptionKey, fallbackTemplate, arguments);
+        }
+
+        private string GetBarrierDamageTypeMaskDescription()
+        {
+            string damageTypes = FormatDamageTypeMask((DamageType)Mathf.RoundToInt(value));
+            string descriptionKey = GetDescriptionKey();
+
+            return modifierType switch
+            {
+                ModifierType.Added => GameLocalization.FormatModifier(
+                    descriptionKey,
+                    "Barrier blocks [[0]] damage",
+                    damageTypes),
+                ModifierType.Increased => GameLocalization.FormatModifier(
+                    descriptionKey,
+                    value < 0f
+                        ? "Barrier blocks fewer damage types"
+                        : "Barrier blocks more damage types",
+                    damageTypes),
+                ModifierType.More => GameLocalization.FormatModifier(
+                    descriptionKey,
+                    value < 0f
+                        ? "Barrier blocks fewer damage types"
+                        : "Barrier blocks more damage types",
+                    damageTypes),
+                _ => string.Empty
+            };
+        }
+
+        private string GetLifeStealTypeMaskDescription()
+        {
+            string descriptionKey = GetDescriptionKey();
+            int roundedValue = Mathf.RoundToInt(value);
+            string damageTypes = FormatDamageTypeMask((DamageType)Mathf.Abs(roundedValue));
+
+            return modifierType switch
+            {
+                ModifierType.Added => roundedValue < 0
+                    ? GameLocalization.FormatModifier(
+                        "modifier.container.removed.LifeStealTypeMask",
+                        "[[0]] damage no longer grants {lifeSteal|Life Steal}",
+                        damageTypes)
+                    : GameLocalization.FormatModifier(
+                        descriptionKey,
+                        "{lifeSteal|Life Steal} applies to [[0]] damage",
+                        damageTypes),
+                ModifierType.Increased => GameLocalization.FormatModifier(
+                    descriptionKey,
+                    value < 0f
+                        ? "{lifeSteal|Life Steal} applies to fewer damage types"
+                        : "{lifeSteal|Life Steal} applies to more damage types",
+                    damageTypes),
+                ModifierType.More => GameLocalization.FormatModifier(
+                    descriptionKey,
+                    value <= -1f
+                        ? "No damage grants {lifeSteal|Life Steal}"
+                        : value < 0f
+                            ? "{lifeSteal|Life Steal} applies to fewer damage types"
+                            : "{lifeSteal|Life Steal} applies to more damage types",
+                    damageTypes),
+                _ => string.Empty
+            };
+        }
+
+        private static string FormatDamageTypeMask(DamageType damageTypeMask)
+        {
+            List<string> damageTypeNames = new List<string>();
+            foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
+            {
+                if (damageTypeMask.HasFlag(damageType))
+                {
+                    damageTypeNames.Add(GameLocalization.LocalizeEnum(damageType));
+                }
+            }
+
+            if (damageTypeNames.Count == 0)
+            {
+                return GameLocalization.GetModifier("modifier.damageTypeMask.none", "no");
+            }
+
+            if (damageTypeNames.Count == 1)
+            {
+                return damageTypeNames[0];
+            }
+
+            return string.Join(", ", damageTypeNames);
         }
 
         private string GetDescriptionKey()

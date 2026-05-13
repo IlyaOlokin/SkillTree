@@ -865,7 +865,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991577
-    m_Localized: '[[0]] to Barrier Damage Type Mask'
+    m_Localized: Barrier blocks [[0]] damage
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991578
@@ -913,27 +913,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991589
-    m_Localized: '[[0]] to {lifeSteelTypeMask|Life Steel Type Mask}'
+    m_Localized: '{lifeSteal|Life Steal} applies to [[0]] damage'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991590
-    m_Localized: '[[0]]% increased {lifeSteelTypeMask|Life Steel Type Mask}'
+    m_Localized: '{lifeSteal|Life Steal} applies to more damage types'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991591
-    m_Localized: '[[0]]% decreased {lifeSteelTypeMask|Life Steel Type Mask}'
+    m_Localized: '{lifeSteal|Life Steal} applies to fewer damage types'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991592
-    m_Localized: '[[0]]% more {lifeSteelTypeMask|Life Steel Type Mask}'
+    m_Localized: '{lifeSteal|Life Steal} applies to more damage types'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991593
-    m_Localized: '[[0]]% less {lifeSteelTypeMask|Life Steel Type Mask}'
+    m_Localized: '{lifeSteal|Life Steal} applies to fewer damage types'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991594
-    m_Localized: You have no {lifeSteelTypeMask|Life Steel Type Mask}
+    m_Localized: No damage grants {lifeSteal|Life Steal}
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991595
@@ -1770,7 +1770,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311754
-    m_Localized: Critical hits have [[0]]
+    m_Localized: 'Critical hits have [[0]]'
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311755
@@ -1799,6 +1799,17 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 5084156906311761
     m_Localized: You have no {ailmentChance|Ailment Chance}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311762
+    m_Localized: If a target has at least [[0]] {bleed|Bleed} stacks, those stacks
+      merge into one {bleed|Bleed} with [[1]]% more remaining damage and refreshed
+      duration.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311763
+    m_Localized: 'On Hit: gain {relentlessMomentum|Relentless Momentum}. Lose all stacks
+      when you get hit or block a hit.'
     m_Metadata:
       m_Items: []
   references:

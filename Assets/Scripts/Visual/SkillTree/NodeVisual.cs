@@ -1,6 +1,8 @@
 using System;
 using Battle;
 using DG.Tweening;
+using SkillTree;
+using TMPro;
 using UnityEngine;
 using Zenject;
 using Node = SkillTree.Node;
@@ -11,6 +13,7 @@ namespace Visual
     public class NodeVisual : MonoBehaviour
     {
         [Inject] private UnitLevel _unitLevel;
+        [Inject(Optional = true)] private MainSkillTree _skillTree;
         
         [SerializeField] private Node node;
         [SerializeField] private SpriteRenderer border;
@@ -24,6 +27,9 @@ namespace Visual
         [Header("Allocated color")]
         [SerializeField] private Color nodeImageAllocatedColor;
         [SerializeField] private Color borderAllocatedColor;
+        [Header("Allocation queue")]
+        [SerializeField] private Canvas allocationQueueOrderCanvas;
+        [SerializeField] private TMP_Text allocationQueueOrderText;
 
         private Sprite _defaultNodeIcon;
         private bool _wasActive = false;
@@ -65,6 +71,9 @@ namespace Visual
 
             if (_unitLevel != null)
                 _unitLevel.OnSkillPointsChanged += UpdateVisual;
+
+            if (_skillTree != null)
+                _skillTree.OnAllocationQueueChanged += RefreshAllocationQueueOrder;
         }
 
         private void OnDestroy()
@@ -83,6 +92,9 @@ namespace Visual
             if (_unitLevel != null)
                 _unitLevel.OnSkillPointsChanged -= UpdateVisual;
 
+            if (_skillTree != null)
+                _skillTree.OnAllocationQueueChanged -= RefreshAllocationQueueOrder;
+
             _colorTween?.Kill();
         }
 
@@ -91,6 +103,7 @@ namespace Visual
             RefreshNodeIcon();
             _wasActive = node != null && node.IsActive;
             UpdateVisual(node);
+            RefreshAllocationQueueOrder();
             _isStarted = true;
         }
 
@@ -105,7 +118,11 @@ namespace Visual
 
         private void UpdateVisual(Node node)
         {
+            if (node == null)
+                return;
+
             RefreshNodeIcon();
+            RefreshAllocationQueueOrder();
 
             bool canAllocateNow = node.CanBeAllocated() && node.HasEnoughSkillPoints();
 
@@ -168,6 +185,26 @@ else if (_colorTween == null || !_colorTween.IsActive())
             nodeImage.sprite = socketNode.SocketedGem.Icon != null
                 ? socketNode.SocketedGem.Icon
                 : _defaultNodeIcon;
+        }
+
+        private void RefreshAllocationQueueOrder()
+        {
+            int order = _skillTree != null && node != null
+                ? _skillTree.GetQueuedAllocationOrder(node)
+                : 0;
+            bool isQueued = order > 0;
+
+            if (allocationQueueOrderText != null)
+                allocationQueueOrderText.text = isQueued ? order.ToString() : string.Empty;
+
+            if (allocationQueueOrderCanvas != null)
+            {
+                allocationQueueOrderCanvas.gameObject.SetActive(isQueued);
+                return;
+            }
+
+            if (allocationQueueOrderText != null)
+                allocationQueueOrderText.gameObject.SetActive(isQueued);
         }
     }
 }

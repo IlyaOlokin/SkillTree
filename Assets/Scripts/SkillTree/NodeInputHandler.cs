@@ -12,6 +12,7 @@ namespace SkillTree
         [Inject] private GemPlacementService _gemPlacementService;
         [Inject] private NodeItemUseService _nodeItemUseService;
         [Inject] private TooltipUI _tooltipUI;
+        [Inject(Optional = true)] private MainSkillTree _skillTree;
         private Node _node;
         private SkillTreeFogOfWarController _fogOfWarController;
 
@@ -50,11 +51,24 @@ namespace SkillTree
                     return;
                 }
 
-                _node.Allocate();
+                if (_skillTree != null)
+                    _skillTree.TryAllocateOrQueue(_node);
+                else
+                    _node.Allocate();
+
                 _tooltipUI?.RefreshCurrentTooltip();
             }
             else if (Input.GetMouseButtonDown(1))
             {
+                if (_skillTree != null && _skillTree.CancelQueuedAllocation(_node))
+                {
+                    _tooltipUI?.RefreshCurrentTooltip();
+                    return;
+                }
+
+                if (_skillTree != null && _skillTree.IsNodeQueuedForAllocation(_node))
+                    return;
+
                 if (_node is SocketNode socketNode && socketNode.HasGem && _gemPlacementService != null)
                 {
                     if (_gemPlacementService.TryExtractGemAndSelect(socketNode))
