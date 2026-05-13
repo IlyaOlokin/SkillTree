@@ -23,6 +23,7 @@ namespace SkillTree
         
         public virtual bool IsAllocated { get; private set; }
         public virtual bool IsActive { get; private set; }
+        public bool IsApplyingSavedState { get; private set; }
         [SerializeField] private int nodeCost = 1;
         [SerializeField] private float permanentPower;
         [SerializeField] private bool preventPowerChanges;
@@ -202,16 +203,24 @@ namespace SkillTree
 
         public void SetAllocatedFromSave(bool allocated, bool allocatedIndependently)
         {
-            bool wasAllocated = IsAllocated;
-            bool wasIndependentlyAllocated = independentlyAllocated;
-            IsAllocated = allocated;
-            independentlyAllocated = allocated && allocatedIndependently;
-            SetActiveInternal(allocated && (AdditionalActivationCondition == null || AdditionalActivationCondition()), false);
-            if (allocated || wasAllocated != allocated || wasIndependentlyAllocated != independentlyAllocated)
+            IsApplyingSavedState = true;
+            try
             {
-                OnAllocatedChanged?.Invoke(this);
-                OnAnyNodeAllocatedChanged?.Invoke(this);
-                RaiseNodeChanged();
+                bool wasAllocated = IsAllocated;
+                bool wasIndependentlyAllocated = independentlyAllocated;
+                IsAllocated = allocated;
+                independentlyAllocated = allocated && allocatedIndependently;
+                SetActiveInternal(allocated && (AdditionalActivationCondition == null || AdditionalActivationCondition()), false);
+                if (allocated || wasAllocated != allocated || wasIndependentlyAllocated != independentlyAllocated)
+                {
+                    OnAllocatedChanged?.Invoke(this);
+                    OnAnyNodeAllocatedChanged?.Invoke(this);
+                    RaiseNodeChanged();
+                }
+            }
+            finally
+            {
+                IsApplyingSavedState = false;
             }
         }
 

@@ -1,5 +1,6 @@
 using System;
 using Battle;
+using DG.Tweening;
 using UnityEngine;
 using Zenject;
 using Node = SkillTree.Node;
@@ -25,6 +26,9 @@ namespace Visual
         [SerializeField] private Color borderAllocatedColor;
 
         private Sprite _defaultNodeIcon;
+        private bool _wasActive = false;
+        private bool _isStarted = false;
+        private Tween _colorTween;
 
         public Sprite NodeIcon
         {
@@ -78,12 +82,25 @@ namespace Visual
 
             if (_unitLevel != null)
                 _unitLevel.OnSkillPointsChanged -= UpdateVisual;
+
+            _colorTween?.Kill();
         }
 
         private void Start()
         {
             RefreshNodeIcon();
+            _wasActive = node != null && node.IsActive;
             UpdateVisual(node);
+            _isStarted = true;
+        }
+
+        public void AnimateToAllocated(float duration)
+        {
+            _colorTween?.Kill();
+            Sequence seq = DOTween.Sequence();
+            if (border != null) seq.Join(border.DOColor(borderAllocatedColor, duration));
+            if (nodeImage != null) seq.Join(nodeImage.DOColor(nodeImageAllocatedColor, duration));
+            _colorTween = seq;
         }
 
         private void UpdateVisual(Node node)
@@ -94,20 +111,32 @@ namespace Visual
 
             if (node.IsActive)
             {
-                border.color = borderAllocatedColor;
-                nodeImage.color = nodeImageAllocatedColor;
+                if (!_wasActive && _isStarted)
+                {
+                    AnimateToAllocated(0.5f);
+                }
+else if (_colorTween == null || !_colorTween.IsActive())
+                {
+                    if (border != null) border.color = borderAllocatedColor;
+                    if (nodeImage != null) nodeImage.color = nodeImageAllocatedColor;
+                }
+                
+                _wasActive = true;
                 return;
             }
+
+            _wasActive = false;
+            _colorTween?.Kill();
 
             if (canAllocateNow)
             {
-                border.color = borderCanAllocateColor;
-                nodeImage.color = nodeImageCanAllocateColor;
+                if (border != null) border.color = borderCanAllocateColor;
+                if (nodeImage != null) nodeImage.color = nodeImageCanAllocateColor;
                 return;
             }
 
-            border.color = borderBaseColor;
-            nodeImage.color = nodeImageBaseColor;
+            if (border != null) border.color = borderBaseColor;
+            if (nodeImage != null) nodeImage.color = nodeImageBaseColor;
         }
 
         private void UpdateVisual(int _)
