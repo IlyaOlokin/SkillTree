@@ -12,6 +12,7 @@ using Zenject;
 public class PlayerStatsWindow : MonoBehaviour
 {
     [Inject] private PlayerUnit _player;
+    [Inject(Optional = true)] private EnemySpawner _enemySpawner;
     [SerializeField] private TMP_Text lvlText;
     [SerializeField] private TMP_Text DPSText;
     [SerializeField] private TMP_Text DamageText;
@@ -59,6 +60,14 @@ public class PlayerStatsWindow : MonoBehaviour
             _player.UnitLevel.OnLevelUp += UpdateLevelText;
         }
 
+        if (_enemySpawner != null)
+        {
+            _enemySpawner.OnWaveCleared += UpdateTexts;
+            _enemySpawner.OnLevelChanged += UpdateTexts;
+            _enemySpawner.OnLocationChanged += UpdateTexts;
+            _enemySpawner.OnBattleActivityChanged += HandleBattleActivityChanged;
+        }
+
         LocalizationSettings.SelectedLocaleChanged += HandleLocaleChanged;
         _isSubscribed = true;
     }
@@ -75,6 +84,14 @@ public class PlayerStatsWindow : MonoBehaviour
             {
                 _player.UnitLevel.OnLevelUp -= UpdateLevelText;
             }
+        }
+
+        if (_enemySpawner != null)
+        {
+            _enemySpawner.OnWaveCleared -= UpdateTexts;
+            _enemySpawner.OnLevelChanged -= UpdateTexts;
+            _enemySpawner.OnLocationChanged -= UpdateTexts;
+            _enemySpawner.OnBattleActivityChanged -= HandleBattleActivityChanged;
         }
 
         if (LocalizationSettings.HasSettings)
@@ -260,6 +277,10 @@ public class PlayerStatsWindow : MonoBehaviour
                 return GetUncappedResistanceSuffix(rawValue, StatType.MaxColdResistance);
             case StatType.LightningResistance:
                 return GetUncappedResistanceSuffix(rawValue, StatType.MaxLightningResistance);
+            case StatType.Armor:
+                return GetEstimatedArmorMitigationSuffix(rawValue);
+            case StatType.Evasion:
+                return GetEstimatedEvasionChanceSuffix(rawValue);
             case StatType.BarrierRegenerationSpeed: 
                 return GameLocalization.Get("ui.common.secondsShort", "s");
             default:
@@ -312,9 +333,42 @@ public class PlayerStatsWindow : MonoBehaviour
             FormatStatValue(rawValue, true));
     }
 
+    private string GetEstimatedArmorMitigationSuffix(float armor)
+    {
+        if (_enemySpawner == null ||
+            _enemySpawner.TryGetActiveWaveNormalEnemyEstimates(out _, out float physicalDamage) == false)
+            return string.Empty;
+
+        float mitigationPercent = Armor.CalculatePhysicalMitigation(armor, physicalDamage) * 100f;
+        return FormatEstimatedPercentSuffix(mitigationPercent);
+    }
+
+    private string GetEstimatedEvasionChanceSuffix(float evasion)
+    {
+        if (_enemySpawner == null ||
+            _enemySpawner.TryGetActiveWaveNormalEnemyEstimates(out float accuracy, out _) == false)
+            return string.Empty;
+
+        float dodgeChancePercent = Evasion.CalculateDodgeChance(evasion, accuracy) * 100f;
+        return FormatEstimatedPercentSuffix(dodgeChancePercent);
+    }
+
+    private string FormatEstimatedPercentSuffix(float value)
+    {
+        return GameLocalization.Format(
+            "ui.playerStats.estimatedPercentSuffix",
+            " ([[0]])",
+            FormatStatValue(value, true));
+    }
+
     private void HandleLocaleChanged(Locale _)
     {
         RefreshTexts();
+    }
+
+    private void HandleBattleActivityChanged(bool _)
+    {
+        UpdateTexts();
     }
 }
 

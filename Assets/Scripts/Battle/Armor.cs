@@ -14,6 +14,17 @@ namespace Battle
             if (armor == 0 || K == 0) return;
             damage.Damage[DamageType.Physical] *= K / (armor + K);
         }
+
+        public static float CalculatePhysicalMitigation(float armor, float physicalDamage)
+        {
+            armor = Mathf.Max(0f, armor);
+            physicalDamage = Mathf.Max(0f, physicalDamage);
+
+            if (armor == 0f || physicalDamage == 0f)
+                return 0f;
+
+            return armor / (armor + physicalDamage);
+        }
     }
 }
 

@@ -186,6 +186,43 @@ namespace Battle
             return true;
         }
 
+        public bool TryGetActiveWavePower(out float totalPower)
+        {
+            totalPower = 0f;
+
+            if (ActiveDatabase == null)
+                return false;
+
+            WaveContext context = BuildWaveContext();
+            totalPower = ActiveDatabase.GetPowerForLevel(context.Level);
+
+            if (ActiveDatabase.WavePowerBalance != null)
+                totalPower *= ActiveDatabase.WavePowerBalance.GetMultiplier(context);
+
+            return totalPower > 0f;
+        }
+
+        public bool TryGetActiveWaveNormalEnemyEstimates(out float accuracy, out float physicalDamage)
+        {
+            const float normalEnemyWaveWeight = 0.33f;
+            const float normalEnemyOffenceRatio = 0.33f;
+
+            accuracy = 0f;
+            physicalDamage = 0f;
+
+            if (TryGetActiveWavePower(out float totalPower) == false)
+                return false;
+
+            accuracy = totalPower;
+
+            float physicalBudget = totalPower * normalEnemyWaveWeight * normalEnemyOffenceRatio;
+            EnemyStatBudgetRule rule = ActiveDatabase.StatBudgetConfig != null
+                ? ActiveDatabase.StatBudgetConfig.GetRule(StatType.PhysicalDamage)
+                : EnemyStatBudgetRuleDefaults.Get(StatType.PhysicalDamage);
+            physicalDamage = rule.Evaluate(physicalBudget, normalEnemyOffenceRatio);
+            return true;
+        }
+
         private void SetSelectedLevel(int level)
         {
             int minLevel = StartingLevel;

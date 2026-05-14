@@ -18,7 +18,7 @@ namespace Battle
             base.Awake();
             UnitLevel.Init(this);
 
-            SkillTree.OnSkillTreeChanged += RaiseOnModsChanged;
+            SkillTree.OnSkillTreeChanged += RequestModRecalculation;
         }
         
         protected override void Start()
@@ -32,7 +32,7 @@ namespace Battle
         {
             base.OnDestroy();
             if (SkillTree != null)
-                SkillTree.OnSkillTreeChanged -= RaiseOnModsChanged;
+                SkillTree.OnSkillTreeChanged -= RequestModRecalculation;
         }
     }
 }
