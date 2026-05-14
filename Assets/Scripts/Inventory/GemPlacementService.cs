@@ -54,7 +54,7 @@ namespace InventorySystem
             if (!_inventorySocketService.TryInsertGem(_inventory, selectedSlotIndex, socketNode))
                 return false;
 
-            if (!hadGemInSocket)
+            if (!hadGemInSocket && !SelectionState.HasSelectedItem)
                 SelectionState.ClearSelection();
 
             return true;

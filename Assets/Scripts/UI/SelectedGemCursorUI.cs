@@ -1,5 +1,6 @@
 using InventorySystem;
 using SkillTree;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ namespace UI
         [SerializeField] private RectTransform root;
         [SerializeField] private Vector2 screenOffset = new(18f, -18f);
         [SerializeField] private Image iconImage;
+        [SerializeField] private TMP_Text stackCountText;
 
         [Inject] private InventorySelectionState _selectionState;
 
@@ -63,10 +65,26 @@ namespace UI
                 root.gameObject.SetActive(hasSelectedItem);
 
             if (!hasSelectedItem)
+            {
+                RefreshStackCount(null);
                 return;
+            }
 
             if (iconImage != null)
                 iconImage.sprite = selectedItem.Icon;
+
+            RefreshStackCount(selectedItem);
+        }
+
+        private void RefreshStackCount(InventoryItem selectedItem)
+        {
+            if (stackCountText == null)
+                return;
+
+            int stackCount = selectedItem?.StackCount ?? 0;
+            bool shouldShowStackCount = stackCount > 1;
+            stackCountText.gameObject.SetActive(shouldShowStackCount);
+            stackCountText.text = shouldShowStackCount ? stackCount.ToString() : string.Empty;
         }
 
         private static bool IsPointerHandledElsewhere()

@@ -40,7 +40,9 @@ namespace InventorySystem
             if (item.ConsumeOnUse)
                 _inventory.TryConsumeItem(slotIndex, 1);
 
-            _selectionState.ClearSelection();
+            if (!_selectionState.HasSelectedItem)
+                _selectionState.ClearSelection();
+
             return true;
         }
     }

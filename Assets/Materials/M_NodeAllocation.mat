@@ -41,7 +41,7 @@ Material:
     - _EmissionIntensity: 4.5
     - _HaloSize: 0.34
     - _NoiseInfluence: 0.25
-    - _Progress: 0
+    - _Progress: 1
     - _RayLength: 0.55
     - _SparkDensity: 24
     - _Stencil: 0
@@ -51,11 +51,11 @@ Material:
     - _StencilWriteMask: 255
     - _WispSharpness: 14
     m_Colors:
-    - _BurstColor: {r: 0.16820933, g: 0.32569084, b: 1.6981132, a: 1}
+    - _BurstColor: {r: 1.6981133, g: 0.88182056, b: 0.16892229, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 0}
-    - _CoreColor: {r: 0.17381631, g: 0.36418664, b: 1.754717, a: 1}
+    - _CoreColor: {r: 2.1437776, g: 1.112838, b: 0.23257968, a: 1}
     - _DimColor: {r: 0.18, g: 0.2, b: 0.22, a: 1}
-    - _WispColor: {r: 0.36356357, g: 0.50258636, b: 1.7924528, a: 1}
+    - _WispColor: {r: 1.7924526, g: 0.9719176, b: 0.36599815, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &389240767156497051
