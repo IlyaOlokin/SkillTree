@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using AudioSystem;
 using SkillTree;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace Visual
         [SerializeField, Min(0)] private int preloadCount = 8;
         [SerializeField, Min(0)] private int maxPoolSize = 32;
         [SerializeField, Min(0.01f)] private float duration = 1.25f;
+        [SerializeField] private string allocationSoundCueId = "ui.nodeAllocation";
 
         private readonly Queue<NodeAllocationEffect> _availableEffects = new();
         private readonly HashSet<NodeAllocationEffect> _activeEffects = new();
@@ -72,7 +74,18 @@ namespace Visual
                 return;
             }
 
+            PlayAllocationSound();
             Play(node);
+        }
+
+        private void PlayAllocationSound()
+        {
+            if (GameAudio.Instance == null || string.IsNullOrWhiteSpace(allocationSoundCueId))
+            {
+                return;
+            }
+
+            GameAudio.Instance.PlaySfx(allocationSoundCueId);
         }
 
         private void Play(Node node)

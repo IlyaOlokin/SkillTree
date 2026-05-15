@@ -1,0 +1,15 @@
+{
+    "asset": "e4402e47be40f184a8dbdb76bb36fe63",
+    "fileName": "019e2ae9-b613-7abb-a8ae-f6c63df05f81.wav",
+    "prompt": "just any sound",
+    "negativePrompt": "",
+    "model": "elevenlabs-sound-effects-v2",
+    "modelName": "ElevenLabs Sound Effects V2",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "duration": 0.5,
+    "autoTrim": false,
+    "hasReference": false,
+    "voice": ""
+}

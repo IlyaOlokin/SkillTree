@@ -33,6 +33,10 @@ public class GameSceneInstaller : MonoInstaller
 
         Container.Bind<AttackResolver>().FromComponentInHierarchy().AsSingle();
         Container.Bind<SkillTreeUI>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<SkillTreeSearchController>()
+            .FromComponentInHierarchy()
+            .AsSingle()
+            .NonLazy();
         Container.Bind<TooltipUI>().FromComponentInHierarchy().AsSingle();
         Container.Bind<InventorySocketService>().AsSingle();
         Container.Bind<InventorySelectionState>().AsSingle();

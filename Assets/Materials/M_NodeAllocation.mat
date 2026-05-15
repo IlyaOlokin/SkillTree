@@ -41,7 +41,7 @@ Material:
     - _EmissionIntensity: 4.5
     - _HaloSize: 0.34
     - _NoiseInfluence: 0.25
-    - _Progress: 1
+    - _Progress: 0.815
     - _RayLength: 0.55
     - _SparkDensity: 24
     - _Stencil: 0

@@ -1,0 +1,15 @@
+{
+    "asset": "e4402e47be40f184a8dbdb76bb36fe63",
+    "fileName": "019e2aee-e854-77ba-8f5c-aceb27792e57.wav",
+    "prompt": "Magical energy burst with charging buildup, bright concentrated core explosion, and smooth fading decay. Strong emphasis in the center peak. Juicy arcane pulse, radiant energy flare, sharp magical transient, soft shimmering tail, powerful but clean fantasy spell impact.",
+    "negativePrompt": "",
+    "model": "elevenlabs-sound-effects-v2",
+    "modelName": "ElevenLabs Sound Effects V2",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "duration": 1.25,
+    "autoTrim": false,
+    "hasReference": false,
+    "voice": ""
+}

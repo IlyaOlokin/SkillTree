@@ -14,6 +14,7 @@ namespace SkillTree
         public event Action OnSkillTreeChanged;
         public event Action<Node> OnAnyNodeChanged;
         public event Action OnAllocationQueueChanged;
+        public event Action OnSearchMatchesChanged;
 
         [Inject(Optional = true)] private UnitLevel _unitLevel;
         [SerializeField] private Node root;
@@ -21,7 +22,9 @@ namespace SkillTree
         [SerializeField] private SkillTreeFogOfWarController fogOfWarController;
         private List<Node> _allocatedNodes = new List<Node>();
         private readonly List<Node> _allocationQueue = new();
+        private readonly HashSet<Node> _searchMatchedNodes = new();
         private bool _isProcessingAllocationQueue;
+        private bool _hasActiveSearch;
 
         private void Awake()
         {
@@ -61,10 +64,25 @@ namespace SkillTree
                 _allocatedNodes.Remove(node);
             }
 
+            bool allocationQueueChanged = false;
+            bool prunedAllocationQueue = false;
+
             if (node.IsAllocated && RemoveQueuedNode(node))
+                allocationQueueChanged = true;
+
+            if (!node.IsActive && PruneInvalidAllocationQueue())
+            {
+                allocationQueueChanged = true;
+                prunedAllocationQueue = true;
+            }
+
+            if (allocationQueueChanged)
                 RaiseAllocationQueueChanged();
 
             UpdateTree();
+
+            if (prunedAllocationQueue)
+                ProcessQueuedAllocations();
         }
 
         public bool TryAllocateOrQueue(Node node)
@@ -114,6 +132,40 @@ namespace SkillTree
         public bool IsNodeQueuedForAllocation(Node node)
         {
             return _allocationQueue.Contains(node);
+        }
+
+        public bool HasActiveSearch => _hasActiveSearch;
+
+        public bool IsNodeSearchMatched(Node node)
+        {
+            return _hasActiveSearch && node != null && _searchMatchedNodes.Contains(node);
+        }
+
+        public void SetSearchMatches(IEnumerable<Node> matchedNodes, bool hasActiveSearch)
+        {
+            _hasActiveSearch = hasActiveSearch;
+            _searchMatchedNodes.Clear();
+
+            if (matchedNodes != null)
+            {
+                foreach (Node node in matchedNodes)
+                {
+                    if (node != null)
+                        _searchMatchedNodes.Add(node);
+                }
+            }
+
+            OnSearchMatchesChanged?.Invoke();
+        }
+
+        public void ClearSearchMatches()
+        {
+            if (!_hasActiveSearch && _searchMatchedNodes.Count == 0)
+                return;
+
+            _hasActiveSearch = false;
+            _searchMatchedNodes.Clear();
+            OnSearchMatchesChanged?.Invoke();
         }
 
         public List<CollectedModifier> CollectAllModifiers()
@@ -507,12 +559,7 @@ namespace SkillTree
 
         private bool CanRemoveQueuedNodeAt(int removalIndex)
         {
-            HashSet<Node> simulatedActiveNodes = new();
-            foreach (Node node in EnumerateNodes())
-            {
-                if (node != null && node.IsActive)
-                    simulatedActiveNodes.Add(node);
-            }
+            HashSet<Node> simulatedActiveNodes = BuildActiveNodeSet();
 
             for (int i = 0; i < _allocationQueue.Count; i++)
             {
@@ -530,6 +577,50 @@ namespace SkillTree
             }
 
             return true;
+        }
+
+        private bool PruneInvalidAllocationQueue()
+        {
+            if (_allocationQueue.Count == 0)
+                return false;
+
+            bool changed = false;
+            HashSet<Node> simulatedActiveNodes = BuildActiveNodeSet();
+
+            for (int i = 0; i < _allocationQueue.Count;)
+            {
+                Node queuedNode = _allocationQueue[i];
+                if (queuedNode == null || queuedNode.IsAllocated)
+                {
+                    _allocationQueue.RemoveAt(i);
+                    changed = true;
+                    continue;
+                }
+
+                if (!CanQueuedNodeEventuallyAllocate(queuedNode, simulatedActiveNodes))
+                {
+                    _allocationQueue.RemoveAt(i);
+                    changed = true;
+                    continue;
+                }
+
+                simulatedActiveNodes.Add(queuedNode);
+                i++;
+            }
+
+            return changed;
+        }
+
+        private HashSet<Node> BuildActiveNodeSet()
+        {
+            HashSet<Node> activeNodes = new();
+            foreach (Node node in EnumerateNodes())
+            {
+                if (node != null && node.IsActive)
+                    activeNodes.Add(node);
+            }
+
+            return activeNodes;
         }
 
         private bool CanQueuedNodeEventuallyAllocate(Node node, HashSet<Node> simulatedActiveNodes)

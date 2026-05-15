@@ -1812,6 +1812,16 @@ MonoBehaviour:
       when you get hit or block a hit.'
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311764
+    m_Localized: While {armor|Armor} and {evasion|Evasion} differ by no more than
+      [[0]]% of the higher value, applies modifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311765
+    m_Localized: While {armor|Armor} and {evasion|Evasion} differ by no more than
+      [[0]]% of the higher value, [[1]]
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

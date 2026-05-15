@@ -43,8 +43,9 @@ public class SkillPointVisual : MonoBehaviour
             _unitLevel.OnSkillPointsChanged -= UpdateCount;
     }
 
-    private void UpdateCount(int count)
+    private void UpdateCount(int _)
     {
+        int count = _unitLevel != null ? _unitLevel.SkillPoints : 0;
         skillPointCount.text = count.ToString();
 
         bool isActive = count > 0;

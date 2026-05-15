@@ -1795,6 +1795,14 @@ MonoBehaviour:
     m_Key: modifier.relentlessMomentumOnHit.description
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311764
+    m_Key: modifier.balancedArmorEvasion.noModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311765
+    m_Key: modifier.balancedArmorEvasion.withModifier
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

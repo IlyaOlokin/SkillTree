@@ -1,0 +1,15 @@
+{
+    "asset": "e4402e47be40f184a8dbdb76bb36fe63",
+    "fileName": "019e2aeb-b507-7b56-b356-b74e02780d84.wav",
+    "prompt": "Juicy sharp fantasy sword slash through flesh and cloth, strong punchy impact, fast deadly AAA action RPG hit sound.",
+    "negativePrompt": "",
+    "model": "elevenlabs-sound-effects-v2",
+    "modelName": "ElevenLabs Sound Effects V2",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "duration": 0.5,
+    "autoTrim": false,
+    "hasReference": false,
+    "voice": ""
+}

@@ -30,6 +30,10 @@ namespace Visual
         [Header("Allocation queue")]
         [SerializeField] private Canvas allocationQueueOrderCanvas;
         [SerializeField] private TMP_Text allocationQueueOrderText;
+        [Header("Search")]
+        [SerializeField] private Color searchMatchedBorderColor = new Color(1f, 0.85f, 0.15f, 1f);
+        [SerializeField] private Color searchMatchedNodeImageColor = new Color(1f, 1f, 0.45f, 1f);
+        [SerializeField] private bool overrideNodeImageColorOnSearch;
 
         private Sprite _defaultNodeIcon;
         private bool _wasActive = false;
@@ -73,7 +77,10 @@ namespace Visual
                 _unitLevel.OnSkillPointsChanged += UpdateVisual;
 
             if (_skillTree != null)
+            {
                 _skillTree.OnAllocationQueueChanged += RefreshAllocationQueueOrder;
+                _skillTree.OnSearchMatchesChanged += UpdateVisualFromSearch;
+            }
         }
 
         private void OnDestroy()
@@ -93,7 +100,10 @@ namespace Visual
                 _unitLevel.OnSkillPointsChanged -= UpdateVisual;
 
             if (_skillTree != null)
+            {
                 _skillTree.OnAllocationQueueChanged -= RefreshAllocationQueueOrder;
+                _skillTree.OnSearchMatchesChanged -= UpdateVisualFromSearch;
+            }
 
             _colorTween?.Kill();
         }
@@ -128,14 +138,18 @@ namespace Visual
 
             if (node.IsActive)
             {
-                if (!_wasActive && _isStarted)
+                if (IsSearchMatched())
+                {
+                    _colorTween?.Kill();
+                    ApplyColors(borderAllocatedColor, nodeImageAllocatedColor);
+                }
+                else if (!_wasActive && _isStarted)
                 {
                     AnimateToAllocated(0.5f);
                 }
-else if (_colorTween == null || !_colorTween.IsActive())
+                else if (_colorTween == null || !_colorTween.IsActive())
                 {
-                    if (border != null) border.color = borderAllocatedColor;
-                    if (nodeImage != null) nodeImage.color = nodeImageAllocatedColor;
+                    ApplyColors(borderAllocatedColor, nodeImageAllocatedColor);
                 }
                 
                 _wasActive = true;
@@ -147,13 +161,11 @@ else if (_colorTween == null || !_colorTween.IsActive())
 
             if (canAllocateNow)
             {
-                if (border != null) border.color = borderCanAllocateColor;
-                if (nodeImage != null) nodeImage.color = nodeImageCanAllocateColor;
+                ApplyColors(borderCanAllocateColor, nodeImageCanAllocateColor);
                 return;
             }
 
-            if (border != null) border.color = borderBaseColor;
-            if (nodeImage != null) nodeImage.color = nodeImageBaseColor;
+            ApplyColors(borderBaseColor, nodeImageBaseColor);
         }
 
         private void UpdateVisual(int _)
@@ -164,6 +176,11 @@ else if (_colorTween == null || !_colorTween.IsActive())
         private void UpdateVisualSelf(Node node)
         {
             UpdateVisual(this.node);
+        }
+
+        private void UpdateVisualFromSearch()
+        {
+            UpdateVisual(node);
         }
 
         private void UpdateSocketVisual(SocketNode _)
@@ -205,6 +222,26 @@ else if (_colorTween == null || !_colorTween.IsActive())
 
             if (allocationQueueOrderText != null)
                 allocationQueueOrderText.gameObject.SetActive(isQueued);
+        }
+
+        private void ApplyColors(Color borderColor, Color nodeImageColor)
+        {
+            bool isSearchMatched = IsSearchMatched();
+
+            if (border != null)
+                border.color = isSearchMatched ? searchMatchedBorderColor : borderColor;
+
+            if (nodeImage != null)
+            {
+                nodeImage.color = isSearchMatched && overrideNodeImageColorOnSearch
+                    ? searchMatchedNodeImageColor
+                    : nodeImageColor;
+            }
+        }
+
+        private bool IsSearchMatched()
+        {
+            return _skillTree != null && _skillTree.IsNodeSearchMatched(node);
         }
     }
 }
