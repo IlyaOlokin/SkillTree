@@ -15,6 +15,8 @@ namespace Battle
         public AttackEffectPayload AttackEffectPayload { get; } = new AttackEffectPayload();
         public DamageInstance DamageInstance { get; } = new DamageInstance();
         [HideInInspector] public bool IsCritical { get; set; }
+        [HideInInspector] public bool AllowsMultiCrit { get; set; }
+        [HideInInspector] public int CriticalLayerCount { get; set; }
 
         public DamageInfo(Unit owner, BaseUnitModifiers baseUnitModifiersSnapshot)
         {
@@ -29,6 +31,8 @@ namespace Battle
             AttackEffectPayload.Reset();
             DamageInstance.ResetValues();
             IsCritical = false;
+            AllowsMultiCrit = false;
+            CriticalLayerCount = 0;
         }
     }
 

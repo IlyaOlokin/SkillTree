@@ -1580,7 +1580,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311710
-    m_Key: modifier.moreEvasionPerActiveBarrier.description
+    m_Key: modifier.modifierContainerPerActiveBarrier.description
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311711
@@ -1801,6 +1801,26 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 5084156906311765
     m_Key: modifier.balancedArmorEvasion.withModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311766
+    m_Key: modifier.multiCrit.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311767
+    m_Key: modifier.barrierRegenSpeedIncreasesArmor.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311768
+    m_Key: modifier.addedResistanceToIncreasedStat.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311769
+    m_Key: modifier.addedResistanceToIncreasedStat.invalidResistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311770
+    m_Key: modifier.addedResistanceToIncreasedStat.unconfiguredTarget
     m_Metadata:
       m_Items: []
   m_Metadata:

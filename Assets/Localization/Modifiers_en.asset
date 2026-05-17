@@ -1593,7 +1593,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311710
-    m_Localized: '[[0]]% more {evasion|Evasion} per active {barrier|Barrier}'
+    m_Localized: Adds '[[0]]' per active {barrier|Barrier}
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311711
@@ -1820,6 +1820,29 @@ MonoBehaviour:
   - m_Id: 5084156906311765
     m_Localized: While {armor|Armor} and {evasion|Evasion} differ by no more than
       [[0]]% of the higher value, [[1]]
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311766
+    m_Localized: Crit Chance can exceed 100%. Each full 100% Crit Chance grants
+      another Crit Damage Bonus layer, and the remainder rolls for one additional
+      layer.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311767
+    m_Localized: Increases to {barrierRegenerationSpeed|Barrier Regeneration Speed}
+      also increase {armor|Armor} by the same amount
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311768
+    m_Localized: '[[2]]% of added [[0]] also applies as increased [[1]]'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311769
+    m_Localized: Resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311770
+    m_Localized: an unconfigured stat
     m_Metadata:
       m_Items: []
   references:
