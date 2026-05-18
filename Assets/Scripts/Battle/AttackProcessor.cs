@@ -17,6 +17,7 @@ namespace Battle
             {
                 context.IsEvaded = true;
                 defender.OnHitEvaded(damageInfo.DamageInstance);
+                attackerUnit.OnAttackMissed(defender);
                 AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics
                 return;
             }

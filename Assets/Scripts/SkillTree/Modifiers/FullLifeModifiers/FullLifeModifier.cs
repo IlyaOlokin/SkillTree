@@ -8,22 +8,23 @@ namespace SkillTree
     public class FullLifeModifier : Modifier
     {
         [SerializeField] public ModifierContainer modifierContainer;
+        [SerializeField] public bool reverseCondition;
 
-        public override bool IsApplicable(Unit unit) => unit.IsOnFullLife();
+        public override bool IsApplicable(Unit unit) => IsConditionMet(unit);
 
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
         {
-            bool wasOnFullLife = unit.IsOnFullLife();
+            bool wasApplicable = IsConditionMet(unit);
 
             void OnHealthChanged()
             {
-                bool isOnFullLife = unit.IsOnFullLife();
-                if (isOnFullLife == wasOnFullLife)
+                bool isApplicable = IsConditionMet(unit);
+                if (isApplicable == wasApplicable)
                 {
                     return;
                 }
 
-                wasOnFullLife = isOnFullLife;
+                wasApplicable = isApplicable;
                 unit.RequestModRecalculation();
             }
 
@@ -47,14 +48,20 @@ namespace SkillTree
             if (modifierContainer == null)
             {
                 return GameLocalization.GetModifier(
-                    "modifier.fullLife.noModifier",
-                    "While on Full Life, applies modifier");
+                    reverseCondition ? "modifier.fullLife.notFullLife.noModifier" : "modifier.fullLife.noModifier",
+                    reverseCondition ? "While not on Full Life, applies modifier" : "While on Full Life, applies modifier");
             }
 
             return GameLocalization.FormatModifier(
-                "modifier.fullLife.withModifier",
-                "While on Full Life, [[0]]",
+                reverseCondition ? "modifier.fullLife.notFullLife.withModifier" : "modifier.fullLife.withModifier",
+                reverseCondition ? "While not on Full Life, [[0]]" : "While on Full Life, [[0]]",
                 powerContext.Scale(modifierContainer).GetDescription());
+        }
+
+        private bool IsConditionMet(Unit unit)
+        {
+            bool isOnFullLife = unit.IsOnFullLife();
+            return reverseCondition ? !isOnFullLife : isOnFullLife;
         }
     }
 }

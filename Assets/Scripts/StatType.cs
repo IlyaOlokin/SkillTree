@@ -94,4 +94,5 @@ public enum StatType
     Strength = 23,
     Dexterity = 24,
     Intelligence = 25,
+    AllAttributes = 69,
 }

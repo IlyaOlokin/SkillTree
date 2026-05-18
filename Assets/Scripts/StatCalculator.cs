@@ -44,6 +44,7 @@ public static class StatCalculator
             if (mod.IsInPriority(ModifierPriority.PreAttribute2) && mod.IsApplicable(unit)) mod.ApplyEffect(unit);
         }
         
+        MergeAttributeModifiers(unit.BaseUnitModifiers);
         ApplyAttributes(unit);
             
         foreach (var mod in mods)
@@ -113,6 +114,15 @@ public static class StatCalculator
         baseUnitModifiers.MergeModifier(StatType.BlockChance, baseUnitModifiers.GetModifier(StatType.Defence));
         
         baseUnitModifiers.ClearModifier(StatType.Defence);
+    }
+
+    public static void MergeAttributeModifiers(BaseUnitModifiers baseUnitModifiers)
+    {
+        baseUnitModifiers.MergeModifier(StatType.Strength, baseUnitModifiers.GetModifier(StatType.AllAttributes));
+        baseUnitModifiers.MergeModifier(StatType.Dexterity, baseUnitModifiers.GetModifier(StatType.AllAttributes));
+        baseUnitModifiers.MergeModifier(StatType.Intelligence, baseUnitModifiers.GetModifier(StatType.AllAttributes));
+
+        baseUnitModifiers.ClearModifier(StatType.AllAttributes);
     }
     
     public static void MergeAilmentModifiers(BaseUnitModifiers baseUnitModifiers)

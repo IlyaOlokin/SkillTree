@@ -34,11 +34,13 @@ namespace Battle
         public event Action<DamageInfo, float> OnHealthDamageTaken;
         public event Action<ITarget> OnAttack;
         public event Action<ITarget> OnHit;
+        public event Action<ITarget> OnMiss;
         public event Action<ITarget> OnCrit;
         public event Action<ITarget> OnNonCrit;
         public event Action<WeaponType> OnWeaponTypeChanged;
         public event Action<float> OnPainConsumed;
         public event Action<Unit> OnBleedApplied;
+        public event Action<Unit> OnAilmentApplied;
         
         public event Action OnEvade;
         public event Action OnBlock;
@@ -114,6 +116,11 @@ namespace Battle
             OnHit?.Invoke(target);
         }
 
+        public void OnAttackMissed(ITarget target)
+        {
+            OnMiss?.Invoke(target);
+        }
+
         public void DamageDealt(DamageInstance damageInstance)
         {
         }
@@ -150,6 +157,17 @@ namespace Battle
             }
 
             OnBleedApplied?.Invoke(target);
+            AilmentApplied(target);
+        }
+
+        public void AilmentApplied(Unit target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            OnAilmentApplied?.Invoke(target);
         }
 
         public void ReceiveDoT(DamageInstance damageInstance)

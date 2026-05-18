@@ -352,6 +352,14 @@ MonoBehaviour:
     m_Localized: Maximum 10 stacks.
     m_Metadata:
       m_Items: []
+  - m_Id: 10152012756946945
+    m_Localized: All Attributes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10152012756946946
+    m_Localized: Applies to Strength, Dexterity, and Intelligence
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

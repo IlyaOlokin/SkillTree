@@ -86,6 +86,7 @@ namespace Battle
                     return;
                 Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Overcharge>() ? attacker : defender;
                 effectTarget.effectController.AddEffect(new Overcharge(damageInfo, effectTarget));
+                attacker.AilmentApplied(effectTarget);
             }
         }
         

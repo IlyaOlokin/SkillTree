@@ -339,6 +339,14 @@ MonoBehaviour:
 '
     m_Metadata:
       m_Items: []
+  - m_Id: 10152012756946945
+    m_Key: enum.StatType.AllAttributes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10152012756946946
+    m_Key: description.allAttributes1
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

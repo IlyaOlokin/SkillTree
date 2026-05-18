@@ -74,6 +74,14 @@ MonoBehaviour:
     m_Localized: 
     m_Metadata:
       m_Items: []
+  - m_Id: 10152012756946945
+    m_Localized: Alle Attribute
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10152012756946946
+    m_Localized: Gilt fuer Staerke, Geschicklichkeit und Intelligenz
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

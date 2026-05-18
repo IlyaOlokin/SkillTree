@@ -127,6 +127,7 @@ namespace Battle
             {
                 Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Chill>() ? attacker : defender;
                 effectTarget.effectController.AddEffect(new Chill(damageInfo, effectTarget, BASE_DURATION));
+                attacker.AilmentApplied(effectTarget);
             }
         }
     }

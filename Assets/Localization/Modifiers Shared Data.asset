@@ -1407,6 +1407,30 @@ MonoBehaviour:
     m_Key: modifier.container.none.Intelligence
     m_Metadata:
       m_Items: []
+  - m_Id: 7780259991667
+    m_Key: modifier.container.added.AllAttributes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991668
+    m_Key: modifier.container.increased.AllAttributes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991669
+    m_Key: modifier.container.decreased.AllAttributes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991670
+    m_Key: modifier.container.more.AllAttributes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991671
+    m_Key: modifier.container.less.AllAttributes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991672
+    m_Key: modifier.container.none.AllAttributes
+    m_Metadata:
+      m_Items: []
   - m_Id: 487906223460352
     m_Key: modifier.noArmor.withModifier
     m_Metadata:
@@ -1821,6 +1845,22 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 5084156906311770
     m_Key: modifier.addedResistanceToIncreasedStat.unconfiguredTarget
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311771
+    m_Key: modifier.fullLife.notFullLife.withModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311772
+    m_Key: modifier.fullLife.notFullLife.noModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311773
+    m_Key: modifier.gainAttackProgressOnAilmentApplied.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311774
+    m_Key: modifier.gainAttackProgressOnMiss.description
     m_Metadata:
       m_Items: []
   m_Metadata:

@@ -278,6 +278,46 @@ MonoBehaviour:
     m_Localized: 
     m_Metadata:
       m_Items: []
+  - m_Id: 7780259991667
+    m_Localized: '[[0]] zu {allAttributes|allen Attributen}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991668
+    m_Localized: '[[0]]% erhoehte {allAttributes|alle Attribute}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991669
+    m_Localized: '[[0]]% verringerte {allAttributes|alle Attribute}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991670
+    m_Localized: '[[0]]% mehr {allAttributes|alle Attribute}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991671
+    m_Localized: '[[0]]% weniger {allAttributes|alle Attribute}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991672
+    m_Localized: Du hast keine {allAttributes|alle Attribute}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311771
+    m_Localized: 'Solange du nicht bei vollem Leben bist, [[0]]'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311772
+    m_Localized: Solange du nicht bei vollem Leben bist, wird ein Modifikator angewendet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311773
+    m_Localized: 
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311774
+    m_Localized: 
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
