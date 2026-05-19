@@ -184,6 +184,7 @@ namespace Battle
                     break;
 
                 case EnemyRarity.Boss:
+                    Add(package, ModifierType.More, StatType.Damage, -0.5f);
                     Add(package, ModifierType.More, StatType.MaximumHealth, -0.2f);
                     break;
             }

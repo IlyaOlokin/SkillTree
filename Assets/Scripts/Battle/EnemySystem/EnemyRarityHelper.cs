@@ -11,9 +11,9 @@ namespace Battle
             {
                 EnemyRarity.Normal => 1f,
                 EnemyRarity.Magic => 1.2f,
-                EnemyRarity.Rare => 1.5f,
-                EnemyRarity.Elite => 1.8f,
-                EnemyRarity.Boss => 2.5f,
+                EnemyRarity.Rare => 1.4f,
+                EnemyRarity.Elite => 1.65f,
+                EnemyRarity.Boss => 2f,
                 _ => 1f
             };
         }

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d219f318536ff974580c180788e87719, type: 3}
+  m_Name: Volcano6
+  m_EditorClassIdentifier: 
+  locationId: Volcano-6
+  displayName: Volcano
+  description: 
+  mapIcon: {fileID: -5804966304102174107, guid: 1ccd25ccc16dd944d80ddd2fb42a9fdb, type: 3}
+  enemyDatabase: {fileID: 11400000, guid: d9d2702f03edaa3409b979154dc833b0, type: 2}
+  levelRewards:
+  - levelNumber: 5
+    itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
+    amount: 2
