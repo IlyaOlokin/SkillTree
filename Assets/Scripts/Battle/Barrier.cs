@@ -11,7 +11,7 @@ namespace Battle
         private int _barrierCount;
         private int _maxBarrierCount;
 
-        public static readonly float BarrierCooldown = 10f;
+        public static readonly float BarrierCooldown = 5f;
 
         private float _cooldownProgress;
         private float _regenSpeedMult;

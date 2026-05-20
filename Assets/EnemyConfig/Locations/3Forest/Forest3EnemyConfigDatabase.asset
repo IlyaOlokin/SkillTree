@@ -19,13 +19,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eb6496325a2a9764289862c896dcd09d, type: 2}
   - {fileID: 11400000, guid: c58d0d0cf29359049a2da7efa11bcba1, type: 2}
   - {fileID: 11400000, guid: a5b07aaae115f2b4d907e690cceb84c0, type: 2}
-  levelPowers:
-  - 66
-  - 71
-  - 75
-  - 79
-  - 82
-  startingLevel: 1
+  levelPowerConfig: {fileID: 11400000, guid: 77c2e810577433a4c8c4044c074e8a62, type: 2}
+  startingLevel: 11
+  maxLevel: 15
   wavesToUnlockNextLevel: 3
   respawnDelay: 1
   maxEnemiesPerWave: 3

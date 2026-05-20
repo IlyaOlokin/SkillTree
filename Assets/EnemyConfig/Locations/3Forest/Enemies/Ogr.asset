@@ -69,5 +69,5 @@ MonoBehaviour:
   extraModifiers: []
   itemDropTable: {fileID: 11400000, guid: 562f4bb25f8bf9a4f95f24fde9f23482, type: 2}
   previewDatabaseOverride: {fileID: 11400000, guid: 75e51ac5d07785043b7c33854d13ba57, type: 2}
-  previewPower: 112
+  previewPower: 82
   previewRarity: 4

@@ -23,6 +23,7 @@ namespace Battle
             ApplyArchetypeModifiers(package.Modifiers, archetype);
             ApplyAttackSpeed(package.Modifiers, archetype, applyRandomVariance);
             ApplyAccuracy(package.Modifiers, totalPower);
+            ApplyEvasion(package.Modifiers, power);
             ApplyRarityScaling(package.Modifiers, rarity);
             ApplyAffixes(package.Modifiers, archetype, rarity, affixCountOverride);
             
@@ -166,6 +167,13 @@ namespace Battle
             float power)
         {
             Add(package, ModifierType.Added, StatType.Accuracy, power);
+        }
+
+        private void ApplyEvasion(
+            BaseInnateModifiers package,
+            float power)
+        {
+            Add(package, ModifierType.Added, StatType.Evasion, power / 10f);
         }
         
         private void ApplyRarityScaling(

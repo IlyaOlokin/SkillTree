@@ -311,7 +311,8 @@ MonoBehaviour:
   currentExp: 0
   expToNextLevel: 10
   baseExpToNextLevel: 10
-  expGrowthPerLevel: 1.1
+  expIncreasePerLevel: 1
+  expGrowthMultiplier: 1.04
   skillPoints: 1
 --- !u!114 &7463270014328316196 stripped
 MonoBehaviour:

@@ -16,6 +16,7 @@ namespace Battle
         [TextArea]
         [SerializeField] private string description;
         [SerializeField] private Sprite mapIcon;
+        [SerializeField] private Sprite battleBackground;
         [SerializeField] private EnemyConfigDatabase enemyDatabase;
         [SerializeField] private List<LocationLevelRewardEntry> levelRewards = new();
 
@@ -23,6 +24,7 @@ namespace Battle
         public string DisplayName => string.IsNullOrWhiteSpace(displayName) ? name : displayName;
         public string Description => description;
         public Sprite MapIcon => mapIcon;
+        public Sprite BattleBackground => battleBackground;
         public EnemyConfigDatabase EnemyDatabase => enemyDatabase;
         public IReadOnlyList<LocationLevelRewardEntry> LevelRewards => levelRewards;
 

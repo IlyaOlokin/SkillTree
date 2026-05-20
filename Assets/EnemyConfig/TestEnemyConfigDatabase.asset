@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   archetypes:
   - {fileID: 11400000, guid: 3eb85abf4551864498ca76ae65819ca3, type: 2}
-  levelPowers:
-  - 10
+  levelPowerConfig: {fileID: 11400000, guid: 77c2e810577433a4c8c4044c074e8a62, type: 2}
   startingLevel: 1
+  maxLevel: 200
   wavesToUnlockNextLevel: 5
   respawnDelay: 1
   maxEnemiesPerWave: 3

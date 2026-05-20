@@ -10,11 +10,12 @@ namespace Battle
         [Header("Enemy selection")]
         public List<EnemyArchetype> archetypes = new();
 
-        [Header("Level power")]
-        [SerializeField] private List<float> levelPowers = new() { 10f };
+        [Header("Level range")]
+        [SerializeField] private EnemyLevelPowerConfig levelPowerConfig;
+        [SerializeField, Min(1)] private int startingLevel = 1;
+        [SerializeField, Min(1)] private int maxLevel = 1;
 
         [Header("Wave progression")]
-        [SerializeField, Min(1)] private int startingLevel = 1;
         [SerializeField, Min(1)] private int wavesToUnlockNextLevel = 10;
         [SerializeField, Min(0f)] private float respawnDelay = 2f;
 
@@ -36,10 +37,11 @@ namespace Battle
         [Header("Global enemy modifiers")]
         [SerializeField] private List<ModifierContainer> globalModifiers = new();
 
-        public IReadOnlyList<float> LevelPowers => levelPowers;
+        public EnemyLevelPowerConfig LevelPowerConfig => levelPowerConfig;
+        public IReadOnlyList<float> LevelPowers => levelPowerConfig.LevelPowers;
         public int StartingLevel => startingLevel;
         public int WavesToUnlockNextLevel => wavesToUnlockNextLevel;
-        public int MaxWaveLevel => Mathf.Max(startingLevel, startingLevel + GetLevelPowerCount() - 1);
+        public int MaxWaveLevel => Mathf.Max(startingLevel, maxLevel);
         public float RespawnDelay => respawnDelay;
         public int MaxEnemiesPerWave => maxEnemiesPerWave;
         public EnemyRarityBalanceConfig RarityBalance => rarityBalance;
@@ -51,35 +53,22 @@ namespace Battle
         private void OnValidate()
         {
             startingLevel = Mathf.Max(1, startingLevel);
+            maxLevel = Mathf.Max(startingLevel, maxLevel);
             wavesToUnlockNextLevel = Mathf.Max(1, wavesToUnlockNextLevel);
             respawnDelay = Mathf.Max(0f, respawnDelay);
             maxEnemiesPerWave = Mathf.Clamp(maxEnemiesPerWave, 1, 3);
-
-            levelPowers ??= new List<float>();
-            if (levelPowers.Count == 0)
-                levelPowers.Add(10f);
-
-            for (int i = 0; i < levelPowers.Count; i++)
-                levelPowers[i] = Mathf.Max(0.01f, levelPowers[i]);
         }
 
         public float GetPowerForLevel(int level)
         {
-            int powerCount = GetLevelPowerCount();
-            if (powerCount <= 0)
-            {
-                Debug.LogWarning($"{nameof(EnemyConfigDatabase)} has no level powers configured. Using fallback power 10.", this);
-                return 10f;
-            }
-
             int clampedLevel = Mathf.Clamp(level, StartingLevel, MaxWaveLevel);
-            int index = clampedLevel - StartingLevel;
-            return levelPowers[index];
+            return levelPowerConfig.GetPowerForLevel(clampedLevel, this);
+
         }
 
         public int GetLevelPowerCount()
         {
-            return levelPowers?.Count ?? 0;
+            return MaxWaveLevel - StartingLevel + 1;
         }
 
         public EnemyArchetype GetRandomArchetype(WaveContext context, EnemyRarity rarity, int enemyIndex = 0)

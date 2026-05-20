@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BossConfig
   m_EditorClassIdentifier: 
   rules:
-  - level: 5
+  - level: 30
     lastWaveOnly: 1
     waveIndex: 1
     bossCount: 1

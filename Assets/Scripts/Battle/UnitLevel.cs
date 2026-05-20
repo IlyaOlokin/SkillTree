@@ -18,7 +18,8 @@ namespace Battle
         [SerializeField] private double currentExp = 0d;
         [SerializeField] private double expToNextLevel = 100d;
         [SerializeField] private double baseExpToNextLevel = 100d;
-        [SerializeField] private float expGrowthPerLevel = 1.08f;
+        [SerializeField] private double expIncreasePerLevel = 10d;
+        [SerializeField] private float expGrowthMultiplier = 1f;
 
         [Header("Skill Points")]
         [SerializeField] private int skillPoints = 1;
@@ -89,10 +90,21 @@ namespace Battle
 
         private void RecalculateExpToNextLevel()
         {
-            double clampedBaseExp = Math.Max(1d, baseExpToNextLevel);
-            double growth = Math.Max(1.001d, expGrowthPerLevel);
-            double scaled = clampedBaseExp * Math.Pow(growth, level - 1);
-            expToNextLevel = Math.Max(1d, Math.Round(scaled, MidpointRounding.AwayFromZero));
+            expToNextLevel = CalculateExpToNextLevel(level);
+        }
+
+        private double CalculateExpToNextLevel(int targetLevel)
+        {
+            double amount = Math.Max(1d, baseExpToNextLevel);
+            double increase = Math.Max(0d, expIncreasePerLevel);
+            double multiplier = Math.Max(0.001d, expGrowthMultiplier);
+
+            for (int i = 1; i < targetLevel; i++)
+            {
+                amount = (amount + increase) * multiplier;
+            }
+
+            return Math.Max(1d, Math.Round(amount, MidpointRounding.AwayFromZero));
         }
         
         public bool TrySpendSkillPoints(int cost)

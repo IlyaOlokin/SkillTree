@@ -12,6 +12,7 @@ namespace Battle
     public class EnemySpawner : MonoBehaviour
     {
         private const string FallbackLocationId = "default";
+        private const float NormalEnemyWaveWeight = 0.33f;
 
         [SerializeField] private EnemyPool pool;
         [SerializeField] private EnemyConfigDatabase database;
@@ -55,6 +56,7 @@ namespace Battle
         public event Action OnLocationChanged;
         public event Action OnLevelChanged;
         public event Action OnWaveCleared;
+        public event Action<LocationDefinition, int> OnLocationCompletedFirstTime;
         public event Action<EnemyUnit, IReadOnlyList<InventoryItem>> OnEnemyDropsResolved;
         public event Action<IReadOnlyList<InventoryItem>, Vector3> OnLocationRewardsResolved;
         public event Action<bool> OnBattleActivityChanged;
@@ -204,7 +206,6 @@ namespace Battle
 
         public bool TryGetActiveWaveNormalEnemyEstimates(out float accuracy, out float physicalDamage)
         {
-            const float normalEnemyWaveWeight = 0.33f;
             const float normalEnemyOffenceRatio = 0.33f;
 
             accuracy = 0f;
@@ -215,11 +216,22 @@ namespace Battle
 
             accuracy = totalPower;
 
-            float physicalBudget = totalPower * normalEnemyWaveWeight * normalEnemyOffenceRatio;
+            float physicalBudget = totalPower * NormalEnemyWaveWeight * normalEnemyOffenceRatio;
             EnemyStatBudgetRule rule = ActiveDatabase.StatBudgetConfig != null
                 ? ActiveDatabase.StatBudgetConfig.GetRule(StatType.PhysicalDamage)
                 : EnemyStatBudgetRuleDefaults.Get(StatType.PhysicalDamage);
             physicalDamage = rule.Evaluate(physicalBudget, normalEnemyOffenceRatio);
+            return true;
+        }
+
+        public bool TryGetActiveWaveNormalEnemyBaseEvasionEstimate(out float evasion)
+        {
+            evasion = 0f;
+
+            if (TryGetActiveWavePower(out float totalPower) == false)
+                return false;
+
+            evasion = totalPower * NormalEnemyWaveWeight / 10f;
             return true;
         }
 
@@ -309,9 +321,10 @@ namespace Battle
             if (_activeEnemies.Count > 0)
                 return;
 
-            RegisterWaveClear();
+            WaveContext clearedContext = BuildWaveContext();
+            bool shouldContinueBattle = RegisterWaveClear(clearedContext);
 
-            if (_battleActive)
+            if (_battleActive && shouldContinueBattle)
                 ScheduleRespawn(RespawnDelay);
         }
 
@@ -323,21 +336,35 @@ namespace Battle
             return _itemDropResolver.Resolve(enemy);
         }
 
-        private void RegisterWaveClear()
+        private bool RegisterWaveClear(WaveContext clearedContext)
         {
             _currentClearedWaves++;
 
+            bool completedLevelFirstTime = false;
+            int completedLevel = _selectedLevel;
             if (_currentClearedWaves >= WavesToUnlockNextLevelInternal)
-                RegisterCompletedLevel();
+                completedLevelFirstTime = RegisterCompletedLevel(out completedLevel);
+
+            bool shouldShowLocationComplete =
+                clearedContext.IsBossWave &&
+                completedLevelFirstTime;
 
             if (_currentClearedWaves >= WavesToUnlockNextLevelInternal && _autoProgressionEnabled)
             {
                 _player.ResetCombatState();
                 _maxUnlockedLevel = Mathf.Min(_maxUnlockedLevel + 1, MaxWaveLevel);
                 PersistSelectedLocationProgress();
-                SelectNextLevel();
+
+                if (!shouldShowLocationComplete)
+                    SelectNextLevel();
             }
+
             OnWaveCleared?.Invoke();
+
+            if (shouldShowLocationComplete)
+                OnLocationCompletedFirstTime?.Invoke(_selectedLocation, completedLevel);
+
+            return !shouldShowLocationComplete;
         }
 
         private void ScheduleRespawn(float delay)
@@ -619,21 +646,22 @@ namespace Battle
             _selectedLocationProgress.MaxUnlockedLevel = _maxUnlockedLevel;
         }
 
-        private void RegisterCompletedLevel()
+        private bool RegisterCompletedLevel(out int completedLevel)
         {
+            completedLevel = Mathf.Clamp(_selectedLevel, 0, MaxWaveLevel);
             if (_selectedLocationProgress == null)
-                return;
+                return false;
 
-            int completedLevel = Mathf.Clamp(_selectedLevel, 0, MaxWaveLevel);
             int previousCompletedLevelCount = _selectedLocationProgress.CompletedLevelCount;
             _selectedLocationProgress.CompletedLevelCount = Mathf.Max(
                 previousCompletedLevelCount,
                 completedLevel);
 
             if (completedLevel <= previousCompletedLevelCount)
-                return;
+                return false;
 
             ResolveLocationRewardsForCompletedLevel(completedLevel);
+            return true;
         }
 
         private void ResolveLocationRewardsForCompletedLevel(int completedLevel)

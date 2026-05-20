@@ -281,6 +281,8 @@ public class PlayerStatsWindow : MonoBehaviour
                 return GetEstimatedArmorMitigationSuffix(rawValue);
             case StatType.Evasion:
                 return GetEstimatedEvasionChanceSuffix(rawValue);
+            case StatType.Accuracy:
+                return GetEstimatedAccuracyHitChanceSuffix(rawValue);
             case StatType.BarrierRegenerationSpeed: 
                 return GameLocalization.Get("ui.common.secondsShort", "s");
             default:
@@ -351,6 +353,16 @@ public class PlayerStatsWindow : MonoBehaviour
 
         float dodgeChancePercent = Evasion.CalculateDodgeChance(evasion, accuracy) * 100f;
         return FormatEstimatedPercentSuffix(dodgeChancePercent);
+    }
+
+    private string GetEstimatedAccuracyHitChanceSuffix(float accuracy)
+    {
+        if (_enemySpawner == null ||
+            _enemySpawner.TryGetActiveWaveNormalEnemyBaseEvasionEstimate(out float evasion) == false)
+            return string.Empty;
+
+        float hitChancePercent = Evasion.CalculateHitChance(accuracy, evasion) * 100f;
+        return FormatEstimatedPercentSuffix(hitChancePercent);
     }
 
     private string FormatEstimatedPercentSuffix(float value)

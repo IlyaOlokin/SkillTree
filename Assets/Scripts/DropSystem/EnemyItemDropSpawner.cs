@@ -27,6 +27,8 @@ namespace DropSystem
         private ObjectPool<ItemDropPickup> pickupPool;
         private readonly List<ItemDropPickup> _activePickups = new();
 
+        public int ActiveDropCount => _activePickups.Count;
+
         private void Awake()
         {
             if (enemySpawner == null)
@@ -158,6 +160,28 @@ namespace DropSystem
             }
 
             _activePickups.Clear();
+        }
+
+        public int CollectAllActiveDrops()
+        {
+            if (_activePickups.Count == 0)
+                return 0;
+
+            int collectedCount = 0;
+            for (int i = _activePickups.Count - 1; i >= 0; i--)
+            {
+                ItemDropPickup pickup = _activePickups[i];
+                if (pickup == null || pickup.Item == null || pickup.Item.IsEmpty)
+                    continue;
+
+                int activeCountBeforeCollect = _activePickups.Count;
+                pickup.TryCollect();
+
+                if (_activePickups.Count < activeCountBeforeCollect || !_activePickups.Contains(pickup))
+                    collectedCount++;
+            }
+
+            return collectedCount;
         }
 
         private void OnDestroy()

@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: BossConfig
   m_EditorClassIdentifier: 
   rules:
-  - level: 5
+  - level: 40
     lastWaveOnly: 1
     waveIndex: 1
     bossCount: 1
-    totalEnemiesInWave: 3
+    totalEnemiesInWave: 1
     maxBossAffixes: 2
     bossArchetypes:
     - {fileID: 11400000, guid: 79146e2e3845ed841a82774a06c989f5, type: 2}
