@@ -15,5 +15,5 @@ MonoBehaviour:
   <Priorities>k__BackingField: 00000000
   modifierContainer:
     modifierType: 0
-    statType: 0
-    value: 0
+    statType: 22
+    value: 0.5
