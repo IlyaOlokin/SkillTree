@@ -166,7 +166,7 @@ namespace Battle
             BaseInnateModifiers package,
             float power)
         {
-            Add(package, ModifierType.Added, StatType.Accuracy, power);
+            Add(package, ModifierType.Added, StatType.Accuracy, power / 7f);
         }
 
         private void ApplyEvasion(

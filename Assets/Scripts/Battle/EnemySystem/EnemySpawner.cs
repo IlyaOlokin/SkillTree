@@ -214,7 +214,7 @@ namespace Battle
             if (TryGetActiveWavePower(out float totalPower) == false)
                 return false;
 
-            accuracy = totalPower;
+            accuracy = totalPower / 7f;
 
             float physicalBudget = totalPower * NormalEnemyWaveWeight * normalEnemyOffenceRatio;
             EnemyStatBudgetRule rule = ActiveDatabase.StatBudgetConfig != null
