@@ -15,6 +15,7 @@ namespace Visual
         [SerializeField] private UnitVisualHitEffectController hitEffectController;
         [SerializeField] private UnitVisualAttackAnimationController attackAnimationController = new UnitVisualAttackAnimationController();
         [SerializeField] private UnitVisualIdleBreathingController idleBreathingController = new UnitVisualIdleBreathingController();
+        [SerializeField] private Transform visualScaleRoot;
 
         void Awake()
         {
@@ -109,6 +110,13 @@ namespace Visual
         public void PlayAttackAnimation(Vector2 direction)
         {
             attackAnimationController?.PlayAttackAnimation(direction);
+        }
+
+        public void SetVisualScale(Vector3 scale)
+        {
+            Transform target = visualScaleRoot != null ? visualScaleRoot : transform;
+            target.localScale = scale;
+            idleBreathingController?.SetBaseScale(target, scale);
         }
 
         private void AssignBattleCameraToWorldCanvases()

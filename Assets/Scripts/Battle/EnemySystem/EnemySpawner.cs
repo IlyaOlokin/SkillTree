@@ -273,6 +273,7 @@ namespace Battle
                     continue;
 
                 enemy.Initialize(packages[i]);
+                pool.ApplyVisualScaleForSlot(enemy, i);
                 enemy.OnDeath += HandleEnemyDeath;
                 enemy.gameObject.SetActive(true);
                 _activeEnemies.Add(enemy);

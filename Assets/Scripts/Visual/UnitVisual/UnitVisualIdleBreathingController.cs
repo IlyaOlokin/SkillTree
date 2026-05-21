@@ -64,6 +64,24 @@ namespace Visual
             ResetScale();
         }
 
+        public void SetBaseScale(Transform target, Vector3 scale)
+        {
+            if (!_isInitialized || breathingTransform == null || breathingTransform != target)
+            {
+                return;
+            }
+
+            bool wasPlaying = _breathingTween != null && _breathingTween.IsActive();
+            _breathingTween?.Kill();
+            _baseScale = scale;
+            breathingTransform.localScale = _baseScale;
+
+            if (wasPlaying && _ownerGameObject != null && _ownerGameObject.activeInHierarchy)
+            {
+                Play();
+            }
+        }
+
         private void ResetScale()
         {
             if (!_isInitialized || breathingTransform == null)

@@ -358,8 +358,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "UnityEditor.MainToolbarWindow\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 8
-    y: 51
+    x: 0
+    y: 0
     width: 2515
     height: 36
   m_SerializedDataModeController:
@@ -610,8 +610,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Game\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 8
-    y: 87
+    x: 0
+    y: 24
     width: 1445
     height: 989
   m_SerializedDataModeController:
@@ -870,8 +870,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Scene\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1454
-    y: 87
+    x: 1447
+    y: 24
     width: 269
     height: 989
   m_SerializedDataModeController:
@@ -1558,7 +1558,7 @@ MonoBehaviour:
   m_Position:
     m_Target: {x: 300.51065, y: 1.2929991, z: 0.08401884}
     speed: 2
-    m_Value: {x: -0.22554812, y: -2.8972735, z: 19.69501}
+    m_Value: {x: 300.51065, y: 1.2929991, z: 0.08401884}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1611,7 +1611,7 @@ MonoBehaviour:
   m_Size:
     m_Target: 2.0747666
     speed: 2
-    m_Value: 0.7864319
+    m_Value: 2.0747666
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1704,8 +1704,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Hierarchy\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1725
-    y: 87
+    x: 1718
+    y: 24
     width: 273
     height: 989
   m_SerializedDataModeController:
@@ -1795,8 +1795,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 8
-    y: 1102
+    x: 0
+    y: 1039
     width: 1991
     height: 236
   m_SerializedDataModeController:
@@ -1847,31 +1847,30 @@ MonoBehaviour:
       m_Data: 98968
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 73534
-    - m_Data: 98764
-    - m_Data: 98766
-    - m_Data: 98768
-    - m_Data: 98770
-    - m_Data: 98772
-    - m_Data: 98774
-    - m_Data: 98776
-    - m_Data: 98778
-    - m_Data: 98780
-    - m_Data: 98782
-    - m_Data: 98784
-    - m_Data: 98786
-    - m_Data: 98788
-    - m_Data: 98790
-    - m_Data: 98792
-    - m_Data: 98794
-    - m_Data: 98796
-    - m_Data: 98798
-    - m_Data: 98800
-    - m_Data: 98806
-    - m_Data: 98812
-    - m_Data: 98968
-    - m_Data: 99028
-    - m_Data: 1000000000
+    - m_Data: 73546
+    - m_Data: 98898
+    - m_Data: 98900
+    - m_Data: 98902
+    - m_Data: 98904
+    - m_Data: 98906
+    - m_Data: 98908
+    - m_Data: 98910
+    - m_Data: 98912
+    - m_Data: 98914
+    - m_Data: 98916
+    - m_Data: 98918
+    - m_Data: 98920
+    - m_Data: 98922
+    - m_Data: 98924
+    - m_Data: 98926
+    - m_Data: 98928
+    - m_Data: 98930
+    - m_Data: 98932
+    - m_Data: 98934
+    - m_Data: 98936
+    - m_Data: 98938
+    - m_Data: 98940
+    - m_Data: 98942
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1905,31 +1904,30 @@ MonoBehaviour:
       m_Data: 0
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 73534
-    - m_Data: 98764
-    - m_Data: 98766
-    - m_Data: 98768
-    - m_Data: 98770
-    - m_Data: 98772
-    - m_Data: 98774
-    - m_Data: 98776
-    - m_Data: 98778
-    - m_Data: 98780
-    - m_Data: 98782
-    - m_Data: 98784
-    - m_Data: 98786
-    - m_Data: 98788
-    - m_Data: 98790
-    - m_Data: 98792
-    - m_Data: 98794
-    - m_Data: 98796
-    - m_Data: 98798
-    - m_Data: 98800
-    - m_Data: 98806
-    - m_Data: 98812
-    - m_Data: 98968
-    - m_Data: 99028
-    - m_Data: 1000000000
+    - m_Data: 73546
+    - m_Data: 98898
+    - m_Data: 98900
+    - m_Data: 98902
+    - m_Data: 98904
+    - m_Data: 98906
+    - m_Data: 98908
+    - m_Data: 98910
+    - m_Data: 98912
+    - m_Data: 98914
+    - m_Data: 98916
+    - m_Data: 98918
+    - m_Data: 98920
+    - m_Data: 98922
+    - m_Data: 98924
+    - m_Data: 98926
+    - m_Data: 98928
+    - m_Data: 98930
+    - m_Data: 98932
+    - m_Data: 98934
+    - m_Data: 98936
+    - m_Data: 98938
+    - m_Data: 98940
+    - m_Data: 98942
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2094,8 +2092,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 2000
-    y: 87
+    x: 1993
+    y: 24
     width: 522
     height: 1251
   m_SerializedDataModeController:
