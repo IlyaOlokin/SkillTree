@@ -120,6 +120,9 @@ MonoBehaviour:
   borderAllocatedColor: {r: 0.9528302, g: 0.9528302, b: 0.9528302, a: 1}
   allocationQueueOrderCanvas: {fileID: 2919584759863195965}
   allocationQueueOrderText: {fileID: 2291845909606310432}
+  searchMatchedBorderColor: {r: 1, g: 0.85, b: 0.15, a: 1}
+  searchMatchedNodeImageColor: {r: 1, g: 1, b: 0.45, a: 1}
+  overrideNodeImageColorOnSearch: 0
 --- !u!114 &4188905282137775919
 MonoBehaviour:
   m_ObjectHideFlags: 0

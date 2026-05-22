@@ -26,6 +26,26 @@ MonoBehaviour:
     m_Localized: Settings
     m_Metadata:
       m_Items: []
+  - m_Id: 3000000000001
+    m_Localized: English
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000000000002
+    m_Localized: Russian
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000000000003
+    m_Localized: German
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000000000004
+    m_Localized: Clear Profile Save
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000000000005
+    m_Localized: Deletes the current profile progress, skill tree, and inventory data. The profile slot remains available.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

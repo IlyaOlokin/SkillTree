@@ -23,6 +23,26 @@ MonoBehaviour:
     m_Key: maimMenu.UI.settings
     m_Metadata:
       m_Items: []
+  - m_Id: 3000000000001
+    m_Key: mainMenu.tooltip.language.en
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000000000002
+    m_Key: mainMenu.tooltip.language.ru
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000000000003
+    m_Key: mainMenu.tooltip.language.de
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000000000004
+    m_Key: mainMenu.tooltip.clearProfile.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000000000005
+    m_Key: mainMenu.tooltip.clearProfile.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

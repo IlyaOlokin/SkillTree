@@ -25,8 +25,7 @@ namespace MenuTree
 
         private void Focus(MenuNode node, MenuCameraFocusTarget focusTarget)
         {
-            if (cameraController == null)
-                cameraController = FindFirstObjectByType<MenuTreeCameraController>(FindObjectsInactive.Include);
+            ResolveCameraController();
 
             if (cameraController == null)
                 return;
@@ -45,6 +44,17 @@ namespace MenuTree
 
             if (fallbackToNodeTransform && node != null)
                 cameraController.FocusOn(node.transform);
+        }
+
+        private void ResolveCameraController()
+        {
+            if (cameraController != null)
+                return;
+
+            MenuTreeCameraController[] controllers =
+                FindObjectsByType<MenuTreeCameraController>(FindObjectsInactive.Include);
+            if (controllers.Length == 1)
+                cameraController = controllers[0];
         }
     }
 }

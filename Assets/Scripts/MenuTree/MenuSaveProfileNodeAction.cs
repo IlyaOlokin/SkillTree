@@ -42,7 +42,7 @@ namespace MenuTree
             if (string.IsNullOrWhiteSpace(sceneName))
                 return;
 
-            cameraController ??= FindFirstObjectByType<MenuTreeCameraController>(FindObjectsInactive.Include);
+            ResolveCameraController();
             if (cameraController == null)
             {
                 LoadConfiguredScene();
@@ -68,6 +68,17 @@ namespace MenuTree
             }
 
             LoadConfiguredScene();
+        }
+
+        private void ResolveCameraController()
+        {
+            if (cameraController != null)
+                return;
+
+            MenuTreeCameraController[] controllers =
+                FindObjectsByType<MenuTreeCameraController>(FindObjectsInactive.Include);
+            if (controllers.Length == 1)
+                cameraController = controllers[0];
         }
 
         private void LoadConfiguredScene()

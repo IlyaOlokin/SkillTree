@@ -82,13 +82,14 @@ public enum StatType
     MaxFireResistance = 44,
     MaxColdResistance = 45,
     MaxLightningResistance = 46,
+    
+    MysticNegation = 70,
+    MysticCleansePerSecond = 52,
 
     ElementalResistancePenetration = 64,
     FireResistancePenetration = 65,
     ColdResistancePenetration = 66,
     LightningResistancePenetration = 67,
-    
-    MysticCleansePerSecond = 52,
     
     // Attributes
     Strength = 23,

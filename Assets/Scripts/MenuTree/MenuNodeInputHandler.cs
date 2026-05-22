@@ -18,18 +18,17 @@ namespace MenuTree
             if (node == null)
                 node = GetComponent<MenuNode>();
 
-            if (treeController == null)
-                treeController = FindFirstObjectByType<MenuTreeController>(FindObjectsInactive.Include);
-
             if (cameraController == null)
-                cameraController = FindFirstObjectByType<MenuTreeCameraController>(FindObjectsInactive.Include);
+                ResolveCameraController();
 
             if (tooltipUI == null)
-                tooltipUI = FindFirstObjectByType<TooltipUI>(FindObjectsInactive.Include);
+                tooltipUI = FindAnyObjectByType<TooltipUI>(FindObjectsInactive.Include);
         }
 
         private void OnMouseOver()
         {
+            ResolveTreeController();
+
             if (IsPointerOverUI() || node == null || treeController == null)
                 return;
 
@@ -73,6 +72,8 @@ namespace MenuTree
 
         private void OnMouseEnter()
         {
+            ResolveTreeController();
+
             if (IsPointerOverUI() || node == null || tooltipUI == null || !HasVisibleTooltip())
                 return;
 
@@ -97,6 +98,39 @@ namespace MenuTree
         private bool IsInteractionLocked()
         {
             return cameraController != null && cameraController.IsFocusing;
+        }
+
+        private void ResolveCameraController()
+        {
+            MenuTreeCameraController[] controllers =
+                FindObjectsByType<MenuTreeCameraController>(FindObjectsInactive.Include);
+            if (controllers.Length == 1)
+                cameraController = controllers[0];
+        }
+
+        private void ResolveTreeController()
+        {
+            if (node == null)
+                return;
+
+            if (treeController != null)
+            {
+                if (treeController.ContainsNode(node))
+                    return;
+
+                treeController = null;
+            }
+
+            if (node.TreeController != null)
+            {
+                treeController = node.TreeController;
+                return;
+            }
+
+            MenuTreeController[] controllers =
+                FindObjectsByType<MenuTreeController>(FindObjectsInactive.Include);
+            if (controllers.Length == 1)
+                treeController = controllers[0];
         }
 
         private bool HasVisibleTooltip()

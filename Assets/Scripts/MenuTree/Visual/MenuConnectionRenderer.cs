@@ -41,18 +41,21 @@ namespace MenuTree
         private Texture2D _stateTexture;
         private Texture2D _progressTexture;
         private Material _material;
+        private Material _runtimeMaterial;
         private MenuConnectionVisualState[] _connectionStates = Array.Empty<MenuConnectionVisualState>();
         private float[] _connectionLengths = Array.Empty<float>();
         private readonly Dictionary<MenuNode, bool> _nodeAllocationStates = new();
 
         private void OnValidate()
         {
+            SyncRootNodeWithTree();
             CacheMaterialReference();
             ApplyMaterialProperties();
         }
 
         private void Awake()
         {
+            SyncRootNodeWithTree();
             CacheMaterialReference();
 
             CacheNodeAllocationStates();
@@ -67,6 +70,9 @@ namespace MenuTree
 
             ConnectionRendererUtility.ReleaseTexture(_stateTexture);
             ConnectionRendererUtility.ReleaseTexture(_progressTexture);
+
+            if (_runtimeMaterial != null)
+                Destroy(_runtimeMaterial);
         }
 
         private void Start()
@@ -113,6 +119,7 @@ namespace MenuTree
 #if UNITY_EDITOR
         public void ConstructNodeConnections()
         {
+            SyncRootNodeWithTree();
             List<MenuNodePair> pairs = MenuTreeGraphTraversalService.CollectUniquePairs(rootNode);
 
             for (int i = 0; i < pairs.Count; i++)
@@ -389,7 +396,7 @@ namespace MenuTree
         private Mesh GetOrCreateChunkMesh(int chunkIndex)
         {
             if (_material == null)
-                _material = GetComponent<MeshRenderer>().sharedMaterial;
+                CacheMaterialReference();
 
             string chunkName = $"{ChunkObjectPrefix}{chunkIndex}";
             Transform chunkTransform = transform.Find(chunkName);
@@ -637,7 +644,39 @@ namespace MenuTree
         {
             MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
             if (meshRenderer != null)
-                _material = meshRenderer.sharedMaterial;
+            {
+                if (Application.isPlaying)
+                {
+                    if (_runtimeMaterial == null)
+                        _runtimeMaterial = meshRenderer.material;
+
+                    _material = _runtimeMaterial;
+                }
+                else
+                {
+                    _material = meshRenderer.sharedMaterial;
+                }
+            }
+        }
+
+        private void SyncRootNodeWithTree()
+        {
+            if (menuTree == null)
+                return;
+
+            if (rootNode == null)
+            {
+                rootNode = menuTree.Root;
+                return;
+            }
+
+            if (rootNode != menuTree.Root)
+            {
+                Debug.LogWarning(
+                    $"Menu connection renderer '{name}' has a root node that differs from its menu tree root. " +
+                    "Using mismatched references can mix two menu trees.",
+                    this);
+            }
         }
     }
 

@@ -8,8 +8,20 @@ namespace MenuTree
     {
         public static bool HasAllocatedPathToRoot(MenuNode startNode, HashSet<MenuNode> excludedNodes = null)
         {
+            MenuNode rootNode = startNode != null ? startNode.TreeController?.Root : null;
+            return HasAllocatedPathToRoot(startNode, rootNode, excludedNodes);
+        }
+
+        public static bool HasAllocatedPathToRoot(
+            MenuNode startNode,
+            MenuNode rootNode,
+            HashSet<MenuNode> excludedNodes = null)
+        {
+            if (rootNode == null)
+                return false;
+
             HashSet<MenuNode> visited = new();
-            return HasAllocatedPathToRootInternal(startNode, visited, excludedNodes);
+            return HasAllocatedPathToRootInternal(startNode, rootNode, visited, excludedNodes);
         }
 
         public static List<MenuNodePair> CollectUniquePairs(MenuNode rootNode)
@@ -60,6 +72,7 @@ namespace MenuTree
 
         private static bool HasAllocatedPathToRootInternal(
             MenuNode current,
+            MenuNode rootNode,
             HashSet<MenuNode> visited,
             HashSet<MenuNode> excludedNodes)
         {
@@ -69,8 +82,8 @@ namespace MenuTree
             if (excludedNodes != null && excludedNodes.Contains(current))
                 return false;
 
-            if (current.IsPersistentRoot)
-                return true;
+            if (ReferenceEquals(current, rootNode))
+                return current.IsAllocated;
 
             if (!visited.Add(current))
                 return false;
@@ -85,7 +98,7 @@ namespace MenuTree
                 if (excludedNodes != null && excludedNodes.Contains(next))
                     continue;
 
-                if (HasAllocatedPathToRootInternal(next, visited, excludedNodes))
+                if (HasAllocatedPathToRootInternal(next, rootNode, visited, excludedNodes))
                     return true;
             }
 

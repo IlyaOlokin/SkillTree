@@ -61,6 +61,9 @@ namespace MenuTree
             if (!IsAllocated || isPersistentRoot)
                 return false;
 
+            if (LimitedZone != null && !LimitedZone.CanDeallocate(this))
+                return false;
+
             return CanDisconnectWithoutBreakingAllocatedNeighbors();
         }
 
@@ -151,7 +154,8 @@ namespace MenuTree
 
         private bool HasRootConnection()
         {
-            return MenuTreeGraphTraversalService.HasAllocatedPathToRoot(this);
+            return TreeController != null
+                && MenuTreeGraphTraversalService.HasAllocatedPathToRoot(this, TreeController.Root);
         }
 
         private bool CanDisconnectWithoutBreakingAllocatedNeighbors()
@@ -163,8 +167,11 @@ namespace MenuTree
                 if (neighbor == null || !neighbor.IsAllocated)
                     continue;
 
-                if (!MenuTreeGraphTraversalService.HasAllocatedPathToRoot(neighbor, excludedNodes))
+                if (TreeController == null
+                    || !MenuTreeGraphTraversalService.HasAllocatedPathToRoot(neighbor, TreeController.Root, excludedNodes))
+                {
                     return false;
+                }
             }
 
             return true;

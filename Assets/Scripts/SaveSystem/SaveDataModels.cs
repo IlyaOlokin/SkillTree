@@ -172,7 +172,7 @@ namespace SaveSystem
     [Serializable]
     public class CloudSettingsSaveData
     {
-        public string languageCode = "en";
+        public string languageCode = string.Empty;
     }
 
     [Serializable]

@@ -7,7 +7,7 @@ namespace TooltipSystem
 {
     public class TooltipPointerHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [Inject] private TooltipUI tooltipUI;
+        [Inject(Optional = true)] [SerializeField] private TooltipUI tooltipUI;
         [SerializeField] private MonoBehaviour tooltipSource;
         [SerializeField] private TooltipCanvasTarget canvasTarget;
 
@@ -15,12 +15,14 @@ namespace TooltipSystem
 
         private void Awake()
         {
+            ResolveTooltipUI();
             tooltipDescriptionProvider = TooltipDescriptionProviderResolver.Resolve(gameObject, tooltipSource);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (tooltipDescriptionProvider == null)
+            ResolveTooltipUI();
+            if (tooltipUI == null || tooltipDescriptionProvider == null)
             {
                 return;
             }
@@ -30,12 +32,22 @@ namespace TooltipSystem
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            tooltipUI.RequestHideTooltip(this);
+            ResolveTooltipUI();
+            tooltipUI?.RequestHideTooltip(this);
         }
 
         private void OnDisable()
         {
-            tooltipUI.HideTooltip(this);
+            ResolveTooltipUI();
+            tooltipUI?.HideTooltip(this);
+        }
+
+        private void ResolveTooltipUI()
+        {
+            if (tooltipUI != null)
+                return;
+
+            tooltipUI = FindAnyObjectByType<TooltipUI>(FindObjectsInactive.Include);
         }
     }
 }

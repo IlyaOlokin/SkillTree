@@ -16,17 +16,34 @@ namespace MenuTree
 
         public SaveProfileDescriptor ActivateOrCreateProfileAtSlot(int slotIndex, bool createIfMissing, string displayNameKeyOrText = null)
         {
+            SaveProfileDescriptor profile = GetOrCreateProfileAtSlot(slotIndex, createIfMissing, displayNameKeyOrText);
+            if (profile == null)
+                return null;
+
+            return _profileManager.TrySetActiveProfile(profile.ProfileId)
+                ? profile
+                : null;
+        }
+
+        public SaveProfileDescriptor ClearProfileAtSlot(int slotIndex, bool createIfMissing, string displayNameKeyOrText = null)
+        {
+            SaveProfileDescriptor profile = GetOrCreateProfileAtSlot(slotIndex, createIfMissing, displayNameKeyOrText);
+            if (profile == null)
+                return null;
+
+            _profileManager.ClearProfileSaveData(profile.ProfileId);
+            _profileManager.TouchProfile(profile.ProfileId);
+            return profile;
+        }
+
+        private SaveProfileDescriptor GetOrCreateProfileAtSlot(int slotIndex, bool createIfMissing, string displayNameKeyOrText)
+        {
             if (slotIndex < 0)
                 return null;
 
             var profiles = _profileManager.GetProfiles();
             if (slotIndex < profiles.Count)
-            {
-                SaveProfileDescriptor profile = profiles[slotIndex];
-                return _profileManager.TrySetActiveProfile(profile.ProfileId)
-                    ? profile
-                    : null;
-            }
+                return profiles[slotIndex];
 
             if (!createIfMissing)
                 return null;

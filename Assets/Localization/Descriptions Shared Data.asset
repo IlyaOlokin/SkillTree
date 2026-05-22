@@ -347,6 +347,10 @@ MonoBehaviour:
     m_Key: description.allAttributes1
     m_Metadata:
       m_Items: []
+  - m_Id: 10152012756946947
+    m_Key: enum.StatType.MysticNegation
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

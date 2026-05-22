@@ -27,16 +27,20 @@ namespace MenuTree
         {
             UnsubscribeAllNodes(RaiseNodeChanged);
             OnAnyNodeChanged -= HandleAnyNodeChanged;
+            ClearTreeControllerReferences();
         }
 
         public bool TryAllocateNode(MenuNode node)
         {
-            return node != null && node.Allocate();
+            return OwnsNode(node) && node.Allocate();
         }
 
         public bool TryDeallocateNode(MenuNode node)
         {
-            if (node == null || !node.IsAllocated || node.IsPersistentRoot)
+            if (!OwnsNode(node) || !node.IsAllocated || node.IsPersistentRoot)
+                return false;
+
+            if (!node.CanDeallocate())
                 return false;
 
             if (!collapseDependentBranchesOnDeallocate)
@@ -50,7 +54,11 @@ namespace MenuTree
             bool changedAny = false;
             for (int i = 0; i < orderedNodes.Count; i++)
             {
-                changedAny |= orderedNodes[i].SetAllocatedFromController(false);
+                MenuNode orderedNode = orderedNodes[i];
+                if (orderedNode.LimitedZone != null && !orderedNode.LimitedZone.CanDeallocate(orderedNode))
+                    continue;
+
+                changedAny |= orderedNode.SetAllocatedFromController(false);
             }
 
             return changedAny;
@@ -65,6 +73,9 @@ namespace MenuTree
                 if (node == null || node.IsPersistentRoot)
                     continue;
 
+                if (node.IsAllocated && node.LimitedZone != null && !node.LimitedZone.CanDeallocate(node))
+                    continue;
+
                 node.SetAllocatedFromController(node.DefaultIsAllocated);
             }
         }
@@ -72,6 +83,11 @@ namespace MenuTree
         public IEnumerable<MenuNode> EnumerateNodes()
         {
             return _cachedNodes;
+        }
+
+        public bool ContainsNode(MenuNode node)
+        {
+            return OwnsNode(node);
         }
 
         public void RefreshGraph()
@@ -94,15 +110,35 @@ namespace MenuTree
 
         private void CacheNodes()
         {
+            ClearTreeControllerReferences();
             _cachedNodes.Clear();
             if (root == null)
                 return;
 
             MenuTreeGraphTraversalService.Traverse(root, node =>
             {
+                if (node.TreeController != null && node.TreeController != this)
+                {
+                    Debug.LogWarning(
+                        $"Menu node '{node.name}' is reachable from multiple menu tree roots. " +
+                        "Keep menu trees disconnected or assign each node to only one tree.",
+                        node);
+                    return;
+                }
+
                 node.SetTreeController(this);
                 _cachedNodes.Add(node);
             });
+        }
+
+        private void ClearTreeControllerReferences()
+        {
+            for (int i = 0; i < _cachedNodes.Count; i++)
+            {
+                MenuNode node = _cachedNodes[i];
+                if (node != null && node.TreeController == this)
+                    node.SetTreeController(null);
+            }
         }
 
         private void SubscribeAllNodes(Action<MenuNode> callback)
@@ -137,7 +173,7 @@ namespace MenuTree
                     if (node == null || !node.IsAllocated || node.IsPersistentRoot || nodesToCollapse.Contains(node))
                         continue;
 
-                    if (!MenuTreeGraphTraversalService.HasAllocatedPathToRoot(node, nodesToCollapse))
+                    if (!MenuTreeGraphTraversalService.HasAllocatedPathToRoot(node, root, nodesToCollapse))
                     {
                         nodesToCollapse.Add(node);
                         changed = true;
@@ -184,6 +220,13 @@ namespace MenuTree
             }
 
             return int.MinValue;
+        }
+
+        private bool OwnsNode(MenuNode node)
+        {
+            return node != null
+                && ReferenceEquals(node.TreeController, this)
+                && _cachedNodes.Contains(node);
         }
     }
 }

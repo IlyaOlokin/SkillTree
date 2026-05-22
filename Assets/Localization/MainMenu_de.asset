@@ -17,7 +17,27 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: 342165d7a160b0246b5690311bb45121, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 3000000000001
+    m_Localized: Englisch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000000000002
+    m_Localized: Russisch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000000000003
+    m_Localized: Deutsch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000000000004
+    m_Localized: Profilspeicher löschen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000000000005
+    m_Localized: Löscht Fortschritt, Fertigkeitsbaum und Inventardaten des aktuellen Profils. Der Profilplatz bleibt verfügbar.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

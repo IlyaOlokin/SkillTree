@@ -302,6 +302,30 @@ MonoBehaviour:
     m_Localized: Du hast keine {allAttributes|alle Attribute}
     m_Metadata:
       m_Items: []
+  - m_Id: 7780259991673
+    m_Localized: '[[0]] zu {mysticNegation|Mystic Negation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991674
+    m_Localized: '[[0]]% erhoehte {mysticNegation|Mystic Negation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991675
+    m_Localized: '[[0]]% verringerte {mysticNegation|Mystic Negation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991676
+    m_Localized: '[[0]]% mehr {mysticNegation|Mystic Negation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991677
+    m_Localized: '[[0]]% weniger {mysticNegation|Mystic Negation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991678
+    m_Localized: Du hast keine {mysticNegation|Mystic Negation}
+    m_Metadata:
+      m_Items: []
   - m_Id: 5084156906311771
     m_Localized: 'Solange du nicht bei vollem Leben bist, [[0]]'
     m_Metadata:

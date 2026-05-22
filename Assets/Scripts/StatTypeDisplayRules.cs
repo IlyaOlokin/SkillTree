@@ -45,6 +45,7 @@ public static class StatTypeDisplayRules
         StatType.OverchargeAvoidanceChance,
         StatType.AilmentGuard,
         StatType.MysticCleansePerSecond,
+        StatType.MysticNegation,
         StatType.ProfanedHealthPercent,
         StatType.HealingReceived
     };

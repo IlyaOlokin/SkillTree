@@ -1248,6 +1248,30 @@ MonoBehaviour:
     m_Localized: You have no {allAttributes|All Attributes}
     m_Metadata:
       m_Items: []
+  - m_Id: 7780259991673
+    m_Localized: '[[0]] to {mysticNegation|Mystic Negation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991674
+    m_Localized: '[[0]]% increased {mysticNegation|Mystic Negation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991675
+    m_Localized: '[[0]]% decreased {mysticNegation|Mystic Negation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991676
+    m_Localized: '[[0]]% more {mysticNegation|Mystic Negation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991677
+    m_Localized: '[[0]]% less {mysticNegation|Mystic Negation}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991678
+    m_Localized: You have no {mysticNegation|Mystic Negation}
+    m_Metadata:
+      m_Items: []
   - m_Id: 7780251603003
     m_Localized: '[[0]] to {ailment|Ailment} {power|Power}'
     m_Metadata:

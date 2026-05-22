@@ -61,8 +61,16 @@ namespace MenuTree
             nodeImage.color = nodeImageBaseColor;
         }
 
-        private void UpdateVisualSelf(MenuNode _)
+        private void UpdateVisualSelf(MenuNode changedNode)
         {
+            if (node != null
+                && changedNode != null
+                && node.TreeController != null
+                && changedNode.TreeController != node.TreeController)
+            {
+                return;
+            }
+
             UpdateVisual(node);
         }
     }

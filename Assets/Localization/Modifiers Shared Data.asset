@@ -1431,6 +1431,30 @@ MonoBehaviour:
     m_Key: modifier.container.none.AllAttributes
     m_Metadata:
       m_Items: []
+  - m_Id: 7780259991673
+    m_Key: modifier.container.added.MysticNegation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991674
+    m_Key: modifier.container.increased.MysticNegation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991675
+    m_Key: modifier.container.decreased.MysticNegation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991676
+    m_Key: modifier.container.more.MysticNegation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991677
+    m_Key: modifier.container.less.MysticNegation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991678
+    m_Key: modifier.container.none.MysticNegation
+    m_Metadata:
+      m_Items: []
   - m_Id: 487906223460352
     m_Key: modifier.noArmor.withModifier
     m_Metadata:

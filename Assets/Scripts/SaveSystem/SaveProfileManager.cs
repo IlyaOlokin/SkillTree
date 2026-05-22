@@ -114,6 +114,25 @@ namespace SaveSystem
             _storage.SaveDocument(SavePaths.GetProfileManifestFile(profileId), SaveDocumentType.ProfileManifest, ProfileManifestVersion, manifestData);
         }
 
+        public SaveProfileDescriptor ClearActiveProfileSaveData(string defaultDisplayName)
+        {
+            SaveProfileDescriptor activeProfile = GetOrCreateActiveProfile(defaultDisplayName);
+            ClearProfileSaveData(activeProfile.ProfileId);
+            TouchProfile(activeProfile.ProfileId);
+            return TryLoadProfile(activeProfile.ProfileId) ?? activeProfile;
+        }
+
+        public void ClearProfileSaveData(string profileId)
+        {
+            if (string.IsNullOrWhiteSpace(profileId))
+                return;
+
+            _storage.DeleteFile(SavePaths.GetPlayerFile(profileId));
+            _storage.DeleteFile(SavePaths.GetProgressFile(profileId));
+            _storage.DeleteFile(SavePaths.GetSkillTreeFile(profileId));
+            _storage.DeleteFile(SavePaths.GetInventoryFile(profileId));
+        }
+
         private SaveProfilesIndexData LoadIndex()
         {
             if (_storage.TryLoadDocument(

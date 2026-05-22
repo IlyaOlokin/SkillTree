@@ -82,6 +82,10 @@ MonoBehaviour:
     m_Localized: Gilt fuer Staerke, Geschicklichkeit und Intelligenz
     m_Metadata:
       m_Items: []
+  - m_Id: 10152012756946947
+    m_Localized: Mystic Negation
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
