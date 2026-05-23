@@ -23,12 +23,19 @@ namespace Items
                     powerAmount)
             };
 
+            descriptions.Add(GameLocalization.GetContent(
+                "item.increaseNodePower.maxPermanentPower",
+                "This item cannot raise a node's permanent {power|Power} above 100%."));
+
             return descriptions;
         }
 
         public override bool TryUseOnNode(ItemUseContext context, Node node)
         {
             if (context?.Player == null || node == null || !node.CanChangePower)
+                return false;
+
+            if (node.PermanentPower >= Node.MaxPermanentPower)
                 return false;
 
             float previousPower = node.PermanentPower;

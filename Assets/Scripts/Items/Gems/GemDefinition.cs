@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Items;
 using SkillTree;
@@ -10,9 +11,12 @@ namespace Gems
     {
         [SerializeField] private GemKind kind = GemKind.LocalModifiers;
         [SerializeField] private List<Modifier> modifierTemplates = new();
+        [SerializeField] private List<GemPowerInfluenceRule> powerInfluenceRules = new();
 
         public GemKind Kind => kind;
         public IReadOnlyList<Modifier> ModifierTemplates => modifierTemplates;
+        public IReadOnlyList<GemPowerInfluenceRule> PowerInfluenceRules =>
+            powerInfluenceRules != null ? powerInfluenceRules : Array.Empty<GemPowerInfluenceRule>();
 
         public GemInstance CreateInstance()
         {
@@ -33,6 +37,18 @@ namespace Gems
                     continue;
 
                 descriptions.Add(modifier.GetDescription(ModifierPowerContext.None));
+            }
+
+            IReadOnlyList<GemPowerInfluenceRule> influenceRules = PowerInfluenceRules;
+            for (int i = 0; i < influenceRules.Count; i++)
+            {
+                GemPowerInfluenceRule influenceRule = influenceRules[i];
+                if (influenceRule == null)
+                    continue;
+
+                string description = influenceRule.GetDescription();
+                if (!string.IsNullOrWhiteSpace(description))
+                    descriptions.Add(description);
             }
 
             return descriptions;

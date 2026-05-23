@@ -364,6 +364,23 @@ MonoBehaviour:
     m_Localized: Mystic Negation
     m_Metadata:
       m_Items: []
+  - m_Id: 10152012756946948
+    m_Localized: Grants [[0]]% {power|Power} to nodes exactly [[1]] links away.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10152012756946949
+    m_Localized: Grants [[0]]% {power|Power} to nodes within [[1]] links.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10152012756946950
+    m_Localized: Apply to a node that can change {power|Power} to increase its {power|Power}
+      by [[0]].
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10152012756946951
+    m_Localized: This item cannot raise a node's permanent {power|Power} above 100%.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

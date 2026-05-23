@@ -15,6 +15,7 @@ namespace SkillTree
         private const string TooltipTitleLocalizationKey = "node.title.default";
         private const string InactiveNoEffectLocalizationKey = "node.inactiveNoEffect";
         private const string PowerChangeForbiddenLocalizationKey = "node.powerChangeForbidden";
+        public const float MaxPermanentPower = 1f;
 
         [Inject] private UnitLevel _unitLevel;
         [SerializeField] [HideInInspector] private string saveId;
@@ -257,16 +258,17 @@ namespace SkillTree
             if (!CanChangePower)
                 return;
 
-            if (Mathf.Approximately(permanentPower, value))
+            float clampedValue = ClampPermanentPower(value);
+            if (Mathf.Approximately(permanentPower, clampedValue))
                 return;
 
-            permanentPower = value;
+            permanentPower = clampedValue;
             RaiseNodeChanged();
         }
 
         public void SetPermanentPowerFromSave(float value)
         {
-            permanentPower = value;
+            permanentPower = ClampPermanentPower(value);
             RuntimePower = 0f;
         }
 
@@ -296,8 +298,14 @@ namespace SkillTree
 
         protected virtual void OnValidate()
         {
+            permanentPower = ClampPermanentPower(permanentPower);
             defaultIsAllocated = IsAllocated;
             defaultPermanentPower = permanentPower;
+        }
+
+        private static float ClampPermanentPower(float value)
+        {
+            return Mathf.Min(value, MaxPermanentPower);
         }
 
         private void SetActiveInternal(bool active, bool notify)

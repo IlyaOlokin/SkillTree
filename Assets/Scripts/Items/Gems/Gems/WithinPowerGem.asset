@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b32fe2f7d7826a4bb2bf1557ee66229, type: 3}
-  m_Name: TestGem
-  m_EditorClassIdentifier: 
-  saveDefinitionId: 61eeaf8dcf4a4990b3cbbb5ccf63dcf7
-  displayName: TestGem
+  m_Name: WithinPowerGem
+  m_EditorClassIdentifier: Assembly-CSharp::Gems.GemDefinition
+  saveDefinitionId: 948fe053ef3f495c8ab5b26021df9696
+  displayName: Within Gem
   description: 
-  icon: {fileID: 21300000, guid: 34f4291c2694575439bf2ef25f29aaa3, type: 3}
+  icon: {fileID: 21300000, guid: e30d9b061a327664bb50a3754c68c392, type: 3}
   maxStack: 99
-  kind: 0
-  modifierTemplates:
-  - {fileID: 11400000, guid: 80289d26f8df9ae4fbb21b4c8ee2c964, type: 2}
-  powerInfluenceRules: []
+  kind: 1
+  modifierTemplates: []
+  powerInfluenceRules:
+  - {fileID: 11400000, guid: c8511f603a860eb46bbf866241cd6c23, type: 2}

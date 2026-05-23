@@ -84,6 +84,18 @@ namespace Gems
                     descriptions.Add(description);
             }
 
+            IReadOnlyList<GemPowerInfluenceRule> powerInfluenceRules = definition.PowerInfluenceRules;
+            for (int i = 0; i < powerInfluenceRules.Count; i++)
+            {
+                GemPowerInfluenceRule influenceRule = powerInfluenceRules[i];
+                if (influenceRule == null)
+                    continue;
+
+                string description = influenceRule.GetDescription();
+                if (!string.IsNullOrWhiteSpace(description))
+                    descriptions.Add(description);
+            }
+
             return descriptions;
         }
 

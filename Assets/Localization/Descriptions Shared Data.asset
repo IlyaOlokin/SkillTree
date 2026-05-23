@@ -351,6 +351,22 @@ MonoBehaviour:
     m_Key: enum.StatType.MysticNegation
     m_Metadata:
       m_Items: []
+  - m_Id: 10152012756946948
+    m_Key: gem.influence.power.exactDistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10152012756946949
+    m_Key: gem.influence.power.withinDistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10152012756946950
+    m_Key: item.increaseNodePower.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10152012756946951
+    m_Key: item.increaseNodePower.maxPermanentPower
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

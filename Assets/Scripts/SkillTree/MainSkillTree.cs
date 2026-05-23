@@ -23,7 +23,9 @@ namespace SkillTree
         private List<Node> _allocatedNodes = new List<Node>();
         private readonly List<Node> _allocationQueue = new();
         private readonly HashSet<Node> _searchMatchedNodes = new();
+        private readonly GemPowerInfluenceService _gemPowerInfluenceService = new();
         private bool _isProcessingAllocationQueue;
+        private bool _isRecalculatingGemPowerInfluence;
         private bool _hasActiveSearch;
 
         private void Awake()
@@ -34,6 +36,7 @@ namespace SkillTree
                 _unitLevel.OnSkillPointsChanged += ProcessQueuedAllocations;
 
             RebuildAllocatedNodes();
+            RecalculateGemPowerInfluence();
             fogOfWarController?.Bind(this, root);
             fogOfWarController?.SetDiscoveredNodes(_allocatedNodes);
             ProcessQueuedAllocations();
@@ -78,6 +81,9 @@ namespace SkillTree
 
             if (allocationQueueChanged)
                 RaiseAllocationQueueChanged();
+
+            if (!_isRecalculatingGemPowerInfluence)
+                RecalculateGemPowerInfluence();
 
             UpdateTree();
 
@@ -320,6 +326,7 @@ namespace SkillTree
             RebuildAllocatedNodes();
             RestoreAllocationQueue(saveData, nodesById);
             ProcessQueuedAllocations();
+            RecalculateGemPowerInfluence();
             ApplyFogOfWarSaveData(saveData, nodesById, resolvedNodeIds);
             RaiseAllocationQueueChanged();
             RaiseOnSkillTreeChanged();
@@ -347,6 +354,22 @@ namespace SkillTree
             {
                 if (node.IsActive)
                     _allocatedNodes.Add(node);
+            }
+        }
+
+        private void RecalculateGemPowerInfluence()
+        {
+            if (_isRecalculatingGemPowerInfluence)
+                return;
+
+            _isRecalculatingGemPowerInfluence = true;
+            try
+            {
+                _gemPowerInfluenceService.Recalculate(EnumerateNodes());
+            }
+            finally
+            {
+                _isRecalculatingGemPowerInfluence = false;
             }
         }
 
