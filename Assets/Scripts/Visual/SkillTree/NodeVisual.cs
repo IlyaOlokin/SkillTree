@@ -18,6 +18,7 @@ namespace Visual
         [SerializeField] private Node node;
         [SerializeField] private SpriteRenderer border;
         [SerializeField] private SpriteRenderer nodeImage;
+        [SerializeField] private NodePowerVisual nodePowerVisual;
         [Header("Base color")]
         [SerializeField] private Color nodeImageBaseColor;
         [SerializeField] private Color borderBaseColor;
@@ -65,7 +66,9 @@ namespace Visual
             if (node != null)
             {
                 node.OnAllocatedChanged += UpdateVisual;
+                node.OnAllocatedChanged += UpdatePowerVisual;
                 node.OnActiveChanged += UpdateVisual;
+                node.OnNodeChanged += UpdatePowerVisual;
             }
 
             if (node is SocketNode socketNode)
@@ -88,7 +91,9 @@ namespace Visual
             if (node != null)
             {
                 node.OnAllocatedChanged -= UpdateVisual;
+                node.OnAllocatedChanged -= UpdatePowerVisual;
                 node.OnActiveChanged -= UpdateVisual;
+                node.OnNodeChanged -= UpdatePowerVisual;
             }
 
             if (node is SocketNode socketNode)
@@ -113,6 +118,7 @@ namespace Visual
             RefreshNodeIcon();
             _wasActive = node != null && node.IsActive;
             UpdateVisual(node);
+            UpdatePowerVisual(node);
             RefreshAllocationQueueOrder();
             _isStarted = true;
         }
@@ -176,6 +182,17 @@ namespace Visual
         private void UpdateVisualSelf(Node node)
         {
             UpdateVisual(this.node);
+        }
+
+        private void UpdatePowerVisual(Node _)
+        {
+            if (nodePowerVisual == null)
+                nodePowerVisual = GetComponentInChildren<NodePowerVisual>(true);
+
+            if (nodePowerVisual == null || node == null)
+                return;
+
+            nodePowerVisual.SetPower(node.Power, node.IsAllocated);
         }
 
         private void UpdateVisualFromSearch()

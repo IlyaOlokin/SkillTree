@@ -34,8 +34,8 @@ MonoBehaviour:
     eliteRarityMultiplier: 1.5
     bossRarityMultiplier: 2
   - itemDefinition: {fileID: 11400000, guid: 8b27fcb8c610aa547af2679f875e8ee4, type: 2}
-    stackSize: 1
-    baseDropChance: 0.1
+    stackSize: 10
+    baseDropChance: 1
     powerForMaxBonus: 100
     maxPowerBonusChance: 0.05
     normalRarityMultiplier: 1

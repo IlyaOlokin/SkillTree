@@ -112,6 +112,7 @@ MonoBehaviour:
   node: {fileID: 3041048277598826952}
   border: {fileID: 2706540189942539725}
   nodeImage: {fileID: 3160987939310528331}
+  nodePowerVisual: {fileID: 0}
   nodeImageBaseColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
   borderBaseColor: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
   nodeImageCanAllocateColor: {r: 0.67058825, g: 0.67058825, b: 0.67058825, a: 1}
@@ -147,6 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ddd85c6dcb641f788a8f9429df111d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tooltipUI: {fileID: 0}
   tooltipSource: {fileID: 3041048277598826952}
 --- !u!1 &3204345449470436903
 GameObject:
@@ -650,7 +652,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.22745098, g: 0.22745098, b: 0.22745098, a: 1}

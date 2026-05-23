@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Visual;
 
 namespace SkillTree
 {
@@ -519,6 +520,7 @@ namespace SkillTree
         {
             private readonly Renderer[] _renderers;
             private readonly bool[] _rendererEnabledStates;
+            private readonly NodePowerVisual[] _powerVisuals;
             private readonly Collider[] _colliders;
             private readonly bool[] _colliderEnabledStates;
             private readonly Collider2D[] _colliders2D;
@@ -526,7 +528,20 @@ namespace SkillTree
 
             public NodePresentationState(GameObject nodeObject)
             {
-                _renderers = nodeObject.GetComponentsInChildren<Renderer>(true);
+                _powerVisuals = nodeObject.GetComponentsInChildren<NodePowerVisual>(true);
+
+                Renderer[] allRenderers = nodeObject.GetComponentsInChildren<Renderer>(true);
+                List<Renderer> controlledRenderers = new(allRenderers.Length);
+                for (int i = 0; i < allRenderers.Length; i++)
+                {
+                    Renderer renderer = allRenderers[i];
+                    if (renderer == null || IsManagedByPowerVisual(renderer))
+                        continue;
+
+                    controlledRenderers.Add(renderer);
+                }
+
+                _renderers = controlledRenderers.ToArray();
                 _rendererEnabledStates = new bool[_renderers.Length];
                 for (int i = 0; i < _renderers.Length; i++)
                     _rendererEnabledStates[i] = _renderers[i] != null && _renderers[i].enabled;
@@ -544,6 +559,12 @@ namespace SkillTree
 
             public void SetVisible(bool isVisible)
             {
+                for (int i = 0; i < _powerVisuals.Length; i++)
+                {
+                    if (_powerVisuals[i] != null)
+                        _powerVisuals[i].SetPresentationVisible(isVisible);
+                }
+
                 for (int i = 0; i < _renderers.Length; i++)
                 {
                     if (_renderers[i] != null)
@@ -561,6 +582,18 @@ namespace SkillTree
                     if (_colliders2D[i] != null)
                         _colliders2D[i].enabled = isVisible && _collider2DEnabledStates[i];
                 }
+            }
+
+            private bool IsManagedByPowerVisual(Renderer renderer)
+            {
+                for (int i = 0; i < _powerVisuals.Length; i++)
+                {
+                    NodePowerVisual powerVisual = _powerVisuals[i];
+                    if (powerVisual != null && powerVisual.ManagedRenderer == renderer)
+                        return true;
+                }
+
+                return false;
             }
         }
     }
