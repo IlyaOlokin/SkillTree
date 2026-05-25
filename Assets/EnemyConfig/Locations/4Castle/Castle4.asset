@@ -16,8 +16,12 @@ MonoBehaviour:
   displayName: Castle
   description: 
   mapIcon: {fileID: 1262853243375832970, guid: 9fd9dd6a76bf9444da478d9905524c10, type: 3}
+  battleBackground: {fileID: 0}
   enemyDatabase: {fileID: 11400000, guid: 3894181d881efb541979c7a858827df3, type: 2}
   levelRewards:
-  - levelNumber: 5
+  - levelNumber: 30
     itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
     amount: 2
+  - levelNumber: 30
+    itemDefinition: {fileID: 11400000, guid: 8b27fcb8c610aa547af2679f875e8ee4, type: 2}
+    amount: 1

@@ -16,8 +16,15 @@ MonoBehaviour:
   displayName: Ice Cave
   description: 
   mapIcon: {fileID: -1428192696162401390, guid: 1ccd25ccc16dd944d80ddd2fb42a9fdb, type: 3}
+  battleBackground: {fileID: 0}
   enemyDatabase: {fileID: 11400000, guid: cf1fdadc09c44a8439fd448e79639c7a, type: 2}
   levelRewards:
-  - levelNumber: 5
+  - levelNumber: 55
     itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
-    amount: 2
+    amount: 3
+  - levelNumber: 55
+    itemDefinition: {fileID: 11400000, guid: 4cae05f83ff29a440a33b69e16874a18, type: 2}
+    amount: 1
+  - levelNumber: 55
+    itemDefinition: {fileID: 11400000, guid: 54910c5afc6e9fb48b97a86cc38377af, type: 2}
+    amount: 1

@@ -16,8 +16,12 @@ MonoBehaviour:
   displayName: Volcano
   description: 
   mapIcon: {fileID: -5804966304102174107, guid: 1ccd25ccc16dd944d80ddd2fb42a9fdb, type: 3}
+  battleBackground: {fileID: 0}
   enemyDatabase: {fileID: 11400000, guid: d9d2702f03edaa3409b979154dc833b0, type: 2}
   levelRewards:
-  - levelNumber: 5
+  - levelNumber: 50
     itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
-    amount: 2
+    amount: 3
+  - levelNumber: 50
+    itemDefinition: {fileID: 11400000, guid: 4cae05f83ff29a440a33b69e16874a18, type: 2}
+    amount: 1

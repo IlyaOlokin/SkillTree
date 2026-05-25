@@ -358,8 +358,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "UnityEditor.MainToolbarWindow\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 8
-    y: 51
+    x: 0
+    y: 0
     width: 2515
     height: 36
   m_SerializedDataModeController:
@@ -610,8 +610,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Game\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 8
-    y: 87
+    x: 0
+    y: 24
     width: 1264
     height: 989
   m_SerializedDataModeController:
@@ -870,8 +870,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Scene\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1273
-    y: 87
+    x: 1266
+    y: 24
     width: 283
     height: 989
   m_SerializedDataModeController:
@@ -1704,8 +1704,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Hierarchy\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1558
-    y: 87
+    x: 1551
+    y: 24
     width: 284
     height: 989
   m_SerializedDataModeController:
@@ -1787,8 +1787,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 8
-    y: 1102
+    x: 0
+    y: 1039
     width: 1835
     height: 236
   m_SerializedDataModeController:
@@ -1839,32 +1839,31 @@ MonoBehaviour:
       m_Data: 99782
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 73554
-    - m_Data: 80744
-    - m_Data: 80746
-    - m_Data: 80748
-    - m_Data: 80750
-    - m_Data: 80752
-    - m_Data: 80754
-    - m_Data: 80756
-    - m_Data: 80758
-    - m_Data: 80760
-    - m_Data: 80762
-    - m_Data: 80764
-    - m_Data: 80766
-    - m_Data: 80768
-    - m_Data: 80770
-    - m_Data: 80772
-    - m_Data: 80774
-    - m_Data: 80776
-    - m_Data: 80778
-    - m_Data: 80780
-    - m_Data: 80782
-    - m_Data: 80786
-    - m_Data: 80788
-    - m_Data: 80934
-    - m_Data: 99790
-    - m_Data: 1000000000
+    - m_Data: 73576
+    - m_Data: 99168
+    - m_Data: 99170
+    - m_Data: 99172
+    - m_Data: 99174
+    - m_Data: 99176
+    - m_Data: 99178
+    - m_Data: 99180
+    - m_Data: 99182
+    - m_Data: 99184
+    - m_Data: 99186
+    - m_Data: 99188
+    - m_Data: 99190
+    - m_Data: 99192
+    - m_Data: 99194
+    - m_Data: 99196
+    - m_Data: 99198
+    - m_Data: 99200
+    - m_Data: 99202
+    - m_Data: 99204
+    - m_Data: 99206
+    - m_Data: 99208
+    - m_Data: 99210
+    - m_Data: 99212
+    - m_Data: 99214
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1898,32 +1897,31 @@ MonoBehaviour:
       m_Data: 0
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 73554
-    - m_Data: 80744
-    - m_Data: 80746
-    - m_Data: 80748
-    - m_Data: 80750
-    - m_Data: 80752
-    - m_Data: 80754
-    - m_Data: 80756
-    - m_Data: 80758
-    - m_Data: 80760
-    - m_Data: 80762
-    - m_Data: 80764
-    - m_Data: 80766
-    - m_Data: 80768
-    - m_Data: 80770
-    - m_Data: 80772
-    - m_Data: 80774
-    - m_Data: 80776
-    - m_Data: 80778
-    - m_Data: 80780
-    - m_Data: 80782
-    - m_Data: 80786
-    - m_Data: 80788
-    - m_Data: 80934
-    - m_Data: 99790
-    - m_Data: 1000000000
+    - m_Data: 73576
+    - m_Data: 99168
+    - m_Data: 99170
+    - m_Data: 99172
+    - m_Data: 99174
+    - m_Data: 99176
+    - m_Data: 99178
+    - m_Data: 99180
+    - m_Data: 99182
+    - m_Data: 99184
+    - m_Data: 99186
+    - m_Data: 99188
+    - m_Data: 99190
+    - m_Data: 99192
+    - m_Data: 99194
+    - m_Data: 99196
+    - m_Data: 99198
+    - m_Data: 99200
+    - m_Data: 99202
+    - m_Data: 99204
+    - m_Data: 99206
+    - m_Data: 99208
+    - m_Data: 99210
+    - m_Data: 99212
+    - m_Data: 99214
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2091,8 +2089,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1844
-    y: 87
+    x: 1837
+    y: 24
     width: 678
     height: 1251
   m_SerializedDataModeController:

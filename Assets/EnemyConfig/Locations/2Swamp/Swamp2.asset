@@ -16,8 +16,9 @@ MonoBehaviour:
   displayName: Swamp
   description: 
   mapIcon: {fileID: -7934509782598252502, guid: 9fd9dd6a76bf9444da478d9905524c10, type: 3}
+  battleBackground: {fileID: 0}
   enemyDatabase: {fileID: 11400000, guid: 5e2c99daaea952849a86506f5f5f4075, type: 2}
   levelRewards:
   - levelNumber: 5
     itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
-    amount: 2
+    amount: 1

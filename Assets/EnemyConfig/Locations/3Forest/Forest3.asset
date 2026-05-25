@@ -16,8 +16,12 @@ MonoBehaviour:
   displayName: Forest
   description: 
   mapIcon: {fileID: -7713157828157735119, guid: 9fd9dd6a76bf9444da478d9905524c10, type: 3}
+  battleBackground: {fileID: 0}
   enemyDatabase: {fileID: 11400000, guid: 75e51ac5d07785043b7c33854d13ba57, type: 2}
   levelRewards:
-  - levelNumber: 5
+  - levelNumber: 20
     itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
-    amount: 2
+    amount: 1
+  - levelNumber: 20
+    itemDefinition: {fileID: 11400000, guid: 4cae05f83ff29a440a33b69e16874a18, type: 2}
+    amount: 1

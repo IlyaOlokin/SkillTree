@@ -16,8 +16,15 @@ MonoBehaviour:
   displayName: Desert
   description: 
   mapIcon: {fileID: -6447946645196783340, guid: 1ccd25ccc16dd944d80ddd2fb42a9fdb, type: 3}
+  battleBackground: {fileID: 0}
   enemyDatabase: {fileID: 11400000, guid: 1f560b4637d8eb848b66333daaaed779, type: 2}
   levelRewards:
-  - levelNumber: 5
+  - levelNumber: 40
     itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
     amount: 2
+  - levelNumber: 40
+    itemDefinition: {fileID: 11400000, guid: 4cae05f83ff29a440a33b69e16874a18, type: 2}
+    amount: 1
+  - levelNumber: 40
+    itemDefinition: {fileID: 11400000, guid: 8b27fcb8c610aa547af2679f875e8ee4, type: 2}
+    amount: 1
