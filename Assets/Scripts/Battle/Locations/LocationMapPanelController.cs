@@ -38,6 +38,7 @@ public class LocationMapPanelController : MonoBehaviour
         {
             enemySpawner.OnLocationChanged += Refresh;
             enemySpawner.OnLevelChanged += Refresh;
+            enemySpawner.OnWaveCleared += Refresh;
         }
     }
 
@@ -47,6 +48,7 @@ public class LocationMapPanelController : MonoBehaviour
         {
             enemySpawner.OnLocationChanged -= Refresh;
             enemySpawner.OnLevelChanged -= Refresh;
+            enemySpawner.OnWaveCleared -= Refresh;
         }
     }
 
@@ -95,14 +97,15 @@ public class LocationMapPanelController : MonoBehaviour
             LocationMapButton node = locationNodes[i];
             if (node == null)
                 continue;
-        }
-    }
 
-    private bool IsNodeSelected(LocationMapButton node)
-    {
-        return node != null &&
-               enemySpawner != null &&
-               node.LocationId == enemySpawner.SelectedLocationId;
+            bool isUnlocked = enemySpawner == null ||
+                              node.Location == null ||
+                              enemySpawner.IsLocationUnlocked(node.Location);
+            bool isCompleted = enemySpawner != null &&
+                               node.Location != null &&
+                               enemySpawner.IsLocationCompleted(node.Location);
+            node.SetMapState(isUnlocked, isCompleted);
+        }
     }
 
     private void HandleLocationSelected(LocationMapButton locationButton)
@@ -111,6 +114,12 @@ public class LocationMapPanelController : MonoBehaviour
             return;
 
         LocationDefinition location = locationButton.Location;
+        if (enemySpawner != null && enemySpawner.IsLocationUnlocked(location) == false)
+        {
+            infoWindow?.Hide();
+            RefreshNodeSelection();
+            return;
+        }
 
         if (flowController != null)
             flowController.SelectLocation(location.LocationId);
@@ -126,9 +135,22 @@ public class LocationMapPanelController : MonoBehaviour
         if (location == null)
             return;
 
+        if (enemySpawner != null && enemySpawner.IsLocationUnlocked(location) == false)
+        {
+            infoWindow?.Hide();
+            RefreshNodeSelection();
+            return;
+        }
+
         if (flowController != null)
         {
-            flowController.SelectLocation(location.LocationId);
+            if (flowController.SelectLocation(location.LocationId) == false)
+            {
+                infoWindow?.Hide();
+                RefreshNodeSelection();
+                return;
+            }
+
             infoWindow?.Hide();
             flowController.EnterSelectedLocation();
             return;
@@ -136,7 +158,13 @@ public class LocationMapPanelController : MonoBehaviour
 
         if (enemySpawner != null)
         {
-            enemySpawner.SelectLocation(location.LocationId, false);
+            if (enemySpawner.SelectLocation(location.LocationId, false) == false)
+            {
+                infoWindow?.Hide();
+                RefreshNodeSelection();
+                return;
+            }
+
             infoWindow?.Hide();
             enemySpawner.EnterBattle();
         }

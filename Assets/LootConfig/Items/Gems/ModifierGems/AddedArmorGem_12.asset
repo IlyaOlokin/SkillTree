@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b32fe2f7d7826a4bb2bf1557ee66229, type: 3}
+  m_Name: AddedArmorGem_12
+  m_EditorClassIdentifier: Assembly-CSharp::Gems.GemDefinition
+  saveDefinitionId: 691a3a7ba0f240a7bff6563873bec898
+  displayName: Steel Gem
+  description: 
+  icon: {fileID: 21300000, guid: 34f4291c2694575439bf2ef25f29aaa3, type: 3}
+  maxStack: 99
+  kind: 0
+  modifierTemplates:
+  - {fileID: 11400000, guid: e22a1aca4f9c2564992717032b508995, type: 2}
+  powerInfluenceRules: []

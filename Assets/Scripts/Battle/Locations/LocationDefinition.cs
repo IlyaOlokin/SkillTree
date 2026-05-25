@@ -19,6 +19,9 @@ namespace Battle
         [SerializeField] private Sprite battleBackground;
         [SerializeField] private EnemyConfigDatabase enemyDatabase;
         [SerializeField] private List<LocationLevelRewardEntry> levelRewards = new();
+        [Header("Unlock requirements")]
+        [Tooltip("If empty, this location is available immediately. If filled, completing any one listed location unlocks this location.")]
+        [SerializeField] private List<LocationDefinition> unlockPrerequisites = new();
 
         public string LocationId => IsPlaceholderId(locationId) ? name : locationId;
         public string DisplayName => string.IsNullOrWhiteSpace(displayName) ? name : displayName;
@@ -27,6 +30,8 @@ namespace Battle
         public Sprite BattleBackground => battleBackground;
         public EnemyConfigDatabase EnemyDatabase => enemyDatabase;
         public IReadOnlyList<LocationLevelRewardEntry> LevelRewards => levelRewards;
+        public IReadOnlyList<LocationDefinition> UnlockPrerequisites => unlockPrerequisites;
+        public bool HasUnlockPrerequisites => unlockPrerequisites != null && unlockPrerequisites.Count > 0;
 
         private static bool IsPlaceholderId(string value)
         {

@@ -19,8 +19,8 @@ namespace Items
             {
                 GameLocalization.FormatContent(
                     "item.increaseNodePower.description",
-                    "Apply to a node that can change Power to increase its Power by [[0]].",
-                    powerAmount)
+                    "Apply to a node that can change Power to increase its Power by [[0]]%.",
+                    powerAmount * 100f)
             };
 
             descriptions.Add(GameLocalization.GetContent(

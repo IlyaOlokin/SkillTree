@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Battle;
 using DG.Tweening;
 using TMPro;
+using TooltipSystem;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,10 @@ public class LocationInfoWindow : MonoBehaviour
     [SerializeField] private Color completedLevelColor = Color.green;
     [SerializeField] private Color lockedLevelColor = Color.gray;
     [SerializeField] private Vector2 bossMarkerOffset = new(0f, 18f);
+    [Header("Level rewards")]
+    [SerializeField] private RectTransform levelRewardsContainer;
+    [SerializeField] private LocationRewardIconView levelRewardPrefab;
+    [SerializeField] private TooltipUI tooltipUI;
     [Header("Visibility animation")]
     [SerializeField] [Min(0f)] private float showDuration = 0.16f;
     [SerializeField] [Min(0f)] private float hideDuration = 0.12f;
@@ -34,6 +39,7 @@ public class LocationInfoWindow : MonoBehaviour
     private LocationDefinition _displayedLocation;
     private RectTransform _rectTransform;
     private readonly List<GameObject> _spawnedLevelProgressObjects = new();
+    private readonly List<LocationRewardIconView> _spawnedRewardViews = new();
     private Vector3 _visibleScale;
     private Tween _visibilityTween;
     private bool _initialized;
@@ -67,6 +73,7 @@ public class LocationInfoWindow : MonoBehaviour
 
         _visibilityTween?.Kill();
         ClearLevelProgress();
+        ClearLevelRewards();
     }
 
     public void Initialize(EnemySpawner enemySpawner)
@@ -96,6 +103,7 @@ public class LocationInfoWindow : MonoBehaviour
         {
             SetVisibleScale();
             ClearLevelProgress();
+            ClearLevelRewards();
             return;
         }
 
@@ -103,6 +111,7 @@ public class LocationInfoWindow : MonoBehaviour
         {
             SetVisibleScale();
             ClearLevelProgress();
+            ClearLevelRewards();
             gameObject.SetActive(false);
             return;
         }
@@ -115,6 +124,7 @@ public class LocationInfoWindow : MonoBehaviour
             {
                 SetVisibleScale();
                 ClearLevelProgress();
+                ClearLevelRewards();
                 gameObject.SetActive(false);
             });
     }
@@ -146,6 +156,7 @@ public class LocationInfoWindow : MonoBehaviour
                 enterButton.interactable = false;
 
             ClearLevelProgress();
+            ClearLevelRewards();
             return;
         }
 
@@ -159,6 +170,7 @@ public class LocationInfoWindow : MonoBehaviour
             locationProgressText.text = BuildProgressText(_displayedLocation);
 
         RefreshLevelProgress(_displayedLocation);
+        RefreshLevelRewards(_displayedLocation);
 
         if (enterButton != null)
             enterButton.interactable = true;
@@ -284,6 +296,62 @@ public class LocationInfoWindow : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void RefreshLevelRewards(LocationDefinition location)
+    {
+        ClearLevelRewards();
+
+        if (levelRewardsContainer == null || levelRewardPrefab == null)
+            return;
+
+        IReadOnlyList<LocationLevelRewardEntry> rewards = location?.LevelRewards;
+        if (rewards == null || rewards.Count == 0)
+            return;
+
+        ResolveTooltipUI();
+
+        for (int i = 0; i < rewards.Count; i++)
+        {
+            LocationLevelRewardEntry reward = rewards[i];
+            if (reward == null || reward.ItemDefinition == null)
+                continue;
+
+            LocationRewardIconView rewardView = Instantiate(levelRewardPrefab, levelRewardsContainer);
+            rewardView.gameObject.SetActive(true);
+            rewardView.Initialize(reward, IsRewardClaimed(location, reward), tooltipUI);
+            _spawnedRewardViews.Add(rewardView);
+        }
+    }
+
+    private bool IsRewardClaimed(LocationDefinition location, LocationLevelRewardEntry reward)
+    {
+        if (_enemySpawner == null || location == null || reward == null)
+            return false;
+
+        return _enemySpawner.HasClaimedReward(location.LocationId, reward.GetRewardId(location));
+    }
+
+    private void ClearLevelRewards()
+    {
+        for (int i = 0; i < _spawnedRewardViews.Count; i++)
+        {
+            if (_spawnedRewardViews[i] != null)
+            {
+                _spawnedRewardViews[i].gameObject.SetActive(false);
+                Destroy(_spawnedRewardViews[i].gameObject);
+            }
+        }
+
+        _spawnedRewardViews.Clear();
+    }
+
+    private void ResolveTooltipUI()
+    {
+        if (tooltipUI != null)
+            return;
+
+        tooltipUI = FindAnyObjectByType<TooltipUI>(FindObjectsInactive.Include);
     }
 
     private void ClearLevelProgress()

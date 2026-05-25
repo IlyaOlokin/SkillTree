@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(EnemyArchetype))]
+[CanEditMultipleObjects]
 public class EnemyArchetypeEditor : Editor
 {
     private readonly EnemyStatPackageBuilder _builder = new();
@@ -101,7 +102,10 @@ public class EnemyArchetypeEditor : Editor
 
         serializedObject.ApplyModifiedProperties();
 
-        DrawPreview((EnemyArchetype)target);
+        if (targets.Length == 1)
+            DrawPreview((EnemyArchetype)target);
+        else
+            DrawMultiObjectPreviewNotice();
     }
 
     private void DrawSpawnRules()
@@ -135,14 +139,14 @@ public class EnemyArchetypeEditor : Editor
     {
         using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
         {
-            EditorGUILayout.LabelField(title, $"Sum: {GetSum(definitions):0.###}", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField(title, GetSumLabel(definitions), EditorStyles.boldLabel);
 
             if (definitions.Count == 1)
             {
                 using (new EditorGUI.DisabledScope(true))
                 {
                     var onlyProperty = serializedObject.FindProperty(definitions[0].PropertyPath);
-                    EditorGUILayout.Slider(definitions[0].Label, onlyProperty.floatValue, 0f, 1f);
+                    DrawSlider(definitions[0].Label, onlyProperty);
                 }
 
                 return;
@@ -164,7 +168,7 @@ public class EnemyArchetypeEditor : Editor
                 }
 
                 EditorGUI.BeginChangeCheck();
-                float newValue = EditorGUILayout.Slider(definition.Label, properties[i].floatValue, 0f, 1f);
+                float newValue = DrawSlider(definition.Label, properties[i]);
                 if (EditorGUI.EndChangeCheck())
                     RebalanceGroup(properties, i, newValue);
             }
@@ -235,17 +239,40 @@ public class EnemyArchetypeEditor : Editor
         }
     }
 
-    private float GetSum(IReadOnlyList<WeightFieldDefinition> definitions)
+    private static float DrawSlider(string label, SerializedProperty property)
+    {
+        bool previousShowMixedValue = EditorGUI.showMixedValue;
+        EditorGUI.showMixedValue = property.hasMultipleDifferentValues;
+        float value = EditorGUILayout.Slider(label, property.floatValue, 0f, 1f);
+        EditorGUI.showMixedValue = previousShowMixedValue;
+        return value;
+    }
+
+    private string GetSumLabel(IReadOnlyList<WeightFieldDefinition> definitions)
     {
         float sum = 0f;
         for (int i = 0; i < definitions.Count; i++)
         {
             var property = serializedObject.FindProperty(definitions[i].PropertyPath);
-            if (property != null)
-                sum += Mathf.Clamp01(property.floatValue);
+            if (property == null)
+                continue;
+
+            if (property.hasMultipleDifferentValues)
+                return "Sum: Mixed";
+
+            sum += Mathf.Clamp01(property.floatValue);
         }
 
-        return sum;
+        return $"Sum: {sum:0.###}";
+    }
+
+    private static void DrawMultiObjectPreviewNotice()
+    {
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Archetype Preview", EditorStyles.boldLabel);
+        EditorGUILayout.HelpBox(
+            "Preview is only available when editing a single Enemy Archetype.",
+            MessageType.Info);
     }
 
     private void DrawPreview(EnemyArchetype archetype)

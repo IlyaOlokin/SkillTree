@@ -36,6 +36,10 @@ MonoBehaviour:
     m_Localized: This node's Power cannot be changed
     m_Metadata:
       m_Items: []
+  - m_Id: 5346512051769348
+    m_Localized: '[[0]] Node Power'
+    m_Metadata:
+      m_Items: []
   - m_Id: 6805365104709633
     m_Localized: 
     m_Metadata:
@@ -81,7 +85,9 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 10152012756946946
-    m_Localized: "\u041F\u0440\u0438\u043C\u0435\u043D\u044F\u0435\u0442\u0441\u044F \u043A \u0441\u0438\u043B\u0435, \u043B\u043E\u0432\u043A\u043E\u0441\u0442\u0438 \u0438 \u0438\u043D\u0442\u0435\u043B\u043B\u0435\u043A\u0442\u0443"
+    m_Localized: "\u041F\u0440\u0438\u043C\u0435\u043D\u044F\u0435\u0442\u0441\u044F
+      \u043A \u0441\u0438\u043B\u0435, \u043B\u043E\u0432\u043A\u043E\u0441\u0442\u0438
+      \u0438 \u0438\u043D\u0442\u0435\u043B\u043B\u0435\u043A\u0442\u0443"
     m_Metadata:
       m_Items: []
   - m_Id: 10152012756946947

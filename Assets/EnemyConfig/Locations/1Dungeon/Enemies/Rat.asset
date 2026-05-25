@@ -67,7 +67,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c2bdd953a1ec2154d927e63e023d1378, type: 2}
   - {fileID: 11400000, guid: a817d26638ef9fe4795561ee24da464a, type: 2}
   extraModifiers: []
-  itemDropTable: {fileID: 11400000, guid: 562f4bb25f8bf9a4f95f24fde9f23482, type: 2}
+  itemDropTable: {fileID: 0}
   previewDatabaseOverride: {fileID: 0}
   previewPower: 10
   previewRarity: 0

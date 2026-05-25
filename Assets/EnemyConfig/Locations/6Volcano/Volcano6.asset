@@ -25,3 +25,5 @@ MonoBehaviour:
   - levelNumber: 50
     itemDefinition: {fileID: 11400000, guid: 4cae05f83ff29a440a33b69e16874a18, type: 2}
     amount: 1
+  unlockPrerequisites:
+  - {fileID: 11400000, guid: 0d5a0e52dab837e4c94d052bd82cbef1, type: 2}

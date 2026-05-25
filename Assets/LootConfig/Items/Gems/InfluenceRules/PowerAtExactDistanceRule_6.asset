@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba40b414d17c1b54d8e3013cb47b64be, type: 3}
   m_Name: PowerAtExactDistanceRule_6
   m_EditorClassIdentifier: Assembly-CSharp::Gems.ExactDistanceGemPowerInfluenceRule
-  powerBonus: 0.5
+  powerBonus: 0.2
   distance: 6

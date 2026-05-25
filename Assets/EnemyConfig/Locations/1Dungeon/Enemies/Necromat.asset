@@ -65,7 +65,7 @@ MonoBehaviour:
   weaponType: 2
   possibleAffixes: []
   extraModifiers: []
-  itemDropTable: {fileID: 11400000, guid: 562f4bb25f8bf9a4f95f24fde9f23482, type: 2}
+  itemDropTable: {fileID: 0}
   previewDatabaseOverride: {fileID: 11400000, guid: b89dbc099b0773449954e02193c1b3c7, type: 2}
   previewPower: 36
   previewRarity: 4

@@ -269,6 +269,10 @@ MonoBehaviour:
     m_Localized: This node's Power cannot be changed
     m_Metadata:
       m_Items: []
+  - m_Id: 5346512051769348
+    m_Localized: '[[0]] Node Power'
+    m_Metadata:
+      m_Items: []
   - m_Id: 5346512051769347
     m_Localized: Gain percentage of lost Health as Pain.
     m_Metadata:
@@ -374,7 +378,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 10152012756946950
     m_Localized: Apply to a node that can change {power|Power} to increase its {power|Power}
-      by [[0]].
+      by [[0]]%.
     m_Metadata:
       m_Items: []
   - m_Id: 10152012756946951

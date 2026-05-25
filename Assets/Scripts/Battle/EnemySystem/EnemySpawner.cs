@@ -124,8 +124,61 @@ namespace Battle
             if (TryResolveLocation(locationId, out var location) == false)
                 return false;
 
+            if (location != null && IsLocationUnlocked(location) == false)
+                return false;
+
             ApplySelectedLocation(location, locationId, restartBattle && _battleActive);
             return true;
+        }
+
+        public bool IsLocationUnlocked(LocationDefinition location)
+        {
+            if (location == null)
+                return false;
+
+            IReadOnlyList<LocationDefinition> prerequisites = location.UnlockPrerequisites;
+            if (prerequisites == null || prerequisites.Count == 0)
+                return true;
+
+            for (int i = 0; i < prerequisites.Count; i++)
+            {
+                LocationDefinition prerequisite = prerequisites[i];
+                if (prerequisite != null && IsLocationCompleted(prerequisite))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public bool IsLocationUnlocked(string locationId)
+        {
+            if (TryResolveLocation(locationId, out var location) == false || location == null)
+                return false;
+
+            return IsLocationUnlocked(location);
+        }
+
+        public bool IsLocationCompleted(LocationDefinition location)
+        {
+            if (location == null)
+                return false;
+
+            EnemyConfigDatabase locationDatabase = location.EnemyDatabase;
+            if (locationDatabase == null)
+                return false;
+
+            if (TryGetLocationProgress(location.LocationId, out _, out _, out int completedLevelCount) == false)
+                return false;
+
+            return completedLevelCount >= locationDatabase.MaxWaveLevel;
+        }
+
+        public bool IsLocationCompleted(string locationId)
+        {
+            if (TryResolveLocation(locationId, out var location) == false || location == null)
+                return false;
+
+            return IsLocationCompleted(location);
         }
 
         public void EnterBattle()
@@ -144,6 +197,17 @@ namespace Battle
                 return false;
 
             return _selectedLocationProgress.ClaimedRewardIds.Contains(rewardId);
+        }
+
+        public bool HasClaimedReward(string locationId, string rewardId)
+        {
+            if (string.IsNullOrWhiteSpace(locationId) || string.IsNullOrWhiteSpace(rewardId))
+                return false;
+
+            if (!_locationProgressById.TryGetValue(locationId, out var progressState) || progressState == null)
+                return false;
+
+            return progressState.ClaimedRewardIds.Contains(rewardId);
         }
 
         public bool TryClaimReward(string rewardId)
@@ -483,7 +547,8 @@ namespace Battle
                 ? GetDefaultLocationId()
                 : saveData.selectedLocationId;
 
-            if (TryResolveLocation(locationIdToApply, out var location))
+            if (TryResolveLocation(locationIdToApply, out var location) &&
+                (location == null || IsLocationUnlocked(location)))
             {
                 ApplySelectedLocation(location, locationIdToApply, false);
             }

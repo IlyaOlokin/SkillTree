@@ -257,6 +257,10 @@ MonoBehaviour:
     m_Key: node.powerChangeForbidden
     m_Metadata:
       m_Items: []
+  - m_Id: 5346512051769348
+    m_Key: node.power
+    m_Metadata:
+      m_Items: []
   - m_Id: 5346512051769347
     m_Key: description.pain1
     m_Metadata:

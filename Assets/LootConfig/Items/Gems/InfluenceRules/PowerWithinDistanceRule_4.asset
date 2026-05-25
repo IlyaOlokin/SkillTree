@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 798932b1cba34384a9cfd4ba028be21d, type: 3}
   m_Name: PowerWithinDistanceRule_4
   m_EditorClassIdentifier: Assembly-CSharp::Gems.WithinDistanceGemPowerInfluenceRule
-  powerBonus: 0.5
+  powerBonus: 0.1
   maxDistance: 4

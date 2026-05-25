@@ -15,6 +15,7 @@ namespace SkillTree
         private const string TooltipTitleLocalizationKey = "node.title.default";
         private const string InactiveNoEffectLocalizationKey = "node.inactiveNoEffect";
         private const string PowerChangeForbiddenLocalizationKey = "node.powerChangeForbidden";
+        private const string NodePowerLocalizationKey = "node.power";
         public const float MaxPermanentPower = 1f;
 
         [Inject] private UnitLevel _unitLevel;
@@ -148,6 +149,7 @@ namespace SkillTree
             List<string> descriptions = GetModifierTooltipDescriptions();
             AppendPowerChangeForbiddenDescription(descriptions);
             AppendInactiveNoEffectDescription(descriptions);
+            AppendNodePowerDescription(descriptions);
             return descriptions;
         }
 
@@ -196,6 +198,18 @@ namespace SkillTree
             descriptions.Add(GameLocalization.Get(
                 PowerChangeForbiddenLocalizationKey,
                 "This node's Power cannot be changed"));
+        }
+
+        protected void AppendNodePowerDescription(List<string> descriptions)
+        {
+            if (Mathf.Approximately(Power, 0f))
+                return;
+
+            string formattedPower = $"{Power * 100f:+0.##;-0.##;0}%";
+            descriptions.Add(GameLocalization.Format(
+                NodePowerLocalizationKey,
+                "[[0]] Node Power",
+                formattedPower));
         }
 
         public void SetAllocatedFromSave(bool allocated)
