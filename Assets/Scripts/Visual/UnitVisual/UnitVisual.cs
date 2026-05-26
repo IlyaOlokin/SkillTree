@@ -1,3 +1,4 @@
+using AudioSystem;
 using Battle;
 using LocalizationSupport;
 using TooltipSystem;
@@ -16,6 +17,10 @@ namespace Visual
         [SerializeField] private UnitVisualAttackAnimationController attackAnimationController = new UnitVisualAttackAnimationController();
         [SerializeField] private UnitVisualIdleBreathingController idleBreathingController = new UnitVisualIdleBreathingController();
         [SerializeField] private Transform visualScaleRoot;
+        [Header("Audio")]
+        [SerializeField] private string swordAttackSoundCueId = "combat.attack.sword";
+        [SerializeField] private string hammerAttackSoundCueId = "combat.attack.hammer";
+        [SerializeField] private string staffAttackSoundCueId = "combat.attack.staff";
 
         void Awake()
         {
@@ -105,11 +110,13 @@ namespace Visual
         private void DisplayAttackAnimation(ITarget target)
         {
             attackAnimationController?.PlayAttackAnimation(target);
+            PlayAttackSound();
         }
 
         public void PlayAttackAnimation(Vector2 direction)
         {
             attackAnimationController?.PlayAttackAnimation(direction);
+            PlayAttackSound();
         }
 
         public void SetVisualScale(Vector3 scale)
@@ -144,6 +151,28 @@ namespace Visual
 
                 canvas.worldCamera = battleCamera;
             }
+        }
+
+        private void PlayAttackSound()
+        {
+            string cueId = GetAttackSoundCueId(unit != null ? unit.WeaponType : WeaponType.Unarmed);
+            if (string.IsNullOrWhiteSpace(cueId))
+            {
+                return;
+            }
+
+            GameAudio.Instance?.PlaySfxAt(cueId, transform.position);
+        }
+
+        private string GetAttackSoundCueId(WeaponType weaponType)
+        {
+            return weaponType switch
+            {
+                WeaponType.Sword => swordAttackSoundCueId,
+                WeaponType.Hammer => hammerAttackSoundCueId,
+                WeaponType.Staff => staffAttackSoundCueId,
+                _ => null
+            };
         }
     }
 }

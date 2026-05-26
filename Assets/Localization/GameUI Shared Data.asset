@@ -27,6 +27,10 @@ MonoBehaviour:
     m_Key: ui.limitedZone.tooltip.playerLevelLimit
     m_Metadata:
       m_Items: []
+  - m_Id: 9831872496537600
+    m_Key: ui.volumeZone.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -77,9 +77,11 @@ namespace AudioSystem
             if (clip == null)
                 return;
 
-            AudioSource source = sfx2DSource != null ? sfx2DSource : GetPooledSfxSource();
+            AudioSource source = Get2DSfxSource();
             ConfigureSfxSource(source, cue, Vector3.zero, false);
-            source.PlayOneShot(clip, cue.Volume);
+            source.clip = clip;
+            source.volume = cue.Volume;
+            source.Play();
         }
 
         public void PlaySfxAt(string cueId, Vector3 position)
@@ -244,14 +246,46 @@ namespace AudioSystem
             return source;
         }
 
+        private AudioSource Get2DSfxSource()
+        {
+            if (sfx2DSource != null && !sfx2DSource.isPlaying)
+                return sfx2DSource;
+
+            return GetPooledSfxSource();
+        }
+
         private AudioSource GetPooledSfxSource()
         {
             if (_sfxPool.Count == 0)
-                return EnsureSource(null, "SfxSource_Runtime", sfxGroup, true);
+            {
+                AudioSource source = EnsureSource(null, "SfxSource_Runtime", sfxGroup, false);
+                _sfxPool.Add(source);
+                return source;
+            }
 
-            AudioSource source = _sfxPool[_nextPoolIndex];
-            _nextPoolIndex = (_nextPoolIndex + 1) % _sfxPool.Count;
-            return source;
+            int startIndex = _nextPoolIndex;
+            for (int i = 0; i < _sfxPool.Count; i++)
+            {
+                int index = (startIndex + i) % _sfxPool.Count;
+                AudioSource source = _sfxPool[index];
+
+                if (source == null)
+                {
+                    source = EnsureSource(null, $"SfxSource_{index:00}", sfxGroup, false);
+                    _sfxPool[index] = source;
+                }
+
+                if (source.isPlaying)
+                    continue;
+
+                _nextPoolIndex = (index + 1) % _sfxPool.Count;
+                return source;
+            }
+
+            AudioSource newSource = EnsureSource(null, $"SfxSource_{_sfxPool.Count:00}", sfxGroup, false);
+            _sfxPool.Add(newSource);
+            _nextPoolIndex = 0;
+            return newSource;
         }
 
         private void ConfigureSfxSource(AudioSource source, AudioCueDefinition cue, Vector3 position, bool useWorldPosition)

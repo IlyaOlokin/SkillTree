@@ -30,6 +30,10 @@ MonoBehaviour:
     m_Localized: Reach higher levels to expand the limit.
     m_Metadata:
       m_Items: []
+  - m_Id: 9831872496537600
+    m_Localized: "Gain [[0]] [[1]] for every allocated node in this zone\nCurrent [[1]]: [[2]]"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

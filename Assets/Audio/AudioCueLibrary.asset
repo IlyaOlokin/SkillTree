@@ -24,8 +24,16 @@ MonoBehaviour:
   - id: ui.nodeAllocation
     bus: 0
     clips:
-    - {fileID: 8300000, guid: dd67e1c6bbf86c74a961e0f0a1d58cf8, type: 3}
-    volume: 1
+    - {fileID: 8300000, guid: 326f10f7d429e3c4b975f6159437d801, type: 3}
+    volume: 0.594
     randomPitchRange: 0.02
     minimumInterval: 0.03
     spatialBlend: 0
+  - id: combat.attack.sword
+    bus: 0
+    clips:
+    - {fileID: 8300000, guid: ae6769ac85ec3a446ab79665f1c383cd, type: 3}
+    volume: 0.221
+    randomPitchRange: 0.05
+    minimumInterval: 0.03
+    spatialBlend: 0.589
