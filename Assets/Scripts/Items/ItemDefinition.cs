@@ -39,6 +39,11 @@ namespace Items
             return false;
         }
 
+        public virtual bool CanUseOnNode(ItemUseContext context, Node node)
+        {
+            return false;
+        }
+
         public virtual bool TryUseOnNode(ItemUseContext context, Node node)
         {
             return false;

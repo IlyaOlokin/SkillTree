@@ -117,14 +117,20 @@ namespace SkillTree
 
         public void Deallocate()
         {
-            if (!IsAllocated) return;
-            if (independentlyAllocated) return;
+            TryDeallocate();
+        }
+
+        public bool TryDeallocate(bool validateDependentNodes = true)
+        {
+            if (this is RootNode) return false;
+            if (!IsAllocated) return false;
+            if (independentlyAllocated) return false;
 
             bool wasActive = IsActive;
             IsAllocated = false;
             SetActiveInternal(false, false);
 
-            if (wasActive)
+            if (validateDependentNodes && wasActive)
             {
                 foreach (var node in ConnectedNodes)
                 {
@@ -132,7 +138,7 @@ namespace SkillTree
                     {
                         IsAllocated = true;
                         SetActiveInternal(true, false);
-                        return;
+                        return false;
                     }
                 }
             }
@@ -142,6 +148,7 @@ namespace SkillTree
             OnAllocatedChanged?.Invoke(this);
             OnAnyNodeAllocatedChanged?.Invoke(this);
             RaiseNodeChanged();
+            return true;
         }
         
         public virtual IReadOnlyList<string> GetTooltipDescriptions()

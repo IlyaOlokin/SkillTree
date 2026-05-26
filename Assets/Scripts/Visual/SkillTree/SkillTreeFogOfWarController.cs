@@ -37,6 +37,8 @@ namespace SkillTree
         private Color32[] _maskPixels = Array.Empty<Color32>();
         private Bounds _worldBounds;
 
+        public event Action OnNodeVisibilityChanged;
+
         public IReadOnlyCollection<Node> GetDiscoveredNodes()
         {
             return _discoveredNodes;
@@ -480,14 +482,19 @@ namespace SkillTree
 
         private void RefreshNodeVisibility()
         {
+            bool changed = false;
             for (int i = 0; i < _cachedNodes.Count; i++)
             {
                 Node node = _cachedNodes[i];
                 if (node == null || !_presentationStates.TryGetValue(node, out NodePresentationState presentationState))
                     continue;
 
-                presentationState.SetVisible(IsNodeDiscovered(node));
+                if (presentationState.SetVisible(IsNodeDiscovered(node)))
+                    changed = true;
             }
+
+            if (changed)
+                OnNodeVisibilityChanged?.Invoke();
         }
 
         private Vector2 WorldToNormalized(Vector3 worldPosition)
@@ -525,6 +532,7 @@ namespace SkillTree
             private readonly bool[] _colliderEnabledStates;
             private readonly Collider2D[] _colliders2D;
             private readonly bool[] _collider2DEnabledStates;
+            private bool _isVisible = true;
 
             public NodePresentationState(GameObject nodeObject)
             {
@@ -557,8 +565,13 @@ namespace SkillTree
                     _collider2DEnabledStates[i] = _colliders2D[i] != null && _colliders2D[i].enabled;
             }
 
-            public void SetVisible(bool isVisible)
+            public bool SetVisible(bool isVisible)
             {
+                if (_isVisible == isVisible)
+                    return false;
+
+                _isVisible = isVisible;
+
                 for (int i = 0; i < _powerVisuals.Length; i++)
                 {
                     if (_powerVisuals[i] != null)
@@ -582,6 +595,8 @@ namespace SkillTree
                     if (_colliders2D[i] != null)
                         _colliders2D[i].enabled = isVisible && _collider2DEnabledStates[i];
                 }
+
+                return true;
             }
 
             private bool IsManagedByPowerVisual(Renderer renderer)

@@ -48,6 +48,7 @@ namespace SkillTree
                     continue;
 
                 node.OnAllocatedChanged += OnNodeChanged;
+                node.AdditionalAllocatedCondition = LimitCondition;
                 node.AdditionalActivationCondition = ActivationCondition;
             }
 
@@ -70,9 +71,16 @@ namespace SkillTree
                     continue;
 
                 node.OnAllocatedChanged -= OnNodeChanged;
+                if (node.AdditionalAllocatedCondition == LimitCondition)
+                    node.AdditionalAllocatedCondition = null;
                 if (node.AdditionalActivationCondition == ActivationCondition)
                     node.AdditionalActivationCondition = null;
             }
+        }
+
+        private bool LimitCondition()
+        {
+            return CurrentAllocatedCount < MaxAllocatedNode;
         }
 
         private bool ActivationCondition()

@@ -30,12 +30,20 @@ namespace Items
             return descriptions;
         }
 
-        public override bool TryUseOnNode(ItemUseContext context, Node node)
+        public override bool CanUseOnNode(ItemUseContext context, Node node)
         {
             if (context?.Player == null || node == null || !node.CanChangePower)
                 return false;
 
             if (node.PermanentPower >= Node.MaxPermanentPower)
+                return false;
+
+            return true;
+        }
+
+        public override bool TryUseOnNode(ItemUseContext context, Node node)
+        {
+            if (!CanUseOnNode(context, node))
                 return false;
 
             float previousPower = node.PermanentPower;

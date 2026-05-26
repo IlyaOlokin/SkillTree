@@ -4,6 +4,7 @@ using DG.Tweening;
 using SkillTree;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 using Node = SkillTree.Node;
 using SocketNode = SkillTree.SocketNode;
@@ -31,10 +32,14 @@ namespace Visual
         [Header("Allocation queue")]
         [SerializeField] private Canvas allocationQueueOrderCanvas;
         [SerializeField] private TMP_Text allocationQueueOrderText;
-        [Header("Search")]
-        [SerializeField] private Color searchMatchedBorderColor = new Color(1f, 0.85f, 0.15f, 1f);
-        [SerializeField] private Color searchMatchedNodeImageColor = new Color(1f, 1f, 0.45f, 1f);
-        [SerializeField] private bool overrideNodeImageColorOnSearch;
+        [Header("Highlight")]
+        [SerializeField] [FormerlySerializedAs("searchMatchedBorderColor")]
+        private Color highlightedBorderColor = new Color(1f, 0.85f, 0.15f, 1f);
+        [SerializeField] [FormerlySerializedAs("searchMatchedNodeImageColor")]
+        private Color highlightedNodeImageColor = new Color(1f, 1f, 0.45f, 1f);
+        [SerializeField] [FormerlySerializedAs("overrideNodeImageColorOnSearch")]
+        private bool overrideNodeImageColorOnHighlight;
+        [Inject(Optional = true)] private SkillTreeNodeHighlightService _highlightService;
 
         private Sprite _defaultNodeIcon;
         private bool _wasActive = false;
@@ -80,10 +85,10 @@ namespace Visual
                 _unitLevel.OnSkillPointsChanged += UpdateVisual;
 
             if (_skillTree != null)
-            {
                 _skillTree.OnAllocationQueueChanged += RefreshAllocationQueueOrder;
-                _skillTree.OnSearchMatchesChanged += UpdateVisualFromSearch;
-            }
+
+            if (_highlightService != null)
+                _highlightService.OnHighlightsChanged += UpdateVisualFromHighlights;
         }
 
         private void OnDestroy()
@@ -105,10 +110,10 @@ namespace Visual
                 _unitLevel.OnSkillPointsChanged -= UpdateVisual;
 
             if (_skillTree != null)
-            {
                 _skillTree.OnAllocationQueueChanged -= RefreshAllocationQueueOrder;
-                _skillTree.OnSearchMatchesChanged -= UpdateVisualFromSearch;
-            }
+
+            if (_highlightService != null)
+                _highlightService.OnHighlightsChanged -= UpdateVisualFromHighlights;
 
             _colorTween?.Kill();
         }
@@ -144,7 +149,7 @@ namespace Visual
 
             if (node.IsActive)
             {
-                if (IsSearchMatched())
+                if (IsHighlighted())
                 {
                     _colorTween?.Kill();
                     ApplyColors(borderAllocatedColor, nodeImageAllocatedColor);
@@ -195,7 +200,7 @@ namespace Visual
             nodePowerVisual.SetPower(node.Power, node.IsAllocated);
         }
 
-        private void UpdateVisualFromSearch()
+        private void UpdateVisualFromHighlights()
         {
             UpdateVisual(node);
         }
@@ -243,22 +248,22 @@ namespace Visual
 
         private void ApplyColors(Color borderColor, Color nodeImageColor)
         {
-            bool isSearchMatched = IsSearchMatched();
+            bool isHighlighted = IsHighlighted();
 
             if (border != null)
-                border.color = isSearchMatched ? searchMatchedBorderColor : borderColor;
+                border.color = isHighlighted ? highlightedBorderColor : borderColor;
 
             if (nodeImage != null)
             {
-                nodeImage.color = isSearchMatched && overrideNodeImageColorOnSearch
-                    ? searchMatchedNodeImageColor
+                nodeImage.color = isHighlighted && overrideNodeImageColorOnHighlight
+                    ? highlightedNodeImageColor
                     : nodeImageColor;
             }
         }
 
-        private bool IsSearchMatched()
+        private bool IsHighlighted()
         {
-            return _skillTree != null && _skillTree.IsNodeSearchMatched(node);
+            return _highlightService != null && _highlightService.IsHighlighted(node);
         }
     }
 }

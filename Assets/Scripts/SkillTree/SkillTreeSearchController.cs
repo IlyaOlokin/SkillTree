@@ -20,6 +20,7 @@ namespace SkillTree
         }
 
         [Inject] private MainSkillTree _skillTree;
+        [Inject] private SkillTreeNodeHighlightService _highlightService;
 
         [Header("Input")]
         [SerializeField] private TMP_InputField searchInputField;
@@ -64,8 +65,9 @@ namespace SkillTree
             if (_skillTree != null)
             {
                 _skillTree.OnAnyNodeChanged -= RefreshNodeIndex;
-                _skillTree.ClearSearchMatches();
             }
+
+            _highlightService?.ClearHighlights(SkillTreeNodeHighlightLayer.Search);
         }
 
         private void HandleSearchTextChanged(string query)
@@ -107,7 +109,7 @@ namespace SkillTree
 
             if (_terms.Count == 0)
             {
-                _skillTree?.ClearSearchMatches();
+                _highlightService?.ClearHighlights(SkillTreeNodeHighlightLayer.Search);
                 _searchCoroutine = null;
                 yield break;
             }
@@ -131,7 +133,7 @@ namespace SkillTree
                 }
             }
 
-            _skillTree?.SetSearchMatches(matches, true);
+            _highlightService?.SetHighlights(SkillTreeNodeHighlightLayer.Search, matches);
             _searchCoroutine = null;
         }
 

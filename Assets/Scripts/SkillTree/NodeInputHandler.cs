@@ -83,7 +83,11 @@ namespace SkillTree
                     return;
                 }
 
-                _node.Deallocate();
+                if (_skillTree != null)
+                    _skillTree.TryDeallocateWithDependents(_node);
+                else
+                    _node.Deallocate();
+
                 _tooltipUI?.RefreshCurrentTooltip();
             }
         }
