@@ -20,7 +20,7 @@ namespace SkillTree
 
             void HandleCrit(ITarget _)
             {
-                effectController.AddEffect(new CriticalMomentum(
+                effectController.AddEffect(() => new CriticalMomentum(
                     1,
                     critChanceLossPerStack,
                     critDamageBonusPerStack));

@@ -32,7 +32,7 @@ namespace SkillTree
                     return;
                 }
 
-                effectController.AddEffect(new Pain(painAmount));
+                effectController.AddEffect(() => new Pain(painAmount));
             }
 
             return new DelegateModifierRuntimeBinding(

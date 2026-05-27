@@ -1,3 +1,4 @@
+using System;
 using Battle;
 using LocalizationSupport;
 using UnityEngine;
@@ -24,6 +25,38 @@ namespace SkillTree
                 }
             }
         }
+
+        public override string GetDescription()
+        {
+            return GameLocalization.FormatModifier(
+                "modifier.damageMitigation.description",
+                "Take [[0]]% less [[1]] Damage",
+                mitigationValue * 100f,
+                FormatDamageTypeMask(damageType));
+        }
+
+        private static string FormatDamageTypeMask(DamageType damageTypeMask)
+        {
+            List<string> damageTypeNames = new List<string>();
+            foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
+            {
+                if (damageTypeMask.HasFlag(damageType))
+                {
+                    damageTypeNames.Add(GameLocalization.LocalizeEnum(damageType));
+                }
+            }
+
+            if (damageTypeNames.Count == 0)
+            {
+                return GameLocalization.GetModifier("modifier.damageTypeMask.none", "no");
+            }
+
+            if (damageTypeNames.Count == 1)
+            {
+                return damageTypeNames[0];
+            }
+
+            return string.Join(", ", damageTypeNames);
+        }
     }
 }
-

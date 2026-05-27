@@ -9,7 +9,7 @@ namespace Battle
         private readonly DamageMitigation _modifier;
         private bool _isUsed;
         private bool _isApplied;
-        private readonly System.Action<DamageInfo> _onHitHandler;
+        private bool _isSubscribed;
 
         public override bool IsStackable { get; set; }
         public override EffectVisualType VisualType => EffectVisualType.NextHitDamageMitigation;
@@ -19,14 +19,18 @@ namespace Battle
         {
             _owner = owner;
             _modifier = modifier;
-            _onHitHandler = HandleOwnerHit;
-            _owner.OnGettingHit += _onHitHandler;
         }
 
         public override void OnApply(Unit unit)
         {
             if (_isApplied)
                 return;
+
+            if (_owner != null && !_isSubscribed)
+            {
+                _owner.OnGettingHit += HandleOwnerHit;
+                _isSubscribed = true;
+            }
 
             unit.AddOuterModifier(_modifier);
             _isApplied = true;
@@ -40,7 +44,10 @@ namespace Battle
         public override void OnRemove(Unit unit)
         {
             if (_owner != null)
-                _owner.OnGettingHit -= _onHitHandler;
+            {
+                _owner.OnGettingHit -= HandleOwnerHit;
+                _isSubscribed = false;
+            }
 
             if (_isApplied)
             {

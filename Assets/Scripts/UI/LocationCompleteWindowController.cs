@@ -66,10 +66,7 @@ public class LocationCompleteWindowController : MonoBehaviour
 
     public void CollectAllLoot()
     {
-        if (itemDropSpawner == null)
-            itemDropSpawner = FindFirstObjectByType<EnemyItemDropSpawner>();
-
-        itemDropSpawner?.CollectAllActiveDrops();
+        itemDropSpawner.CollectAllActiveDrops();
     }
 
     public void ExitToMap()

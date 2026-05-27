@@ -126,7 +126,7 @@ namespace Battle
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
                 Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Chill>() ? attacker : defender;
-                effectTarget.effectController.AddEffect(new Chill(damageInfo, effectTarget, BASE_DURATION));
+                effectTarget.effectController.AddEffect(() => new Chill(damageInfo, effectTarget, BASE_DURATION));
                 attacker.AilmentApplied(effectTarget);
             }
         }

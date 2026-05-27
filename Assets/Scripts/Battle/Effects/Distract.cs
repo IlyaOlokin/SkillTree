@@ -71,7 +71,7 @@ namespace Battle
 
             if (damageInfo.AttackEffectPayload.IsGuaranteed<Distract>())
             {
-                effectTarget.effectController.AddEffect(new Distract(damageInfo, effectTarget));
+                effectTarget.effectController.AddEffect(() => new Distract(damageInfo, effectTarget));
                 return;
             }
 
@@ -83,7 +83,7 @@ namespace Battle
 
             if (Random.Range(0f, 1f) < chance)
             {
-                effectTarget.effectController.AddEffect(new Distract(damageInfo, effectTarget));
+                effectTarget.effectController.AddEffect(() => new Distract(damageInfo, effectTarget));
             }
         }
     }

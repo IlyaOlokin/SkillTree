@@ -27,7 +27,7 @@ namespace SkillTree
 
             void HandleCrit(ITarget _)
             {
-                effectController.AddEffect(new CriticalRegeneration(
+                effectController.AddEffect(() => new CriticalRegeneration(
                     duration,
                     scaledRegeneration));
             }

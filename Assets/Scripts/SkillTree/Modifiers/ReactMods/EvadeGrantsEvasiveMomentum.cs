@@ -31,7 +31,7 @@ namespace SkillTree
 
                 if (effectController != null)
                 {
-                    effectController.AddEffect(new EvasiveMomentum(
+                    effectController.AddEffect(() => new EvasiveMomentum(
                         duration,
                         evasionLossPerStack,
                         critChancePerStack));

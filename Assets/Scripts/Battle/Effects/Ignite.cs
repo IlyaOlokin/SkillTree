@@ -70,7 +70,7 @@ namespace Battle
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
                 Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Ignite>() ? attacker : defender;
-                effectTarget.effectController.AddEffect(new Ignite(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Fire]));
+                effectTarget.effectController.AddEffect(() => new Ignite(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Fire]));
                 attacker.AilmentApplied(effectTarget);
             }
         }

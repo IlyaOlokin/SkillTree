@@ -327,11 +327,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311771
-    m_Localized: 'Solange du nicht bei vollem Leben bist, [[0]]'
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311772
-    m_Localized: Solange du nicht bei vollem Leben bist, wird ein Modifikator angewendet
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311773
@@ -339,6 +339,30 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311774
+    m_Localized: 
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311775
+    m_Localized: 
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311776
+    m_Localized: 
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311777
+    m_Localized: 
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311778
+    m_Localized: 
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311779
+    m_Localized: 
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311780
     m_Localized: 
     m_Metadata:
       m_Items: []

@@ -8,9 +8,9 @@ namespace Battle
         private readonly Unit _owner;
         private readonly Modifier _modifier;
         private readonly bool _ownsModifier;
-        private readonly System.Action<ITarget> _onHitHandler;
         private bool _isUsed;
         private bool _isApplied;
+        private bool _isSubscribed;
 
         public override bool IsStackable { get; set; } = true;
         
@@ -22,8 +22,6 @@ namespace Battle
             _owner = owner;
             _modifier = modifier;
             _ownsModifier = ownsModifier;
-            _onHitHandler = HandleHit;
-            _owner.OnHit += _onHitHandler;
         }
 
         public override void OnApply(Unit unit)
@@ -31,6 +29,12 @@ namespace Battle
             if (_isApplied || _modifier == null)
             {
                 return;
+            }
+
+            if (_owner != null && !_isSubscribed)
+            {
+                _owner.OnHit += HandleHit;
+                _isSubscribed = true;
             }
 
             unit.AddOuterModifier(_modifier);
@@ -46,7 +50,8 @@ namespace Battle
         {
             if (_owner != null)
             {
-                _owner.OnHit -= _onHitHandler;
+                _owner.OnHit -= HandleHit;
+                _isSubscribed = false;
             }
 
             if (_isApplied && _modifier != null)

@@ -196,8 +196,6 @@ public static class StatCalculator
                 return StatType.ColdDamage;
             case DamageType.Lightning:
                 return StatType.LightningDamage;
-            case DamageType.Poison:
-                return StatType.PoisonDamage;
             case DamageType.Darkness:
                 return StatType.DarknessDamage;
             case DamageType.Light:

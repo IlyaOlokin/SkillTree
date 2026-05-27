@@ -33,7 +33,7 @@ namespace SkillTree
                     return;
                 }
 
-                effectController.AddEffect(new Scar(duration, scarAmount));
+                effectController.AddEffect(() => new Scar(duration, scarAmount));
             }
 
             return new DelegateModifierRuntimeBinding(

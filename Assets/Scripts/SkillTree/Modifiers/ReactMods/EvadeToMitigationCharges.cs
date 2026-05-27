@@ -13,7 +13,7 @@ namespace SkillTree
         {
             void HandleEvade()
             {
-                unit.effectController.AddEffect(new NextHitDamageMitigation(unit, modifier));
+                unit.effectController.AddEffect(() => new NextHitDamageMitigation(unit, modifier));
             }
 
             return new DelegateModifierRuntimeBinding(

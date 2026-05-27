@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace Battle
         private Unit _owner;
 
         public readonly List<ActiveEffect> Effects = new List<ActiveEffect>();
+        public event Action<Func<BaseEffect>> OnEffectReceived;
 
         public void Init(Unit owner)
         {
@@ -16,19 +18,63 @@ namespace Battle
 
         public void AddEffect(BaseEffect newEffect)
         {
+            AddEffect(newEffect, null, true);
+        }
+
+        public void AddEffect(Func<BaseEffect> effectFactory)
+        {
+            if (effectFactory == null)
+            {
+                return;
+            }
+
+            AddEffect(effectFactory(), effectFactory, true);
+        }
+
+        public void AddRepeatedEffect(Func<BaseEffect> effectFactory)
+        {
+            if (effectFactory == null)
+            {
+                return;
+            }
+
+            AddEffect(effectFactory(), null, false);
+        }
+
+        private void AddEffect(BaseEffect newEffect, Func<BaseEffect> repeatFactory, bool notifyReceived)
+        {
+            if (newEffect == null)
+            {
+                return;
+            }
+
             var existing = Effects
                 .Find(e => e.Effect.GetType() == newEffect.GetType());
 
             if (existing != null)
             {
                 existing.Effect.OnStack(_owner, newEffect, existing);
-                if (existing.Effect.IsStackable) return;
+                if (existing.Effect.IsStackable)
+                {
+                    NotifyEffectReceived(repeatFactory, notifyReceived);
+                    return;
+                }
             }
 
             var active = new ActiveEffect(newEffect);
 
             Effects.Add(active);
             newEffect.OnApply(_owner);
+
+            NotifyEffectReceived(repeatFactory, notifyReceived);
+        }
+
+        private void NotifyEffectReceived(Func<BaseEffect> repeatFactory, bool notifyReceived)
+        {
+            if (notifyReceived && repeatFactory != null)
+            {
+                OnEffectReceived?.Invoke(repeatFactory);
+            }
         }
 
 

@@ -1887,6 +1887,30 @@ MonoBehaviour:
     m_Key: modifier.gainAttackProgressOnMiss.description
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311775
+    m_Key: modifier.hitTakenGrantsVengeance.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311776
+    m_Key: modifier.attackProgressCannotBeModified.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311777
+    m_Key: modifier.repeatReceivedEffectChance.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311778
+    m_Key: modifier.damageMitigation.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311779
+    m_Key: modifier.addedFireDamageConvertedToLightDamage.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311780
+    m_Key: modifier.addedColdDamageConvertedToDarknessDamage.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

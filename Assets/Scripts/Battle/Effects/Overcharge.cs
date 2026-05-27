@@ -85,7 +85,7 @@ namespace Battle
                 if (Random.Range(0f, 1f) < defender.BaseUnitModifiers.GetStatValue(StatType.OverchargeAvoidanceChance))
                     return;
                 Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Overcharge>() ? attacker : defender;
-                effectTarget.effectController.AddEffect(new Overcharge(damageInfo, effectTarget));
+                effectTarget.effectController.AddEffect(() => new Overcharge(damageInfo, effectTarget));
                 attacker.AilmentApplied(effectTarget);
             }
         }

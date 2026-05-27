@@ -28,7 +28,7 @@ namespace SkillTree
 
             void HandleBarrierRestored()
             {
-                unit.effectController.AddEffect(new BarrierSurge(
+                unit.effectController.AddEffect(() => new BarrierSurge(
                     duration,
                     scaledAilmentPower,
                     scaledMysticDamage));

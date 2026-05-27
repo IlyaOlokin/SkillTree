@@ -385,6 +385,11 @@ MonoBehaviour:
     m_Localized: This item cannot raise a node's permanent {power|Power} above 100%.
     m_Metadata:
       m_Items: []
+  - m_Id: 10152012756946953
+    m_Localized: Your next attack gains 5% more Damage and +10% added {ailment|Ailment}
+      Chance.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

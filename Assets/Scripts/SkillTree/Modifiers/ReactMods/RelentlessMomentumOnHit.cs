@@ -17,7 +17,7 @@ namespace SkillTree
 
             void HandleHit(ITarget _)
             {
-                effectController.AddEffect(new RelentlessMomentum(1));
+                effectController.AddEffect(() => new RelentlessMomentum(1));
             }
 
             void RemoveStacks()

@@ -21,5 +21,6 @@ namespace Battle
         Expose = 16,
         CriticalRegeneration = 17,
         RelentlessMomentum = 18,
+        Vengeance = 19,
     }
 }

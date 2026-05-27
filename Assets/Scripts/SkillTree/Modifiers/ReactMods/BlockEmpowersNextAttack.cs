@@ -19,7 +19,7 @@ namespace SkillTree
             void HandleBlock()
             {
                 Modifier runtimeModifier = CreateRuntimeEffectModifier(powerContext, out bool ownsModifier);
-                unit.effectController.AddEffect(new NextAttackModifierEffect(unit, runtimeModifier, ownsModifier));
+                unit.effectController.AddEffect(() => new NextAttackModifierEffect(unit, runtimeModifier, ownsModifier));
             }
 
             return new DelegateModifierRuntimeBinding(

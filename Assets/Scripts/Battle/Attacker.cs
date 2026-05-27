@@ -13,8 +13,10 @@ namespace Battle
         public ITarget Target { get; private set; }
 
         public float AttackProgress => _attackTimer;
+        public bool ExternalAttackProgressLocked => _externalAttackProgressLockCount > 0;
 
         private float _attackTimer;
+        private int _externalAttackProgressLockCount;
         private readonly List<float> _extraAttackMoments = new List<float>();
         private readonly List<float> _triggeredExtraAttackMomentsThisCycle = new List<float>();
 
@@ -86,7 +88,22 @@ namespace Battle
 
         public void ModifyAttackProgress(float deltaProgress)
         {
+            if (ExternalAttackProgressLocked)
+            {
+                return;
+            }
+
             AddAttackProgress(deltaProgress);
+        }
+
+        public void AddExternalAttackProgressLock()
+        {
+            _externalAttackProgressLockCount++;
+        }
+
+        public void RemoveExternalAttackProgressLock()
+        {
+            _externalAttackProgressLockCount = Mathf.Max(0, _externalAttackProgressLockCount - 1);
         }
 
         private void AddAttackProgress(float deltaProgress)

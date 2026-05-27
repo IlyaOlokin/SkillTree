@@ -91,7 +91,7 @@ namespace Battle
 
             if (damageInfo.AttackEffectPayload.IsGuaranteed<Bleed>())
             {
-                effectTarget.effectController.AddEffect(new Bleed(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Physical], BASE_DURATION));
+                effectTarget.effectController.AddEffect(() => new Bleed(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Physical], BASE_DURATION));
                 attacker.BleedApplied(effectTarget);
                 return;
             }
@@ -100,7 +100,7 @@ namespace Battle
             damagePercentOfMaxHealth *= 1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.BleedChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
-                effectTarget.effectController.AddEffect(new Bleed(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Physical], BASE_DURATION));
+                effectTarget.effectController.AddEffect(() => new Bleed(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Physical], BASE_DURATION));
                 attacker.BleedApplied(effectTarget);
             }
         }
@@ -138,7 +138,7 @@ namespace Battle
             }
 
             float damageMultiplier = 1f + Mathf.Max(0f, moreDamage);
-            unit.effectController.AddEffect(new Bleed(mergedDamage * damageMultiplier, BASE_DURATION));
+            unit.effectController.AddEffect(() => new Bleed(mergedDamage * damageMultiplier, BASE_DURATION));
         }
 
         private void ApplyBleedDamage(Unit unit, float requestedDamage)

@@ -26,6 +26,7 @@ namespace Battle
             
             Overcharge.ApplyOverchargeEffect(context);
             Pain.ApplyPainEffect(context);
+            Vengeance.ApplyVengeanceEffect(context);
             RunModifiers(attackerUnit.GetAllModifiers(), ModifierPriority.OnAttack, attackerUnit, context);
 
             StatCalculator.RecalculateAttackStat(damageInfo.BaseUnitModifiers, StatType.CritChance);

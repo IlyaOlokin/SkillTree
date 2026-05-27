@@ -1856,8 +1856,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311763
-    m_Localized: 'On Hit: gain {relentlessMomentum|Relentless Momentum}. Lose all stacks
-      when you get hit or block a hit.'
+    m_Localized: 'On Hit: gain {relentlessMomentum|Relentless Momentum}. Lose all
+      stacks when you get hit or block a hit.'
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311764
@@ -1866,14 +1866,13 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311765
-    m_Localized: While {armor|Armor} and {evasion|Evasion} differ by no more than
-      [[0]]% of the higher value, [[1]]
+    m_Localized: 'While {armor|Armor} and {evasion|Evasion} differ by no more than
+      [[0]]% of the higher value, [[1]]'
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311766
-    m_Localized: Crit Chance can exceed 100%. Each full 100% Crit Chance grants
-      another Crit Damage Bonus layer, and the remainder rolls for one additional
-      layer.
+    m_Localized: Crit Chance can exceed 100%. Each full 100% Crit Chance grants another
+      Crit Damage Bonus layer, and the remainder rolls for one additional layer.
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311767
@@ -1908,6 +1907,31 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 5084156906311774
     m_Localized: 'On Miss: gain [[0]]% Attack Progress'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311775
+    m_Localized: 'When you are hit: lose [[0]]% Attack Progress and gain {vengeance|Vengeance}.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311776
+    m_Localized: You cannot lose or gain extra Attack Progress.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311777
+    m_Localized: '[[0]]% chance when you receive an {effect|Effect} to receive it
+      again'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311778
+    m_Localized: Take [[0]]% less [[1]] Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311779
+    m_Localized: Added Fire Damage is converted to added Light Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311780
+    m_Localized: Added Cold Damage is converted to added Darkness Damage
     m_Metadata:
       m_Items: []
   references:

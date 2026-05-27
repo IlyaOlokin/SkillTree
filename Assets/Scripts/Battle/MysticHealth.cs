@@ -175,11 +175,11 @@ namespace Battle
 
             if (!(lightStacks <= 0 && _owner.effectController.GetAllEffectsOfType<LightAbsorptionDebuff>().Count == 0))
             {
-                _owner.effectController.AddEffect(new LightAbsorptionDebuff(lightStacks));
+                _owner.effectController.AddEffect(() => new LightAbsorptionDebuff(lightStacks));
             }
             if (!(darknessStacks <= 0 && _owner.effectController.GetAllEffectsOfType<DarknessAbsorptionDebuff>().Count == 0))
             {
-                _owner.effectController.AddEffect(new DarknessAbsorptionDebuff(darknessStacks));
+                _owner.effectController.AddEffect(() => new DarknessAbsorptionDebuff(darknessStacks));
             }
         }
 

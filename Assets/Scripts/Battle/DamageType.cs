@@ -11,7 +11,6 @@ namespace Battle
         Lightning = 1 << 3, // 8
         Light     = 1 << 4, // 16
         Darkness  = 1 << 5, // 32
-        Poison    = 1 << 6, // 64
     }
 }
 

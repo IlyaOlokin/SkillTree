@@ -8,7 +8,7 @@ namespace Visual
     {
         private float _fallbackLifetime;
         private float _destroyCheckDelay;
-        private float _elapsedTime;
+        private double _startRealtime;
         [SerializeField] private List<VisualEffect> _visualEffects = new List<VisualEffect>();
         private bool _isInitialized;
         private bool _hasSeenAliveParticles;
@@ -17,24 +17,29 @@ namespace Visual
         {
             _fallbackLifetime = Mathf.Max(0.01f, fallbackLifetime);
             _destroyCheckDelay = Mathf.Max(0f, destroyCheckDelay);
-            _elapsedTime = 0f;
+            _startRealtime = Time.realtimeSinceStartupAsDouble;
             _hasSeenAliveParticles = false;
             _isInitialized = true;
-
-            if (_visualEffects.Count == 0)
-            {
-                Destroy(gameObject, _fallbackLifetime);
-            }
         }
 
         private void Update()
         {
-            if (!_isInitialized || _visualEffects == null || _visualEffects.Count == 0)
+            if (!_isInitialized)
             {
                 return;
             }
 
-            _elapsedTime += Time.deltaTime;
+            float elapsedTime = (float)(Time.realtimeSinceStartupAsDouble - _startRealtime);
+            if (elapsedTime >= _fallbackLifetime)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            if (_visualEffects == null || _visualEffects.Count == 0)
+            {
+                return;
+            }
 
             bool hasAliveParticles = false;
             for (int i = 0; i < _visualEffects.Count; i++)
@@ -53,12 +58,12 @@ namespace Visual
                 return;
             }
 
-            if (_elapsedTime < _destroyCheckDelay)
+            if (elapsedTime < _destroyCheckDelay)
             {
                 return;
             }
 
-            if (_hasSeenAliveParticles || _elapsedTime >= _fallbackLifetime)
+            if (_hasSeenAliveParticles)
             {
                 Destroy(gameObject);
             }
