@@ -1911,6 +1911,30 @@ MonoBehaviour:
     m_Key: modifier.addedColdDamageConvertedToDarknessDamage.description
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311781
+    m_Key: modifier.elementalResistanceOverMaximumIncreasesArmor.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311782
+    m_Key: modifier.addTotalAttributesModifierContainer.noModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311783
+    m_Key: modifier.addTotalAttributesModifierContainer.single
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311784
+    m_Key: modifier.addTotalAttributesModifierContainer.multi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311785
+    m_Key: modifier.timedNextAttackModifierContainer.noModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311786
+    m_Key: modifier.timedNextAttackModifierContainer.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -390,6 +390,15 @@ MonoBehaviour:
       Chance.
     m_Metadata:
       m_Items: []
+  - m_Id: 10152012756946954
+    m_Localized: Timed Strike
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10152012756946955
+    m_Localized: Charges every [[0]] seconds. When charged, your next attack has
+      [[1]].
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

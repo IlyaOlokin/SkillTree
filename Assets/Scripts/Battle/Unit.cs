@@ -29,10 +29,12 @@ namespace Battle
         public event Action OnModsChanged;
         public event Action OnOuterModsChanged;
         public event Action OnStatsRecalculated;
+        public event Action OnCombatStateReset;
 
         public event Action<DamageInfo> OnGettingHit;
         public event Action<DamageInfo, float> OnHealthDamageTaken;
         public event Action<ITarget> OnAttack;
+        public event Action<ITarget> OnAttackCompleted;
         public event Action<ITarget> OnHit;
         public event Action<ITarget> OnMiss;
         public event Action<ITarget> OnCrit;
@@ -111,6 +113,11 @@ namespace Battle
             OnAttack?.Invoke(target);
         }
 
+        public void OnAttackFinished(ITarget target)
+        {
+            OnAttackCompleted?.Invoke(target);
+        }
+
         public void OnHitLanded(ITarget target)
         {
             OnHit?.Invoke(target);
@@ -187,6 +194,7 @@ namespace Battle
             mysticHealth.Reset();
             effectController.ClearAllEffects();
             attacker.ResetAttackCooldownHard();
+            OnCombatStateReset?.Invoke();
         }
 
         public void OnHitEvaded(DamageInstance damageInstance)

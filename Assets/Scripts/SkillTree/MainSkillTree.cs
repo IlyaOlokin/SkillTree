@@ -313,17 +313,25 @@ namespace SkillTree
             HashSet<string> independentlyAllocatedNodeIds = saveData?.ToIndependentlyAllocatedNodeSet() ?? new HashSet<string>();
             Dictionary<string, float> nodePowersById = saveData?.ToNodePowerMap() ?? new Dictionary<string, float>(StringComparer.Ordinal);
 
-            foreach (Node node in nodesById.Values)
+            LimitedZone.BeginSaveDataRestore();
+            try
             {
-                if (node is SocketNode socketNode)
-                    socketNode.SetSocketedGemFromSave(null);
+                foreach (Node node in nodesById.Values)
+                {
+                    if (node is SocketNode socketNode)
+                        socketNode.SetSocketedGemFromSave(null);
 
-                string nodeId = resolvedNodeIds[node];
-                node.SetPermanentPowerFromSave(nodePowersById.TryGetValue(nodeId, out float permanentPower)
-                    ? permanentPower
-                    : node.DefaultPermanentPower);
-                bool isAllocated = allocatedNodeIds.Contains(resolvedNodeIds[node]);
-                node.SetAllocatedFromSave(isAllocated, isAllocated && independentlyAllocatedNodeIds.Contains(resolvedNodeIds[node]));
+                    string nodeId = resolvedNodeIds[node];
+                    node.SetPermanentPowerFromSave(nodePowersById.TryGetValue(nodeId, out float permanentPower)
+                        ? permanentPower
+                        : node.DefaultPermanentPower);
+                    bool isAllocated = allocatedNodeIds.Contains(resolvedNodeIds[node]);
+                    node.SetAllocatedFromSave(isAllocated, isAllocated && independentlyAllocatedNodeIds.Contains(resolvedNodeIds[node]));
+                }
+            }
+            finally
+            {
+                LimitedZone.EndSaveDataRestore();
             }
 
             if (saveData?.socketedGems != null)

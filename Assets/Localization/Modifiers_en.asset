@@ -1934,6 +1934,31 @@ MonoBehaviour:
     m_Localized: Added Cold Damage is converted to added Darkness Damage
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311781
+    m_Localized: '{elemental|Elemental} {resistance|Resistance} above its maximum
+      also increases {armor|Armor} by the same amount'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311782
+    m_Localized: Adds modifier container based on total attributes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311783
+    m_Localized: Adds '[[0]]' per 1 total point of {allAttributes|All Attributes}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311784
+    m_Localized: Adds '[[0]]' per [[1]] total points of {attributes|Attributes}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311785
+    m_Localized: Every few seconds, your next attack gains an unconfigured modifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311786
+    m_Localized: Every [[0]] seconds, your next attack gains [[1]].
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

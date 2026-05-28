@@ -375,6 +375,14 @@ MonoBehaviour:
     m_Key: description.vengeance1
     m_Metadata:
       m_Items: []
+  - m_Id: 10152012756946954
+    m_Key: effect.timedNextAttackModifier.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10152012756946955
+    m_Key: effect.timedNextAttackModifier.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

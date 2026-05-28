@@ -14,6 +14,7 @@ namespace SkillTree
         private const string TooltipTitleLocalizationKey = "ui.limitedZone.tooltip.title";
         private const string TooltipLimitLocalizationKey = "ui.limitedZone.tooltip.limit";
         private const string TooltipPlayerLevelLimitLocalizationKey = "ui.limitedZone.tooltip.playerLevelLimit";
+        private static readonly List<LimitedZone> ActiveZones = new();
 
         [Inject(Optional = true)] private UnitLevel _unitLevel;
 
@@ -29,6 +30,9 @@ namespace SkillTree
 
         private readonly List<Node> _allocationOrder = new();
         private int _lastMaxAllocatedNode;
+        private bool _playerLevelLimitInitialized;
+        private int _saveDataRestoreDepth;
+        private bool _isSubscribedToPlayerProgress;
 
         public int MaxAllocatedNode => limitMode == LimitMode.PlayerLevel
             ? GetMaxAllocatedNodeForPlayerLevel()
@@ -42,6 +46,9 @@ namespace SkillTree
 
         private void Awake()
         {
+            if (!ActiveZones.Contains(this))
+                ActiveZones.Add(this);
+
             foreach (var node in nodes)
             {
                 if (node == null)
@@ -52,17 +59,25 @@ namespace SkillTree
                 node.AdditionalActivationCondition = ActivationCondition;
             }
 
-            if (_unitLevel != null)
-                _unitLevel.OnExpChanged += OnPlayerProgressChanged;
+            SubscribeToPlayerProgressIfPossible();
 
+            _playerLevelLimitInitialized = limitMode != LimitMode.PlayerLevel || _unitLevel == null;
             RebuildAllocationOrderFromNodes();
             _lastMaxAllocatedNode = MaxAllocatedNode;
             RebuildActiveNodes();
         }
 
+        private void Start()
+        {
+            SubscribeToPlayerProgressIfPossible();
+            RefreshFromCurrentNodes();
+        }
+
         private void OnDestroy()
         {
-            if (_unitLevel != null)
+            ActiveZones.Remove(this);
+
+            if (_unitLevel != null && _isSubscribedToPlayerProgress)
                 _unitLevel.OnExpChanged -= OnPlayerProgressChanged;
 
             foreach (var node in nodes)
@@ -80,11 +95,23 @@ namespace SkillTree
 
         private bool LimitCondition()
         {
+            if (_saveDataRestoreDepth > 0)
+                return true;
+
+            if (!IsLimitReady())
+                return true;
+
             return CurrentAllocatedCount < MaxAllocatedNode;
         }
 
         private bool ActivationCondition()
         {
+            if (_saveDataRestoreDepth > 0)
+                return true;
+
+            if (!IsLimitReady())
+                return true;
+
             return CurrentAllocatedCount < MaxAllocatedNode;
         }
 
@@ -103,13 +130,16 @@ namespace SkillTree
                 }
             }
 
+            if (_saveDataRestoreDepth > 0)
+                return;
+
             RebuildActiveNodes();
             OnAllocatedCountChanged?.Invoke();
         }
 
         private void RebuildActiveNodes()
         {
-            int activeSlots = MaxAllocatedNode;
+            int activeSlots = IsLimitReady() ? MaxAllocatedNode : int.MaxValue;
             int activeCount = 0;
 
             foreach (var node in nodes)
@@ -230,8 +260,10 @@ namespace SkillTree
         {
             if (limitMode == LimitMode.PlayerLevel)
             {
+                bool wasInitialized = _playerLevelLimitInitialized;
+                _playerLevelLimitInitialized = true;
                 int currentMaxAllocatedNode = MaxAllocatedNode;
-                if (currentMaxAllocatedNode != _lastMaxAllocatedNode)
+                if (_saveDataRestoreDepth == 0 && (!wasInitialized || currentMaxAllocatedNode != _lastMaxAllocatedNode))
                 {
                     _lastMaxAllocatedNode = currentMaxAllocatedNode;
                     RebuildAllocationOrderFromNodes();
@@ -240,6 +272,60 @@ namespace SkillTree
 
                 OnAllocatedCountChanged?.Invoke();
             }
+        }
+
+        private void SubscribeToPlayerProgressIfPossible()
+        {
+            if (_unitLevel == null || _isSubscribedToPlayerProgress)
+                return;
+
+            _unitLevel.OnExpChanged += OnPlayerProgressChanged;
+            _isSubscribedToPlayerProgress = true;
+        }
+
+        public static void BeginSaveDataRestore()
+        {
+            for (int i = 0; i < ActiveZones.Count; i++)
+                ActiveZones[i]?.BeginSaveDataRestoreInternal();
+        }
+
+        public static void EndSaveDataRestore()
+        {
+            for (int i = 0; i < ActiveZones.Count; i++)
+                ActiveZones[i]?.EndSaveDataRestoreInternal();
+        }
+
+        private void BeginSaveDataRestoreInternal()
+        {
+            _saveDataRestoreDepth++;
+        }
+
+        private void EndSaveDataRestoreInternal()
+        {
+            if (_saveDataRestoreDepth <= 0)
+                return;
+
+            _saveDataRestoreDepth--;
+            if (_saveDataRestoreDepth > 0)
+                return;
+
+            RefreshFromCurrentNodes();
+        }
+
+        private void RefreshFromCurrentNodes()
+        {
+            if (limitMode == LimitMode.PlayerLevel)
+                _playerLevelLimitInitialized = true;
+
+            RebuildAllocationOrderFromNodes();
+            _lastMaxAllocatedNode = MaxAllocatedNode;
+            RebuildActiveNodes();
+            OnAllocatedCountChanged?.Invoke();
+        }
+
+        private bool IsLimitReady()
+        {
+            return limitMode != LimitMode.PlayerLevel || _playerLevelLimitInitialized;
         }
 
         private enum LimitMode

@@ -22,5 +22,6 @@ namespace Battle
         CriticalRegeneration = 17,
         RelentlessMomentum = 18,
         Vengeance = 19,
+        TimedNextAttackModifier = 20,
     }
 }

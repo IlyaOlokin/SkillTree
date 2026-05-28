@@ -177,6 +177,7 @@ namespace Battle
             _attackDamageInfo.Reset(_owner, _attackSnapshot);
             
             AttackProcessor.HandleAttack(_owner, _attackDamageInfo, Target);
+            _owner.OnAttackFinished(Target);
         }
     }
 }

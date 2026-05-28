@@ -24,6 +24,8 @@ namespace Battle
         [Header("Intelligence")]
         [SerializeField] public List<AttributeScalingModifier> scalingModifiersIntelligence = new List<AttributeScalingModifier>();
         private readonly List<AttributeScalingModifier> _runtimeModifiersIntelligence = new List<AttributeScalingModifier>();
+
+        private readonly List<AttributeScalingModifier> _runtimeModifiersAllAttributes = new List<AttributeScalingModifier>();
         
         private float _attributePower = 1f; 
         private float _strengthPower = 1f; 
@@ -44,6 +46,7 @@ namespace Battle
             _runtimeModifiersStrength.Clear();
             _runtimeModifiersDexterity.Clear();
             _runtimeModifiersIntelligence.Clear();
+            _runtimeModifiersAllAttributes.Clear();
         }
 
         public void AddRuntimeModifier(AttributeType attributeType, ModifierContainer modifierContainer, int attributesPerStack = 1)
@@ -70,6 +73,9 @@ namespace Battle
                 case AttributeType.Intelligence:
                     _runtimeModifiersIntelligence.Add(runtimeModifier);
                     break;
+                case AttributeType.AllAttributes:
+                    _runtimeModifiersAllAttributes.Add(runtimeModifier);
+                    break;
             }
         }
 
@@ -92,11 +98,15 @@ namespace Battle
                     baseModifiers = scalingModifiersIntelligence;
                     runtimeModifiers = _runtimeModifiersIntelligence;
                     break;
+                case AttributeType.AllAttributes:
+                    baseModifiers = null;
+                    runtimeModifiers = _runtimeModifiersAllAttributes;
+                    break;
                 default:
                     return;
             }
             
-            for (int i = 0; i < baseModifiers.Count; i++)
+            for (int i = 0; baseModifiers != null && i < baseModifiers.Count; i++)
             {
                 var scalingModifier = baseModifiers[i];
                 ApplyModifier(baseUnitModifiers, attributeType, scalingModifier.modifierContainer, attributeValue, scalingModifier.attributesPerStack);
@@ -145,9 +155,13 @@ namespace Battle
                 AttributeType.Strength => _strengthPower,
                 AttributeType.Dexterity => _dexterityPower,
                 AttributeType.Intelligence => _intelligencePower,
+                AttributeType.AllAttributes => _attributePower,
                 _ => 1f
             };
-            localPower += _attributePower - 1f;
+            if (attributeType != AttributeType.AllAttributes)
+            {
+                localPower += _attributePower - 1f;
+            }
             baseUnitModifiers.ChangeModifierValue(modifierContainer * stacks * localPower);
         }
     }

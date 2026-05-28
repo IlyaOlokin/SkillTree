@@ -182,6 +182,7 @@ public static class StatCalculator
         unit.attributes.ApplyAttributeModifiers(AttributeType.Strength, str, unit.BaseUnitModifiers);
         unit.attributes.ApplyAttributeModifiers(AttributeType.Dexterity, dex, unit.BaseUnitModifiers);
         unit.attributes.ApplyAttributeModifiers(AttributeType.Intelligence, intl, unit.BaseUnitModifiers);
+        unit.attributes.ApplyAttributeModifiers(AttributeType.AllAttributes, str + dex + intl, unit.BaseUnitModifiers);
     }
     
     public static StatType GetCorespondingDamageStat(DamageType damageType)
