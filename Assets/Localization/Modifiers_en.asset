@@ -67,243 +67,243 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780222242816
-    m_Localized: '[[0]] to Damage'
+    m_Localized: '[[0]] to {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602944
-    m_Localized: '[[0]]% increased Damage'
+    m_Localized: '[[0]]% increased {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602945
-    m_Localized: '[[0]]% decreased Damage'
+    m_Localized: '[[0]]% decreased {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602946
-    m_Localized: '[[0]]% more Damage'
+    m_Localized: '[[0]]% more {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602947
-    m_Localized: '[[0]]% less Damage'
+    m_Localized: '[[0]]% less {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602948
-    m_Localized: You have no Damage
+    m_Localized: You have no {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602949
-    m_Localized: '[[0]] to {elemental|Elemental} Damage'
+    m_Localized: '[[0]] to {elemental|Elemental} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602950
-    m_Localized: '[[0]]% increased {elemental|Elemental} Damage'
+    m_Localized: '[[0]]% increased {elemental|Elemental} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602951
-    m_Localized: '[[0]]% decreased {elemental|Elemental} Damage'
+    m_Localized: '[[0]]% decreased {elemental|Elemental} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602952
-    m_Localized: '[[0]]% more {elemental|Elemental} Damage'
+    m_Localized: '[[0]]% more {elemental|Elemental} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602953
-    m_Localized: '[[0]]% less {elemental|Elemental} Damage'
+    m_Localized: '[[0]]% less {elemental|Elemental} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602954
-    m_Localized: You have no {elemental|Elemental} Damage
+    m_Localized: You have no {elemental|Elemental} {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602955
-    m_Localized: '[[0]] to Mystic Damage'
+    m_Localized: '[[0]] to {mystic|Mystic} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602956
-    m_Localized: '[[0]]% increased Mystic Damage'
+    m_Localized: '[[0]]% increased {mystic|Mystic} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602957
-    m_Localized: '[[0]]% decreased Mystic Damage'
+    m_Localized: '[[0]]% decreased {mystic|Mystic} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602958
-    m_Localized: '[[0]]% more Mystic Damage'
+    m_Localized: '[[0]]% more {mystic|Mystic} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602959
-    m_Localized: '[[0]]% less Mystic Damage'
+    m_Localized: '[[0]]% less {mystic|Mystic} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602960
-    m_Localized: You have no Mystic Damage
+    m_Localized: You have no {mystic|Mystic} {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602961
-    m_Localized: '[[0]] to Physical Damage'
+    m_Localized: '[[0]] to {physical|Physical} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602962
-    m_Localized: '[[0]]% increased Physical Damage'
+    m_Localized: '[[0]]% increased {physical|Physical} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602963
-    m_Localized: '[[0]]% decreased Physical Damage'
+    m_Localized: '[[0]]% decreased {physical|Physical} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602964
-    m_Localized: '[[0]]% more Physical Damage'
+    m_Localized: '[[0]]% more {physical|Physical} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602965
-    m_Localized: '[[0]]% less Physical Damage'
+    m_Localized: '[[0]]% less {physical|Physical} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602966
-    m_Localized: You have no Physical Damage
+    m_Localized: You have no {physical|Physical} {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602967
-    m_Localized: '[[0]] to Fire Damage'
+    m_Localized: '[[0]] to Fire {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602968
-    m_Localized: '[[0]]% increased Fire Damage'
+    m_Localized: '[[0]]% increased Fire {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602969
-    m_Localized: '[[0]]% decreased Fire Damage'
+    m_Localized: '[[0]]% decreased Fire {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602970
-    m_Localized: '[[0]]% more Fire Damage'
+    m_Localized: '[[0]]% more Fire {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602971
-    m_Localized: '[[0]]% less Fire Damage'
+    m_Localized: '[[0]]% less Fire {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602972
-    m_Localized: You have no Fire Damage
+    m_Localized: You have no Fire {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602973
-    m_Localized: '[[0]] to Cold Damage'
+    m_Localized: '[[0]] to Cold {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602974
-    m_Localized: '[[0]]% increased Cold Damage'
+    m_Localized: '[[0]]% increased Cold {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602975
-    m_Localized: '[[0]]% decreased Cold Damage'
+    m_Localized: '[[0]]% decreased Cold {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602976
-    m_Localized: '[[0]]% more Cold Damage'
+    m_Localized: '[[0]]% more Cold {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602977
-    m_Localized: '[[0]]% less Cold Damage'
+    m_Localized: '[[0]]% less Cold {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602978
-    m_Localized: You have no Cold Damage
+    m_Localized: You have no Cold {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602979
-    m_Localized: '[[0]] to Lightning Damage'
+    m_Localized: '[[0]] to Lightning {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602980
-    m_Localized: '[[0]]% increased Lightning Damage'
+    m_Localized: '[[0]]% increased Lightning {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602981
-    m_Localized: '[[0]]% decreased Lightning Damage'
+    m_Localized: '[[0]]% decreased Lightning {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602982
-    m_Localized: '[[0]]% more Lightning Damage'
+    m_Localized: '[[0]]% more Lightning {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602983
-    m_Localized: '[[0]]% less Lightning Damage'
+    m_Localized: '[[0]]% less Lightning {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602984
-    m_Localized: You have no Lightning Damage
+    m_Localized: You have no Lightning {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602985
-    m_Localized: '[[0]] to Light Damage'
+    m_Localized: '[[0]] to Light {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602986
-    m_Localized: '[[0]]% increased Light Damage'
+    m_Localized: '[[0]]% increased Light {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602987
-    m_Localized: '[[0]]% decreased Light Damage'
+    m_Localized: '[[0]]% decreased Light {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602988
-    m_Localized: '[[0]]% more Light Damage'
+    m_Localized: '[[0]]% more Light {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602989
-    m_Localized: '[[0]]% less Light Damage'
+    m_Localized: '[[0]]% less Light {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602990
-    m_Localized: You have no Light Damage
+    m_Localized: You have no Light {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602991
-    m_Localized: '[[0]] to Darkness Damage'
+    m_Localized: '[[0]] to Darkness {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602992
-    m_Localized: '[[0]]% increased Darkness Damage'
+    m_Localized: '[[0]]% increased Darkness {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602993
-    m_Localized: '[[0]]% decreased Darkness Damage'
+    m_Localized: '[[0]]% decreased Darkness {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602994
-    m_Localized: '[[0]]% more Darkness Damage'
+    m_Localized: '[[0]]% more Darkness {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602995
-    m_Localized: '[[0]]% less Darkness Damage'
+    m_Localized: '[[0]]% less Darkness {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602996
-    m_Localized: You have no Darkness Damage
+    m_Localized: You have no Darkness {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602997
-    m_Localized: '[[0]] to Poison Damage'
+    m_Localized: '[[0]] to Poison {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602998
-    m_Localized: '[[0]]% increased Poison Damage'
+    m_Localized: '[[0]]% increased Poison {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602999
-    m_Localized: '[[0]]% decreased Poison Damage'
+    m_Localized: '[[0]]% decreased Poison {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603000
-    m_Localized: '[[0]]% more Poison Damage'
+    m_Localized: '[[0]]% more Poison {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603001
-    m_Localized: '[[0]]% less Poison Damage'
+    m_Localized: '[[0]]% less Poison {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603002
-    m_Localized: You have no Poison Damage
+    m_Localized: You have no Poison {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603033
@@ -865,7 +865,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991577
-    m_Localized: Barrier blocks [[0]] damage
+    m_Localized: Barrier blocks [[0]] {damage|damage}
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991578
@@ -913,27 +913,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991589
-    m_Localized: '{lifeSteal|Life Steal} applies to [[0]] damage'
+    m_Localized: '{lifeSteal|Life Steal} applies to [[0]] {damage|damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991590
-    m_Localized: '{lifeSteal|Life Steal} applies to more damage types'
+    m_Localized: '{lifeSteal|Life Steal} applies to more {damage|damage} types'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991591
-    m_Localized: '{lifeSteal|Life Steal} applies to fewer damage types'
+    m_Localized: '{lifeSteal|Life Steal} applies to fewer {damage|damage} types'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991592
-    m_Localized: '{lifeSteal|Life Steal} applies to more damage types'
+    m_Localized: '{lifeSteal|Life Steal} applies to more {damage|damage} types'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991593
-    m_Localized: '{lifeSteal|Life Steal} applies to fewer damage types'
+    m_Localized: '{lifeSteal|Life Steal} applies to fewer {damage|damage} types'
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991594
-    m_Localized: No damage grants {lifeSteal|Life Steal}
+    m_Localized: No {damage|damage} grants {lifeSteal|Life Steal}
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991595
@@ -1497,7 +1497,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 487906223460361
-    m_Localized: While you have {profanedHealth|Profaned Health}, take 50% more Damage
+    m_Localized: While you have {profanedHealth|Profaned Health}, take 50% more
+      {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 487906223460362
@@ -1518,7 +1519,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311681
-    m_Localized: '[[0]]% more Damage per unique {ailment|Ailment} on target'
+    m_Localized: '[[0]]% more {damage|Damage} per unique {ailment|Ailment} on target'
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311682
@@ -1636,7 +1637,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 5084156906311709
     m_Localized: Crits against targets with {bleed|Bleed} instantly deal all remaining
-      {bleed|Bleed} damage and grant [[0]]% Attack Progress. That hit cannot apply
+      {bleed|Bleed} {damage|damage} and grant [[0]]% Attack Progress. That hit cannot apply
       new {bleed|Bleed}.
     m_Metadata:
       m_Items: []
@@ -1645,7 +1646,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311711
-    m_Localized: '[[0]] Damage to your highest {elemental|Elemental} Damage type
+    m_Localized: '[[0]] {damage|Damage} to your highest {elemental|Elemental} {damage|Damage} type
       if it is higher than the others'
     m_Metadata:
       m_Items: []
@@ -1851,8 +1852,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 5084156906311762
     m_Localized: If a target has at least [[0]] {bleed|Bleed} stacks, those stacks
-      merge into one {bleed|Bleed} with [[1]]% more remaining damage and refreshed
-      duration.
+      merge into one {bleed|Bleed} with [[1]]% more remaining {damage|damage}
+      and refreshed duration.
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311763
@@ -1923,15 +1924,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311778
-    m_Localized: Take [[0]]% less [[1]] Damage
+    m_Localized: Take [[0]]% less [[1]] {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311779
-    m_Localized: Added Fire Damage is converted to added Light Damage
+    m_Localized: Added Fire {damage|Damage} is converted to added Light {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311780
-    m_Localized: Added Cold Damage is converted to added Darkness Damage
+    m_Localized: Added Cold {damage|Damage} is converted to added Darkness {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311781

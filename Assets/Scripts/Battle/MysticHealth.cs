@@ -173,13 +173,13 @@ namespace Battle
             int lightStacks = type == MysticAbsorptionType.Light ? stacks : 0;
             int darknessStacks = type == MysticAbsorptionType.Darkness ? stacks : 0;
 
-            if (!(lightStacks <= 0 && _owner.effectController.GetAllEffectsOfType<LightAbsorptionDebuff>().Count == 0))
+            if (!(lightStacks <= 0 && _owner.effectController.GetAllEffectsOfType<LightAbsorption>().Count == 0))
             {
-                _owner.effectController.AddEffect(() => new LightAbsorptionDebuff(lightStacks));
+                _owner.effectController.AddEffect(() => new LightAbsorption(lightStacks));
             }
-            if (!(darknessStacks <= 0 && _owner.effectController.GetAllEffectsOfType<DarknessAbsorptionDebuff>().Count == 0))
+            if (!(darknessStacks <= 0 && _owner.effectController.GetAllEffectsOfType<DarknessAbsorption>().Count == 0))
             {
-                _owner.effectController.AddEffect(() => new DarknessAbsorptionDebuff(darknessStacks));
+                _owner.effectController.AddEffect(() => new DarknessAbsorption(darknessStacks));
             }
         }
 

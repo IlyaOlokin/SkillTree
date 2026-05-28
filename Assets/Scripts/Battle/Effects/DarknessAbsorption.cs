@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class DarknessAbsorptionDebuff : BaseEffect
+    public class DarknessAbsorption : BaseEffect
     {
         private int _stacks;
 
@@ -19,7 +19,7 @@ namespace Battle
         
         private bool _isReadyToBeRemoved;
 
-        public DarknessAbsorptionDebuff(int stacks)
+        public DarknessAbsorption(int stacks)
         {
             _stacks = Mathf.Max(0, stacks);
         }
@@ -40,7 +40,7 @@ namespace Battle
             unit.RemoveOuterModifier(_cachedModifier1);
             unit.RemoveOuterModifier(_cachedModifier2);
             
-            if (newEffect is DarknessAbsorptionDebuff debuff)
+            if (newEffect is DarknessAbsorption debuff)
             {
                 if (debuff._stacks <= 0)
                 {

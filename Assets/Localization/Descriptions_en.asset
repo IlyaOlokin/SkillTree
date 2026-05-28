@@ -41,15 +41,16 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 247191832760320
     m_Localized: The base chance to inflict an Ailment is equal to the corresponding
-      damage dealt by the hit as a percentage of the target's Max Health
+      {damage|damage} dealt by the hit as a percentage of the target's Max Health
     m_Metadata:
       m_Items: []
   - m_Id: 247264213864448
-    m_Localized: Reduces incoming physical damage
+    m_Localized: Reduces incoming {physical|Physical} {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 247311684997120
-    m_Localized: Barrier charges absorb pgysical damage before health is hit
+    m_Localized: Barrier charges absorb {physical|physical} {damage|damage} before
+      health is hit
     m_Metadata:
       m_Items: []
   - m_Id: 247372057808896
@@ -57,28 +58,29 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 247384347119616
-    m_Localized: Each charge absorbs damage up to Barrier Capacity
+    m_Localized: Each charge absorbs {damage|damage} up to Barrier Capacity
     m_Metadata:
       m_Items: []
   - m_Id: 247399215927296
-    m_Localized: Remaining damage beyond Barrier Capacity continues through
+    m_Localized: Remaining {damage|damage} beyond Barrier Capacity continues through
     m_Metadata:
       m_Items: []
   - m_Id: 247474637901824
-    m_Localized: Bleed is an {ailment|Ailment} caused by Physical hits
+    m_Localized: Bleed is an {ailment|Ailment} caused by {physical|Physical} hits
     m_Metadata:
       m_Items: []
   - m_Id: 247487862542336
-    m_Localized: It stores 30% of dealt Physical damage as damage over time
+    m_Localized: It stores 30% of dealt {physical|Physical} {damage|damage} as {damage|damage}
+      over time
     m_Metadata:
       m_Items: []
   - m_Id: 247495907217408
-    m_Localized: Each Bleed stack is a separate effect, and deals its stored damage
+    m_Localized: Each Bleed stack is a separate effect, and deals its stored {damage|damage}
       evenly over 5 seconds
     m_Metadata:
       m_Items: []
   - m_Id: 247590371332096
-    m_Localized: Block negates all damage from a hit
+    m_Localized: Block negates all {damage|damage} from a hit
     m_Metadata:
       m_Items: []
   - m_Id: 247601490432000
@@ -152,16 +154,17 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 248365214470144
-    m_Localized: It stores 30% of dealt Fire damage in a single burning pool
+    m_Localized: It stores 30% of dealt Fire {damage|damage} in a single burning
+      pool
     m_Metadata:
       m_Items: []
   - m_Id: 248374098006016
-    m_Localized: Ignite damage is dealt over time at 40% of the remaining stored
-      damage per second
+    m_Localized: Ignite {damage|damage} is dealt over time at 40% of the remaining
+      stored {damage|damage} per second
     m_Metadata:
       m_Items: []
   - m_Id: 248452351135744
-    m_Localized: Covers light and darkness damage
+    m_Localized: Covers {light|Light} and {darkness|Darkness} {damage|damage}
     m_Metadata:
       m_Items: []
   - m_Id: 248538325979136
@@ -169,7 +172,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 248576729026560
-    m_Localized: It empowers the next hit against the target with 10% more damage
+    m_Localized: It empowers the next hit against the target with 10% more {damage|damage}
       and 20% more Crit Damage Bonus
     m_Metadata:
       m_Items: []
@@ -190,17 +193,17 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 292686433226752
-    m_Localized: Resistance reduces incoming {elemental|Elemental} damage
+    m_Localized: Resistance reduces incoming {elemental|Elemental} {damage|damage}
     m_Metadata:
       m_Items: []
   - m_Id: 292724769165312
     m_Localized: '{elemental|Elemental} Resistance applies to all {elemental|Elemental}
-      damage types'
+      {damage|damage} types'
     m_Metadata:
       m_Items: []
   - m_Id: 292734143434752
-    m_Localized: Each {elemental|Elemental} damage type have also its own matching
-      Resistance
+    m_Localized: Each {elemental|Elemental} {damage|damage} type have also its own
+      matching Resistance
     m_Metadata:
       m_Items: []
   - m_Id: 294350485590016
@@ -220,7 +223,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3213892748709888
-    m_Localized: 1% increased Physical Damage per 2 Strength
+    m_Localized: 1% increased {physical|Physical} {damage|Damage} per 2 Strength
     m_Metadata:
       m_Items: []
   - m_Id: 3214049204637696
@@ -236,16 +239,16 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3214420366987264
-    m_Localized: 1% increased Elemental Damage per 2 Intelligence
+    m_Localized: 1% increased {elemental|Elemental} {damage|Damage} per 2 Intelligence
     m_Metadata:
       m_Items: []
   - m_Id: 3214420366987265
-    m_Localized: While you have Profaned Health, take 50% more Damage
+    m_Localized: While you have Profaned Health, take 50% more {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 5085118307897344
     m_Localized: Grants 30% increased {ailment|Ailment} Power and 20% increased {mystic|Mystic}
-      Damage for 6 seconds.
+      {damage|Damage} for 6 seconds.
     m_Metadata:
       m_Items: []
   - m_Id: 5086869182353408
@@ -278,12 +281,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6770548061376512
-    m_Localized: Pain is consumed by your next attack to gain increased Damage equal
-      to current Pain percentage of your Maximum Health.
+    m_Localized: Pain is consumed by your next attack to gain increased {damage|Damage}
+      equal to current Pain percentage of your Maximum Health.
     m_Metadata:
       m_Items: []
   - m_Id: 6773358702235648
-    m_Localized: Damage over Time does not grant Pain.
+    m_Localized: '{damage|Damage} over Time does not grant Pain.'
     m_Metadata:
       m_Items: []
   - m_Id: 6773414712971264
@@ -349,7 +352,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7255200857460745
-    m_Localized: Each stack grants 5% increased Attack Speed and 5% increased Damage.
+    m_Localized: Each stack grants 5% increased Attack Speed and 5% increased {damage|Damage}.
     m_Metadata:
       m_Items: []
   - m_Id: 10152012756946944
@@ -386,7 +389,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 10152012756946953
-    m_Localized: Your next attack gains 5% more Damage and +10% added {ailment|Ailment}
+    m_Localized: Your next attack gains 5% more {damage|Damage} and +10% added {ailment|Ailment}
       Chance.
     m_Metadata:
       m_Items: []
@@ -397,6 +400,70 @@ MonoBehaviour:
   - m_Id: 10152012756946955
     m_Localized: Charges every [[0]] seconds. When charged, your next attack has
       [[1]].
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15597478923603968
+    m_Localized: Damage can be {physical|Physical}, {elemental|Elemental}, or {mystic|Mystic}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15598381592350720
+    m_Localized: Physical {damage|Damage} is reduced by {armor|Armor}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15598442539782144
+    m_Localized: Physical hits can cause {bleed|Bleed}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15598931780177920
+    m_Localized: Mystic {damage|Damage} absorbs target Health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15598991477706752
+    m_Localized: If target Health falls to the absorbed amount, the target dies
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000000
+    m_Localized: A {mystic|Mystic} {damage|Damage} type that builds {lightAbsorption|Light
+      Absorption}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000001
+    m_Localized: A {mystic|Mystic} {damage|Damage} type that builds {darknessAbsorption|Darkness
+      Absorption}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000002
+    m_Localized: Light Absorption
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000003
+    m_Localized: Built by {light|Light} {damage|Damage}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000004
+    m_Localized: Each stack reduces {ailmentGuard|Ailment Guard} by 5% and {accuracy|Accuracy}
+      by 2%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000008
+    m_Localized: Gain 1 stack per 5% of Maximum Health absorbed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000005
+    m_Localized: Darkness Absorption
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000006
+    m_Localized: Built by {darkness|Darkness} {damage|damage}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000007
+    m_Localized: Each stack reduces {ailmentGuard|Ailment Guard} by 5% and {damage|Damage}
+      by 2%
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000009
+    m_Localized: Gain 1 stack per 5% of Maximum Health absorbed
     m_Metadata:
       m_Items: []
   references:

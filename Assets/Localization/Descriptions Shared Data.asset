@@ -383,6 +383,66 @@ MonoBehaviour:
     m_Key: effect.timedNextAttackModifier.description
     m_Metadata:
       m_Items: []
+  - m_Id: 15597478923603968
+    m_Key: description.damage1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15598381592350720
+    m_Key: description.physical1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15598442539782144
+    m_Key: description.physical2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15598931780177920
+    m_Key: description.mystic2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15598991477706752
+    m_Key: description.mystic3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000000
+    m_Key: description.light1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000001
+    m_Key: description.darkness1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000002
+    m_Key: effect.LightAbsorptionDebuff.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000003
+    m_Key: description.lightAbsorption1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000004
+    m_Key: description.lightAbsorption2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000008
+    m_Key: description.lightAbsorption3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000005
+    m_Key: effect.DarknessAbsorptionDebuff.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000006
+    m_Key: description.darknessAbsorption1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000007
+    m_Key: description.darknessAbsorption2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000009
+    m_Key: description.darknessAbsorption3
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
