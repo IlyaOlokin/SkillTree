@@ -23,5 +23,6 @@ namespace Battle
         RelentlessMomentum = 18,
         Vengeance = 19,
         TimedNextAttackModifier = 20,
+        Freeze = 21,
     }
 }

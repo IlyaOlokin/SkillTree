@@ -17,6 +17,9 @@ namespace Battle
         [HideInInspector] public bool IsCritical { get; set; }
         [HideInInspector] public bool AllowsMultiCrit { get; set; }
         [HideInInspector] public int CriticalLayerCount { get; set; }
+        [HideInInspector] public float HealthDamageTaken { get; private set; }
+        [HideInInspector] public Unit AppliedChillTarget { get; private set; }
+        [HideInInspector] public Func<BaseEffect> ChillAfterFreezeFactory { get; private set; }
 
         public DamageInfo(Unit owner, BaseUnitModifiers baseUnitModifiersSnapshot)
         {
@@ -33,6 +36,26 @@ namespace Battle
             IsCritical = false;
             AllowsMultiCrit = false;
             CriticalLayerCount = 0;
+            HealthDamageTaken = 0f;
+            AppliedChillTarget = null;
+            ChillAfterFreezeFactory = null;
+        }
+
+        public void SetHealthDamageTaken(float healthDamageTaken)
+        {
+            HealthDamageTaken = Mathf.Max(0f, healthDamageTaken);
+        }
+
+        public void RegisterAppliedChill(Unit target, Func<BaseEffect> chillAfterFreezeFactory)
+        {
+            AppliedChillTarget = target;
+            ChillAfterFreezeFactory = chillAfterFreezeFactory;
+        }
+
+        public void ClearAppliedChill()
+        {
+            AppliedChillTarget = null;
+            ChillAfterFreezeFactory = null;
         }
     }
 

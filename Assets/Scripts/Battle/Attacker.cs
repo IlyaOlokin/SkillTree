@@ -43,7 +43,7 @@ namespace Battle
             {
                 AddAttackProgress(GetCalculatedAttackSpeed() * deltaTime);
             }
-            else if (Target?.UnitObject != null)
+            else if (Target?.UnitObject != null && !IsAttackSuppressed())
             {
                 AttackTarget();
                 ConsumeAttackCycle();
@@ -131,6 +131,11 @@ namespace Battle
                 return;
             }
 
+            if (IsAttackSuppressed())
+            {
+                return;
+            }
+
             for (int i = 0; i < _extraAttackMoments.Count; i++)
             {
                 float extraAttackMoment = _extraAttackMoments[i];
@@ -143,6 +148,12 @@ namespace Battle
                 AttackTarget();
                 _triggeredExtraAttackMomentsThisCycle.Add(extraAttackMoment);
             }
+        }
+
+        private bool IsAttackSuppressed()
+        {
+            return _owner?.effectController != null &&
+                   _owner.effectController.GetAllEffectsOfType<Freeze>().Count > 0;
         }
 
         private static bool ContainsMoment(List<float> moments, float value)

@@ -100,6 +100,7 @@ namespace Battle
             float healthBeforeDamage = health.CurrentHealth;
             DamageInstance receivedDamage = health.TakeDamage(damageInfo.DamageInstance);
             float healthLost = Mathf.Max(0f, healthBeforeDamage - health.CurrentHealth);
+            damageInfo.SetHealthDamageTaken(healthLost);
             OnGettingHit?.Invoke(damageInfo);
             if (healthLost > 0f)
             {

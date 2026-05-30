@@ -91,3 +91,5 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: 535d7ca034c2e574ca45c1aaad5cd381, type: 2}
   - id: darknessAbsorption
     description: {fileID: 11400000, guid: 3b347563520afaf49a5984827b1f64a0, type: 2}
+  - id: freeze
+    description: {fileID: 11400000, guid: 4bd02a6883c4a0a47bb4ef68062e8bc4, type: 2}

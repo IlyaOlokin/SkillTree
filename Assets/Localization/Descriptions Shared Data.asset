@@ -91,6 +91,14 @@ MonoBehaviour:
     m_Key: description.chill3
     m_Metadata:
       m_Items: []
+  - m_Id: 15599070000000010
+    m_Key: description.freeze1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000012
+    m_Key: description.freeze2
+    m_Metadata:
+      m_Items: []
   - m_Id: 247765575798784
     m_Key: description.defence1
     m_Metadata:
@@ -441,6 +449,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 15599070000000009
     m_Key: description.darknessAbsorption3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16306778297995264
+    m_Key: description.chill4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16309371590021120
+    m_Key: description.mystic4
     m_Metadata:
       m_Items: []
   m_Metadata:

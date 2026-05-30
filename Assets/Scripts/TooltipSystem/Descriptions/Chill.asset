@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f866e67487ce48e2bb54293b6a94b6d5, type: 3}
   m_Name: Chill
   m_EditorClassIdentifier: 
+  title: 
+  showTooltipTitle: 0
   descriptions:
   - description.chill1
   - description.chill2
   - description.chill3
+  - description.chill4

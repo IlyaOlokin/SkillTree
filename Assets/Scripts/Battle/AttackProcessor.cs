@@ -65,6 +65,7 @@ namespace Battle
             
             //Damage
             DamageInstance damageDealt = defender.ReceiveDamage(damageInfo);
+            Chill.TryUpgradeAppliedChillToFreeze(damageInfo, defender.UnitObject);
             context.ResolveSuccessfulHitSideEffects();
             LifeSteal.Apply(attackerUnit, damageInfo, damageDealt);
             if (damageInfo.IsCritical)

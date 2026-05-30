@@ -1647,6 +1647,10 @@ MonoBehaviour:
     m_Key: effect.Chill.linkedName
     m_Metadata:
       m_Items: []
+  - m_Id: 15599070000000013
+    m_Key: effect.Freeze.linkedName
+    m_Metadata:
+      m_Items: []
   - m_Id: 5084156906311715
     m_Key: effect.Overcharge.linkedName
     m_Metadata:

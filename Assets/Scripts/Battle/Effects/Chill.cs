@@ -9,6 +9,7 @@ namespace Battle
     {
         public const float BASE_DURATION = 3f;
         public const float CHILL_BASE_SLOW = -0.2f;
+        private const float FreezeHealthDamageThreshold = 0.4f;
         public override bool IsStackable { get; set; } = true;
         public override EffectVisualType VisualType => EffectVisualType.Chill;
         
@@ -22,6 +23,13 @@ namespace Battle
             Duration = duration * (1f - defender.BaseUnitModifiers.GetStatValue(StatType.ChillDurationReduction));
             CalculateChillPowerMultiplier(damageInfo);
             SetModifierContainers(damageInfo.AttackEffectPayload.GetEffectModifiers<Chill>());
+        }
+
+        private Chill(float duration, float chillPower, IReadOnlyList<ModifierContainer> modifierContainers)
+        {
+            Duration = duration;
+            _chillPower = chillPower;
+            CopyModifierContainers(modifierContainers);
         }
         
         public override void OnApply(Unit unit)
@@ -116,6 +124,11 @@ namespace Battle
         {
             return value * _chillPower;
         }
+
+        private Chill CloneForReapply()
+        {
+            return new Chill(Duration, _chillPower, _modifierContainers);
+        }
         
         public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)
         {
@@ -126,9 +139,39 @@ namespace Battle
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
                 Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Chill>() ? attacker : defender;
-                effectTarget.effectController.AddEffect(() => new Chill(damageInfo, effectTarget, BASE_DURATION));
+                Chill chillSnapshot = new Chill(damageInfo, effectTarget, BASE_DURATION);
+                BaseEffect CreateChillFromSnapshot() => chillSnapshot.CloneForReapply();
+                effectTarget.effectController.AddEffect(CreateChillFromSnapshot);
+                damageInfo.RegisterAppliedChill(effectTarget, CreateChillFromSnapshot);
                 attacker.AilmentApplied(effectTarget);
             }
+        }
+
+        public static void TryUpgradeAppliedChillToFreeze(DamageInfo damageInfo, Unit defender)
+        {
+            if (damageInfo?.AppliedChillTarget?.effectController == null ||
+                damageInfo.ChillAfterFreezeFactory == null ||
+                !ShouldFreeze(damageInfo, defender))
+            {
+                damageInfo?.ClearAppliedChill();
+                return;
+            }
+
+            Unit effectTarget = damageInfo.AppliedChillTarget;
+            var chillAfterFreezeFactory = damageInfo.ChillAfterFreezeFactory;
+            effectTarget.effectController.RemoveEffectsOfType<Chill>();
+            effectTarget.effectController.AddEffect(() => new Freeze(chillAfterFreezeFactory));
+            damageInfo.ClearAppliedChill();
+        }
+
+        private static bool ShouldFreeze(DamageInfo damageInfo, Unit defender)
+        {
+            if (defender?.health == null || defender.health.MaxHealth <= 0f)
+            {
+                return false;
+            }
+
+            return damageInfo.HealthDamageTaken / defender.health.MaxHealth > FreezeHealthDamageThreshold;
         }
     }
 }

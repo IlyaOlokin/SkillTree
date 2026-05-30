@@ -67,7 +67,8 @@ namespace SkillTree
                 count++;
             }
 
-            if (effectController.GetAllEffectsOfType<Chill>().Count > 0)
+            if (effectController.GetAllEffectsOfType<Chill>().Count > 0 ||
+                effectController.GetAllEffectsOfType<Freeze>().Count > 0)
             {
                 count++;
             }

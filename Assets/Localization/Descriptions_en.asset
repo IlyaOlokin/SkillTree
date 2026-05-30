@@ -99,6 +99,15 @@ MonoBehaviour:
     m_Localized: Base Chill duration is 3 seconds
     m_Metadata:
       m_Items: []
+  - m_Id: 15599070000000010
+    m_Localized: Freeze replaces {chill|Chill} when a hit that applies {chill|Chill}
+      also deals more than 40% of the target's Maximum Health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15599070000000012
+    m_Localized: Frozen units cannot attack for 2 seconds, then receive {chill|Chill}
+    m_Metadata:
+      m_Items: []
   - m_Id: 247765575798784
     m_Localized: A shared defensive stat
     m_Metadata:
@@ -464,6 +473,16 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 15599070000000009
     m_Localized: Gain 1 stack per 5% of Maximum Health absorbed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16306778297995264
+    m_Localized: If a hit applies Chill and deals more than 40% of the target's Maximum
+      Health, it applies {freeze|Freeze} instead.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16309371590021120
+    m_Localized: '{light|Light} and {darkness|Darkness} {damage|Damage} cancel each
+      other and each other''s absorption'
     m_Metadata:
       m_Items: []
   references:
