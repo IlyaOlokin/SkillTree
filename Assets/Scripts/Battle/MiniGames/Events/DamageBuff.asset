@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a1671e5ff76d7b4c91bd216860b58fe, type: 3}
+  m_Name: DamageBuff
+  m_EditorClassIdentifier: Assembly-CSharp::Battle.MiniGames.BattleMiniGameEventDefinition
+  id: damage
+  activatorPrefab: {fileID: 6270856319063007783, guid: 338d162b7bc1ab941948119fb60b5e35, type: 3}
+  miniGamePrefab: {fileID: 7513513224078512546, guid: e465c9a7f5f88ca41b7b6d1153e6ce6a, type: 3}
+  reward: {fileID: 11400000, guid: 0094bc5abf9c1ce4f99faddb8a2f1109, type: 2}
+  activationTime: 4
+  miniGameTime: 5
+  basePower: 1
+  miniGameSpawnPlacement: 1
+  miniGameSpawnOffset: {x: 0, y: 0}
+  randomSpawnEnabled: 1
+  randomMinInterval: 2
+  randomMaxInterval: 5
+  triggerCooldown: 0

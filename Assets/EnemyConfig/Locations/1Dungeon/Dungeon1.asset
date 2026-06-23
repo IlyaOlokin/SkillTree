@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: Dungeon
   description: 
   mapIcon: {fileID: 3901225644602981163, guid: 9fd9dd6a76bf9444da478d9905524c10, type: 3}
-  battleBackground: {fileID: 21300000, guid: 6bda2ec08d395bf41b65113bf8843825, type: 3}
+  battleBackground: {fileID: -3521884470877836325, guid: 802cc36259ac0dc42886417f42a230d1, type: 3}
   enemyDatabase: {fileID: 11400000, guid: b89dbc099b0773449954e02193c1b3c7, type: 2}
   levelRewards:
   - levelNumber: 5
