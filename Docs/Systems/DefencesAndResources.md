@@ -158,3 +158,9 @@ Barrier.OnBarriersLost(amount) reports actual charge loss from damage absorption
 and successful TryConsume, after the count notification (and after damage
 absorption finishes for TakeDamage). Restoration, reset and stat-driven maximum
 clamping do not emit this event. See [Barrier Surge](ReactiveCombatEffects.md#barrier-surge-on-barrier-loss-2026-10-03).
+
+The optional deferred-attack modifier introduces a pre-HP stage after those
+resources have processed an attack. It postpones only HP-bound damage, preserving
+mystic absorption and the direct DoT path. Debt payments bypass all defences but
+still validate health and absorption death thresholds. See the
+[debt contract](CombatAndEffects.md#deferred-attack-hp-damage-2026-10-03).

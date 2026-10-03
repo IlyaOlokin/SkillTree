@@ -28,5 +28,6 @@ namespace Battle
         BleedPhysicalDamageBuff = 23,
         OffensiveStance = 24,
         DefensiveStance = 25,
+        DamageDebt = 26,
     }
 }

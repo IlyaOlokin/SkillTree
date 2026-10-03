@@ -117,6 +117,50 @@ See [resource formulas](DefencesAndResources.md) and
 
 ## Effect lifecycle and stacking
 
+### Deferred attack HP damage (2026-10-03)
+
+`Unit.OnBeforeAttackHealthDamage` receives a mutable copy of the attack damage after
+barrier receipt and mystic absorption, immediately before `Health.TakeDamage`.
+It leaves the original post-defence attack payload intact for source-side reactions.
+`HealthDamageTaken` and `OnHealthDamageTaken` measure immediate HP loss only.
+`ReceiveDoT` does not enter this stage.
+
+`DeferredAttackDamageModifier` follows the per-owner delegate-binding pattern of
+DamageTakenAsPain, but uses this new pre-HP stage. It moves a powered fraction
+(clamped to 0..1, default 0.30) of positive physical/fire/cold/lightning damage into
+an independent `DamageDebtEffect`. Duration is configurable, at least 0.01 seconds,
+default 5, and does not scale with node power. Light/darkness absorption is unchanged.
+Multiple copies process remaining immediate damage in subscription order: two
+unpowered 30% copies defer 51% in total, not 60%. Their deadlines stay independent.
+
+Each debt pays at its original damage divided by its original duration. The existing
+effect controller caps the final tick to remaining lifetime. Payments call
+`Health.TakeDamage` directly with their original damage types: no repeat mitigation,
+barrier consumption, new debt, attack hit events or Pain gain. Payments pass
+`displayDamage: false`, so they do not emit floating damage numbers. Health-change/death
+and mystic absorption death-threshold validation still run. Debt is a separate effect,
+not an ailment, and receives no ailment mitigation. Adding it without a repeat factory
+prevents generic received-effect reactions from copying the debt.
+
+Effects are non-stackable with a no-op OnStack: every hit has a separate active entry
+and new hits never refresh prior entries. Default icon grouping gives one DamageDebt
+icon (enum value 26); its text is the ceiling of the sum of remaining damage. Its
+timer border follows the nearest-expiring debt. Runtime rebinding or removing the
+modifier stops future deferral but preserves existing debts. ResetCombatState and
+ordinary effect clearing discard debts. They are not persisted across combat resets.
+
+The supplied definition is
+`Assets/Scripts/SkillTree/Modifiers/ReactMods/DeferredAttackDamage.asset`.
+Node assignment and icon mapping remain manual. See
+[localization and setup](StatsAndModifiers.md#deferred-attack-damage-2026-10-03).
+
+Verification: direct Roslyn `csc.exe @Temp/DamageDebtCompile/compile.rsp` compiled
+the gameplay C# sources against installed Unity references with exit code 0.
+The response file adds the two new sources and references existing ScriptAssemblies
+for generated project dependencies. MSBuild was unavailable because SDK discovery
+could not access the local Microsoft SDKs directory. No tests, player build or Unity
+playtest were run; visual integration and actual combat behavior remain unverified.
+
 `BaseEffect` defines apply, stack, tick, consume and remove hooks. `ActiveEffect`
 holds an effect and its remaining time. `EffectController` owns the active list.
 

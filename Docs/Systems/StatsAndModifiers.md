@@ -247,3 +247,59 @@ did not reach C#: generated ProjectReference metadata failed with MSB3107 for
 Assembly-CSharp-firstpass and Zenject projects. Compilation and gameplay remain
 unverified. No tests or player build were run. Script GUID/asset settings and
 localization key/ID pairing were checked directly.
+
+## Deferred attack damage (2026-10-03)
+
+DeferredAttackDamageModifier uses the DamageTakenAsPain delegate-binding pattern
+and a separate DamageDebtEffect through the new pre-HP damage stage. See the
+[combat contract](CombatAndEffects.md#deferred-attack-hp-damage-2026-10-03)
+for timing, power, multiple copies, payments and cleanup. Default settings:
+`deferredFraction = 0.3`, `debtDuration = 5` seconds. Duration is configurable.
+
+### Localization added
+
+Modifiers table, `modifier.deferredAttackDamage.description`:
+> [[0]]% of attack damage that would remove Health after defences becomes a debt, paid evenly over [[1]] seconds. Each hit has its own deadline. Damage over Time and mystic absorption are not deferred. Debt payments bypass defences and cannot create new debt.
+
+Descriptions table (GameLocalization.ContentTable), `effect.damageDebt.name`:
+> Damage Debt
+
+Descriptions table, `effect.damageDebt.description`:
+> Deferred attack damage is paid evenly as Health loss. Each debt has its own deadline; new hits do not extend it. Payments bypass defences and cannot create new debt. The icon shows total remaining damage.
+
+English entries and corresponding shared key/ID records were added. All three
+keys remain translator TODOs for ru/de. No translations or empty entries were
+added. English fallbacks keep the modifier and effect readable without glossary
+configuration. Effect descriptions contain no linked terms requiring database entries.
+
+### Manual Unity Editor Steps
+
+1. Use the supplied `Assets/Scripts/SkillTree/Modifiers/ReactMods/DeferredAttackDamage.asset`;
+   its own definition is already created, configured and linked to the script GUID.
+   Adjust Deferred Fraction or Debt Duration on this asset if desired.
+2. Assign that asset to the intended ordinary node's modifier list. No node or
+   other gameplay configuration was changed, and the mechanic is not yet wired into a build.
+3. Assign a sprite for EffectVisualType.DamageDebt (26) in
+   `Assets/Scripts/Visual/EffectIconsConfig.asset`, and assign the intended node icon
+   through its existing visual configuration. Until mapping, the status uses the
+   configured default icon, or no sprite when that default is absent; its number
+   and English tooltip use the existing view.
+4. Optional glossary entry: register `damageDebt` in the active tooltip database
+   only if a linked glossary is desired; the plain effect tooltip already works.
+   Translate the three exact keys above through the normal translation workflow.
+
+### Icon Generation Prompt
+
+Proposed style; no visual icon reference was inspected:
+
+Create a square dark-fantasy RPG skill icon: a single cracked crimson heart held
+inside an antique iron hourglass, with glowing red droplets falling steadily from
+its upper chamber into the lower chamber. The heart and hourglass form one bold,
+centered silhouette, showing injury paid gradually over time. Deep burgundy and
+charcoal palette, restrained warm amber highlights on the iron frame, dramatic
+rim lighting, subtle smoky dark background, painterly detail with clear shapes
+and strong contrast readable at small skill-tree and status-icon sizes. No text,
+letters, numbers, logos, borders, or watermarks.
+
+No image was generated or imported. Compilation is recorded on the linked combat
+page; runtime and visual verification are pending.

@@ -2471,6 +2471,10 @@ MonoBehaviour:
     m_Localized: 'Start combat in Offence: [[0]]% increased Damage. After [[1]] completed attacks, including misses, switch to Defence: [[2]]% increased Armor and Evasion instead. After [[3]] incoming attacks that are not evaded, return to Offence. Blocked and fully absorbed attacks count.'
     m_Metadata:
       m_Items: []
+  - m_Id: 46850000000000001
+    m_Localized: '[[0]]% of attack damage that would remove Health after defences becomes a debt, paid evenly over [[1]] seconds. Each hit has its own deadline. Damage over Time and mystic absorption are not deferred. Debt payments bypass defences and cannot create new debt.'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

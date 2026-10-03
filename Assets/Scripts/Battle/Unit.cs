@@ -37,6 +37,9 @@ namespace Battle
 
         public event Action<DamageInfo> OnGettingHit;
         public event Action<DamageInfo, float> OnHealthDamageTaken;
+        // Mutable HP-bound damage after all attack defences and mystic absorption.
+        // DoT and direct debt payments do not enter this stage.
+        public event Action<DamageInstance> OnBeforeAttackHealthDamage;
         public event Action<ITarget> OnAttack;
         public event Action<ITarget> OnAttackCompleted;
         public event Action<DamageInfo> OnAttackPrepared;
@@ -108,8 +111,17 @@ namespace Battle
             barrier.TakeDamage(damageInfo.DamageInstance, damageInfo.DealsDoubleDamageToBarrier ? 2f : 1f,
                 damageInfo.MaxBarriersLostPerAttack);
             mysticHealth.ApplyMysticDamageAsAbsorption(damageInfo.DamageInstance);
+            DamageInstance healthDamage = damageInfo.DamageInstance;
+            if (OnBeforeAttackHealthDamage != null)
+            {
+                // Preserve the attack payload used by source-side hit reactions.
+                healthDamage = new DamageInstance();
+                foreach (var pair in damageInfo.DamageInstance.Damage)
+                    healthDamage.Damage[pair.Key] = pair.Value;
+                OnBeforeAttackHealthDamage.Invoke(healthDamage);
+            }
             float healthBeforeDamage = health.CurrentHealth;
-            DamageInstance receivedDamage = health.TakeDamage(damageInfo.DamageInstance);
+            DamageInstance receivedDamage = health.TakeDamage(healthDamage);
             float healthLost = Mathf.Max(0f, healthBeforeDamage - health.CurrentHealth);
             damageInfo.SetHealthDamageTaken(healthLost);
             OnGettingHit?.Invoke(damageInfo);

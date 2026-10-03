@@ -93,3 +93,14 @@ border stays fully filled in both stances; only the text reports counter progres
 modifier asset gets its own indicator; copies of one asset share it. Actual sword
 and shield sprites must be assigned manually in EffectIconsConfig. Without these
 mappings, its configured default icon is used. No scene/UI visual check was run.
+
+## Damage debt status (2026-10-03)
+
+DamageDebtEffect entries share one default icon group while keeping independent
+lifetimes. GetIconText sums RemainingDamage across that group and rounds upward;
+the timer border tracks the nearest expiry using BaseEffect's existing behavior.
+EffectVisualType.DamageDebt requires manual sprite mapping in EffectIconsConfig;
+unmapped effects use its default icon. English name/description fallbacks are
+provided. See the [combat contract](CombatAndEffects.md#deferred-attack-hp-damage-2026-10-03)
+and [manual setup](StatsAndModifiers.md#deferred-attack-damage-2026-10-03).
+No UI layout or serialized visual configuration was changed or visually verified.

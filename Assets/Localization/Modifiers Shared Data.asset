@@ -2435,6 +2435,10 @@ MonoBehaviour:
     m_Key: modifier.offensiveDefensiveStance.description
     m_Metadata:
       m_Items: []
+  - m_Id: 46850000000000001
+    m_Key: modifier.deferredAttackDamage.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

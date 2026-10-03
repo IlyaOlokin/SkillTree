@@ -658,6 +658,14 @@ MonoBehaviour:
     m_Localized: '[[0]]% increased Armor and Evasion. Incoming attacks: [[1]]/[[2]]. Evades do not count; blocked and fully absorbed attacks count. At [[2]], return to Offence.'
     m_Metadata:
       m_Items: []
+  - m_Id: 46850000000000002
+    m_Localized: 'Damage Debt'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46850000000000003
+    m_Localized: 'Deferred attack damage is paid evenly as Health loss. Each debt has its own deadline; new hits do not extend it. Payments bypass defences and cannot create new debt. The icon shows total remaining damage.'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
