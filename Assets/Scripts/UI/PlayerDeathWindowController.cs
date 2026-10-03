@@ -33,7 +33,7 @@ public class PlayerDeathWindowController : MonoBehaviour
     private void Awake()
     {
         if (locationFlowController == null)
-            locationFlowController = FindFirstObjectByType<LocationFlowController>();
+            locationFlowController = FindAnyObjectByType<LocationFlowController>();
 
         CacheTargetAlphas();
         HideInstant();

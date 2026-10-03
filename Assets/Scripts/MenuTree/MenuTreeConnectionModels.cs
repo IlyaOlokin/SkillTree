@@ -15,7 +15,7 @@ namespace MenuTree
             if (ReferenceEquals(firstNode, secondNode))
                 throw new ArgumentException("Pair cannot contain the same node");
 
-            if (firstNode.GetInstanceID() < secondNode.GetInstanceID())
+            if (firstNode.GetEntityId().CompareTo(secondNode.GetEntityId()) < 0)
             {
                 A = firstNode;
                 B = secondNode;
@@ -52,8 +52,8 @@ namespace MenuTree
             unchecked
             {
                 int hash = 17;
-                hash = hash * 31 + (A != null ? A.GetInstanceID() : 0);
-                hash = hash * 31 + (B != null ? B.GetInstanceID() : 0);
+                hash = hash * 31 + (A != null ? A.GetEntityId().GetHashCode() : 0);
+                hash = hash * 31 + (B != null ? B.GetEntityId().GetHashCode() : 0);
                 return hash;
             }
         }

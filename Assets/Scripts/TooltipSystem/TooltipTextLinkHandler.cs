@@ -125,7 +125,7 @@ namespace TooltipSystem
                 return;
             }
 
-            tooltipUI = FindFirstObjectByType<TooltipUI>(FindObjectsInactive.Include);
+            tooltipUI = FindAnyObjectByType<TooltipUI>(FindObjectsInactive.Include);
         }
     }
 }

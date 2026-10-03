@@ -10,7 +10,10 @@ public class NodeConnectionRendererEditor : Editor
 {
     void OnEnable()
     {
+        // Paired with OnDisable below; the domain-reload analyzer misses this Editor lifecycle.
+#pragma warning disable UDR0004
         EditorApplication.playModeStateChanged += OnPlayModeChanged;
+#pragma warning restore UDR0004
     }
 
     void OnDisable()

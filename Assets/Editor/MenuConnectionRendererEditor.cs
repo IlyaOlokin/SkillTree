@@ -7,7 +7,10 @@ public class MenuConnectionRendererEditor : Editor
 {
     private void OnEnable()
     {
+        // This Editor subscription is removed in OnDisable, not by a runtime initializer.
+#pragma warning disable UDR0001
         EditorApplication.playModeStateChanged += OnPlayModeChanged;
+#pragma warning restore UDR0001
     }
 
     private void OnDisable()

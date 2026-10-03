@@ -64,6 +64,12 @@ dirty marking is suppressed so intermediate restore events are not saved.
 - Disposal attempts a dirty save. Quit saves dirty state and settings; WebGL also
   handles loss of focus.
 
+`GameSceneInstaller` binds `GameSaveCoordinator` through Zenject's lifecycle
+interfaces. `Initialize` subscribes to `Application.quitting` (and WebGL
+`focusChanged`); `Dispose` removes both subscriptions. This is a plain C# service,
+so there is no `OnDisable`. The UDR0004 warning on those subscriptions is locally
+suppressed with that justification as of 2026-10-03; save behavior is unchanged.
+
 ### Background autosave (2026-10-02)
 
 In the Editor and non-WebGL players, ordinary autosave captures the complete profile

@@ -17,8 +17,11 @@ internal static class CodexTwoClusters
     [Serializable] internal class Plan { public string theme,icon; public Item[] nodes; public Mod[] small,big; }
     [Serializable] internal class Item { public string id; public bool big; public Vector3 pos; public string[] links; }
     [Serializable] internal class Mod { public int stat,type; public float value; }
+    // Editor-lifetime polling state and subscription intentionally survive entering Play Mode.
+#pragma warning disable UDR0001
     static double next;
     static CodexTwoClusters() { EditorApplication.update+=Tick; }
+#pragma warning restore UDR0001
     static Node[] Nodes()=>UnityEngine.Object.FindObjectsByType<Node>(FindObjectsInactive.Include).Where(n=>n.gameObject.scene.path=="Assets/Scenes/MainScene.unity").ToArray();
     static void Tick()
     {

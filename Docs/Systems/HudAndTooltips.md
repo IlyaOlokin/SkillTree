@@ -35,6 +35,12 @@ layout. Their existence does not establish that every optional view is active.
 
 ## Tooltip ownership and nesting
 
+`TooltipTermDatabase.ActiveDatabase` is cleared by `SubsystemRegistration` before
+scene startup, including when Domain Reload is disabled (2026-10-03). `TooltipUI.Awake`
+registers its configured database. This prevents a previous Play Mode session's
+database from remaining selected. Compilation was checked; repeated Play Mode entry
+without Domain Reload was not playtested.
+
 TooltipUI tracks a current owner, provider and canvas target. HideTooltip and
 RequestHideTooltip only accept the current owner, preventing an old hovered
 object from hiding a newer object's tooltip. A requested hide is deferred while

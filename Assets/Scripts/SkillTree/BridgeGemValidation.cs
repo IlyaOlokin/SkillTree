@@ -24,7 +24,7 @@ namespace SkillTree
         public static void GiveGem()
         {
             if (!Application.isPlaying) { Debug.LogWarning("Enter Play Mode first."); return; }
-            PlayerInventory inventory = UnityEngine.Object.FindFirstObjectByType<PlayerInventory>();
+            PlayerInventory inventory = UnityEngine.Object.FindAnyObjectByType<PlayerInventory>();
             GemDefinition definition = Resources.Load<GemDefinition>("Items/BridgeGem");
             if (inventory == null || definition == null || !inventory.TryAddItem(InventoryItem.FromGem(definition.CreateInstance()), out _))
                 Debug.LogWarning("Cannot add bridge gem: inventory missing or full.");

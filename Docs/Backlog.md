@@ -77,6 +77,13 @@ Evidence types:
 | BL-031 | P3 / Decision | Build script logs `-buildNumber` without applying a platform build-number setting. | Confirm whether consumers require a platform build number; implement and inspect output metadata if required, otherwise document the argument as informational. | [Build arguments](Reference/EditorAndBuildTools.md#build-entry-points) |
 | BL-032 | P2 / Verification gap | Source review did not verify scene/prefab wiring, complete translations/fonts, audio routing/imports, target performance or current visual appearance. Historical render tests are not current results. | Split into scoped verification tasks when preparing a release or changing these areas; record platform, scene, steps and evidence. This umbrella entry is not a claim that all those areas are broken. | [Coverage limits](ProjectMap.md#coverage-limits-and-future-maintenance), [visual history](Reference/ProceduralMagicRootUI.md#historical-validation-record) |
 
+Warning-maintenance note, 2026-10-03: the `CodexTwoClusters` UDR0001 diagnostics
+refer to its intentional Editor-domain lifetime. They are locally suppressed with
+an explanation; its polling and file-triggered behavior are unchanged. **BL-029
+remains open**, because ownership and stale-request safety were not investigated.
+See [compiler warning maintenance](Reference/EditorAndBuildTools.md#compiler-warning-maintenance-2026-10-03)
+for the scoped API updates, runtime static resets and other inspected false positives.
+
 ## Performance capture findings, 2026-10-01
 
 Evidence: [542-frame Editor Profiler capture analysis](Reference/PerformanceCapture20261001.md),

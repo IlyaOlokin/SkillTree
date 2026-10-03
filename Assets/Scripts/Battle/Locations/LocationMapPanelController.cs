@@ -12,10 +12,10 @@ public class LocationMapPanelController : MonoBehaviour
     private void Awake()
     {
         if (enemySpawner == null)
-            enemySpawner = FindFirstObjectByType<EnemySpawner>();
+            enemySpawner = FindAnyObjectByType<EnemySpawner>();
 
         if (flowController == null)
-            flowController = FindFirstObjectByType<LocationFlowController>();
+            flowController = FindAnyObjectByType<LocationFlowController>();
 
         CacheLocationNodesIfNeeded();
         BindLocationNodes();

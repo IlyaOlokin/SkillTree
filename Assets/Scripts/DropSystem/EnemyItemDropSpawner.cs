@@ -581,7 +581,7 @@ namespace DropSystem
         private Canvas FindCanvasForBattleCamera()
         {
             Camera camera = battleCamera != null ? battleCamera : FindBattleCamera();
-            Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Include);
 
             if (camera != null)
             {

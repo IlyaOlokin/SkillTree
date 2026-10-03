@@ -47,7 +47,7 @@ namespace TooltipSystem
 
         private static TooltipUI ResolveTooltipUI()
         {
-            return FindFirstObjectByType<TooltipUI>(FindObjectsInactive.Include);
+            return FindAnyObjectByType<TooltipUI>(FindObjectsInactive.Include);
         }
     }
 }

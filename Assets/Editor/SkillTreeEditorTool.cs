@@ -110,7 +110,7 @@ public class SkillTreeTool : EditorTool
         Node nodeToDelete = selectedNode;
         selectedNode = null;
 
-        Node[] nodes = FindObjectsByType<Node>(FindObjectsSortMode.None);
+        Node[] nodes = FindObjectsByType<Node>();
         foreach (Node node in nodes)
         {
             if (node == null || node == nodeToDelete)
@@ -152,7 +152,7 @@ public class SkillTreeTool : EditorTool
         Vector3 worldPos = GetMouseWorldPosition(mousePosition);
 
         
-        Node[] nodes = FindObjectsByType<Node>(FindObjectsSortMode.None);
+        Node[] nodes = FindObjectsByType<Node>();
 
         float pickRadius = 0.3f; 
         foreach (Node node in nodes)
@@ -453,7 +453,7 @@ public class SkillTreeTool : EditorTool
         corruptedNodes.Clear();
         asymmetricNodes.Clear();
 
-        Node[] nodes = FindObjectsByType<Node>(FindObjectsSortMode.None);
+        Node[] nodes = FindObjectsByType<Node>();
 
         foreach (Node node in nodes)
         {
@@ -471,7 +471,7 @@ public class SkillTreeTool : EditorTool
                 
                 bool symmetric = connected.ConnectedNodes.Contains(node);
 
-                if (node.GetInstanceID() < connected.GetInstanceID())
+                if (node.GetEntityId().CompareTo(connected.GetEntityId()) < 0)
                 {
                     if (symmetric)
                     {

@@ -444,7 +444,7 @@ namespace TooltipSystem
                 return configuredCanvas;
             }
 
-            Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Exclude);
             string targetName = canvasTarget switch
             {
                 TooltipCanvasTarget.Battle => "BattleCanvas",

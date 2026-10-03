@@ -98,10 +98,13 @@ namespace SaveSystem
             _activeProfile = _profileManager.GetOrCreateActiveProfile(GetDefaultProfileDisplayName());
             LoadActiveProfile();
             Subscribe();
+            // Zenject owns this non-MonoBehaviour service; Dispose removes these subscriptions.
+#pragma warning disable UDR0004
             Application.quitting += HandleApplicationQuitting;
 #if UNITY_WEBGL && !UNITY_EDITOR
             Application.focusChanged += HandleApplicationFocusChanged;
 #endif
+#pragma warning restore UDR0004
         }
 
         public void Tick()

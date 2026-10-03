@@ -19,8 +19,11 @@ namespace SaveSystem.Editor
     {
         static MissingNodeSaveIdAssignment()
         {
+            // InitializeOnLoad installs these once per Editor domain, including across Play Mode.
+#pragma warning disable UDR0001
             EditorApplication.hierarchyChanged += ScheduleAssignment;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+#pragma warning restore UDR0001
             ScheduleAssignment();
         }
 

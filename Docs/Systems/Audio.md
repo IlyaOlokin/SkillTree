@@ -13,6 +13,11 @@ the accepted instance optionally survives scene loads (default enabled), builds
 its cue lookup, creates/configures sources and applies available saved volumes.
 No claim is made here that every scene instantiates or correctly wires it.
 
+As of 2026-10-03, `SubsystemRegistration` clears the static `Instance` before scene
+startup, including when Domain Reload is disabled. `Awake` registers the current
+instance and `OnDestroy` still clears its ownership. Compilation was checked;
+repeated Play Mode entry without Domain Reload was not playtested.
+
 AudioCueLibrary contains definitions with an ID, Sfx/Music bus, clip array, volume,
 pitch range, minimum interval and spatial blend. IDs use ordinal, case-sensitive
 lookup. Empty IDs are skipped; later duplicate IDs overwrite earlier definitions.

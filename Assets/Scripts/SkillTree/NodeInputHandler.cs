@@ -19,7 +19,7 @@ namespace SkillTree
         private void Awake()
         {
             _node = GetComponent<Node>();
-            _fogOfWarController = FindFirstObjectByType<SkillTreeFogOfWarController>(FindObjectsInactive.Include);
+            _fogOfWarController = FindAnyObjectByType<SkillTreeFogOfWarController>(FindObjectsInactive.Include);
         }
 
         private void OnMouseOver()

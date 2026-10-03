@@ -37,7 +37,7 @@ namespace Battle
         private void Awake()
         {
             if (enemySpawner == null)
-                enemySpawner = FindFirstObjectByType<EnemySpawner>();
+                enemySpawner = FindAnyObjectByType<EnemySpawner>();
 
             if (enemySpawner == null)
             {

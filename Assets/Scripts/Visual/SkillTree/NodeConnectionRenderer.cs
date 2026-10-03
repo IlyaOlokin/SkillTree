@@ -1026,7 +1026,7 @@ namespace SkillTree
             if (ReferenceEquals(n1, n2))
                 throw new ArgumentException("Pair cannot contain the same node");
             
-            if (n1.GetInstanceID() < n2.GetInstanceID())
+            if (n1.GetEntityId().CompareTo(n2.GetEntityId()) < 0)
             {
                 A = n1;
                 B = n2;
@@ -1066,8 +1066,8 @@ namespace SkillTree
             unchecked
             {
                 int hash = 17;
-                hash = hash * 31 + A.GetInstanceID();
-                hash = hash * 31 + B.GetInstanceID();
+                hash = hash * 31 + A.GetEntityId().GetHashCode();
+                hash = hash * 31 + B.GetEntityId().GetHashCode();
                 return hash;
             }
         }

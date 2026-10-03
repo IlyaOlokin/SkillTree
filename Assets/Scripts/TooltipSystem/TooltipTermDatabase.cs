@@ -9,6 +9,12 @@ namespace TooltipSystem
     {
         public static TooltipTermDatabase ActiveDatabase { get; private set; }
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStaticState()
+        {
+            ActiveDatabase = null;
+        }
+
         [SerializeField] private List<TooltipTermEntry> entries = new();
 
         private Dictionary<string, TooltipDescriptionData> descriptionById;

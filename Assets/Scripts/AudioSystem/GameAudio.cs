@@ -36,6 +36,12 @@ namespace AudioSystem
 
         public static GameAudio Instance { get; private set; }
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStaticState()
+        {
+            Instance = null;
+        }
+
         [Inject]
         private void Construct([InjectOptional] LocalSettingsService settingsService)
         {
