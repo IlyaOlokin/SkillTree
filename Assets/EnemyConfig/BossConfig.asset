@@ -1,0 +1,215 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3e86f2a3c47b2b4d9f3d72445c5b4cd, type: 3}
+  m_Name: BossConfig
+  m_EditorClassIdentifier: 
+  rules:
+  - level: 5
+    lastWaveOnly: 1
+    waveIndex: 1
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 2
+    powerMultiplier: 0.6
+    bossDefinitions:
+    - {fileID: 11400000, guid: 2f92021a351211b44bef87da9f8d6cb1, type: 2}
+  - level: 10
+    lastWaveOnly: 1
+    waveIndex: 1
+    wavesInLevelOverride: 1
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 3
+    powerMultiplier: 0.65
+    bossDefinitions:
+    - {fileID: 11400000, guid: 2f92021a351211b44bef87da9f8d6cb1, type: 2}
+  - level: 15
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 3
+    maxBossAffixes: 4
+    powerMultiplier: 0.7
+    bossDefinitions:
+    - {fileID: 11400000, guid: 89147cf7ce3ee354aa8eb8212ee7c9a2, type: 2}
+  - level: 20
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 3
+    maxBossAffixes: 8
+    powerMultiplier: 0.75
+    bossDefinitions:
+    - {fileID: 11400000, guid: 0ca5b85225518554abbd732ca37f114b, type: 2}
+  - level: 25
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 0.8
+    bossDefinitions:
+    - {fileID: 11400000, guid: e12069047cb36a94a8643add35ff12a9, type: 2}
+  - level: 30
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 3
+    maxBossAffixes: 8
+    powerMultiplier: 0.85
+    bossDefinitions:
+    - {fileID: 11400000, guid: 5140c41cc50e54f43a2677fb0e5ba1a4, type: 2}
+  - level: 40
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 0.9
+    bossDefinitions:
+    - {fileID: 11400000, guid: 46fbfa1b447bad0448a42abed4ad2152, type: 2}
+  - level: 45
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 0.95
+    bossDefinitions:
+    - {fileID: 11400000, guid: e771c3287ead43c69550b5e63c0c2980, type: 2}
+  - level: 50
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 1
+    bossDefinitions:
+    - {fileID: 11400000, guid: ff8abd2bf8ee4b2d8c6c2e893819cced, type: 2}
+  - level: 60
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 1.05
+    bossDefinitions:
+    - {fileID: 11400000, guid: 2c87b70d1fa34cc3bf4a5e76b1938fc5, type: 2}
+  - level: 70
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 1.10
+    bossDefinitions:
+    - {fileID: 11400000, guid: bf41e086ed5740dc82996700cbd3415c, type: 2}
+  - level: 80
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 1.15
+    bossDefinitions:
+    - {fileID: 11400000, guid: 0cfbdb837ba444cfb7ec784534a79f25, type: 2}
+  - level: 90
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 1.20
+    bossDefinitions:
+    - {fileID: 11400000, guid: f71d008d351546699a80b59ad9b282c5, type: 2}
+  - level: 100
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 1.25
+    bossDefinitions:
+    - {fileID: 11400000, guid: edf6cf6e04e24da9b630164c6d44d32f, type: 2}
+  - level: 110
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 1.30
+    bossDefinitions:
+    - {fileID: 11400000, guid: 9b91d5c3d647413f887f6a26d9120af4, type: 2}
+  - level: 120
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 1.35
+    bossDefinitions:
+    - {fileID: 11400000, guid: 0b03a75ec00e411da1803faf15eeecd9, type: 2}
+  - level: 130
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 1.40
+    bossDefinitions:
+    - {fileID: 11400000, guid: 482b74f82cc548de94b8137715286e07, type: 2}
+  - level: 140
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 1.45
+    bossDefinitions:
+    - {fileID: 11400000, guid: af95b6eec7fa402fa6f5f1849b058f94, type: 2}
+  - level: 150
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 1.50
+    bossDefinitions:
+    - {fileID: 11400000, guid: 0e7ae361cc10490db0d90c8ee315f9cc, type: 2}
+  - level: 160
+    lastWaveOnly: 1
+    waveIndex: 3
+    wavesInLevelOverride: 0
+    bossCount: 1
+    totalEnemiesInWave: 1
+    maxBossAffixes: 8
+    powerMultiplier: 1.55
+    bossDefinitions:
+    - {fileID: 11400000, guid: a7560dbf336246ebab0de3dec2687cf9, type: 2}

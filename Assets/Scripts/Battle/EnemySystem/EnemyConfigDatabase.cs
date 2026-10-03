@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DropSystem;
 using SkillTree;
 using UnityEngine;
 
@@ -7,8 +8,11 @@ namespace Battle
     [CreateAssetMenu(menuName = "Enemies/Config Database")]
     public class EnemyConfigDatabase : ScriptableObject
     {
-        [Header("Enemy selection")]
-        public List<EnemyArchetype> archetypes = new();
+        [Header("Enemy generation")]
+        [SerializeField] private List<EnemyGenerationPool> modulePools = new();
+
+        [Header("Gold drops")]
+        [SerializeField] private GoldDropConfig goldDropConfig;
 
         [Header("Level range")]
         [SerializeField] private EnemyLevelPowerConfig levelPowerConfig;
@@ -24,6 +28,7 @@ namespace Battle
 
         [Header("Rarity balance")]
         [SerializeField] private EnemyRarityBalanceConfig rarityBalance;
+        [SerializeField] private EnemyAffixRollSettings affixRollSettings = new();
 
         [Header("Boss balance")]
         [SerializeField] private EnemyBossBalanceConfig bossBalance;
@@ -45,10 +50,36 @@ namespace Battle
         public float RespawnDelay => respawnDelay;
         public int MaxEnemiesPerWave => maxEnemiesPerWave;
         public EnemyRarityBalanceConfig RarityBalance => rarityBalance;
+        public EnemyAffixRollSettings AffixRollSettings => affixRollSettings;
         public EnemyBossBalanceConfig BossBalance => bossBalance;
         public EnemyWavePowerBalanceConfig WavePowerBalance => wavePowerBalance;
         public EnemyStatBudgetConfig StatBudgetConfig => statBudgetConfig;
         public IReadOnlyList<ModifierContainer> GlobalModifiers => globalModifiers;
+        public GoldDropConfig GoldDropConfig => goldDropConfig;
+        public IReadOnlyList<EnemyGenerationPool> ModulePools => modulePools;
+
+        public IReadOnlyList<EnemyAffix> GetLocationAffixPool()
+        {
+            var locationAffixes = new List<EnemyAffix>();
+            if (modulePools == null)
+                return locationAffixes;
+
+            for (int i = 0; i < modulePools.Count; i++)
+            {
+                var pool = modulePools[i];
+                if (pool?.AffixPool == null)
+                    continue;
+
+                for (int j = 0; j < pool.AffixPool.Count; j++)
+                {
+                    var affix = pool.AffixPool[j];
+                    if (affix != null && !ContainsAffix(locationAffixes, affix))
+                        locationAffixes.Add(affix);
+                }
+            }
+
+            return locationAffixes;
+        }
 
         private void OnValidate()
         {
@@ -57,6 +88,7 @@ namespace Battle
             wavesToUnlockNextLevel = Mathf.Max(1, wavesToUnlockNextLevel);
             respawnDelay = Mathf.Max(0f, respawnDelay);
             maxEnemiesPerWave = Mathf.Clamp(maxEnemiesPerWave, 1, 3);
+            affixRollSettings?.Validate();
         }
 
         public float GetPowerForLevel(int level)
@@ -66,68 +98,118 @@ namespace Battle
 
         }
 
+        public int GetWavesToUnlockNextLevel(int level)
+        {
+            int clampedLevel = Mathf.Clamp(level, StartingLevel, MaxWaveLevel);
+            if (bossBalance != null &&
+                bossBalance.TryGetWavesInLevelOverride(clampedLevel, out int wavesInLevel))
+            {
+                return wavesInLevel;
+            }
+
+            return Mathf.Max(1, wavesToUnlockNextLevel);
+        }
+
         public int GetLevelPowerCount()
         {
             return MaxWaveLevel - StartingLevel + 1;
         }
 
-        public EnemyArchetype GetRandomArchetype(WaveContext context, EnemyRarity rarity, int enemyIndex = 0)
+        public bool TryGenerateEnemyDefinition(
+            WaveContext context,
+            EnemyRarity rarity,
+            int enemyIndex,
+            float enemyWeight,
+            out GeneratedEnemyDefinition definition)
         {
-            if (archetypes == null || archetypes.Count == 0)
+            definition = null;
+
+            if (rarity == EnemyRarity.Boss &&
+                bossBalance != null &&
+                bossBalance.TryGetRule(context, out var bossRule) &&
+                bossRule.TryGenerateBossDefinition(enemyIndex, enemyWeight, out definition))
             {
-                Debug.LogError($"{nameof(EnemyConfigDatabase)} has no enemy archetypes assigned.", this);
-                return null;
+                return true;
             }
 
-            IReadOnlyList<EnemyArchetype> archetypePool = GetArchetypePool(context, rarity, enemyIndex);
-            var matchingArchetypes = new List<EnemyArchetype>();
+            return TryGenerateFromModulePools(context, rarity, enemyWeight, out definition);
+        }
 
-            for (int i = 0; i < archetypePool.Count; i++)
+        private bool TryGenerateFromModulePools(
+            WaveContext context,
+            EnemyRarity rarity,
+            float enemyWeight,
+            out GeneratedEnemyDefinition definition)
+        {
+            definition = null;
+
+            if (modulePools == null || modulePools.Count == 0)
             {
-                var archetype = archetypePool[i];
-                if (archetype != null && archetype.Matches(context, rarity))
-                    matchingArchetypes.Add(archetype);
+                Debug.LogError($"{nameof(EnemyConfigDatabase)} has no enemy generation pools assigned.", this);
+                return false;
             }
 
-            if (matchingArchetypes.Count > 0)
-                return matchingArchetypes[Random.Range(0, matchingArchetypes.Count)];
+            var candidates = new List<EnemyGenerationPool>();
+            float totalWeight = 0f;
+            for (int i = 0; i < modulePools.Count; i++)
+            {
+                var pool = modulePools[i];
+                if (pool == null || !pool.CanGenerate(context, rarity, enemyWeight))
+                    continue;
+
+                candidates.Add(pool);
+                totalWeight += pool.SelectionWeight;
+            }
+
+            while (candidates.Count > 0)
+            {
+                int index = PickWeightedPoolIndex(candidates, totalWeight);
+                var candidate = candidates[index];
+                if (candidate.TryGenerate(context, rarity, enemyWeight, out definition))
+                    return true;
+
+                totalWeight -= candidate.SelectionWeight;
+                candidates.RemoveAt(index);
+            }
 
             Debug.LogWarning(
-                $"{nameof(EnemyConfigDatabase)} found no matching archetypes for level {context.Level}, wave {context.WaveIndex}, rarity {rarity}. Falling back to any archetype from the selected pool.",
+                $"{nameof(EnemyConfigDatabase)} could not generate enemy for level {context.Level}, wave {context.WaveIndex}, rarity {rarity}, weight {enemyWeight:0.##}.",
                 this);
-
-            return GetRandomAnyArchetype(archetypePool);
+            return false;
         }
 
-        private IReadOnlyList<EnemyArchetype> GetArchetypePool(WaveContext context, EnemyRarity rarity, int enemyIndex)
+        private static int PickWeightedPoolIndex(IReadOnlyList<EnemyGenerationPool> pools, float totalWeight)
         {
-            if (context.IsBossWave &&
-                bossBalance != null &&
-                bossBalance.TryGetRule(context, out var bossRule))
+            if (pools == null || pools.Count == 0)
+                return -1;
+
+            if (totalWeight <= 0f)
+                return Random.Range(0, pools.Count);
+
+            float roll = Random.Range(0f, totalWeight);
+            float cumulative = 0f;
+            for (int i = 0; i < pools.Count; i++)
             {
-                IReadOnlyList<EnemyArchetype> specificPool = bossRule.GetArchetypePool(enemyIndex, rarity);
-                if (specificPool is { Count: > 0 })
-                    return specificPool;
+                cumulative += pools[i].SelectionWeight;
+                if (roll <= cumulative)
+                    return i;
             }
 
-            return archetypes;
+            return pools.Count - 1;
         }
 
-        private EnemyArchetype GetRandomAnyArchetype(IReadOnlyList<EnemyArchetype> archetypePool)
+        private static bool ContainsAffix(IReadOnlyList<EnemyAffix> affixes, EnemyAffix affix)
         {
-            var availableArchetypes = new List<EnemyArchetype>();
+            if (affixes == null || affix == null)
+                return false;
 
-            for (int i = 0; i < archetypePool.Count; i++)
+            for (int i = 0; i < affixes.Count; i++)
             {
-                if (archetypePool[i] != null)
-                    availableArchetypes.Add(archetypePool[i]);
+                if (affixes[i] == affix)
+                    return true;
             }
 
-            if (availableArchetypes.Count > 0)
-                return availableArchetypes[Random.Range(0, availableArchetypes.Count)];
-
-            Debug.LogError($"{nameof(EnemyConfigDatabase)} selected archetype pool contains no valid entries.", this);
-            return null;
+            return false;
         }
     }
 }

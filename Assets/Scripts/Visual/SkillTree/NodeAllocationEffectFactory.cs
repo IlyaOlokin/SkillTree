@@ -74,6 +74,10 @@ namespace Visual
                 return;
             }
 
+            if (node.NodeType == NodeType.Small || node.NodeType == NodeType.Travel)
+            {
+                return;
+            }
             PlayAllocationSound();
             Play(node);
         }

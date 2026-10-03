@@ -8,10 +8,11 @@ namespace SkillTree
     public class ModifierPerPlayerLevel : Modifier
     {
         [SerializeField] private ModifierContainer modifierContainer;
+        [SerializeField, Min(1)] private int levelsPerModifier = 1;
 
         public override bool IsApplicable(Unit unit)
         {
-            return GetPlayerLevel(unit) > 0;
+            return GetModifierCount(unit) > 0;
         }
 
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
@@ -21,17 +22,17 @@ namespace SkillTree
                 return null;
             }
 
-            int cachedLevel = GetPlayerLevel(unit);
+            int cachedModifierCount = GetModifierCount(unit);
 
             void HandleLevelChanged()
             {
-                int currentLevel = GetPlayerLevel(unit);
-                if (currentLevel == cachedLevel)
+                int currentModifierCount = GetModifierCount(unit);
+                if (currentModifierCount == cachedModifierCount)
                 {
                     return;
                 }
 
-                cachedLevel = currentLevel;
+                cachedModifierCount = currentModifierCount;
                 unit.RequestModRecalculation();
             }
 
@@ -47,13 +48,13 @@ namespace SkillTree
                 return;
             }
 
-            int playerLevel = GetPlayerLevel(unit);
-            if (playerLevel <= 0)
+            int modifierCount = GetModifierCount(unit);
+            if (modifierCount <= 0)
             {
                 return;
             }
 
-            unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer * playerLevel);
+            unit.BaseUnitModifiers.ChangeModifierValue(modifierContainer * modifierCount);
         }
 
         public override void ApplyEffect(Unit unit, ModifierPowerContext powerContext)
@@ -63,28 +64,62 @@ namespace SkillTree
                 return;
             }
 
-            int playerLevel = GetPlayerLevel(unit);
-            if (playerLevel <= 0)
+            int modifierCount = GetModifierCount(unit);
+            if (modifierCount <= 0)
             {
                 return;
             }
 
-            unit.BaseUnitModifiers.ChangeModifierValue(powerContext.Scale(modifierContainer) * playerLevel);
+            unit.BaseUnitModifiers.ChangeModifierValue(powerContext.Scale(modifierContainer) * modifierCount);
         }
 
         public override string GetDescription(ModifierPowerContext powerContext)
         {
+            string levelIntervalDescription = GetLevelIntervalDescription();
             if (modifierContainer == null)
             {
-                return GameLocalization.GetModifier(
+                return GameLocalization.FormatModifier(
                     "modifier.modifierPerPlayerLevel.noModifier",
-                    "Applies modifier per Player Level");
+                    "Applies modifier per [[0]]",
+                    levelIntervalDescription);
             }
 
             return GameLocalization.FormatModifier(
                 "modifier.modifierPerPlayerLevel.withModifier",
-                "Adds '[[0]]' per Player Level",
-                powerContext.Scale(modifierContainer).GetDescription());
+                "Adds '[[0]]' per [[1]]",
+                powerContext.Scale(modifierContainer).GetDescription(),
+                levelIntervalDescription);
+        }
+
+        private void OnValidate()
+        {
+            levelsPerModifier = Mathf.Max(1, levelsPerModifier);
+        }
+
+        private int GetModifierCount(Unit unit)
+        {
+            int playerLevel = GetPlayerLevel(unit);
+            if (playerLevel <= 0)
+            {
+                return 0;
+            }
+
+            return playerLevel / Mathf.Max(1, levelsPerModifier);
+        }
+
+        private string GetLevelIntervalDescription()
+        {
+            if (levelsPerModifier <= 1)
+            {
+                return GameLocalization.GetModifier(
+                    "modifier.modifierPerPlayerLevel.level.single",
+                    "Player Level");
+            }
+
+            return GameLocalization.FormatModifier(
+                "modifier.modifierPerPlayerLevel.level.multi",
+                "[[0]] Player Levels",
+                levelsPerModifier);
         }
 
         private static int GetPlayerLevel(Unit unit)

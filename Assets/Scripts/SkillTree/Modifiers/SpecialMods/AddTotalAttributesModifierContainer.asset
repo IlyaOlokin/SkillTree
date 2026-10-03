@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: AddTotalAttributesModifierContainer
   m_EditorClassIdentifier: Assembly-CSharp::SkillTree.AddTotalAttributesModifierContainer
   <Priorities>k__BackingField: 00000000
-  attributesPerStack: 10
+  attributesPerStack: 50
   modifierContainer:
-    modifierType: 1
-    statType: 3
+    modifierType: 0
+    statType: 51
     value: 0.01

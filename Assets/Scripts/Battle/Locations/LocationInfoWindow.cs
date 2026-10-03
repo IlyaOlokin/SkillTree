@@ -287,7 +287,7 @@ public class LocationInfoWindow : MonoBehaviour
         if (database == null || database.BossBalance == null)
             return false;
 
-        int wavesInLevel = Mathf.Max(1, database.WavesToUnlockNextLevel);
+        int wavesInLevel = Mathf.Max(1, database.GetWavesToUnlockNextLevel(level));
         for (int waveIndex = 1; waveIndex <= wavesInLevel; waveIndex++)
         {
             var context = new WaveContext(level, waveIndex, wavesInLevel);

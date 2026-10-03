@@ -101,9 +101,9 @@ namespace Battle
             }
         }
 
-        private static BaseModifier CreateModifier(StatType statType)
+        private BaseModifier CreateModifier(StatType statType)
         {
-            BaseModifier modifier = ScriptableObject.CreateInstance<BaseModifier>();
+            BaseModifier modifier = CreateRuntimeModifier<BaseModifier>();
             modifier.modifierContainer = new ModifierContainer(ModifierType.Increased, statType, 0f);
             return modifier;
         }

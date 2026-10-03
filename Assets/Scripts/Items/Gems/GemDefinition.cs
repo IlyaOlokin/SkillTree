@@ -12,8 +12,10 @@ namespace Gems
         [SerializeField] private GemKind kind = GemKind.LocalModifiers;
         [SerializeField] private List<Modifier> modifierTemplates = new();
         [SerializeField] private List<GemPowerInfluenceRule> powerInfluenceRules = new();
+        [SerializeField] private LineRenderer bridgeLinePrefab;
 
         public GemKind Kind => kind;
+        public LineRenderer BridgeLinePrefab => bridgeLinePrefab;
         public IReadOnlyList<Modifier> ModifierTemplates => modifierTemplates;
         public IReadOnlyList<GemPowerInfluenceRule> PowerInfluenceRules =>
             powerInfluenceRules != null ? powerInfluenceRules : Array.Empty<GemPowerInfluenceRule>();

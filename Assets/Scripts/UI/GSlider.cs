@@ -27,6 +27,8 @@ public class GSlider : MonoBehaviour
 
     private RectTransform _rectTransform;
     private float _cachedMaskedFillFullWidth = -1f;
+    private float _lastFillAmount;
+    private bool _isMirrored;
 
     private void Awake()
     {
@@ -55,6 +57,7 @@ public class GSlider : MonoBehaviour
     public void UpdateBar(float fillAmount = 0)
     {
         fillAmount = Mathf.Clamp01(fillAmount);
+        _lastFillAmount = fillAmount;
 
         if (needSecondaryFill && secondaryFill != null)
         {
@@ -75,6 +78,7 @@ public class GSlider : MonoBehaviour
     public void SetBar(float fillAmount = 0)
     {
         fillAmount = Mathf.Clamp01(fillAmount);
+        _lastFillAmount = fillAmount;
 
         if (fillVisualMode == FillVisualMode.MaskedWidth)
         {
@@ -118,14 +122,29 @@ public class GSlider : MonoBehaviour
 
     public void SetMirrored(bool mirrored)
     {
-        SetRectMirrored(border != null ? border.rectTransform : null, mirrored);
-        SetRectMirrored(fill != null ? fill.rectTransform : null, mirrored);
-        SetRectMirrored(secondaryFill != null ? secondaryFill.rectTransform : null, mirrored);
+        bool changed = _isMirrored != mirrored;
+        _isMirrored = mirrored;
 
         if (fillVisualMode == FillVisualMode.FilledImage)
+        {
+            SetRectMirrored(border != null ? border.rectTransform : null, mirrored);
+            SetRectMirrored(fill != null ? fill.rectTransform : null, false);
+            SetRectMirrored(secondaryFill != null ? secondaryFill.rectTransform : null, false);
             SetFillOrigin(fill, mirrored);
+            SetFillOrigin(secondaryFill, mirrored);
+        }
+        else
+        {
+            SetRectMirrored(border != null ? border.rectTransform : null, mirrored);
+            SetRectMirrored(fill != null ? fill.rectTransform : null, mirrored);
+            SetRectMirrored(secondaryFill != null ? secondaryFill.rectTransform : null, mirrored);
+            SetFillOrigin(secondaryFill, mirrored);
+        }
 
-        SetFillOrigin(secondaryFill, mirrored);
+        if (changed)
+        {
+            SetBar(_lastFillAmount);
+        }
     }
 
     private static void SetFillOrigin(Image image, bool mirrored)

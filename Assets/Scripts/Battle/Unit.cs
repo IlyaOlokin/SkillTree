@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using SkillTree;
 using UnityEngine;
+using Unity.Profiling;
 using Zenject;
 
 namespace Battle
 {
     public class Unit : MonoBehaviour, ITarget, ICombatTickable
     {
+        private const float DefaultLowLifeThreshold01 = 0.25f;
+
         [SerializeField] public Health health;
         [SerializeField] public MysticHealth mysticHealth;
         [SerializeField] public Barrier barrier;
@@ -25,6 +28,7 @@ namespace Battle
         private bool _modsChangedPending;
         private BattleTickSystem _battleTickSystem;
         private bool _isRegisteredInBattleTickSystem;
+        private float _lowLifeThreshold01 = DefaultLowLifeThreshold01;
 
         public event Action OnModsChanged;
         public event Action OnOuterModsChanged;
@@ -35,6 +39,7 @@ namespace Battle
         public event Action<DamageInfo, float> OnHealthDamageTaken;
         public event Action<ITarget> OnAttack;
         public event Action<ITarget> OnAttackCompleted;
+        public event Action<DamageInfo> OnAttackPrepared;
         public event Action<ITarget> OnHit;
         public event Action<ITarget> OnMiss;
         public event Action<ITarget> OnCrit;
@@ -43,9 +48,14 @@ namespace Battle
         public event Action<float> OnPainConsumed;
         public event Action<Unit> OnBleedApplied;
         public event Action<Unit> OnAilmentApplied;
+        // Source-side notification for accepted, non-repeated effects.
+        public event Action<Unit, Type, Func<BaseEffect>> OnEffectApplied;
         
         public event Action OnEvade;
         public event Action OnBlock;
+        public event Action OnParry;
+        public event Action<AttackContext> OnParryResolved;
+        public event Action<AttackContext> OnAttackParried;
         public event Action<Unit> OnDeath;
 
         public MysticHealth MysticHealth => mysticHealth;
@@ -95,7 +105,8 @@ namespace Battle
 
         public DamageInstance ReceiveDamage(DamageInfo damageInfo)
         {
-            barrier.TakeDamage(damageInfo.DamageInstance);
+            barrier.TakeDamage(damageInfo.DamageInstance, damageInfo.DealsDoubleDamageToBarrier ? 2f : 1f,
+                damageInfo.MaxBarriersLostPerAttack);
             mysticHealth.ApplyMysticDamageAsAbsorption(damageInfo.DamageInstance);
             float healthBeforeDamage = health.CurrentHealth;
             DamageInstance receivedDamage = health.TakeDamage(damageInfo.DamageInstance);
@@ -117,6 +128,11 @@ namespace Battle
         public void OnAttackFinished(ITarget target)
         {
             OnAttackCompleted?.Invoke(target);
+        }
+
+        public void PrepareAttack(DamageInfo damageInfo)
+        {
+            OnAttackPrepared?.Invoke(damageInfo);
         }
 
         public void OnHitLanded(ITarget target)
@@ -178,6 +194,11 @@ namespace Battle
             OnAilmentApplied?.Invoke(target);
         }
 
+        internal void EffectApplied(Unit target, Type effectType, Func<BaseEffect> effectFactory)
+        {
+            OnEffectApplied?.Invoke(target, effectType, effectFactory);
+        }
+
         public void ReceiveDoT(DamageInstance damageInstance)
         {
             health.TakeDamage(damageInstance, false);
@@ -206,6 +227,17 @@ namespace Battle
         public void OnHitBlock(DamageInstance damageInstance)
         {
             OnBlock?.Invoke();
+        }
+
+        public void OnHitParried(AttackContext context)
+        {
+            OnParry?.Invoke();
+            OnParryResolved?.Invoke(context);
+        }
+
+        public void OnAttackWasParried(AttackContext context)
+        {
+            OnAttackParried?.Invoke(context);
         }
 
         protected void RaiseOnModsChanged()
@@ -256,8 +288,11 @@ namespace Battle
             }
         }
 
+        private static readonly ProfilerMarker RecalculateModsMarker = new("Battle.RecalculateUnitModifiers");
+
         private void RecalculateMods()
         {
+            using var sample = RecalculateModsMarker.Auto();
             ResetUnit();
             List<CollectedModifier> mods = GetAllModifiers();
             StatCalculator.RecalculateStats(this, mods);
@@ -266,7 +301,7 @@ namespace Battle
             RaiseOnStatsRecalculated();
         }
 
-        private void ProcessPendingModRecalculation()
+        internal void ProcessPendingModRecalculation()
         {
             if (!_modsChangedPending)
             {
@@ -280,7 +315,9 @@ namespace Battle
         protected void ResetUnit()
         {
             UnbindModifierRuntimes();
+            _lowLifeThreshold01 = DefaultLowLifeThreshold01;
             attributes.Reset();
+            health.ResetSacredHealthSegmentsSwap();
             BaseUnitModifiers.Reset();
             baseInnateModifiers.ApplyEffect(this);
             innateModifiers.ApplyEffect(this);
@@ -351,7 +388,12 @@ namespace Battle
 
         public bool IsOnLowLife()
         {
-            return health.CurrentHealth <= health.MaxHealth * 0.5f;
+            return health != null && health.CurrentHealth <= health.MaxHealth * _lowLifeThreshold01;
+        }
+
+        public void SetLowLifeThreshold(float threshold01)
+        {
+            _lowLifeThreshold01 = Mathf.Clamp01(threshold01);
         }
 
         public bool IsOnFullLife()

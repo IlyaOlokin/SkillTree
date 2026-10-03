@@ -99,7 +99,7 @@ namespace Battle
                 return;
             }
 
-            _attackSpeedModifier = ScriptableObject.CreateInstance<BaseModifier>();
+            _attackSpeedModifier = CreateRuntimeModifier<BaseModifier>();
             _attackSpeedModifier.modifierContainer = new ModifierContainer(
                 ModifierType.More,
                 StatType.AttackSpeed,
@@ -115,6 +115,7 @@ namespace Battle
             }
 
             unit.RemoveOuterModifier(_attackSpeedModifier);
+            ReleaseRuntimeModifier(_attackSpeedModifier);
             _attackSpeedModifier = null;
         }
     }

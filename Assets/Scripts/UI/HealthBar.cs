@@ -8,16 +8,23 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private MysticHealth mysticHealth;
     [SerializeField] private GSlider healthSlider;
     [SerializeField] private GSlider profanedHealthSlider;
+    [SerializeField] private GSlider hallowedHealthSlider;
     [SerializeField] private GSlider mysticHealthSlider;
     [SerializeField] private MysticColorsConfig mysticColorsConfig;
+    [SerializeField] private ProceduralMagicRootUI mysticRoot;
 
     private void Awake()
     {
+        if (mysticRoot == null) mysticRoot = GetComponent<ProceduralMagicRootUI>();
+        if (mysticRoot == null && mysticHealthSlider != null)
+            mysticRoot = mysticHealthSlider.GetComponentInChildren<ProceduralMagicRootUI>(true);
+
         if (health != null)
         {
             health.OnHealthChanged += UpdateHealthBar;
             health.OnMaximumHealthChanged += UpdateHealthBar;
             health.OnProfanedHealthChanged += UpdateProfanedHealthBar;
+            health.OnHallowedHealthChanged += UpdateHallowedHealthBar;
         }
 
         if (mysticHealth != null)
@@ -33,6 +40,7 @@ public class HealthBar : MonoBehaviour
             health.OnHealthChanged -= UpdateHealthBar;
             health.OnMaximumHealthChanged -= UpdateHealthBar;
             health.OnProfanedHealthChanged -= UpdateProfanedHealthBar;
+            health.OnHallowedHealthChanged -= UpdateHallowedHealthBar;
         }
 
         if (mysticHealth != null)
@@ -45,7 +53,9 @@ public class HealthBar : MonoBehaviour
     {
         UpdateHealthBar();
         UpdateProfanedHealthBar();
-        UpdateMysticHealthBar(0f, 0f, mysticHealth != null ? mysticHealth.TotalAbsorption : 0f);
+        UpdateHallowedHealthBar();
+        if (mysticHealth != null)
+            UpdateMysticHealthBar(mysticHealth.LightAbsorption, mysticHealth.DarknessAbsorption, mysticHealth.TotalAbsorption);
     }
 
     private void UpdateHealthBar()
@@ -62,15 +72,36 @@ public class HealthBar : MonoBehaviour
         }
 
         profanedHealthSlider.UpdateBar(health.ProfanedHealthPercent01);
+        profanedHealthSlider.SetMirrored(health.IsProfanedHealthOnHighSide);
+    }
+
+    private void UpdateHallowedHealthBar()
+    {
+        if (hallowedHealthSlider == null || health == null)
+        {
+            return;
+        }
+
+        hallowedHealthSlider.UpdateBar(health.HallowedHealthPercent01);
+        hallowedHealthSlider.SetMirrored(health.IsHallowedHealthOnHighSide);
     }
 
     private void UpdateMysticHealthBar(float lightAbsorption, float darknessAbsorption, float totalAbsorption)
     {
-        if (lightAbsorption > 0f)
+        if (mysticHealthSlider == null || mysticHealth == null) return;
+
+        if (mysticRoot != null && mysticRoot.isActiveAndEnabled)
+        {
+            if (lightAbsorption > 0f) mysticRoot.ApplyLightPreset();
+            else if (darknessAbsorption > 0f) mysticRoot.ApplyDarknessPreset();
+            // The shader owns the color; tinting the Image too would multiply it twice.
+            mysticHealthSlider.SetFillColor(Color.white);
+        }
+        else if (lightAbsorption > 0f && mysticColorsConfig != null)
         {
             mysticHealthSlider.SetFillColor(mysticColorsConfig.LightColor);
         }
-        else if (darknessAbsorption > 0f)
+        else if (darknessAbsorption > 0f && mysticColorsConfig != null)
         {
             mysticHealthSlider.SetFillColor(mysticColorsConfig.DarknessColor);
         }

@@ -8,11 +8,25 @@ namespace SkillTree
         private readonly Dictionary<Node, float> _powerByNode = new();
         private readonly Dictionary<Node, int> _distancesByNode = new();
         private readonly Queue<Node> _frontier = new();
+        private bool _hasCalculated;
+        private bool _hasCustomRules;
+
+        public bool RequiresFullRecalculation(Node changedNode)
+        {
+            return !_hasCalculated || _hasCustomRules || changedNode is SocketNode;
+        }
+
+        public void RefreshNodePower(Node node)
+        {
+            if (node != null && node.CanChangePower)
+                node.SetRuntimePower(_powerByNode.TryGetValue(node, out float power) ? power : 0f);
+        }
 
         public void Recalculate(IEnumerable<Node> nodes)
         {
             List<Node> nodeList = CollectNodes(nodes);
             _powerByNode.Clear();
+            _hasCustomRules = false;
 
             for (int i = 0; i < nodeList.Count; i++)
             {
@@ -28,6 +42,7 @@ namespace SkillTree
 
                 node.SetRuntimePower(_powerByNode.TryGetValue(node, out float power) ? power : 0f);
             }
+            _hasCalculated = true;
         }
 
         private void ApplySocketInfluence(SocketNode socketNode)
@@ -45,6 +60,12 @@ namespace SkillTree
             for (int i = 0; i < influenceRules.Count; i++)
             {
                 GemPowerInfluenceRule influenceRule = influenceRules[i];
+                // Only these sealed built-in rules depend solely on authored
+                // distance and power eligibility. Keep full updates for extensions.
+                if (influenceRule != null
+                    && influenceRule is not WithinDistanceGemPowerInfluenceRule
+                    && influenceRule is not ExactDistanceGemPowerInfluenceRule)
+                    _hasCustomRules = true;
                 influenceRule?.Apply(socketNode, _distancesByNode, _powerByNode);
             }
         }

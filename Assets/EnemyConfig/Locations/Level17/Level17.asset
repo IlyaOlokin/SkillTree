@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d219f318536ff974580c180788e87719, type: 3}
+  m_Name: Level17
+  m_EditorClassIdentifier: 
+  locationId: level-17
+  displayName: Level 17 - Stormscar Ramparts
+  description: Bleeding raiders and overcharged attackers defend the ramparts. Defeat the boss on the final stage.
+  mapIcon: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
+  battleBackground: {fileID: -3521884470877836325, guid: 802cc36259ac0dc42886417f42a230d1, type: 3}
+  enemyDatabase: {fileID: 11400000, guid: 4303eca4d2ef4464bb5afb88fb4a5b14, type: 2}
+  levelRewards:
+  - levelNumber: 130
+    itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
+    amount: 1
+  unlockPrerequisites:
+  - {fileID: 11400000, guid: e0330fceda0d4f25ae3439b3c41be287, type: 2}

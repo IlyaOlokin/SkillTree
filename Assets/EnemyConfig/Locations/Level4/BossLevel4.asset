@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d7c559fd99497d4787026251b18e476, type: 3}
+  m_Name: BossLevel4
+  m_EditorClassIdentifier: Assembly-CSharp::Battle.EnemyBossDefinition
+  waveWeight: 1
+  coreProfile: {fileID: 11400000, guid: 45aa8a069e656de4881aed8e118d4e3d, type: 2}
+  attackSpeedModule: {fileID: 11400000, guid: 016eb83a0ba566648a1f879b29c7c9c3, type: 2}
+  attackModule: {fileID: 11400000, guid: aeec2b4ea30b9f74ea74da10843368fd, type: 2}
+  defenceModule: {fileID: 11400000, guid: 134b57c3ab1864445b1e88696dbcaf44, type: 2}
+  utilityModule: {fileID: 11400000, guid: 2003b8263f7d2464daa4fa4c26d62164, type: 2}
+  affixPool: []

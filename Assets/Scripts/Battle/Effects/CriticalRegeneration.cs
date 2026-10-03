@@ -25,7 +25,7 @@ namespace Battle
                 return;
             }
 
-            _regenerationModifier = ScriptableObject.CreateInstance<PercentHealthRegeneration>();
+            _regenerationModifier = CreateRuntimeModifier<PercentHealthRegeneration>();
             _regenerationModifier.Initialize(_maxHealthRegenerationPerSecond);
             unit.AddOuterModifier(_regenerationModifier);
         }

@@ -7,7 +7,6 @@ namespace Battle
     {
         private readonly Unit _owner;
         private readonly Modifier _modifier;
-        private readonly bool _ownsModifier;
         private bool _isUsed;
         private bool _isApplied;
         private bool _isSubscribed;
@@ -21,7 +20,7 @@ namespace Battle
         {
             _owner = owner;
             _modifier = modifier;
-            _ownsModifier = ownsModifier;
+            if (ownsModifier) OwnRuntimeModifier(modifier);
         }
 
         public override void OnApply(Unit unit)
@@ -60,10 +59,6 @@ namespace Battle
                 _isApplied = false;
             }
 
-            if (_ownsModifier && _modifier != null)
-            {
-                Object.Destroy(_modifier);
-            }
         }
 
         private void HandleHit(ITarget _)

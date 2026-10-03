@@ -10,6 +10,7 @@ namespace Visual
         private static readonly int RingIntensityId = Shader.PropertyToID("_RingIntensity");
         private static readonly int RayIntensityId = Shader.PropertyToID("_RayIntensity");
         private const float VisiblePowerThreshold = 0.001f;
+        private const float TransitionTolerance = 0.0001f;
 
         [Header("References")]
         [SerializeField] private Renderer auraRenderer;
@@ -55,15 +56,12 @@ namespace Visual
         private void OnEnable()
         {
             Initialize();
+            UpdateTransitionScheduling();
             ApplyPower(_currentPower);
         }
 
         private void Update()
         {
-            if (Mathf.Approximately(_currentPower, _targetPower) &&
-                Mathf.Approximately(_currentAllocatedColorWeight, _targetAllocatedColorWeight))
-                return;
-
             float powerStep = smoothingSpeed <= 0f
                 ? 1f
                 : 1f - Mathf.Exp(-smoothingSpeed * Time.deltaTime);
@@ -73,7 +71,23 @@ namespace Visual
 
             _currentPower = Mathf.Lerp(_currentPower, _targetPower, powerStep);
             _currentAllocatedColorWeight = Mathf.Lerp(_currentAllocatedColorWeight, _targetAllocatedColorWeight, colorStep);
+            UpdateTransitionScheduling();
             ApplyPower(_currentPower);
+        }
+
+        private void UpdateTransitionScheduling()
+        {
+            bool settled = Mathf.Abs(_currentPower - _targetPower) <= TransitionTolerance &&
+                           Mathf.Abs(_currentAllocatedColorWeight - _targetAllocatedColorWeight) <= TransitionTolerance;
+            if (settled)
+            {
+                _currentPower = _targetPower;
+                _currentAllocatedColorWeight = _targetAllocatedColorWeight;
+            }
+
+            // SetPower can wake a disabled component; no Update callbacks are needed at rest.
+            // An absolute tolerance also lets exponential fades towards zero finish.
+            enabled = !settled;
         }
 
         public void SetPower(float power)
@@ -132,6 +146,7 @@ namespace Visual
                 _hasReceivedState = true;
             }
 
+            UpdateTransitionScheduling();
             ApplyPower(_currentPower);
         }
 

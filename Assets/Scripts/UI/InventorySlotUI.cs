@@ -18,6 +18,7 @@ namespace UI
         [SerializeField] private GameObject emptyState;
 
         [Inject] private TooltipUI _tooltipUI;
+        [Inject] private GemPlacementService _placement;
 
         private int _slotIndex = -1;
         private InventoryItem _item;
@@ -49,9 +50,10 @@ namespace UI
             if (stackCountText != null)
             {
                 int stackCount = item?.StackCount ?? 0;
-                bool shouldShowStackCount = stackCount > 1;
+                bool reserved = _placement != null && _placement.IsReserved(item);
+                bool shouldShowStackCount = reserved || stackCount > 1;
                 stackCountText.gameObject.SetActive(shouldShowStackCount);
-                stackCountText.text = shouldShowStackCount ? stackCount.ToString() : string.Empty;
+                stackCountText.text = reserved ? "…" : shouldShowStackCount ? stackCount.ToString() : string.Empty;
             }
 
             if (selectionHighlight != null)
@@ -63,6 +65,12 @@ namespace UI
 
         public IReadOnlyList<string> GetTooltipDescriptions()
         {
+            if (_placement != null && _placement.IsReserved(_item))
+            {
+                List<string> descriptions = new(_item.GetTooltipDescriptions());
+                descriptions.Add(LocalizationSupport.GameLocalization.Get("gem.bridge.reserved", "This gem is being placed. Choose the second socket or right-click to cancel."));
+                return descriptions;
+            }
             return _item?.GetTooltipDescriptions() ?? System.Array.Empty<string>();
         }
 

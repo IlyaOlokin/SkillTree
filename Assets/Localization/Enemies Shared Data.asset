@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Enemies Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: Enemies
+  m_TableCollectionNameGuidString: a42d94994a1f1e741a8ceccfe7a9a08b
+  m_Entries:
+  - m_Id: 1783254310893000001
+    m_Key: enemy.affix.swift
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000002
+    m_Key: enemy.affix.coldborn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000003
+    m_Key: enemy.affix.fireborn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000004
+    m_Key: enemy.affix.stormborn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000005
+    m_Key: enemy.affix.strong
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000006
+    m_Key: enemy.affix.stout
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000007
+    m_Key: enemy.affix.accurate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000008
+    m_Key: enemy.affix.searing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000009
+    m_Key: enemy.affix.freezing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000010
+    m_Key: enemy.affix.surging
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000011
+    m_Key: enemy.affix.lacerating
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000012
+    m_Key: enemy.affix.shielded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000013
+    m_Key: enemy.affix.resilient
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000014
+    m_Key: enemy.affix.fireward
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000015
+    m_Key: enemy.affix.coldward
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000016
+    m_Key: enemy.affix.stormward
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000017
+    m_Key: enemy.affix.elementalward
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 4022220366255751314
+  references:
+    version: 2
+    RefIds:
+    - rid: 4022220366255751314
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1783254310893

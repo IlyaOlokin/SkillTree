@@ -16,8 +16,7 @@ namespace SkillTree
         /// </summary>
         public static bool HasAllocatedPathToRoot(Node startNode)
         {
-            var visited = new HashSet<Node>();
-            return HasAllocatedPathToRootInternal(startNode, visited);
+            return HasPathToRoot(startNode, node => node.IsActive);
         }
 
         /// <summary>
@@ -72,22 +71,28 @@ namespace SkillTree
             }
         }
 
-        // Recursive DFS used specifically for the "allocated path to root" check.
-        private static bool HasAllocatedPathToRootInternal(Node current, HashSet<Node> visited)
+        // The starting node need not be passable: it may be a candidate for allocation.
+        // AllocationNeighbors includes bridge edges without changing the base graph.
+        internal static bool HasPathToRoot(Node startNode, Predicate<Node> canTraverse)
         {
-            if (current == null)
-                return false;
+            var visited = new HashSet<Node>();
+            var stack = new Stack<Node>();
+            stack.Push(startNode);
 
-            if (current is RootNode)
-                return true;
-
-            if (!visited.Add(current))
-                return false;
-
-            foreach (var next in current.ConnectedNodes)
+            while (stack.Count > 0)
             {
-                if (next != null && next.IsActive && HasAllocatedPathToRootInternal(next, visited))
+                Node current = stack.Pop();
+                if (current == null || !visited.Add(current))
+                    continue;
+
+                if (current is RootNode)
                     return true;
+
+                foreach (Node next in current.AllocationNeighbors)
+                {
+                    if (next != null && canTraverse(next))
+                        stack.Push(next);
+                }
             }
 
             return false;

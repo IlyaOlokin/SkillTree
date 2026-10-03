@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 namespace InventorySystem
 {
     public class InventorySelectionState : IDisposable
     {
         private readonly PlayerInventory _inventory;
+        private InventoryItem _selectedItem;
 
         public event Action OnSelectionChanged;
 
@@ -29,17 +31,18 @@ namespace InventorySystem
             if (item == null || item.IsEmpty || (item.ItemType != InventoryItemType.Gem && !item.CanBeUsedOnNode))
                 return false;
 
-            if (SelectedSlotIndex == slotIndex && HasSelectedItem)
+            if (IsSelected(slotIndex))
                 return true;
 
             SelectedSlotIndex = slotIndex;
+            _selectedItem = item;
             RaiseSelectionChanged();
             return true;
         }
 
         public void ToggleSlotSelection(int slotIndex)
         {
-            if (SelectedSlotIndex == slotIndex && HasSelectedItem)
+            if (IsSelected(slotIndex))
             {
                 ClearSelection();
                 return;
@@ -54,6 +57,7 @@ namespace InventorySystem
                 return;
 
             SelectedSlotIndex = -1;
+            _selectedItem = null;
             RaiseSelectionChanged();
         }
 
@@ -73,14 +77,34 @@ namespace InventorySystem
             if (!HasSelectedSlot)
                 return;
 
-            if (!HasSelectedItem)
+            if (!TryFindSelectedItemSlot(out int slotIndex))
             {
-                SelectedSlotIndex = -1;
-                RaiseSelectionChanged();
+                ClearSelection();
                 return;
             }
 
+            SelectedSlotIndex = slotIndex;
             RaiseSelectionChanged();
+        }
+
+        private bool TryFindSelectedItemSlot(out int slotIndex)
+        {
+            slotIndex = -1;
+
+            if (_inventory == null || _selectedItem == null || _selectedItem.IsEmpty)
+                return false;
+
+            IReadOnlyList<InventorySlot> slots = _inventory.Slots;
+            for (int i = 0; i < slots.Count; i++)
+            {
+                if (ReferenceEquals(slots[i].Item, _selectedItem))
+                {
+                    slotIndex = i;
+                    return _selectedItem.ItemType == InventoryItemType.Gem || _selectedItem.CanBeUsedOnNode;
+                }
+            }
+
+            return false;
         }
 
         private void RaiseSelectionChanged()

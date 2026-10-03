@@ -23,12 +23,12 @@ namespace Battle
         
         private void CalculateBonuses(DamageInfo damageInfo, Unit defender)
         {
-            MoreDamage = ScriptableObject.CreateInstance<BaseModifier>();
+            MoreDamage = CreateRuntimeModifier<BaseModifier>();
             MoreDamage.modifierContainer = new ModifierContainer(ModifierType.More, StatType.Damage, 
                 BASE_MORE_DAMAGE_BONUS * (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.OverchargePower)));
             MoreDamage.SetPriorities(new List<ModifierPriority>() { ModifierPriority.OnAttack });
             
-            MoreCritDamageBonus = ScriptableObject.CreateInstance<BaseModifier>();
+            MoreCritDamageBonus = CreateRuntimeModifier<BaseModifier>();
             MoreCritDamageBonus.modifierContainer = new ModifierContainer(ModifierType.More, StatType.CritDamageBonus, 
                 BASE_MORE_CRIT_DAMAGE_BONUS * (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.OverchargePower)));
             MoreCritDamageBonus.SetPriorities(new List<ModifierPriority>() { ModifierPriority.OnAttack });
@@ -85,7 +85,9 @@ namespace Battle
                 if (Random.Range(0f, 1f) < defender.BaseUnitModifiers.GetStatValue(StatType.OverchargeAvoidanceChance))
                     return;
                 Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Overcharge>() ? attacker : defender;
-                effectTarget.effectController.AddEffect(() => new Overcharge(damageInfo, effectTarget));
+                if (AilmentAbsorption.TryAbsorbIncomingAilment(effectTarget)) return;
+
+                effectTarget.effectController.AddEffect(() => new Overcharge(damageInfo, effectTarget), attacker);
                 attacker.AilmentApplied(effectTarget);
             }
         }

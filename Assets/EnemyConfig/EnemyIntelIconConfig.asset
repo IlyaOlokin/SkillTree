@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c335eb0df479274fbbb36ce17149e2f, type: 3}
+  m_Name: EnemyIntelIconConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Battle.EnemyIntelIconConfig
+  defaultIcon: {fileID: 21300000, guid: 145ee4ceb3e1cfd468a64c3d119ed1ca, type: 3}
+  icons:
+  - featureType: 3
+    icon: {fileID: 21300000, guid: 0e1ab67eb67874542b1606233616c377, type: 3}
+  - featureType: 4
+    icon: {fileID: 21300000, guid: 85f6db0efa996b342ac40bb7aa6eb2f9, type: 3}
+  - featureType: 5
+    icon: {fileID: 21300000, guid: a658ec0d4c286ed489843b72ebb7a3a0, type: 3}
+  - featureType: 6
+    icon: {fileID: 21300000, guid: 66b19d43466315e4caff1240bfe0da43, type: 3}
+  - featureType: 10
+    icon: {fileID: 21300000, guid: d8e8912eb0e430d499d921be1c3cf4be, type: 3}
+  - featureType: 11
+    icon: {fileID: 21300000, guid: d98b775a6f3c03e43ba95a50dd259d3f, type: 3}
+  - featureType: 12
+    icon: {fileID: 21300000, guid: 6402e62a7d64d494ca6f3fd91f490099, type: 3}
+  - featureType: 13
+    icon: {fileID: 21300000, guid: 341e922fbff1ebe4daf1ca0c2ca9ce27, type: 3}
+  - featureType: 14
+    icon: {fileID: 21300000, guid: 4abf3c14149faf443ba21990a107d80a, type: 3}
+  - featureType: 15
+    icon: {fileID: 21300000, guid: 1fe784c0346a64742a9ab94ab0dd7617, type: 3}
+  - featureType: 16
+    icon: {fileID: 21300000, guid: 04841b8a9cae96b42aa2a2689b689515, type: 3}
+  - featureType: 17
+    icon: {fileID: 21300000, guid: 8124fde2ebe01954895333c53b755f61, type: 3}
+  - featureType: 18
+    icon: {fileID: 21300000, guid: 227a8556eab6d764483c31ec867d61d2, type: 3}
+  - featureType: 21
+    icon: {fileID: 21300000, guid: e0d28137676e2ba428d9594922a7cfd3, type: 3}
+  - featureType: 22
+    icon: {fileID: 21300000, guid: 7e55dad170b82e54d9ef2f91f42835ef, type: 3}
+  - featureType: 28
+    icon: {fileID: 21300000, guid: a75085037fd278148ab9bc1455cf53dc, type: 3}

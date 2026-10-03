@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using DG.Tweening;
@@ -11,6 +12,7 @@ public class TooltipWindow : MonoBehaviour
     [SerializeField] private TMP_Text description;
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private RectTransform heightOffsetSource;
+    [SerializeField] private TooltipIconStrip iconStrip;
     [SerializeField] private int maxCharactersPerLine = 32;
     [SerializeField] [Min(0f)] private float showDuration = 0.16f;
     [SerializeField] [Min(0f)] private float hideDuration = 0.12f;
@@ -64,6 +66,7 @@ public class TooltipWindow : MonoBehaviour
 
     public void SetTexts(IReadOnlyList<string> texts, bool shouldShowTitle, string titleValue)
     {
+        texts ??= Array.Empty<string>();
         EnsureDescriptionFieldCount(texts.Count);
         if (title != null)
         {
@@ -88,6 +91,11 @@ public class TooltipWindow : MonoBehaviour
                 descriptionField.text = TooltipTextLinkFormatter.Format(WrapText(texts[i]));
             }
         }
+    }
+
+    public void SetIcons(IReadOnlyList<TooltipIconData> icons)
+    {
+        iconStrip?.SetIcons(icons);
     }
 
     public void RefreshLayout()

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Gems;
 using LocalizationSupport;
-using SkillTree;
 using TooltipSystem;
 using UnityEngine;
 
@@ -17,23 +16,34 @@ namespace SkillTree
         [SerializeField] [HideInInspector] private GemInstance defaultSocketedGem;
 
         private readonly List<Modifier> _runtimeGemModifiers = new();
+        private GemInstance _pendingGem;
+        [SerializeField, HideInInspector] private SocketNode _bridgePartner;
+        public bool HasPendingBridge => _pendingGem != null;
+        public SocketNode BridgePartner => _bridgePartner != null
+            && _bridgePartner._bridgePartner == this
+            && socketedGem != null && socketedGem.Kind == GemKind.Bridge
+            && !string.IsNullOrEmpty(socketedGem.InstanceId)
+            && socketedGem.InstanceId == _bridgePartner.socketedGem?.InstanceId ? _bridgePartner : null;
+        public GemInstance SavedSocketedGem => socketedGem;
 
         public event Action<SocketNode> OnSocketedGemChanged;
 
-        public GemInstance SocketedGem => socketedGem;
+        public GemInstance SocketedGem => _pendingGem ?? socketedGem;
         public GemInstance DefaultSocketedGem => defaultSocketedGem;
-        public bool HasGem => IsValidGem(socketedGem);
-        public bool IsGemActive => IsActive && HasGem;
+        public bool HasGem => IsValidGem(SocketedGem);
+        public bool IsGemActive => IsActive && IsValidGem(socketedGem) && !HasPendingBridge;
         public override bool CanChangePower => false;
 
         private void Awake()
         {
             RebuildRuntimeGemModifiers();
+            if (!TryGetComponent<Visual.BridgeConnectionVisual>(out _))
+                gameObject.AddComponent<Visual.BridgeConnectionVisual>();
         }
 
         public bool CanAcceptGem(GemInstance gemInstance)
         {
-            return IsActive && IsValidGem(gemInstance) && !HasGem;
+            return IsValidGem(gemInstance) && gemInstance.Kind != GemKind.Bridge && !HasGem;
         }
 
         public bool TryInsertGem(GemInstance gemInstance)
@@ -50,6 +60,11 @@ namespace SkillTree
         public bool TryRemoveGem(out GemInstance removedGem)
         {
             removedGem = socketedGem;
+            if (HasPendingBridge || socketedGem?.Kind == GemKind.Bridge)
+            {
+                removedGem = null;
+                return false;
+            }
             if (!HasGem)
             {
                 removedGem = null;
@@ -73,21 +88,42 @@ namespace SkillTree
         public override IReadOnlyList<string> GetTooltipDescriptions()
         {
             if (HasGem)
-                return socketedGem.GetTooltipDescriptions(ModifierPowerContext.FromNode(this));
+                return GetSocketedGemDescriptions();
 
             List<string> descriptions = GetModifierTooltipDescriptions();
             AppendSocketNodeDescription(descriptions);
 
             descriptions.Add(GameLocalization.Get("node.socket.empty", "Empty Socket"));
 
+            AppendInactiveNoEffectDescription(descriptions);
+            return descriptions;
+        }
+
+        public override IReadOnlyList<TooltipDescriptionLine> GetTooltipDescriptionLines()
+        {
+            return GetRequiredTooltipDescriptionLines(GetTooltipDescriptions());
+        }
+
+        private List<string> GetSocketedGemDescriptions()
+        {
+            List<string> descriptions = new(SocketedGem.GetTooltipDescriptions(ModifierPowerContext.FromNode(this)));
+            if (HasPendingBridge)
+            {
+                descriptions.Add(GameLocalization.Get("node.socket.bridge.pending", "Choose the second socket. Right-click to cancel."));
+                return descriptions;
+            }
+            if (BridgePartner != null)
+            {
+                descriptions.Add(GameLocalization.Format("node.socket.bridge.partner", "Connected to: [[0]]", BridgePartner.name));
+                return descriptions;
+            }
             if (!IsActive)
             {
                 descriptions.Add(GameLocalization.Get(
-                    "node.socket.allocateBeforeSocketing",
-                    "Allocate this node before socketing a {gem|Gem}."));
+                    "node.inactiveNoEffect",
+                    "This node is inactive and grants no effects"));
             }
 
-            AppendInactiveNoEffectDescription(descriptions);
             return descriptions;
         }
 
@@ -113,10 +149,25 @@ namespace SkillTree
             }
         }
 
+        private static IReadOnlyList<TooltipDescriptionLine> GetRequiredTooltipDescriptionLines(
+            IReadOnlyList<string> descriptions)
+        {
+            if (descriptions == null || descriptions.Count == 0)
+                return Array.Empty<TooltipDescriptionLine>();
+
+            List<TooltipDescriptionLine> lines = new(descriptions.Count);
+            for (int i = 0; i < descriptions.Count; i++)
+            {
+                lines.Add(TooltipDescriptionLine.Required(descriptions[i]));
+            }
+
+            return lines;
+        }
+
         private void RebuildRuntimeGemModifiers()
         {
             ClearRuntimeGemModifiers();
-            if (!HasGem || socketedGem.Kind != GemKind.LocalModifiers)
+            if (!IsValidGem(socketedGem) || socketedGem.Kind != GemKind.LocalModifiers)
                 return;
 
             _runtimeGemModifiers.AddRange(socketedGem.CreateRuntimeModifiers());
@@ -145,10 +196,25 @@ namespace SkillTree
 
         public void SetSocketedGemFromSave(GemInstance gemInstance)
         {
-            socketedGem = gemInstance;
-            RebuildRuntimeGemModifiers();
+            SetGemState(gemInstance);
             NotifySocketChanged();
         }
+
+        internal void SetGemState(GemInstance gem, SocketNode partner = null)
+        {
+            _pendingGem = null;
+            socketedGem = gem;
+            _bridgePartner = partner;
+            RebuildRuntimeGemModifiers();
+        }
+
+        internal void SetPendingBridge(GemInstance gem)
+        {
+            _pendingGem = gem;
+            NotifySocketChanged();
+        }
+
+        internal void PublishGemChange() => NotifySocketChanged();
 
         protected override void OnValidate()
         {

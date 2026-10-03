@@ -13,7 +13,7 @@ namespace Battle
         NextAttackModifierEffect = 8,
         Sunder = 9,
         Distract = 10,
-        BarrierRestorationPowerBuff = 11,
+        BarrierSurge = 11,
         EvasiveMomentum = 12,
         Pain = 13,
         Scar = 14,
@@ -24,5 +24,9 @@ namespace Battle
         Vengeance = 19,
         TimedNextAttackModifier = 20,
         Freeze = 21,
+        AilmentAbsorption = 22,
+        BleedPhysicalDamageBuff = 23,
+        OffensiveStance = 24,
+        DefensiveStance = 25,
     }
 }

@@ -8,7 +8,7 @@ namespace SkillTree
     [CreateAssetMenu(menuName = "Modifiers/Special/Profaned Damage Taken", fileName = "New ProfanedDamageTakenModifier")]
     public class ProfanedDamageTakenModifier : Modifier
     {
-        private const float DamageTakenMultiplier = 1.5f;
+        private const float DamageTakenMultiplier = 2f;
 
         public override bool IsInPriority(ModifierPriority priority)
         {
@@ -41,7 +41,7 @@ namespace SkillTree
         {
             return GameLocalization.GetModifier(
                 "modifier.profanedDamageTaken.description",
-                "While you have {profanedHealthPercent|Profaned Health}, take 50% more Damage");
+                "While you have {profanedHealthPercent|Profaned Health}, take 100% more Damage");
         }
     }
 }

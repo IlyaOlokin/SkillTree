@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c890a7a896953d74f903350c03d7d8d2, type: 3}
+  m_Name: Level5EnemyConfigDatabase
+  m_EditorClassIdentifier: 
+  modulePools:
+  - poolId: 
+    selectionWeight: 1
+    minEnemyWeight: 0.2
+    maxEnemyWeight: 1
+    coreProfiles:
+    - {fileID: 11400000, guid: bf3f8951f242aa548b02e5e768b5b7c3, type: 2}
+    - {fileID: 11400000, guid: 45aa8a069e656de4881aed8e118d4e3d, type: 2}
+    - {fileID: 11400000, guid: 82589201e8e82844c8f88f561af39ae9, type: 2}
+    attackSpeedModules:
+    - {fileID: 11400000, guid: 016eb83a0ba566648a1f879b29c7c9c3, type: 2}
+    - {fileID: 11400000, guid: 834ec038bf4c7854f8116ea6ca52c3c3, type: 2}
+    - {fileID: 11400000, guid: 351057d1615f1df43b4f16df58ab616a, type: 2}
+    attackModules:
+    - {fileID: 11400000, guid: aeec2b4ea30b9f74ea74da10843368fd, type: 2}
+    - {fileID: 11400000, guid: fdfc9d7bff4d4d441bb1c79382d5d299, type: 2}
+    - {fileID: 11400000, guid: 6547cfd7b7fca174b8a23046f5759afc, type: 2}
+    - {fileID: 11400000, guid: e959fddfb0e1b004a81d75d1763efad3, type: 2}
+    defenceModules:
+    - {fileID: 11400000, guid: 134b57c3ab1864445b1e88696dbcaf44, type: 2}
+    - {fileID: 11400000, guid: c9617739bdeb91a4fac26268689a38f8, type: 2}
+    - {fileID: 11400000, guid: a4d51cd690b08f74a9e06236613b4f04, type: 2}
+    - {fileID: 11400000, guid: 6f22a0f09ca2bfb4284a03c2b55194eb, type: 2}
+    - {fileID: 11400000, guid: 78cfed832d82d7f44aaa249490b41c07, type: 2}
+    - {fileID: 11400000, guid: e23d07550957c8e4f8e8002c379c100b, type: 2}
+    utilityModules:
+    - {fileID: 11400000, guid: 2003b8263f7d2464daa4fa4c26d62164, type: 2}
+    - {fileID: 11400000, guid: 95f99f172f1f4ea408289d478878ee4a, type: 2}
+    affixPool:
+    - {fileID: 11400000, guid: c2bdd953a1ec2154d927e63e023d1378, type: 2}
+    - {fileID: 11400000, guid: a817d26638ef9fe4795561ee24da464a, type: 2}
+    - {fileID: 11400000, guid: c976ff6cddcdd0d4598b533b119528ee, type: 2}
+    - {fileID: 11400000, guid: 6e5d1066ceca3144d97c7ec6cedd7dc0, type: 2}
+    - {fileID: 11400000, guid: 9c50ca1ee8af2e34cb1b6b866ef14608, type: 2}
+    - {fileID: 11400000, guid: 4319db4a16f5e3f4baebac47f9dfb8db, type: 2}
+    - {fileID: 11400000, guid: 79a4301b848c41d46b34fdf60b42bada, type: 2}
+    - {fileID: 11400000, guid: e5556428b29fcb64da513585986f4541, type: 2}
+    - {fileID: 11400000, guid: 84684fc7ce12bc6428d4a3d5dcd73205, type: 2}
+    - {fileID: 11400000, guid: ff0e5895fdbcfde479e5e4a98c96e2ec, type: 2}
+    - {fileID: 11400000, guid: f0d57a77224ab67488c2f894f5b8fe51, type: 2}
+  goldDropConfig: {fileID: 11400000, guid: 683cd3f23ffbed04e933725dfe2681ef, type: 2}
+  levelPowerConfig: {fileID: 11400000, guid: 77c2e810577433a4c8c4044c074e8a62, type: 2}
+  startingLevel: 21
+  maxLevel: 25
+  wavesToUnlockNextLevel: 3
+  respawnDelay: 1
+  maxEnemiesPerWave: 3
+  rarityBalance: {fileID: 11400000, guid: e06ecfd8fa36bd64ab614c313d620730, type: 2}
+  affixRollSettings:
+    rules:
+    - rarity: 0
+      minAffixes: 0
+      maxAffixes: 3
+      extraAffixRollChance: 0.4
+    - rarity: 1
+      minAffixes: 1
+      maxAffixes: 4
+      extraAffixRollChance: 0.5
+    - rarity: 2
+      minAffixes: 2
+      maxAffixes: 5
+      extraAffixRollChance: 0.6
+    - rarity: 3
+      minAffixes: 3
+      maxAffixes: 6
+      extraAffixRollChance: 0.7
+    - rarity: 4
+      minAffixes: 4
+      maxAffixes: 8
+      extraAffixRollChance: 0.8
+  bossBalance: {fileID: 11400000, guid: 4effbdd8084dcd74790e13923953cfb1, type: 2}
+  wavePowerBalance: {fileID: 11400000, guid: a8b39b4775f364d4db2ad8585647ed53, type: 2}
+  statBudgetConfig: {fileID: 11400000, guid: c638789c3f0751a4c83dff393bcc550c, type: 2}
+  globalModifiers: []

@@ -2,6 +2,7 @@ using Battle;
 using DG.Tweening;
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.VFX;
 using VFX;
 using Object = UnityEngine.Object;
@@ -11,7 +12,11 @@ namespace Visual
     [Serializable]
     public class UnitVisualHitEffectController
     {
-        [SerializeField] private SpriteRenderer unitVisual;
+        private static readonly int GlowColorId = Shader.PropertyToID("_Color");
+        private static readonly int CoreColorId = Shader.PropertyToID("_CoreColor");
+
+        [FormerlySerializedAs("unitVisual")]
+        [SerializeField] private Renderer unitRenderer;
         [Header("Flash")]
         [SerializeField] private Transform wobbleTransform;
         [SerializeField] private Color flashColor = Color.white;
@@ -26,6 +31,13 @@ namespace Visual
         [SerializeField] private float hitScaleMultiplier = 0.92f;
         [SerializeField] private float scaleInDuration = 0.04f;
         [SerializeField] private float scaleOutDuration = 0.1f;
+        [Header("Knockback")]
+        [SerializeField] private Transform knockbackTransform;
+        [FormerlySerializedAs("attackMoveDirection")]
+        [SerializeField] private Vector2 combatDirection = Vector2.right;
+        [SerializeField] private float knockbackDistance = 0.1f;
+        [SerializeField] private float knockbackInDuration = 0.05f;
+        [SerializeField] private float knockbackReturnDuration = 0.12f;
 
         [Header("Hit")]
         [SerializeField] private GameObject hitEffectPrefab;
@@ -44,43 +56,67 @@ namespace Visual
         [SerializeField] private string dominantBaseDamageTypeProperty = "DominantBaseDamageType";
 
         private Color _baseColor;
+        private Color _baseGlowColor;
+        private Color _baseCoreColor;
+        private Transform _ownerTransform;
         private Quaternion _baseWobbleLocalRotation;
         private Vector3 _baseScale;
+        private Vector3 _baseKnockbackLocalPosition;
         private bool _isInitialized;
         private bool _isReplacingHitSequence;
+        private SpriteRenderer _spriteRenderer;
+        private UnitShapeView _unitShapeView;
+        private MaterialPropertyBlock _propertyBlock;
         private VisualEffect[] _spawnedHitEffectsBuffer = Array.Empty<VisualEffect>();
         private ProceduralShockwavePlayer[] _spawnedShockwavePlayersBuffer = Array.Empty<ProceduralShockwavePlayer>();
 
         private Sequence _hitSequence;
 
-        public void Initialize()
+        public void Initialize(Transform ownerTransform, Vector2 fallbackCombatDirection)
         {
             if (_isInitialized)
             {
                 return;
             }
 
-            _baseColor = unitVisual != null ? unitVisual.color : Color.white;
+            _ownerTransform = ownerTransform;
+            ResolveUnitRenderer();
+            SetCombatDirection(fallbackCombatDirection);
+            CaptureBaseVisualColors();
             _baseWobbleLocalRotation = wobbleTransform != null ? wobbleTransform.localRotation : Quaternion.identity;
             if (scaleTransform == null)
             {
                 scaleTransform = wobbleTransform;
             }
 
+            if (knockbackTransform == null)
+            {
+                knockbackTransform = scaleTransform != null ? scaleTransform : wobbleTransform;
+            }
+
             _baseScale = scaleTransform != null ? scaleTransform.localScale : Vector3.one;
+            _baseKnockbackLocalPosition = knockbackTransform != null ? knockbackTransform.localPosition : Vector3.zero;
             _isInitialized = true;
+        }
+
+        public void SetCombatDirection(Vector2 fallbackCombatDirection)
+        {
+            if (fallbackCombatDirection.sqrMagnitude > 0.0001f)
+            {
+                combatDirection = fallbackCombatDirection.normalized;
+            }
         }
 
         public void PlayHitEffect(DamageInfo damageInfo)
         {
-            Initialize();
+            Initialize(_ownerTransform, combatDirection);
 
-            if (unitVisual == null || damageInfo == null || !HasDamage(damageInfo.DamageInstance))
+            if (unitRenderer == null || damageInfo == null || !HasDamage(damageInfo.DamageInstance))
             {
                 return;
             }
 
-            UnitFlash();
+            UnitFlash(damageInfo);
             HitEffect(damageInfo);
         }
 
@@ -88,14 +124,14 @@ namespace Visual
         {
             WeaponType attackerWeaponType = damageInfo.Owner != null ? damageInfo.Owner.WeaponType : WeaponType.Unarmed;
             GameObject effectPrefab = GetHitEffectPrefab(attackerWeaponType);
-            if (effectPrefab == null || unitVisual == null)
+            if (effectPrefab == null || unitRenderer == null)
             {
                 return;
             }
 
             var hitEffectInstance = Object.Instantiate(
                 effectPrefab,
-                unitVisual.bounds.center,
+                unitRenderer.bounds.center,
                 effectPrefab.transform.rotation);
             var autoDestroy = hitEffectInstance.GetComponent<AutoDestroyVisualEffect>();
             if (autoDestroy == null)
@@ -112,24 +148,26 @@ namespace Visual
             return attackerWeaponType switch
             {
                 WeaponType.Sword => swordHitEffectPrefab != null ? swordHitEffectPrefab : hitEffectPrefab,
-                WeaponType.Staff => staffHitEffectPrefab != null ? staffHitEffectPrefab : hitEffectPrefab,
+                WeaponType.FireStaff or WeaponType.ColdStaff or WeaponType.LightningStaff => staffHitEffectPrefab != null ? staffHitEffectPrefab : hitEffectPrefab,
                 WeaponType.Hammer => hammerHitEffectPrefab != null ? hammerHitEffectPrefab : hitEffectPrefab,
                 _ => hitEffectPrefab
             };
         }
 
-        private void UnitFlash()
+        private void UnitFlash(DamageInfo damageInfo)
         {
             _isReplacingHitSequence = true;
             _hitSequence?.Kill();
             _isReplacingHitSequence = false;
 
-            unitVisual.color = _baseColor;
+            ResetVisualColor();
             ResetWobbleRotation();
+            ResetKnockbackPosition();
 
             _hitSequence = DOTween.Sequence();
+            Vector3 knockbackPosition = _baseKnockbackLocalPosition + GetKnockbackDirection(damageInfo) * knockbackDistance;
 
-            _hitSequence.Append(unitVisual.DOColor(flashColor, flashInDuration).SetEase(Ease.OutQuad));
+            _hitSequence.Append(CreateVisualColorTween(1f, flashInDuration).SetEase(Ease.OutQuad));
 
             if (wobbleTransform != null)
             {
@@ -147,12 +185,26 @@ namespace Visual
                     .SetEase(Ease.OutQuad));
             }
 
-            _hitSequence.Append(unitVisual.DOColor(_baseColor, flashOutDuration).SetEase(Ease.InQuad));
+            if (knockbackTransform != null && knockbackDistance > 0f)
+            {
+                _hitSequence.Join(knockbackTransform
+                    .DOLocalMove(knockbackPosition, knockbackInDuration)
+                    .SetEase(Ease.OutQuad));
+            }
+
+            _hitSequence.Append(CreateVisualColorTween(0f, flashOutDuration).SetEase(Ease.InQuad));
 
             if (scaleTransform != null)
             {
                 _hitSequence.Join(scaleTransform
                     .DOScale(_baseScale, scaleOutDuration)
+                    .SetEase(Ease.OutQuad));
+            }
+
+            if (knockbackTransform != null)
+            {
+                _hitSequence.Join(knockbackTransform
+                    .DOLocalMove(_baseKnockbackLocalPosition, knockbackReturnDuration)
                     .SetEase(Ease.OutQuad));
             }
 
@@ -163,13 +215,134 @@ namespace Visual
         public void Dispose()
         {
             _hitSequence?.Kill();
-            if (unitVisual != null)
-            {
-                unitVisual.color = _baseColor;
-            }
+            ResetVisualColor();
 
             ResetWobbleRotation();
             ResetScale();
+            ResetKnockbackPosition();
+        }
+
+        private void ResolveUnitRenderer()
+        {
+            if (_ownerTransform == null)
+            {
+                return;
+            }
+
+            if (_unitShapeView == null)
+            {
+                _unitShapeView = _ownerTransform.GetComponentInChildren<UnitShapeView>(true);
+            }
+
+            if (unitRenderer == null && _unitShapeView != null)
+            {
+                unitRenderer = _unitShapeView.GetComponent<Renderer>();
+            }
+
+            if (unitRenderer == null)
+            {
+                SpriteRenderer[] spriteRenderers = _ownerTransform.GetComponentsInChildren<SpriteRenderer>(true);
+                for (int i = 0; i < spriteRenderers.Length; i++)
+                {
+                    if (spriteRenderers[i] == null || spriteRenderers[i].name == "Weapon")
+                    {
+                        continue;
+                    }
+
+                    unitRenderer = spriteRenderers[i];
+                    break;
+                }
+            }
+
+            if (_unitShapeView == null && unitRenderer != null)
+            {
+                _unitShapeView = unitRenderer.GetComponent<UnitShapeView>();
+            }
+
+            _spriteRenderer = unitRenderer as SpriteRenderer;
+            _propertyBlock ??= new MaterialPropertyBlock();
+        }
+
+        private void CaptureBaseVisualColors()
+        {
+            _spriteRenderer = unitRenderer as SpriteRenderer;
+            if (_spriteRenderer != null)
+            {
+                _baseColor = _spriteRenderer.color;
+                return;
+            }
+
+            if (_unitShapeView != null)
+            {
+                _baseGlowColor = _unitShapeView.GlowColor;
+                _baseCoreColor = _unitShapeView.CoreColor;
+                return;
+            }
+
+            _baseGlowColor = GetMaterialColor(GlowColorId, Color.white);
+            _baseCoreColor = GetMaterialColor(CoreColorId, Color.white);
+        }
+
+        private Tween CreateVisualColorTween(float targetBlend, float duration)
+        {
+            float blend = targetBlend > 0.5f ? 0f : 1f;
+            return DOTween.To(
+                () => blend,
+                value =>
+                {
+                    blend = value;
+                    ApplyVisualFlashBlend(blend);
+                },
+                targetBlend,
+                duration);
+        }
+
+        private void ApplyVisualFlashBlend(float blend)
+        {
+            if (_spriteRenderer != null)
+            {
+                _spriteRenderer.color = Color.Lerp(_baseColor, flashColor, blend);
+                return;
+            }
+
+            if (unitRenderer == null)
+            {
+                return;
+            }
+
+            unitRenderer.GetPropertyBlock(_propertyBlock);
+            _propertyBlock.SetColor(GlowColorId, Color.Lerp(_baseGlowColor, flashColor, blend));
+            _propertyBlock.SetColor(CoreColorId, Color.Lerp(_baseCoreColor, flashColor, blend));
+            unitRenderer.SetPropertyBlock(_propertyBlock);
+        }
+
+        private void ResetVisualColor()
+        {
+            if (_spriteRenderer != null)
+            {
+                _spriteRenderer.color = _baseColor;
+                return;
+            }
+
+            if (unitRenderer == null)
+            {
+                return;
+            }
+
+            unitRenderer.GetPropertyBlock(_propertyBlock);
+            _propertyBlock.SetColor(GlowColorId, _baseGlowColor);
+            _propertyBlock.SetColor(CoreColorId, _baseCoreColor);
+            unitRenderer.SetPropertyBlock(_propertyBlock);
+        }
+
+        private Color GetMaterialColor(int propertyId, Color fallback)
+        {
+            if (unitRenderer == null || unitRenderer.sharedMaterial == null || !unitRenderer.sharedMaterial.HasProperty(propertyId))
+            {
+                return fallback;
+            }
+
+            return unitRenderer.sharedMaterial.GetColor(propertyId);
         }
 
         private static bool HasDamage(DamageInstance damageInstance)
@@ -351,10 +524,45 @@ namespace Visual
             scaleTransform.localScale = _baseScale;
         }
 
+        private void ResetKnockbackPosition()
+        {
+            if (knockbackTransform == null)
+            {
+                return;
+            }
+
+            knockbackTransform.localPosition = _baseKnockbackLocalPosition;
+        }
+
+        private Vector3 GetKnockbackDirection(DamageInfo damageInfo)
+        {
+            if (damageInfo?.Owner != null && _ownerTransform != null)
+            {
+                Vector3 worldDirection = _ownerTransform.position - damageInfo.Owner.transform.position;
+                if (knockbackTransform != null && knockbackTransform.parent != null)
+                {
+                    worldDirection = knockbackTransform.parent.InverseTransformVector(worldDirection);
+                }
+
+                Vector2 direction = new Vector2(worldDirection.x, worldDirection.y);
+                if (direction.sqrMagnitude > 0.0001f)
+                {
+                    return new Vector3(direction.normalized.x, direction.normalized.y, 0f);
+                }
+            }
+
+            Vector2 fallbackDirection = combatDirection.sqrMagnitude > 0.0001f
+                ? -combatDirection.normalized
+                : Vector2.left;
+            return new Vector3(fallbackDirection.x, fallbackDirection.y, 0f);
+        }
+
         private void ResetTransformEffects()
         {
             ResetWobbleRotation();
             ResetScale();
+            ResetKnockbackPosition();
+            ResetVisualColor();
         }
 
         private void ResetTransformEffectsOnKill()

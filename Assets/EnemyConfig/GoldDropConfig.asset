@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e5b59585527a914d89a2c58c4540d8b, type: 3}
+  m_Name: GoldDropConfig
+  m_EditorClassIdentifier: Assembly-CSharp::DropSystem.GoldDropConfig
+  baseDropChance: 0.2
+  powerForMaxChanceBonus: 1500
+  maxPowerChanceBonus: 0.1
+  baseGold: 2
+  goldPerPower: 0.35
+  levelMultiplierPerLevel: 0.035
+  minRandomAmountMultiplier: 0.85
+  maxRandomAmountMultiplier: 1.15
+  normalChanceMultiplier: 1
+  magicChanceMultiplier: 1.1
+  rareChanceMultiplier: 1.25
+  eliteChanceMultiplier: 1.45
+  bossChanceMultiplier: 1
+  normalAmountMultiplier: 1
+  magicAmountMultiplier: 1.35
+  rareAmountMultiplier: 1.75
+  eliteAmountMultiplier: 2.4
+  bossAmountMultiplier: 5

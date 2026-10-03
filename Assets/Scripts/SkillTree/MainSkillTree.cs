@@ -4,6 +4,7 @@ using Battle;
 using Gems;
 using SaveSystem;
 using UnityEngine;
+using Unity.Profiling;
 using Zenject;
 
 
@@ -11,25 +12,79 @@ namespace SkillTree
 {
     public class MainSkillTree : MonoBehaviour
     {
+        // Broad persistent-state notification, including queue-only edits.
         public event Action OnSkillTreeChanged;
+        public event Action OnActiveModifiersChanged;
+        private int _treeChangeDepth;
+        private bool _treeChangePending;
+        private bool _modifiersChangedPending;
+        private readonly Dictionary<Node, Action> _queueVisualListeners = new();
+        private static readonly ProfilerMarker AvailabilityMarker = new("SkillTree.RefreshAvailability");
+        private static readonly ProfilerMarker QueueVisualMarker = new("SkillTree.PublishQueuePresentation");
         public event Action<Node> OnAnyNodeChanged;
         public event Action OnAllocationQueueChanged;
         public event Action OnNodeVisibilityChanged;
+        public event Action OnTreeUnavailable;
+        public event Action OnTopologyChanged;
+        public event Action OnAllocationAvailabilityChanged;
+        private bool _availabilityDirty = true;
+        private bool _queueVisualsDirty;
+        private bool _visualTopologyDirty = true;
+        private readonly List<Node> _visualNodes = new();
+        private readonly Dictionary<Node, List<Node>> _allocationPredecessors = new();
+        private readonly HashSet<Node> _rootReachable = new();
+        private readonly Stack<Node> _reachabilityWork = new();
+        private readonly Dictionary<Node, int> _publishedQueueOrders = new();
+        private readonly List<Node> _changedQueueNodes = new();
+        private bool _isRestoring;
+
+        private void OnDisable() => OnTreeUnavailable?.Invoke();
 
         [Inject(Optional = true)] private UnitLevel _unitLevel;
         [SerializeField] private Node root;
         [SerializeField] private List<BonusZone> bonusZones;
         [SerializeField] private SkillTreeFogOfWarController fogOfWarController;
         private List<Node> _allocatedNodes = new List<Node>();
-        private readonly List<Node> _allocationQueue = new();
         private readonly GemPowerInfluenceService _gemPowerInfluenceService = new();
-        private bool _isProcessingAllocationQueue;
+        private readonly SkillTreeSaveService _saveService = new();
         private bool _isRecalculatingGemPowerInfluence;
+        private SkillTreeAllocationService _allocationService;
+        public bool HasPendingDeallocation => AllocationService.HasPendingDeallocation;
+        public void NotifyTopologyChanged()
+        {
+            BeginTreeChange();
+            try
+            {
+                _visualTopologyDirty = _availabilityDirty = true;
+                AllocationService.InvalidateAllocationQueue();
+                AllocationService.ProcessQueuedAllocations();
+                RecalculateGemPowerInfluence();
+                OnTopologyChanged?.Invoke();
+            }
+            finally { EndTreeChange(); }
+        }
+
+        private SkillTreeAllocationService AllocationService
+        {
+            get
+            {
+                if (_allocationService == null)
+                {
+                    _allocationService = new SkillTreeAllocationService(
+                        EnumerateNodes,
+                        RaiseAllocationQueueChanged,
+                        RaiseOnSkillTreeChanged);
+                }
+
+                return _allocationService;
+            }
+        }
 
         private void Awake()
         {
             SubscribeAllFromRoot(root, RaiseAnyNodeChanged);
             OnAnyNodeChanged += ProcessNodeAllocation;
+            Node.OnAnyNodeAllocatedChanged += InvalidateAllocationAvailability;
             if (_unitLevel != null)
                 _unitLevel.OnSkillPointsChanged += ProcessQueuedAllocations;
 
@@ -46,15 +101,99 @@ namespace SkillTree
         {
             UnsubscribeAllFromRoot(root, RaiseAnyNodeChanged);
             OnAnyNodeChanged -= ProcessNodeAllocation;
+            Node.OnAnyNodeAllocatedChanged -= InvalidateAllocationAvailability;
             if (_unitLevel != null)
                 _unitLevel.OnSkillPointsChanged -= ProcessQueuedAllocations;
             if (fogOfWarController != null)
                 fogOfWarController.OnNodeVisibilityChanged -= RaiseNodeVisibilityChanged;
         }
 
+        private void Update()
+        {
+            BeginTreeChange();
+            try
+            {
+                AllocationService.Tick(Time.deltaTime);
+            }
+            finally { EndTreeChange(); }
+        }
+
         private void UpdateTree()
         {
+            _modifiersChangedPending = true;
             RaiseOnSkillTreeChanged();
+        }
+
+        private void InvalidateAllocationAvailability(Node _) => _availabilityDirty = true;
+
+        private void LateUpdate()
+        {
+            if (_availabilityDirty)
+            {
+                using var sample = AvailabilityMarker.Auto();
+                _availabilityDirty = false;
+                RebuildVisualReachability();
+                OnAllocationAvailabilityChanged?.Invoke();
+            }
+
+            if (!_queueVisualsDirty) return;
+            using var queueSample = QueueVisualMarker.Auto();
+            _queueVisualsDirty = false;
+            _changedQueueNodes.Clear();
+            foreach (var previous in _publishedQueueOrders)
+                if (GetQueuedDisplayOrder(previous.Key) != previous.Value)
+                    _changedQueueNodes.Add(previous.Key);
+            foreach (Node queued in AllocationService.QueuedNodes)
+                if (queued != null && !_publishedQueueOrders.ContainsKey(queued))
+                    _changedQueueNodes.Add(queued);
+            _publishedQueueOrders.Clear();
+            foreach (Node queued in AllocationService.QueuedNodes)
+                if (queued != null)
+                    _publishedQueueOrders[queued] = GetQueuedDisplayOrder(queued);
+            foreach (Node changed in _changedQueueNodes)
+                if (_queueVisualListeners.TryGetValue(changed, out Action listener))
+                    listener?.Invoke();
+        }
+
+        private void RebuildVisualReachability()
+        {
+            if (_visualTopologyDirty)
+            {
+                _visualTopologyDirty = false;
+                _visualNodes.Clear();
+                _visualNodes.AddRange(EnumerateNodes());
+                _allocationPredecessors.Clear();
+                foreach (Node candidate in _visualNodes)
+                    foreach (Node neighbor in candidate.AllocationNeighbors)
+                    {
+                        if (neighbor == null) continue;
+                        if (!_allocationPredecessors.TryGetValue(neighbor, out var predecessors))
+                            _allocationPredecessors[neighbor] = predecessors = new List<Node>();
+                        predecessors.Add(candidate);
+                    }
+            }
+
+            _rootReachable.Clear();
+            _reachabilityWork.Clear();
+            foreach (Node candidate in _visualNodes)
+                if (candidate is RootNode && _rootReachable.Add(candidate))
+                    _reachabilityWork.Push(candidate);
+            while (_reachabilityWork.Count > 0)
+            {
+                Node current = _reachabilityWork.Pop();
+                // The candidate need not be active, but every subsequent path node must be.
+                if (!current.IsActive || !_allocationPredecessors.TryGetValue(current, out var predecessors))
+                    continue;
+                foreach (Node predecessor in predecessors)
+                    if (_rootReachable.Add(predecessor))
+                        _reachabilityWork.Push(predecessor);
+            }
+        }
+
+        public bool CanAllocateForVisual(Node node)
+        {
+            return node != null && node.HasEnoughSkillPoints()
+                && node.CanBeAllocated(node.IsIndependentlyAllocated || _rootReachable.Contains(node));
         }
 
         private void ProcessNodeAllocation(Node node)
@@ -72,20 +211,26 @@ namespace SkillTree
             bool allocationQueueChanged = false;
             bool prunedAllocationQueue = false;
 
-            if (node.IsAllocated && RemoveQueuedNode(node))
-                allocationQueueChanged = true;
-
-            if (!node.IsActive && PruneInvalidAllocationQueue())
-            {
-                allocationQueueChanged = true;
-                prunedAllocationQueue = true;
-            }
+            AllocationService.HandleNodeAllocationChanged(
+                node,
+                out allocationQueueChanged,
+                out prunedAllocationQueue);
 
             if (allocationQueueChanged)
                 RaiseAllocationQueueChanged();
 
             if (!_isRecalculatingGemPowerInfluence)
-                RecalculateGemPowerInfluence();
+            {
+                if (_gemPowerInfluenceService.RequiresFullRecalculation(node))
+                    RecalculateGemPowerInfluence();
+                else
+                {
+                    // Preserve synchronous power restoration before tree observers run.
+                    _isRecalculatingGemPowerInfluence = true;
+                    try { _gemPowerInfluenceService.RefreshNodePower(node); }
+                    finally { _isRecalculatingGemPowerInfluence = false; }
+                }
+            }
 
             UpdateTree();
 
@@ -95,92 +240,69 @@ namespace SkillTree
 
         public bool TryAllocateOrQueue(Node node)
         {
-            if (node == null)
-                return false;
-
-            if (node.IsAllocated || _allocationQueue.Contains(node))
-                return false;
-
-            List<Node> allocationPath = FindShortestAllocationPath(node);
-            if (allocationPath.Count == 0)
-                return false;
-
-            return AllocateOrQueuePath(allocationPath);
+            BeginTreeChange();
+            try
+            {
+                return AllocationService.TryAllocateOrQueue(node);
+            }
+            finally { EndTreeChange(); }
         }
 
         public bool TryQueueNodeForAllocation(Node node)
         {
-            if (!CanQueueNodeForAllocation(node))
-                return false;
-
-            _allocationQueue.Add(node);
-            RaiseAllocationQueueChanged();
-            RaiseOnSkillTreeChanged();
-            ProcessQueuedAllocations();
-            return true;
+            BeginTreeChange();
+            try
+            {
+                return AllocationService.TryQueueNodeForAllocation(node);
+            }
+            finally { EndTreeChange(); }
         }
 
         public bool CancelQueuedAllocation(Node node)
         {
-            int queuedIndex = _allocationQueue.IndexOf(node);
-            if (queuedIndex < 0)
-                return false;
-
-            _allocationQueue.RemoveAt(queuedIndex);
-            PruneInvalidAllocationQueue();
-            RaiseAllocationQueueChanged();
-            RaiseOnSkillTreeChanged();
-            return true;
+            BeginTreeChange();
+            try
+            {
+                return AllocationService.CancelQueuedAllocation(node);
+            }
+            finally { EndTreeChange(); }
         }
 
         public bool TryDeallocateWithDependents(Node node)
         {
-            if (node == null || node is RootNode || !node.IsAllocated || node.IsIndependentlyAllocated)
-                return false;
-
-            HashSet<Node> nodesToDeallocate = FindAllocatedNodesDependentOn(node);
-            if (nodesToDeallocate.Count == 0 || ContainsSocketWithGem(nodesToDeallocate))
-                return false;
-
-            bool wasProcessingAllocationQueue = _isProcessingAllocationQueue;
-            _isProcessingAllocationQueue = true;
-            bool changed = false;
-            bool queueChanged = RemoveQueuedNodesBrokenByRemoval(nodesToDeallocate);
-
+            BeginTreeChange();
             try
             {
-                foreach (Node nodeToDeallocate in nodesToDeallocate)
-                {
-                    if (nodeToDeallocate != null && nodeToDeallocate.TryDeallocate(false))
-                        changed = true;
-                }
+                return AllocationService.TryDeallocateWithDependents(node);
             }
-            finally
-            {
-                _isProcessingAllocationQueue = wasProcessingAllocationQueue;
-            }
-
-            if (queueChanged)
-                RaiseAllocationQueueChanged();
-
-            if (changed || queueChanged)
-                RaiseOnSkillTreeChanged();
-
-            if (!wasProcessingAllocationQueue)
-                ProcessQueuedAllocations();
-
-            return changed || queueChanged;
+            finally { EndTreeChange(); }
         }
 
         public int GetQueuedAllocationOrder(Node node)
         {
-            int index = _allocationQueue.IndexOf(node);
-            return index >= 0 ? index + 1 : 0;
+            return AllocationService.GetQueuedAllocationOrder(node);
+        }
+
+        public int GetQueuedDisplayOrder(Node node) => AllocationService.GetQueuedDisplayOrder(node);
+
+        public void SubscribeQueueVisual(Node node, Action listener)
+        {
+            if (node == null || listener == null) return;
+            _queueVisualListeners.TryGetValue(node, out Action current);
+            _queueVisualListeners[node] = current + listener;
+        }
+
+        public void UnsubscribeQueueVisual(Node node, Action listener)
+        {
+            if (ReferenceEquals(node, null) || !_queueVisualListeners.TryGetValue(node, out Action current)) return;
+            current -= listener;
+            if (current == null) _queueVisualListeners.Remove(node);
+            else _queueVisualListeners[node] = current;
         }
 
         public bool IsNodeQueuedForAllocation(Node node)
         {
-            return _allocationQueue.Contains(node);
+            return AllocationService.IsNodeQueuedForAllocation(node);
         }
 
         public bool IsNodeVisible(Node node)
@@ -197,6 +319,7 @@ namespace SkillTree
                 ModifierPowerContext powerContext = ModifierPowerContext.FromNode(allocatedNode);
                 foreach (var modifier in allocatedNode.Modifiers)
                 {
+                    if (allocatedNode.IsInfinite && !InfiniteNode.Supports(modifier)) continue;
                     modifiers.Add(new CollectedModifier(modifier, powerContext));
                 }
 
@@ -213,18 +336,44 @@ namespace SkillTree
             {
                 modifiers.Add(CollectedModifier.WithoutPower(bonusZone.CollectModifier()));
             }
-            
+
             return modifiers;
         }
 
         private void RaiseOnSkillTreeChanged()
         {
-            OnSkillTreeChanged?.Invoke();
+            _treeChangePending = true;
+            if (_treeChangeDepth == 0) FlushTreeChanges();
+        }
+
+        private void BeginTreeChange() => _treeChangeDepth++;
+
+        private void EndTreeChange()
+        {
+            if (--_treeChangeDepth == 0) FlushTreeChanges();
+        }
+
+        private void FlushTreeChanges()
+        {
+            bool modifiersChanged = _modifiersChangedPending;
+            bool treeChanged = _treeChangePending;
+            _modifiersChangedPending = _treeChangePending = false;
+            // Flush before returning to input or the frame loop. Active combat still
+            // consumes recalculation in Mods; paused combat sees the final operation.
+            if (modifiersChanged) OnActiveModifiersChanged?.Invoke();
+            if (treeChanged) OnSkillTreeChanged?.Invoke();
         }
 
         private void RaiseAnyNodeChanged(Node node)
         {
-            OnAnyNodeChanged?.Invoke(node);
+            BeginTreeChange();
+            try
+            {
+                _availabilityDirty = true;
+                if (_isRestoring) return;
+                OnAnyNodeChanged?.Invoke(node);
+            }
+            finally { EndTreeChange(); }
         }
 
         private void RaiseNodeVisibilityChanged()
@@ -250,118 +399,48 @@ namespace SkillTree
 
         public SkillTreeSaveData CaptureSaveData()
         {
-            SkillTreeSaveData saveData = new SkillTreeSaveData();
-            Dictionary<Node, string> nodeIds = BuildResolvedNodeIds();
-            HashSet<string> discoveredNodeIds = new(StringComparer.Ordinal);
-
-            foreach (Node node in EnumerateNodes())
-            {
-                if (node.IsAllocated)
-                {
-                    saveData.allocatedNodeIds.Add(nodeIds[node]);
-
-                    if (node.IsIndependentlyAllocated)
-                        saveData.independentlyAllocatedNodeIds.Add(nodeIds[node]);
-                }
-
-                if (!Mathf.Approximately(node.PermanentPower, node.DefaultPermanentPower))
-                {
-                    saveData.nodePowers.Add(new NodePowerSaveData
-                    {
-                        nodeId = nodeIds[node],
-                        permanentPower = node.PermanentPower
-                    });
-                }
-
-                if (node is not SocketNode socketNode || !socketNode.HasGem)
-                    continue;
-
-                saveData.socketedGems.Add(new SocketedGemSaveData
-                {
-                    socketNodeId = nodeIds[socketNode],
-                    gem = socketNode.SocketedGem.CaptureSaveData()
-                });
-            }
-
-            for (int i = 0; i < _allocationQueue.Count; i++)
-            {
-                Node queuedNode = _allocationQueue[i];
-                if (queuedNode != null && nodeIds.TryGetValue(queuedNode, out string queuedNodeId))
-                    saveData.allocationQueueNodeIds.Add(queuedNodeId);
-            }
-
-            if (fogOfWarController != null)
-            {
-                foreach (Node discoveredNode in fogOfWarController.GetDiscoveredNodes())
-                {
-                    if (discoveredNode == null || !nodeIds.TryGetValue(discoveredNode, out string discoveredNodeId))
-                        continue;
-
-                    if (discoveredNodeIds.Add(discoveredNodeId))
-                        saveData.discoveredFogNodeIds.Add(discoveredNodeId);
-                }
-            }
-
-            return saveData;
+            return _saveService.Capture(
+                EnumerateNodes(),
+                AllocationService.QueuedNodes,
+                fogOfWarController);
         }
 
         public void ApplySaveData(SkillTreeSaveData saveData, Func<GemInstanceSaveData, GemInstance> gemResolver)
         {
-            Dictionary<Node, string> resolvedNodeIds = BuildResolvedNodeIds();
-            Dictionary<string, Node> nodesById = BuildNodeLookup();
-            HashSet<string> allocatedNodeIds = saveData?.ToAllocatedNodeSet() ?? new HashSet<string>();
-            HashSet<string> independentlyAllocatedNodeIds = saveData?.ToIndependentlyAllocatedNodeSet() ?? new HashSet<string>();
-            Dictionary<string, float> nodePowersById = saveData?.ToNodePowerMap() ?? new Dictionary<string, float>(StringComparer.Ordinal);
-
-            LimitedZone.BeginSaveDataRestore();
+            BeginTreeChange();
             try
             {
-                foreach (Node node in nodesById.Values)
+                OnTreeUnavailable?.Invoke();
+                _isRestoring = true;
+                Dictionary<string, Node> nodesById;
+                Dictionary<Node, string> resolvedNodeIds;
+                try
                 {
-                    if (node is SocketNode socketNode)
-                        socketNode.SetSocketedGemFromSave(null);
-
-                    string nodeId = resolvedNodeIds[node];
-                    node.SetPermanentPowerFromSave(nodePowersById.TryGetValue(nodeId, out float permanentPower)
-                        ? permanentPower
-                        : node.DefaultPermanentPower);
-                    bool isAllocated = allocatedNodeIds.Contains(resolvedNodeIds[node]);
-                    node.SetAllocatedFromSave(isAllocated, isAllocated && independentlyAllocatedNodeIds.Contains(resolvedNodeIds[node]));
+                    _saveService.ApplyNodeState(
+                        saveData,
+                        EnumerateNodes(),
+                        gemResolver,
+                        out nodesById,
+                        out resolvedNodeIds);
                 }
+                finally { _isRestoring = false; }
+
+                RebuildAllocatedNodes();
+                AllocationService.RestoreAllocationQueue(saveData, nodesById);
+                ProcessQueuedAllocations();
+                RecalculateGemPowerInfluence();
+                ApplyFogOfWarSaveData(saveData, nodesById, resolvedNodeIds);
+                _visualTopologyDirty = _availabilityDirty = true;
+                OnTopologyChanged?.Invoke();
+                RaiseAllocationQueueChanged();
+                UpdateTree();
             }
-            finally
-            {
-                LimitedZone.EndSaveDataRestore();
-            }
-
-            if (saveData?.socketedGems != null)
-            {
-                for (int i = 0; i < saveData.socketedGems.Count; i++)
-                {
-                    SocketedGemSaveData socketSave = saveData.socketedGems[i];
-                    if (socketSave == null || !nodesById.TryGetValue(socketSave.socketNodeId, out Node node))
-                        continue;
-
-                    if (node is not SocketNode socketNode)
-                        continue;
-
-                    GemInstance restoredGem = gemResolver?.Invoke(socketSave.gem);
-                    socketNode.SetSocketedGemFromSave(restoredGem);
-                }
-            }
-
-            RebuildAllocatedNodes();
-            RestoreAllocationQueue(saveData, nodesById);
-            ProcessQueuedAllocations();
-            RecalculateGemPowerInfluence();
-            ApplyFogOfWarSaveData(saveData, nodesById, resolvedNodeIds);
-            RaiseAllocationQueueChanged();
-            RaiseOnSkillTreeChanged();
+            finally { EndTreeChange(); }
         }
 
         public void ResetToDefaults(Func<GemInstanceSaveData, GemInstance> gemResolver)
         {
-            ApplySaveData(CreateDefaultSaveData(), gemResolver);
+            ApplySaveData(_saveService.CreateDefault(EnumerateNodes()), gemResolver);
         }
 
         public IEnumerable<Node> EnumerateNodes()
@@ -398,50 +477,6 @@ namespace SkillTree
             {
                 _isRecalculatingGemPowerInfluence = false;
             }
-        }
-
-        private Dictionary<string, Node> BuildNodeLookup()
-        {
-            Dictionary<Node, string> nodeIds = BuildResolvedNodeIds();
-            Dictionary<string, Node> nodesById = new(StringComparer.Ordinal);
-            foreach (KeyValuePair<Node, string> pair in nodeIds)
-            {
-                if (!nodesById.ContainsKey(pair.Value))
-                    nodesById.Add(pair.Value, pair.Key);
-            }
-
-            return nodesById;
-        }
-
-        private SkillTreeSaveData CreateDefaultSaveData()
-        {
-            SkillTreeSaveData saveData = new SkillTreeSaveData();
-            Dictionary<Node, string> nodeIds = BuildResolvedNodeIds();
-            foreach (Node node in EnumerateNodes())
-            {
-                if (node.DefaultIsAllocated)
-                    saveData.allocatedNodeIds.Add(nodeIds[node]);
-
-                if (!Mathf.Approximately(node.DefaultPermanentPower, 0f))
-                {
-                    saveData.nodePowers.Add(new NodePowerSaveData
-                    {
-                        nodeId = nodeIds[node],
-                        permanentPower = node.DefaultPermanentPower
-                    });
-                }
-
-                if (node is SocketNode socketNode && socketNode.DefaultSocketedGem != null)
-                {
-                    saveData.socketedGems.Add(new SocketedGemSaveData
-                    {
-                        socketNodeId = nodeIds[socketNode],
-                        gem = socketNode.DefaultSocketedGem.CaptureSaveData()
-                    });
-                }
-            }
-
-            return saveData;
         }
 
         private void ApplyFogOfWarSaveData(
@@ -486,468 +521,20 @@ namespace SkillTree
             fogOfWarController.SetDiscoveredNodes(discoveredNodes);
         }
 
-        private Dictionary<Node, string> BuildResolvedNodeIds()
-        {
-            List<Node> nodes = new(EnumerateNodes());
-            Dictionary<string, int> explicitIdCounts = new(StringComparer.Ordinal);
-
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                string explicitId = nodes[i].ExplicitSaveId;
-                if (string.IsNullOrWhiteSpace(explicitId))
-                    continue;
-
-                explicitIdCounts.TryGetValue(explicitId, out int count);
-                explicitIdCounts[explicitId] = count + 1;
-            }
-
-            Dictionary<Node, string> resolvedIds = new();
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                Node node = nodes[i];
-                string explicitId = node.ExplicitSaveId;
-                if (!string.IsNullOrWhiteSpace(explicitId) &&
-                    explicitIdCounts.TryGetValue(explicitId, out int count) &&
-                    count == 1)
-                {
-                    resolvedIds[node] = explicitId;
-                    continue;
-                }
-
-                resolvedIds[node] = node.FallbackSaveId;
-            }
-
-            return resolvedIds;
-        }
-
-        private List<Node> FindShortestAllocationPath(Node targetNode)
-        {
-            List<Node> path = new();
-            if (targetNode == null || targetNode.IsAllocated || _allocationQueue.Contains(targetNode))
-                return path;
-
-            if (!CanUseNodeInAllocationPath(targetNode))
-                return path;
-
-            Queue<Node> queue = new();
-            HashSet<Node> visited = new();
-            Dictionary<Node, Node> previousByNode = new();
-
-            queue.Enqueue(targetNode);
-            visited.Add(targetNode);
-
-            Node pathStart = null;
-            while (queue.Count > 0)
-            {
-                Node current = queue.Dequeue();
-                if (current != targetNode && IsAllocationPathSource(current))
-                {
-                    pathStart = current;
-                    break;
-                }
-
-                foreach (Node next in current.ConnectedNodes)
-                {
-                    if (next == null || !visited.Add(next))
-                        continue;
-
-                    if (!IsAllocationPathSource(next) && !CanUseNodeInAllocationPath(next))
-                        continue;
-
-                    previousByNode[next] = current;
-                    queue.Enqueue(next);
-                }
-            }
-
-            if (pathStart == null)
-                return path;
-
-            Node pathNode = pathStart;
-            while (previousByNode.TryGetValue(pathNode, out Node nextPathNode))
-            {
-                path.Add(nextPathNode);
-                pathNode = nextPathNode;
-            }
-
-            return path;
-        }
-
-        private bool AllocateOrQueuePath(List<Node> allocationPath)
-        {
-            bool wasProcessingAllocationQueue = _isProcessingAllocationQueue;
-            _isProcessingAllocationQueue = true;
-            bool changed = false;
-            bool queueChanged = false;
-
-            try
-            {
-                for (int i = 0; i < allocationPath.Count; i++)
-                {
-                    Node pathNode = allocationPath[i];
-                    if (pathNode == null || pathNode.IsAllocated || _allocationQueue.Contains(pathNode))
-                        continue;
-
-                    if (pathNode.CanBeAllocated() && pathNode.HasEnoughSkillPoints())
-                    {
-                        if (pathNode.Allocate())
-                            changed = true;
-
-                        continue;
-                    }
-
-                    if (!CanQueueNodeForAllocation(pathNode))
-                        break;
-
-                    _allocationQueue.Add(pathNode);
-                    changed = true;
-                    queueChanged = true;
-                }
-            }
-            finally
-            {
-                _isProcessingAllocationQueue = wasProcessingAllocationQueue;
-            }
-
-            if (queueChanged)
-                RaiseAllocationQueueChanged();
-
-            if (changed)
-                RaiseOnSkillTreeChanged();
-
-            if (!wasProcessingAllocationQueue)
-                ProcessQueuedAllocations();
-
-            return changed;
-        }
-
-        private bool IsAllocationPathSource(Node node)
-        {
-            return node != null && (node.IsActive || _allocationQueue.Contains(node));
-        }
-
-        private bool CanUseNodeInAllocationPath(Node node)
-        {
-            if (node == null)
-                return false;
-
-            if (node.IsAllocated)
-                return node.IsActive;
-
-            if (_allocationQueue.Contains(node))
-                return true;
-
-            return node.AdditionalAllocatedCondition == null || node.AdditionalAllocatedCondition();
-        }
-
-        private HashSet<Node> FindAllocatedNodesDependentOn(Node removedNode)
-        {
-            HashSet<Node> removedNodes = new();
-            if (removedNode == null)
-                return removedNodes;
-
-            removedNodes.Add(removedNode);
-            bool changed;
-
-            do
-            {
-                changed = false;
-                foreach (Node node in EnumerateNodes())
-                {
-                    if (node == null
-                        || removedNodes.Contains(node)
-                        || node is RootNode
-                        || !node.IsAllocated
-                        || node.IsIndependentlyAllocated)
-                    {
-                        continue;
-                    }
-
-                    if (CanAllocatedNodeStayWithoutRemovedNodes(node, removedNodes))
-                        continue;
-
-                    removedNodes.Add(node);
-                    changed = true;
-                }
-            }
-            while (changed);
-
-            return removedNodes;
-        }
-
-        private bool CanAllocatedNodeStayWithoutRemovedNodes(Node node, HashSet<Node> removedNodes)
-        {
-            if (node == null || removedNodes.Contains(node))
-                return false;
-
-            if (!node.IsActive)
-                return true;
-
-            return HasActivePathToRootWithoutRemovedNodes(node, removedNodes);
-        }
-
-        private bool HasActivePathToRootWithoutRemovedNodes(Node startNode, HashSet<Node> removedNodes)
-        {
-            HashSet<Node> visited = new();
-            Stack<Node> stack = new();
-            stack.Push(startNode);
-
-            while (stack.Count > 0)
-            {
-                Node current = stack.Pop();
-                if (current == null || removedNodes.Contains(current) || !visited.Add(current))
-                    continue;
-
-                if (current is RootNode)
-                    return true;
-
-                if (!current.IsActive)
-                    continue;
-
-                foreach (Node next in current.ConnectedNodes)
-                {
-                    if (next != null && !removedNodes.Contains(next) && next.IsActive)
-                        stack.Push(next);
-                }
-            }
-
-            return false;
-        }
-
-        private bool ContainsSocketWithGem(HashSet<Node> nodes)
-        {
-            foreach (Node node in nodes)
-            {
-                if (node is SocketNode { HasGem: true })
-                    return true;
-            }
-
-            return false;
-        }
-
-        private bool RemoveQueuedNodesBrokenByRemoval(HashSet<Node> removedNodes)
-        {
-            if (_allocationQueue.Count == 0)
-                return false;
-
-            bool changed = false;
-            HashSet<Node> simulatedActiveNodes = BuildActiveNodeSet();
-            foreach (Node removedNode in removedNodes)
-                simulatedActiveNodes.Remove(removedNode);
-
-            for (int i = 0; i < _allocationQueue.Count;)
-            {
-                Node queuedNode = _allocationQueue[i];
-                if (queuedNode == null
-                    || queuedNode.IsAllocated
-                    || removedNodes.Contains(queuedNode)
-                    || !CanQueuedNodeEventuallyAllocate(queuedNode, simulatedActiveNodes))
-                {
-                    _allocationQueue.RemoveAt(i);
-                    changed = true;
-                    continue;
-                }
-
-                simulatedActiveNodes.Add(queuedNode);
-                i++;
-            }
-
-            return changed;
-        }
-
-        private bool CanQueueNodeForAllocation(Node node)
-        {
-            if (node == null || node.IsAllocated || _allocationQueue.Contains(node))
-                return false;
-
-            if (node.AdditionalAllocatedCondition != null && !node.AdditionalAllocatedCondition())
-                return false;
-
-            return node.CanBeAllocated() || HasAllocatedOrQueuedPathToRoot(node);
-        }
-
         private void ProcessQueuedAllocations(int _)
         {
+            _availabilityDirty = true;
             ProcessQueuedAllocations();
         }
 
         private void ProcessQueuedAllocations()
         {
-            if (_isProcessingAllocationQueue)
-                return;
-
-            _isProcessingAllocationQueue = true;
-            bool queueChanged = false;
-
-            try
-            {
-                if (PruneInvalidAllocationQueue())
-                    queueChanged = true;
-
-                while (_allocationQueue.Count > 0)
-                {
-                    Node node = _allocationQueue[0];
-                    if (node == null || node.IsAllocated)
-                    {
-                        _allocationQueue.RemoveAt(0);
-                        queueChanged = true;
-                        continue;
-                    }
-
-                    if (!node.CanBeAllocated() || !node.HasEnoughSkillPoints())
-                        break;
-
-                    _allocationQueue.RemoveAt(0);
-                    queueChanged = true;
-
-                    if (!node.Allocate() && !node.IsAllocated)
-                    {
-                        _allocationQueue.Insert(0, node);
-                        queueChanged = false;
-                        break;
-                    }
-                }
-            }
-            finally
-            {
-                _isProcessingAllocationQueue = false;
-            }
-
-            if (!queueChanged)
-                return;
-
-            RaiseAllocationQueueChanged();
-            RaiseOnSkillTreeChanged();
-        }
-
-        private bool HasAllocatedOrQueuedPathToRoot(Node startNode)
-        {
-            HashSet<Node> visited = new();
-            Stack<Node> stack = new();
-            stack.Push(startNode);
-
-            while (stack.Count > 0)
-            {
-                Node current = stack.Pop();
-                if (current == null || !visited.Add(current))
-                    continue;
-
-                if (current is RootNode)
-                    return true;
-
-                foreach (Node next in current.ConnectedNodes)
-                {
-                    if (next != null && (next.IsActive || _allocationQueue.Contains(next)))
-                        stack.Push(next);
-                }
-            }
-
-            return false;
-        }
-
-        private bool PruneInvalidAllocationQueue()
-        {
-            if (_allocationQueue.Count == 0)
-                return false;
-
-            bool changed = false;
-            HashSet<Node> simulatedActiveNodes = BuildActiveNodeSet();
-
-            for (int i = 0; i < _allocationQueue.Count;)
-            {
-                Node queuedNode = _allocationQueue[i];
-                if (queuedNode == null || queuedNode.IsAllocated)
-                {
-                    _allocationQueue.RemoveAt(i);
-                    changed = true;
-                    continue;
-                }
-
-                if (!CanQueuedNodeEventuallyAllocate(queuedNode, simulatedActiveNodes))
-                {
-                    _allocationQueue.RemoveAt(i);
-                    changed = true;
-                    continue;
-                }
-
-                simulatedActiveNodes.Add(queuedNode);
-                i++;
-            }
-
-            return changed;
-        }
-
-        private HashSet<Node> BuildActiveNodeSet()
-        {
-            HashSet<Node> activeNodes = new();
-            foreach (Node node in EnumerateNodes())
-            {
-                if (node != null && node.IsActive)
-                    activeNodes.Add(node);
-            }
-
-            return activeNodes;
-        }
-
-        private bool CanQueuedNodeEventuallyAllocate(Node node, HashSet<Node> simulatedActiveNodes)
-        {
-            if (node == null || node.IsAllocated)
-                return false;
-
-            if (node.AdditionalAllocatedCondition != null && !node.AdditionalAllocatedCondition())
-                return false;
-
-            return HasPathToRootThroughNodes(node, simulatedActiveNodes);
-        }
-
-        private bool HasPathToRootThroughNodes(Node startNode, HashSet<Node> passableNodes)
-        {
-            HashSet<Node> visited = new();
-            Stack<Node> stack = new();
-            stack.Push(startNode);
-
-            while (stack.Count > 0)
-            {
-                Node current = stack.Pop();
-                if (current == null || !visited.Add(current))
-                    continue;
-
-                if (current is RootNode)
-                    return true;
-
-                foreach (Node next in current.ConnectedNodes)
-                {
-                    if (next != null && passableNodes.Contains(next))
-                        stack.Push(next);
-                }
-            }
-
-            return false;
-        }
-
-        private void RestoreAllocationQueue(SkillTreeSaveData saveData, Dictionary<string, Node> nodesById)
-        {
-            _allocationQueue.Clear();
-            if (saveData?.allocationQueueNodeIds == null)
-                return;
-
-            for (int i = 0; i < saveData.allocationQueueNodeIds.Count; i++)
-            {
-                string nodeId = saveData.allocationQueueNodeIds[i];
-                if (string.IsNullOrWhiteSpace(nodeId) || !nodesById.TryGetValue(nodeId, out Node node))
-                    continue;
-
-                if (CanQueueNodeForAllocation(node))
-                    _allocationQueue.Add(node);
-            }
-        }
-
-        private bool RemoveQueuedNode(Node node)
-        {
-            return node != null && _allocationQueue.Remove(node);
+            AllocationService.ProcessQueuedAllocations();
         }
 
         private void RaiseAllocationQueueChanged()
         {
+            _queueVisualsDirty = true;
             OnAllocationQueueChanged?.Invoke();
         }
     }

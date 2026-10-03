@@ -17,6 +17,12 @@ Shader "SkillTree/VFX/HammerShockwaveMasked"
         _DominantBaseDamageType ("Dominant Base Damage Type", Float) = 0
         _Life ("Life 0..1", Range(0, 1)) = 0
 
+        [Header(Painterly Color)]
+        _PaintStrength ("Paint Strength", Range(0, 1)) = 1
+        _PaintSteps ("Paint Tonal Steps", Range(2, 12)) = 5
+        _PaintSize ("Paint Patch Size", Range(0.03, 0.4)) = 0.14
+        _PaintVariation ("Paint Patch Variation", Range(0, 1)) = 0.65
+
         _StartRadius ("Start Radius", Range(0.01, 0.8)) = 0.16
         _EndRadius ("End Radius", Range(0.01, 0.8)) = 0.34
 
@@ -69,6 +75,7 @@ Shader "SkillTree/VFX/HammerShockwaveMasked"
             #pragma target 3.0
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "../PainterlyColor.hlsl"
 
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
@@ -88,6 +95,10 @@ Shader "SkillTree/VFX/HammerShockwaveMasked"
                 half4 _LightningColor;
                 float _DominantBaseDamageType;
                 float _Life;
+                float _PaintStrength;
+                float _PaintSteps;
+                float _PaintSize;
+                float _PaintVariation;
                 float _StartRadius;
                 float _EndRadius;
                 float _BottomMaskRadius;
@@ -306,6 +317,13 @@ Shader "SkillTree/VFX/HammerShockwaveMasked"
 
                 float topEdgePulse = 1.0 + angularPulse * _TopSpikeJitter * 0.18;
                 topAlpha *= topEdgePulse;
+
+                float bottomPatch = SkillTreePaintPatch(bottomUv * 2.0 - 1.0, _PaintSize);
+                float topPatch = SkillTreePaintPatch(topUv * 2.0 - 1.0, _PaintSize);
+                bottomLayerColor = SkillTreePaintColor(bottomLayerColor, bottomPatch, _PaintStrength, _PaintSteps, _PaintVariation);
+                topLayerColor = SkillTreePaintColor(topLayerColor, topPatch, _PaintStrength, _PaintSteps, _PaintVariation);
+                bottomAlpha = saturate(SkillTreePaintEnergy(bottomAlpha, bottomPatch, _PaintStrength, _PaintSteps, _PaintVariation));
+                topAlpha = saturate(SkillTreePaintEnergy(topAlpha, topPatch, _PaintStrength, _PaintSteps, _PaintVariation));
 
                 bottomAlpha *= lifeAlpha;
                 topAlpha *= lifeAlpha;

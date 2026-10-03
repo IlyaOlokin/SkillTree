@@ -29,9 +29,9 @@ namespace SaveSystem
                     return activeProfile;
             }
 
-            if (indexData.profiles.Count > 0)
+            for (int i = 0; i < indexData.profiles.Count; i++)
             {
-                SaveProfileDescriptor firstProfile = TryLoadProfile(indexData.profiles[0].profileId);
+                SaveProfileDescriptor firstProfile = TryLoadProfile(indexData.profiles[i].profileId);
                 if (firstProfile != null)
                 {
                     indexData.activeProfileId = firstProfile.ProfileId;
@@ -127,10 +127,18 @@ namespace SaveSystem
             if (string.IsNullOrWhiteSpace(profileId))
                 return;
 
+            // Commit the reset before cleanup. An interrupted cleanup must never import
+            // a mixture of remaining legacy files or recover a pre-reset snapshot.
+            string snapshotPath = SavePaths.GetProfileSnapshotFile(profileId);
+            _storage.SaveDocument(snapshotPath, SaveDocumentType.ProfileSnapshot, 1,
+                new ProfileSnapshotSaveData { profileId = profileId, resetRequested = true },
+                data => data != null && data.IsCompleteFor(profileId));
+            _storage.DeleteBackups(snapshotPath);
             _storage.DeleteFile(SavePaths.GetPlayerFile(profileId));
             _storage.DeleteFile(SavePaths.GetProgressFile(profileId));
             _storage.DeleteFile(SavePaths.GetSkillTreeFile(profileId));
             _storage.DeleteFile(SavePaths.GetInventoryFile(profileId));
+            // Keep the reset snapshot until the coordinator commits actual game defaults.
         }
 
         private SaveProfilesIndexData LoadIndex()
@@ -140,12 +148,16 @@ namespace SaveSystem
                     SaveDocumentType.ProfilesIndex,
                     ProfilesIndexVersion,
                     _profilesIndexMigrations,
-                    out SaveProfilesIndexData indexData))
+                    out SaveProfilesIndexData indexData,
+                    data => data != null && data.profiles != null &&
+                        data.profiles.TrueForAll(entry => entry != null && !string.IsNullOrWhiteSpace(entry.profileId))))
             {
                 indexData.profiles ??= new List<SaveProfileListEntryData>();
                 return indexData;
             }
 
+            if (_storage.DocumentExists(SavePaths.ProfilesIndexFile))
+                throw new InvalidDataException("No readable profile index or backup. Existing profiles will not be replaced.");
             return new SaveProfilesIndexData();
         }
 
@@ -171,11 +183,14 @@ namespace SaveSystem
                     SaveDocumentType.ProfileManifest,
                     ProfileManifestVersion,
                     _profileManifestMigrations,
-                    out ProfileManifestData manifestData))
+                    out ProfileManifestData manifestData,
+                    data => data != null && string.Equals(data.profileId, profileId, StringComparison.Ordinal)))
             {
                 return manifestData;
             }
 
+            if (_storage.DocumentExists(SavePaths.GetProfileManifestFile(profileId)))
+                throw new InvalidDataException($"No readable manifest or backup for profile '{profileId}'. Existing profiles will not be replaced.");
             return null;
         }
 

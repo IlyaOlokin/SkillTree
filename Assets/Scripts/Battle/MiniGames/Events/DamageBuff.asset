@@ -22,6 +22,6 @@ MonoBehaviour:
   miniGameSpawnPlacement: 1
   miniGameSpawnOffset: {x: 0, y: 0}
   randomSpawnEnabled: 1
-  randomMinInterval: 2
-  randomMaxInterval: 5
-  triggerCooldown: 0
+  randomMinInterval: 120
+  randomMaxInterval: 240
+  triggerCooldown: 30

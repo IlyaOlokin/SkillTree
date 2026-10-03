@@ -89,9 +89,9 @@ namespace Battle
             return Amount / unit.health.MaxHealth;
         }
 
-        private static BaseModifier CreateModifier(ModifierType modifierType, StatType statType, float value)
+        private BaseModifier CreateModifier(ModifierType modifierType, StatType statType, float value)
         {
-            BaseModifier modifier = ScriptableObject.CreateInstance<BaseModifier>();
+            BaseModifier modifier = CreateRuntimeModifier<BaseModifier>();
             modifier.modifierContainer = new ModifierContainer(modifierType, statType, value);
             return modifier;
         }

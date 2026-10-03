@@ -9,8 +9,10 @@ namespace Battle
         private const float BASE_DURATION = 5f;
         private const float BASE_REDUCED_AILMENT_GUARD = -0.3f;
 
-        private BaseModifier _cachedModifier;
+        private BaseModifier _cachedAilmentGuardModifier;
         private float _ailmentGuardReduction;
+        private readonly List<ModifierContainer> _additionalModifierContainers = new List<ModifierContainer>();
+        private readonly List<BaseModifier> _cachedAdditionalModifiers = new List<BaseModifier>();
 
         public override bool IsStackable { get; set; } = true;
         public override EffectVisualType VisualType => EffectVisualType.Expose;
@@ -19,14 +21,12 @@ namespace Battle
         {
             Duration = BASE_DURATION;
             _ailmentGuardReduction = CalculateAilmentGuardReduction(damageInfo, defender);
+            CopyModifierContainers(damageInfo.AttackEffectPayload.GetEffectModifiers<Expose>());
         }
 
         public override void OnApply(Unit unit)
         {
-            _cachedModifier = ScriptableObject.CreateInstance<BaseModifier>();
-            _cachedModifier.modifierContainer =
-                new ModifierContainer(ModifierType.Increased, StatType.AilmentGuard, _ailmentGuardReduction);
-            unit.AddOuterModifier(_cachedModifier);
+            ApplyModifiers(unit);
         }
 
         public override void OnStack(Unit unit, BaseEffect newEffect, ActiveEffect existing)
@@ -38,18 +38,66 @@ namespace Battle
                 return;
             }
 
-            unit.RemoveOuterModifier(_cachedModifier);
+            RemoveModifiers(unit);
             _ailmentGuardReduction = expose._ailmentGuardReduction;
-            _cachedModifier.modifierContainer.value = _ailmentGuardReduction;
-            unit.AddOuterModifier(_cachedModifier);
+            CopyModifierContainers(expose._additionalModifierContainers);
+            ApplyModifiers(unit);
         }
 
         public override void OnRemove(Unit unit)
         {
-            if (_cachedModifier != null)
+            RemoveModifiers(unit);
+        }
+
+        private void ApplyModifiers(Unit unit)
+        {
+            _cachedAilmentGuardModifier = CreateRuntimeModifier<BaseModifier>();
+            _cachedAilmentGuardModifier.modifierContainer =
+                new ModifierContainer(ModifierType.Increased, StatType.AilmentGuard, _ailmentGuardReduction);
+            unit.AddOuterModifier(_cachedAilmentGuardModifier);
+
+            for (int i = 0; i < _additionalModifierContainers.Count; i++)
             {
-                unit.RemoveOuterModifier(_cachedModifier);
+                BaseModifier modifier = CreateRuntimeModifier<BaseModifier>();
+                modifier.modifierContainer = CloneModifierContainer(_additionalModifierContainers[i]);
+                _cachedAdditionalModifiers.Add(modifier);
+                unit.AddOuterModifier(modifier);
             }
+        }
+
+        private void RemoveModifiers(Unit unit)
+        {
+            if (_cachedAilmentGuardModifier != null)
+            {
+                unit.RemoveOuterModifier(_cachedAilmentGuardModifier);
+                ReleaseRuntimeModifier(_cachedAilmentGuardModifier);
+                _cachedAilmentGuardModifier = null;
+            }
+
+            for (int i = 0; i < _cachedAdditionalModifiers.Count; i++)
+            {
+                unit.RemoveOuterModifier(_cachedAdditionalModifiers[i]);
+                ReleaseRuntimeModifier(_cachedAdditionalModifiers[i]);
+            }
+
+            _cachedAdditionalModifiers.Clear();
+        }
+
+        private void CopyModifierContainers(IReadOnlyList<ModifierContainer> modifierContainers)
+        {
+            _additionalModifierContainers.Clear();
+            for (int i = 0; i < modifierContainers.Count; i++)
+            {
+                _additionalModifierContainers.Add(CloneModifierContainer(modifierContainers[i]));
+            }
+        }
+
+        private static ModifierContainer CloneModifierContainer(ModifierContainer modifierContainer)
+        {
+            return new ModifierContainer(
+                modifierContainer.modifierType,
+                modifierContainer.statType,
+                modifierContainer.value);
         }
 
         public override string GetIconText(IReadOnlyList<ActiveEffect> activeEffects)
@@ -71,7 +119,7 @@ namespace Battle
 
             if (damageInfo.AttackEffectPayload.IsGuaranteed<Expose>())
             {
-                effectTarget.effectController.AddEffect(() => new Expose(damageInfo, effectTarget));
+                effectTarget.effectController.AddEffect(() => new Expose(damageInfo, effectTarget), attacker);
                 return;
             }
 
@@ -83,7 +131,7 @@ namespace Battle
 
             if (Random.Range(0f, 1f) < chance)
             {
-                effectTarget.effectController.AddEffect(() => new Expose(damageInfo, effectTarget));
+                effectTarget.effectController.AddEffect(() => new Expose(damageInfo, effectTarget), attacker);
             }
         }
     }

@@ -28,11 +28,22 @@ public class EnemyDataText : MonoBehaviour
 
     private void UpdateText()
     {
-        text.text = Math.Round(unit.SpawnData.Power) + "\n" + unit.SpawnData.Archetype.name;
+        if (unit == null || unit.SpawnData == null)
+        {
+            text.text = string.Empty;
+            return;
+        }
+
+        text.text = $"{Math.Round(unit.SpawnData.Power)} ({Math.Round(unit.SpawnData.ExperienceReward)})\n{unit.SpawnData.Rarity}\nBase: {GetBaseModuleName(unit.SpawnData.Definition)}";
     }
 
     private void HandleLocaleChanged(Locale _)
     {
         UpdateText();
+    }
+
+    private static string GetBaseModuleName(GeneratedEnemyDefinition definition)
+    {
+        return definition?.CoreProfile != null ? definition.CoreProfile.name : "-";
     }
 }

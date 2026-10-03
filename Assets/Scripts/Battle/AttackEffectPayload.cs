@@ -9,6 +9,9 @@ namespace Battle
         private readonly HashSet<Type> _guaranteedEffects = new HashSet<Type>();
         private readonly HashSet<Type> _suppressedEffects = new HashSet<Type>();
         private readonly HashSet<Type> _effectsRedirectedToOwner = new HashSet<Type>();
+        private bool _includeLightningDamageInIgnite;
+        private float _distractAttackProgressReduction;
+        private float _elementalResistanceBypassChance;
         private readonly Dictionary<Type, List<ModifierContainer>> _effectModifiers =
             new Dictionary<Type, List<ModifierContainer>>();
 
@@ -17,6 +20,9 @@ namespace Battle
             _guaranteedEffects.Clear();
             _suppressedEffects.Clear();
             _effectsRedirectedToOwner.Clear();
+            _includeLightningDamageInIgnite = false;
+            _distractAttackProgressReduction = 0f;
+            _elementalResistanceBypassChance = 0f;
             _effectModifiers.Clear();
         }
 
@@ -48,6 +54,36 @@ namespace Battle
         public bool IsRedirectedToOwner<T>() where T : BaseEffect
         {
             return IsRedirectedToOwner(typeof(T));
+        }
+
+        public void IncludeLightningDamageInIgnite()
+        {
+            _includeLightningDamageInIgnite = true;
+        }
+
+        public bool ShouldIncludeLightningDamageInIgnite()
+        {
+            return _includeLightningDamageInIgnite;
+        }
+
+        public void AddDistractAttackProgressReduction(float reduction)
+        {
+            _distractAttackProgressReduction += Math.Max(0f, reduction);
+        }
+
+        public float GetDistractAttackProgressReduction()
+        {
+            return _distractAttackProgressReduction;
+        }
+
+        public void AddElementalResistanceBypassChance(float chance)
+        {
+            _elementalResistanceBypassChance += Math.Max(0f, chance);
+        }
+
+        public float GetElementalResistanceBypassChance()
+        {
+            return _elementalResistanceBypassChance;
         }
 
         public void AddEffectModifier<T>(ModifierContainer modifier) where T : BaseEffect

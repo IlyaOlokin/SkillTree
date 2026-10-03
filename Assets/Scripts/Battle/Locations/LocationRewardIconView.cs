@@ -17,7 +17,12 @@ public sealed class LocationRewardIconView : MonoBehaviour, ITooltipDescriptionP
     private TooltipUI _tooltipUI;
 
     private LocationLevelRewardEntry _reward;
+    private PendingLocationReward _pendingReward;
     private Color _defaultIconColor = Color.white;
+    private bool _isFlying;
+
+    public RectTransform RectTransform => transform as RectTransform;
+    public PendingLocationReward PendingReward => _pendingReward;
 
     private void Awake()
     {
@@ -30,9 +35,24 @@ public sealed class LocationRewardIconView : MonoBehaviour, ITooltipDescriptionP
         _tooltipUI?.HideTooltip(this);
     }
 
+    public void Configure(Image image, TMP_Text amount, GameObject claimed, TooltipUI resolvedTooltipUI)
+    {
+        iconImage = image;
+        amountText = amount;
+        claimedIndicator = claimed;
+
+        if (resolvedTooltipUI != null)
+            _tooltipUI = resolvedTooltipUI;
+
+        if (iconImage != null)
+            _defaultIconColor = iconImage.color;
+    }
+
     public void Initialize(LocationLevelRewardEntry reward, bool isClaimed, TooltipUI resolvedTooltipUI)
     {
         _reward = reward;
+        _pendingReward = null;
+        _isFlying = false;
 
         if (resolvedTooltipUI != null)
             _tooltipUI = resolvedTooltipUI;
@@ -41,6 +61,7 @@ public sealed class LocationRewardIconView : MonoBehaviour, ITooltipDescriptionP
         {
             iconImage.enabled = reward?.ItemDefinition?.Icon != null;
             iconImage.sprite = reward?.ItemDefinition?.Icon;
+            iconImage.raycastTarget = true;
             iconImage.color = isClaimed
                 ? Color.Lerp(_defaultIconColor, Color.black, claimedIconDarkenAmount)
                 : _defaultIconColor;
@@ -58,8 +79,27 @@ public sealed class LocationRewardIconView : MonoBehaviour, ITooltipDescriptionP
             claimedIndicator.SetActive(isClaimed);
     }
 
+    public void Initialize(PendingLocationReward pendingReward, TooltipUI resolvedTooltipUI)
+    {
+        _pendingReward = pendingReward;
+        Initialize(pendingReward?.Reward, false, resolvedTooltipUI);
+        _pendingReward = pendingReward;
+    }
+
+    public void MarkFlying()
+    {
+        _isFlying = true;
+        _tooltipUI?.HideTooltip(this);
+
+        if (iconImage != null)
+            iconImage.raycastTarget = false;
+    }
+
     public string GetTooltipTitle()
     {
+        if (_pendingReward?.Item != null)
+            return _pendingReward.Item.DisplayName;
+
         return _reward?.ItemDefinition != null ? _reward.ItemDefinition.DisplayName : string.Empty;
     }
 
@@ -70,6 +110,9 @@ public sealed class LocationRewardIconView : MonoBehaviour, ITooltipDescriptionP
 
     public IReadOnlyList<string> GetTooltipDescriptions()
     {
+        if (_pendingReward?.Item != null)
+            return _pendingReward.Item.GetTooltipDescriptions();
+
         return _reward?.ItemDefinition != null
             ? _reward.ItemDefinition.GetTooltipDescriptions()
             : Array.Empty<string>();
@@ -77,6 +120,9 @@ public sealed class LocationRewardIconView : MonoBehaviour, ITooltipDescriptionP
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (_isFlying)
+            return;
+
         ResolveTooltipUI();
         if (_tooltipUI == null || _reward?.ItemDefinition == null)
             return;
@@ -86,6 +132,9 @@ public sealed class LocationRewardIconView : MonoBehaviour, ITooltipDescriptionP
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (_isFlying)
+            return;
+
         _tooltipUI?.RequestHideTooltip(this);
     }
 

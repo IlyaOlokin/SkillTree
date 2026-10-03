@@ -35,8 +35,8 @@ namespace DropSystem
             if (spawnData == null)
                 return null;
 
-            string sourceId = spawnData.Archetype != null ? spawnData.Archetype.name : string.Empty;
-            int sourceLevel = spawnData.Archetype != null ? spawnData.Archetype.minLevel : 0;
+            string sourceId = string.Empty;
+            int sourceLevel = 0;
             bool sourceIsBoss = spawnData.Rarity == EnemyRarity.Boss;
 
             return new ItemDropContext(

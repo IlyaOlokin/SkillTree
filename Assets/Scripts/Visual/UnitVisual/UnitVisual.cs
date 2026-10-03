@@ -28,7 +28,9 @@ namespace Visual
             attackAnimationController?.Initialize(transform, gameObject);
             idleBreathingController?.Initialize(transform, gameObject);
             effectsController?.Initialize(_tooltipUI);
-            hitEffectController?.Initialize();
+            hitEffectController?.Initialize(
+                transform,
+                attackAnimationController != null ? attackAnimationController.CombatDirection : Vector2.right);
 
             
             unit.health.OnHealthChangedDelta += DisplayHealthChangedNotification;
@@ -36,6 +38,9 @@ namespace Visual
             unit.OnAttack += DisplayAttackAnimation;
             unit.OnEvade += DisplayEvadeNotification;
             unit.OnBlock += DisplayBlockNotification;
+            unit.OnParry += DisplayParryNotification;
+            unit.OnWeaponTypeChanged += DisplayWeaponTypeChanged;
+            DisplayWeaponTypeChanged(unit.WeaponType);
             
         }
 
@@ -52,6 +57,8 @@ namespace Visual
                 unit.OnAttack -= DisplayAttackAnimation;
                 unit.OnEvade -= DisplayEvadeNotification;
                 unit.OnBlock -= DisplayBlockNotification;
+                unit.OnParry -= DisplayParryNotification;
+                unit.OnWeaponTypeChanged -= DisplayWeaponTypeChanged;
             }
 
             if (unit != null && unit.health != null)
@@ -102,9 +109,20 @@ namespace Visual
             newEffect.WriteMessage(GameLocalization.Get("combat.notification.block", "Block"));
         }
 
+        private void DisplayParryNotification()
+        {
+            var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
+            newEffect.WriteMessage(GameLocalization.Get("combat.notification.parry", "Parry"));
+        }
+
         private void DisplayGettingHitEffect(DamageInfo damageInfo)
         {
             hitEffectController?.PlayHitEffect(damageInfo);
+        }
+
+        private void DisplayWeaponTypeChanged(WeaponType weaponType)
+        {
+            attackAnimationController?.SetWeaponType(weaponType);
         }
 
         private void DisplayAttackAnimation(ITarget target)
@@ -170,7 +188,7 @@ namespace Visual
             {
                 WeaponType.Sword => swordAttackSoundCueId,
                 WeaponType.Hammer => hammerAttackSoundCueId,
-                WeaponType.Staff => staffAttackSoundCueId,
+                WeaponType.FireStaff or WeaponType.ColdStaff or WeaponType.LightningStaff => staffAttackSoundCueId,
                 _ => null
             };
         }

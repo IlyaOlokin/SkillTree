@@ -7,7 +7,7 @@ namespace SkillTree
     [CreateAssetMenu(menuName = "Modifiers/Special/EvadeToMitigationCharges", fileName = "New Evade To Mitigation Charges")]
     public class EvadeToMitigationCharges : Modifier
     {
-        [SerializeField] private DamageMitigation modifier;
+        [SerializeField] private BaseModifier modifier;
         
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
         {
@@ -23,9 +23,10 @@ namespace SkillTree
 
         public override string GetDescription()
         {
-            return GameLocalization.GetModifier(
+            return GameLocalization.FormatModifier(
                 "modifier.evadeToMitigationCharges.description",
-                "Each Evade grants a charge: take 10% less damage from the next hit");
+                "Each Evade grants a charge: [[0]]% added Damage Mitigation per charge. All charges are removed after taking a hit.",
+                (modifier != null && modifier.modifierContainer != null ? modifier.modifierContainer.value : 0f) * 100f);
         }
     }
 }

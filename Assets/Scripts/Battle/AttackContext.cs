@@ -13,7 +13,9 @@ namespace Battle
         public DamageInfo DamageInfo { get; }
         public bool IsEvaded { get; set; }
         public bool IsBlocked { get; set; }
+        public bool IsParried { get; set; }
         public bool IsHitConfirmed => !IsEvaded;
+        public float AdditionalMysticNegation { get; private set; }
 
         public IReadOnlyList<QueuedEffectConsumption> EffectsToConsume => _effectsToConsume;
 
@@ -22,6 +24,11 @@ namespace Battle
             Attacker = attacker;
             Defender = defender;
             DamageInfo = damageInfo;
+        }
+
+        public void AddAdditionalMysticNegation(float amount)
+        {
+            AdditionalMysticNegation += Math.Max(0f, amount);
         }
 
         public void QueueEffectConsumption(Unit owner, ActiveEffect activeEffect)

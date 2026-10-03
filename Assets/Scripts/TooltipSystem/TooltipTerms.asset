@@ -59,6 +59,8 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: 5b59341b4a8ebf9409468eedab9f8ee4, type: 2}
   - id: profanedHealth
     description: {fileID: 11400000, guid: ea41dfc1d2d3202419bc8ebef26918a7, type: 2}
+  - id: hallowedHealth
+    description: {fileID: 11400000, guid: 1df2edb5f30f85849a9d947d03800b3b, type: 2}
   - id: barrierSurge
     description: {fileID: 11400000, guid: b1380fb513aa21e458864d01c4de0d16, type: 2}
   - id: evasiveMomentum
@@ -93,3 +95,7 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: 3b347563520afaf49a5984827b1f64a0, type: 2}
   - id: freeze
     description: {fileID: 11400000, guid: 4bd02a6883c4a0a47bb4ef68062e8bc4, type: 2}
+  - id: miniGameDamageBuff
+    description: {fileID: 11400000, guid: 3e7569857176c604a92998922138cb1d, type: 2}
+  - id: parry
+    description: {fileID: 11400000, guid: 7d10f1ea9aad41c4a8654127e55f6a94, type: 2}

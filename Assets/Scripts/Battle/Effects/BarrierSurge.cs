@@ -7,41 +7,41 @@ namespace Battle
 {
     public class BarrierSurge : BaseEffect
     {
-        private readonly float _ailmentPowerIncrease;
-        private readonly float _mysticDamageIncrease;
-        private BaseModifier _ailmentPowerModifier;
-        private BaseModifier _mysticDamageModifier;
+        private readonly float _barrierRegenerationSpeedIncrease;
+        private readonly float _elementalDamageIncrease;
+        private BaseModifier _barrierRegenerationSpeedModifier;
+        private BaseModifier _elementalDamageModifier;
 
         public override bool IsStackable { get; set; } = false;
-        public override EffectVisualType VisualType => EffectVisualType.BarrierRestorationPowerBuff;
+        public override EffectVisualType VisualType => EffectVisualType.BarrierSurge;
         public override bool CanDisplayMultipleIcons => false;
 
-        public BarrierSurge(float duration, float ailmentPowerIncrease, float mysticDamageIncrease)
+        public BarrierSurge(float duration, float barrierRegenerationSpeedIncrease, float elementalDamageIncrease)
         {
             Duration = duration;
-            _ailmentPowerIncrease = ailmentPowerIncrease;
-            _mysticDamageIncrease = mysticDamageIncrease;
+            _barrierRegenerationSpeedIncrease = barrierRegenerationSpeedIncrease;
+            _elementalDamageIncrease = elementalDamageIncrease;
         }
 
         public override void OnApply(Unit unit)
         {
-            _ailmentPowerModifier = CreateModifier(StatType.AilmentPower, _ailmentPowerIncrease);
-            _mysticDamageModifier = CreateModifier(StatType.MysticDamage, _mysticDamageIncrease);
+            _barrierRegenerationSpeedModifier = CreateModifier(StatType.BarrierRegenerationSpeed, _barrierRegenerationSpeedIncrease);
+            _elementalDamageModifier = CreateModifier(StatType.ElementalDamage, _elementalDamageIncrease);
 
-            unit.AddOuterModifier(_ailmentPowerModifier);
-            unit.AddOuterModifier(_mysticDamageModifier);
+            unit.AddOuterModifier(_barrierRegenerationSpeedModifier);
+            unit.AddOuterModifier(_elementalDamageModifier);
         }
 
         public override void OnRemove(Unit unit)
         {
-            if (_ailmentPowerModifier != null)
+            if (_barrierRegenerationSpeedModifier != null)
             {
-                unit.RemoveOuterModifier(_ailmentPowerModifier);
+                unit.RemoveOuterModifier(_barrierRegenerationSpeedModifier);
             }
 
-            if (_mysticDamageModifier != null)
+            if (_elementalDamageModifier != null)
             {
-                unit.RemoveOuterModifier(_mysticDamageModifier);
+                unit.RemoveOuterModifier(_elementalDamageModifier);
             }
         }
 
@@ -78,9 +78,14 @@ namespace Battle
             return hasTimedEffect ? closestProgress : 1f;
         }
 
-        private static BaseModifier CreateModifier(StatType statType, float value)
+        protected override object[] GetDescriptionArguments()
         {
-            BaseModifier modifier = ScriptableObject.CreateInstance<BaseModifier>();
+            return new object[] { _barrierRegenerationSpeedIncrease * 100f, _elementalDamageIncrease * 100f, Duration };
+        }
+
+        private BaseModifier CreateModifier(StatType statType, float value)
+        {
+            BaseModifier modifier = CreateRuntimeModifier<BaseModifier>();
             modifier.modifierContainer = new ModifierContainer(ModifierType.Increased, statType, value);
             return modifier;
         }

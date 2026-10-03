@@ -27,7 +27,7 @@ namespace SkillTree
         {
             return GameLocalization.GetModifier(
                 "modifier.unlockMiniGameEvent.description",
-                "Unlocks a battle mini-game event.");
+                "Adds a battle mini-game to the pool.");
         }
     }
 }

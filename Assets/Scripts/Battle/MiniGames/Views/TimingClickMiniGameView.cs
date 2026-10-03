@@ -374,7 +374,7 @@ namespace Battle.MiniGames
                     approachRing.gameObject.SetActive(false);
                 }
 
-                return DOVirtual.DelayedCall(0f, () => { }, false);
+                return MiniGameTweenUtility.EmptyTween(useUnscaledTweens);
             }
 
             return approachRingImage
@@ -391,60 +391,41 @@ namespace Battle.MiniGames
 
         private Tween BuildSuccessPulseTween()
         {
-            if (successPulseTarget == null)
-            {
-                return DOVirtual.DelayedCall(0f, () => { }, false);
-            }
-
-            Sequence sequence = DOTween.Sequence().SetUpdate(useUnscaledTweens);
-            for (int i = 0; i < successPulseCount; i++)
-            {
-                sequence.Append(successPulseTarget
-                    .DOScale(_successPulseInitialScale * successPulseScale, successPulseInDuration)
-                    .SetEase(successPulseInEase));
-                sequence.Append(successPulseTarget
-                    .DOScale(_successPulseInitialScale, successPulseOutDuration)
-                    .SetEase(successPulseOutEase));
-            }
-
-            return sequence;
+            return MiniGameTweenUtility.BuildPulseTween(
+                successPulseTarget,
+                _successPulseInitialScale,
+                successPulseScale,
+                successPulseInDuration,
+                successPulseOutDuration,
+                successPulseCount,
+                successPulseInEase,
+                successPulseOutEase,
+                useUnscaledTweens);
         }
 
         private Tween BuildFailMoveTween()
         {
-            if (failMoveTarget == null)
-            {
-                return DOVirtual.DelayedCall(0f, () => { }, false);
-            }
-
-            return failMoveTarget
-                .DOAnchorPos(_failMoveInitialPosition + failMoveOffset, failMoveDuration)
-                .SetEase(failMoveEase)
-                .SetUpdate(useUnscaledTweens);
+            return MiniGameTweenUtility.BuildMoveTween(
+                failMoveTarget,
+                _failMoveInitialPosition + failMoveOffset,
+                failMoveDuration,
+                failMoveEase,
+                useUnscaledTweens);
         }
 
         private Tween BuildResultIconTween(bool success)
         {
             GameObject iconRoot = success ? successIconRoot : failIconRoot;
             RectTransform iconTransform = success ? successIconTransform : failIconTransform;
-            if (iconRoot == null || iconTransform == null)
-            {
-                return DOVirtual.DelayedCall(0f, () => { }, false);
-            }
-
-            iconRoot.SetActive(true);
-            iconTransform.localScale = Vector3.zero;
-
-            Sequence sequence = DOTween.Sequence().SetUpdate(useUnscaledTweens);
-            sequence.Append(iconTransform
-                .DOScale(Vector3.one, resultIconShowDuration)
-                .SetEase(resultIconShowEase));
-            sequence.AppendInterval(resultIconHoldDuration);
-            sequence.Append(iconTransform
-                .DOScale(Vector3.zero, resultIconHideDuration)
-                .SetEase(resultIconHideEase));
-            sequence.OnComplete(() => iconRoot.SetActive(false));
-            return sequence;
+            return MiniGameTweenUtility.BuildResultIconTween(
+                iconRoot,
+                iconTransform,
+                resultIconShowDuration,
+                resultIconHoldDuration,
+                resultIconHideDuration,
+                resultIconShowEase,
+                resultIconHideEase,
+                useUnscaledTweens);
         }
     }
 }

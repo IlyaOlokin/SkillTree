@@ -139,7 +139,8 @@ namespace Battle
             OnAbsorptionChanged?.Invoke(LightAbsorption, DarknessAbsorption, TotalAbsorption);
 
             var type = ResolveType(_absorptionSigned);
-            if (force || type != _lastType)
+            bool typeChanged = type != _lastType;
+            if (force || typeChanged)
             {
                 _lastType = type;
                 OnAbsorptionTypeChanged?.Invoke(type);
@@ -153,7 +154,7 @@ namespace Battle
                 stacks = stepAbs > 0f ? Mathf.FloorToInt(TotalAbsorption / stepAbs) : 0;
             }
 
-            if (force || stacks != _lastStacks)
+            if (force || typeChanged || stacks != _lastStacks)
             {
                 _lastStacks = stacks;
                 OnAbsorptionStacksChanged?.Invoke(type, stacks);

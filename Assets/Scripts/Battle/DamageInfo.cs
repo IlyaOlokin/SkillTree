@@ -16,6 +16,8 @@ namespace Battle
         public DamageInstance DamageInstance { get; } = new DamageInstance();
         [HideInInspector] public bool IsCritical { get; set; }
         [HideInInspector] public bool AllowsMultiCrit { get; set; }
+        [HideInInspector] public bool DealsDoubleDamageToBarrier { get; set; }
+        [HideInInspector] public int MaxBarriersLostPerAttack { get; set; } = int.MaxValue;
         [HideInInspector] public int CriticalLayerCount { get; set; }
         [HideInInspector] public float HealthDamageTaken { get; private set; }
         [HideInInspector] public Unit AppliedChillTarget { get; private set; }
@@ -35,6 +37,8 @@ namespace Battle
             DamageInstance.ResetValues();
             IsCritical = false;
             AllowsMultiCrit = false;
+            DealsDoubleDamageToBarrier = false;
+            MaxBarriersLostPerAttack = int.MaxValue;
             CriticalLayerCount = 0;
             HealthDamageTaken = 0f;
             AppliedChillTarget = null;

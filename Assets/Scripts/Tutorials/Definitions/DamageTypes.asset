@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba0e4cb86bbc5414297ca8c0aae89fa1, type: 3}
+  m_Name: DamageTypes
+  m_EditorClassIdentifier: Assembly-CSharp::Tutorials.TutorialDefinition
+  id: damage_types
+  title: tutorial.damage_types.title
+  paragraphs:
+  - tutorial.damage_types.paragraph1
+  - tutorial.damage_types.paragraph2
+  - tutorial.damage_types.paragraph3
+  - tutorial.damage_types.paragraph4
+  side: 0
+  triggers:
+  - eventId: location.level
+    minimumValue: 3
+    locationId: level-1
+  requiredCompletedIds: []
+  excludedLocationIds: []
+  minimumPlayerLevel: 0

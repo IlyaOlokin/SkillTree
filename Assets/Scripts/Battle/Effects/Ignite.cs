@@ -64,15 +64,30 @@ namespace Battle
         public static void Apply(Unit attacker, DamageInfo damageInfo, Unit defender)
         {
             if (damageInfo.AttackEffectPayload.IsSuppressed<Ignite>()) return;
-            if (damageInfo.DamageInstance.Damage[DamageType.Fire] <= 0) return;
-            float damagePercentOfMaxHealth = damageInfo.DamageInstance.Damage[DamageType.Fire] / defender.health.MaxHealth;
+            float fireDamage = damageInfo.DamageInstance.Damage[DamageType.Fire];
+            float igniteBaseDamage = GetIgniteBaseDamage(damageInfo);
+            if (fireDamage <= 0) return;
+            float damagePercentOfMaxHealth = fireDamage / defender.health.MaxHealth;
             damagePercentOfMaxHealth *= 1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.IgniteChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
                 Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Ignite>() ? attacker : defender;
-                effectTarget.effectController.AddEffect(() => new Ignite(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Fire]));
+                if (AilmentAbsorption.TryAbsorbIncomingAilment(effectTarget)) return;
+
+                effectTarget.effectController.AddEffect(() => new Ignite(damageInfo, effectTarget, igniteBaseDamage), attacker);
                 attacker.AilmentApplied(effectTarget);
             }
+        }
+
+        private static float GetIgniteBaseDamage(DamageInfo damageInfo)
+        {
+            float baseDamage = damageInfo.DamageInstance.Damage[DamageType.Fire];
+            if (damageInfo.AttackEffectPayload.ShouldIncludeLightningDamageInIgnite())
+            {
+                baseDamage += damageInfo.DamageInstance.Damage[DamageType.Lightning];
+            }
+
+            return baseDamage;
         }
 
         private void ApplyIgniteDamage(Unit unit, float requestedDamage)

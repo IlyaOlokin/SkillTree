@@ -9,6 +9,7 @@ namespace SaveSystem
         SkillTree = 5,
         Inventory = 6,
         CloudSettings = 7,
-        LocalSettings = 8
+        LocalSettings = 8,
+        ProfileSnapshot = 9
     }
 }

@@ -15,6 +15,13 @@ MonoBehaviour:
   m_GroupName: Localization-String-Tables-English (en)
   m_GUID: 03fd5247cef2d8945ad40c6044a52c8a
   m_SerializeEntries:
+  - m_GUID: e3010a00ef3b88e40a895510859ee64d
+    m_Address: Tutorial_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0bd890ebedc1a17488f133d1753b44d3
     m_Address: Modifiers_en
     m_ReadOnly: 1
@@ -47,6 +54,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-en
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b152a369bc65a2f42af31b15e8ec7ba3
+    m_Address: Enemies_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c325efb705f9da94fa01f0d6ac8d0e6c
     m_Address: StaticText_en

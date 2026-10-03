@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d7c559fd99497d4787026251b18e476, type: 3}
+  m_Name: BossLevel14
+  m_EditorClassIdentifier: Assembly-CSharp::Battle.EnemyBossDefinition
+  waveWeight: 1
+  coreProfile: {fileID: 11400000, guid: faa3caa42da19eb47bbffc43619e8f62, type: 2}
+  attackSpeedModule: {fileID: 11400000, guid: 016eb83a0ba566648a1f879b29c7c9c3, type: 2}
+  attackModule: {fileID: 11400000, guid: e959fddfb0e1b004a81d75d1763efad3, type: 2}
+  defenceModule: {fileID: 11400000, guid: 1a41a1fb632319647a27fb01bb572c91, type: 2}
+  utilityModule: {fileID: 11400000, guid: 81ca775006b0098488db1b13dee0c11c, type: 2}
+  affixPool:
+  - {fileID: 11400000, guid: c2bdd953a1ec2154d927e63e023d1378, type: 2}
+  - {fileID: 11400000, guid: f6d9bbf55acc4553aeb8b6eaafb5479b, type: 2}
+  - {fileID: 11400000, guid: c5aae3cfe79448ef8dcffde2023f64eb, type: 2}
+  - {fileID: 11400000, guid: 27dbf52021144295be335ee63d8e8067, type: 2}
+  - {fileID: 11400000, guid: 566a43411220406bb9989ade1d4c69fc, type: 2}
+  - {fileID: 11400000, guid: 9c50ca1ee8af2e34cb1b6b866ef14608, type: 2}
+  - {fileID: 11400000, guid: 1ea0f12414574bc5a7d3138db5341c92, type: 2}
+  - {fileID: 11400000, guid: b2565ea815634609b49584c0e9753f34, type: 2}
+  - {fileID: 11400000, guid: c1c6f8be3865470bb4b014f8a6f928a3, type: 2}

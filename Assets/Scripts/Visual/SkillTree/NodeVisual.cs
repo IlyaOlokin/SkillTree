@@ -11,6 +11,7 @@ using SocketNode = SkillTree.SocketNode;
 
 namespace Visual
 {
+    [DefaultExecutionOrder(100)]
     public class NodeVisual : MonoBehaviour
     {
         [Inject] private UnitLevel _unitLevel;
@@ -19,6 +20,7 @@ namespace Visual
         [SerializeField] private Node node;
         [SerializeField] private SpriteRenderer border;
         [SerializeField] private SpriteRenderer nodeImage;
+        [SerializeField] private SpriteRenderer lockedOverlay;
         [SerializeField] private NodePowerVisual nodePowerVisual;
         [Header("Base color")]
         [SerializeField] private Color nodeImageBaseColor;
@@ -45,6 +47,13 @@ namespace Visual
         private bool _wasActive = false;
         private bool _isStarted = false;
         private Tween _colorTween;
+        private bool _visualDirty;
+        private bool _powerDirty;
+        private bool _queueDirty;
+        private int _displayedQueueOrder = -1;
+        private bool _powerVisualResolved;
+        private bool _canAllocate;
+        private LimitedZone _limitedZone;
 
         public Sprite NodeIcon
         {
@@ -74,18 +83,24 @@ namespace Visual
                 node.OnAllocatedChanged += UpdatePowerVisual;
                 node.OnActiveChanged += UpdateVisual;
                 node.OnNodeChanged += UpdatePowerVisual;
+                node.OnNodeChanged += UpdateVisual;
             }
 
             if (node is SocketNode socketNode)
                 socketNode.OnSocketedGemChanged += UpdateSocketVisual;
 
-            Node.OnAnyNodeAllocatedChanged += UpdateVisualSelf;
+            if (_skillTree == null)
+                Node.OnAnyNodeAllocatedChanged += UpdateVisualSelf;
 
-            if (_unitLevel != null)
+            if (_skillTree == null && _unitLevel != null)
                 _unitLevel.OnSkillPointsChanged += UpdateVisual;
 
             if (_skillTree != null)
-                _skillTree.OnAllocationQueueChanged += RefreshAllocationQueueOrder;
+            {
+                _skillTree.SubscribeQueueVisual(node, RefreshAllocationQueueOrder);
+                _skillTree.OnAllocationAvailabilityChanged += RefreshAvailability;
+                _skillTree.OnTopologyChanged += RefreshFromTree;
+            }
 
             if (_highlightService != null)
                 _highlightService.OnHighlightsChanged += UpdateVisualFromHighlights;
@@ -99,6 +114,7 @@ namespace Visual
                 node.OnAllocatedChanged -= UpdatePowerVisual;
                 node.OnActiveChanged -= UpdateVisual;
                 node.OnNodeChanged -= UpdatePowerVisual;
+                node.OnNodeChanged -= UpdateVisual;
             }
 
             if (node is SocketNode socketNode)
@@ -110,22 +126,43 @@ namespace Visual
                 _unitLevel.OnSkillPointsChanged -= UpdateVisual;
 
             if (_skillTree != null)
-                _skillTree.OnAllocationQueueChanged -= RefreshAllocationQueueOrder;
+            {
+                _skillTree.UnsubscribeQueueVisual(node, RefreshAllocationQueueOrder);
+                _skillTree.OnAllocationAvailabilityChanged -= RefreshAvailability;
+                _skillTree.OnTopologyChanged -= RefreshFromTree;
+            }
 
             if (_highlightService != null)
                 _highlightService.OnHighlightsChanged -= UpdateVisualFromHighlights;
 
             _colorTween?.Kill();
+            if (_limitedZone != null)
+                _limitedZone.OnAllocatedCountChanged -= RefreshFromTree;
         }
 
         private void Start()
         {
+            _limitedZone = node != null ? node.AdditionalAllocatedCondition?.Target as LimitedZone : null;
+            if (_limitedZone != null)
+                _limitedZone.OnAllocatedCountChanged += RefreshFromTree;
             RefreshNodeIcon();
             _wasActive = node != null && node.IsActive;
-            UpdateVisual(node);
-            UpdatePowerVisual(node);
-            RefreshAllocationQueueOrder();
+            ApplyVisual(node);
+            ApplyPowerVisual();
+            ApplyAllocationQueueOrder();
             _isStarted = true;
+        }
+
+        private void LateUpdate()
+        {
+            bool visualDirty = _visualDirty;
+            bool powerDirty = _powerDirty;
+            bool queueDirty = _queueDirty;
+            _visualDirty = _powerDirty = _queueDirty = false;
+            enabled = false;
+            if (visualDirty) ApplyVisual(node);
+            if (powerDirty) ApplyPowerVisual();
+            if (queueDirty) ApplyAllocationQueueOrder();
         }
 
         public void AnimateToAllocated(float duration)
@@ -139,13 +176,19 @@ namespace Visual
 
         private void UpdateVisual(Node node)
         {
+            _visualDirty = true;
+            enabled = true;
+        }
+
+        private void ApplyVisual(Node node)
+        {
             if (node == null)
                 return;
 
-            RefreshNodeIcon();
-            RefreshAllocationQueueOrder();
+            if (lockedOverlay != null)
+                lockedOverlay.gameObject.SetActive(node.IsLocked);
 
-            bool canAllocateNow = node.CanBeAllocated() && node.HasEnoughSkillPoints();
+            RefreshNodeIcon();
 
             if (node.IsActive)
             {
@@ -170,7 +213,12 @@ namespace Visual
             _wasActive = false;
             _colorTween?.Kill();
 
-            if (canAllocateNow)
+            // Active nodes need no availability traversal. Insufficient points also
+            // short-circuit before the more expensive root-connectivity check.
+            _canAllocate = _skillTree != null
+                ? _skillTree.CanAllocateForVisual(node)
+                : node.HasEnoughSkillPoints() && node.CanBeAllocated();
+            if (_canAllocate)
             {
                 ApplyColors(borderCanAllocateColor, nodeImageCanAllocateColor);
                 return;
@@ -181,18 +229,27 @@ namespace Visual
 
         private void UpdateVisual(int _)
         {
-            UpdateVisual(node);
+            if (node != null && !node.IsActive)
+                UpdateVisual(node);
         }
         
         private void UpdateVisualSelf(Node node)
         {
-            UpdateVisual(this.node);
+            if (this.node != null && (!this.node.IsActive || node == this.node))
+                UpdateVisual(this.node);
         }
 
         private void UpdatePowerVisual(Node _)
         {
-            if (nodePowerVisual == null)
+            _powerDirty = true;
+            enabled = true;
+        }
+
+        private void ApplyPowerVisual()
+        {
+            if (!_powerVisualResolved && nodePowerVisual == null)
                 nodePowerVisual = GetComponentInChildren<NodePowerVisual>(true);
+            _powerVisualResolved = true;
 
             if (nodePowerVisual == null || node == null)
                 return;
@@ -208,6 +265,17 @@ namespace Visual
         private void UpdateSocketVisual(SocketNode _)
         {
             RefreshNodeIcon();
+        }
+
+        private void RefreshFromTree() => UpdateVisual(node);
+
+        private void RefreshAvailability()
+        {
+            if (node == null || node.IsActive) return;
+            bool canAllocate = _skillTree.CanAllocateForVisual(node);
+            if (canAllocate == _canAllocate) return;
+            _canAllocate = canAllocate;
+            UpdateVisual(node);
         }
 
         private void RefreshNodeIcon()
@@ -228,9 +296,18 @@ namespace Visual
 
         private void RefreshAllocationQueueOrder()
         {
+            _queueDirty = true;
+            enabled = true;
+        }
+
+        private void ApplyAllocationQueueOrder()
+        {
             int order = _skillTree != null && node != null
-                ? _skillTree.GetQueuedAllocationOrder(node)
+                ? _skillTree.GetQueuedDisplayOrder(node)
                 : 0;
+            if (_displayedQueueOrder == order)
+                return;
+            _displayedQueueOrder = order;
             bool isQueued = order > 0;
 
             if (allocationQueueOrderText != null)
@@ -250,14 +327,17 @@ namespace Visual
         {
             bool isHighlighted = IsHighlighted();
 
-            if (border != null)
-                border.color = isHighlighted ? highlightedBorderColor : borderColor;
+            Color targetBorderColor = isHighlighted ? highlightedBorderColor : borderColor;
+            if (border != null && border.color != targetBorderColor)
+                border.color = targetBorderColor;
 
             if (nodeImage != null)
             {
-                nodeImage.color = isHighlighted && overrideNodeImageColorOnHighlight
+                Color targetImageColor = isHighlighted && overrideNodeImageColorOnHighlight
                     ? highlightedNodeImageColor
                     : nodeImageColor;
+                if (nodeImage.color != targetImageColor)
+                    nodeImage.color = targetImageColor;
             }
         }
 

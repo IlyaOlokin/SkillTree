@@ -17,16 +17,70 @@ namespace InventorySystem
 
         public IReadOnlyList<InventorySlot> Slots => slots;
         public int SlotCount => slotCount;
+        internal InventoryItem ReservedBridgeItem { get; set; }
+
+        public int FindGemSlot(GemInstance gem)
+        {
+            for (int i = 0; i < slots.Count; i++)
+                if (ReferenceEquals(slots[i].Item?.Gem, gem)) return i;
+            return -1;
+        }
+
+        // Prepare the entire inventory exchange before changing either the sockets or inventory.
+        internal bool TryExchangeGem(int consumeSlot, GemInstance returnedGem, Action commitSockets,
+            out int returnedSlot)
+        {
+            returnedSlot = -1;
+            List<InventoryItem> next = new();
+            for (int i = 0; i < slots.Count; i++) next.Add(slots[i].Item);
+            if (consumeSlot >= 0)
+            {
+                if (!IsValidSlotIndex(consumeSlot) || next[consumeSlot]?.Gem == null) return false;
+                InventoryItem remainder = next[consumeSlot].CreateCopy();
+                if (!remainder.TryConsumeUnits(1)) return false;
+                next[consumeSlot] = remainder.IsEmpty ? null : remainder;
+            }
+            InventoryItem returnedItem = returnedGem != null ? InventoryItem.FromGem(returnedGem) : null;
+            if (returnedItem != null)
+            {
+                for (int i = 0; i < next.Count; i++)
+                {
+                    if (next[i] == null || ReferenceEquals(next[i], ReservedBridgeItem)
+                        || !next[i].CanStackWith(returnedItem)) continue;
+                    InventoryItem stack = next[i].CreateCopy();
+                    if (stack.AddToStack(1) != 1) continue;
+                    next[i] = stack;
+                    returnedItem = stack;
+                    returnedSlot = i;
+                    break;
+                }
+                if (returnedSlot < 0)
+                {
+                    returnedSlot = next.FindIndex(item => item == null || item.IsEmpty);
+                    if (returnedSlot < 0) return false;
+                    next[returnedSlot] = returnedItem;
+                }
+            }
+            next.RemoveAll(item => item == null || item.IsEmpty);
+            returnedSlot = returnedItem != null ? next.IndexOf(returnedItem) : -1;
+            for (int i = 0; i < slots.Count; i++)
+                slots[i].SetItem(i < next.Count ? next[i] : null);
+            commitSockets?.Invoke();
+            RaiseInventoryChanged();
+            return true;
+        }
 
         private void Awake()
         {
             EnsureSlotCount();
+            CompactItemsToStart();
             _defaultSaveData = CaptureSaveData();
         }
 
         private void OnValidate()
         {
             EnsureSlotCount();
+            CompactItemsToStart();
         }
 
         public bool TryAddItem(InventoryItem item, out int slotIndex)
@@ -73,16 +127,19 @@ namespace InventorySystem
         public bool TryRemoveItem(int slotIndex, out InventoryItem removedItem)
         {
             removedItem = null;
+            if (IsReservedSlot(slotIndex)) return false;
             if (!IsValidSlotIndex(slotIndex) || slots[slotIndex].IsEmpty)
                 return false;
 
             removedItem = slots[slotIndex].Clear();
+            CompactItemsToStart();
             RaiseInventoryChanged();
             return true;
         }
 
         public bool TryMoveItem(int fromSlotIndex, int toSlotIndex)
         {
+            if (IsReservedSlot(fromSlotIndex) || IsReservedSlot(toSlotIndex)) return false;
             if (!IsValidSlotIndex(fromSlotIndex) || !IsValidSlotIndex(toSlotIndex))
                 return false;
 
@@ -99,6 +156,7 @@ namespace InventorySystem
             if (replacedItem != null && !replacedItem.IsEmpty)
                 fromSlot.SetItem(replacedItem);
 
+            CompactItemsToStart();
             RaiseInventoryChanged();
             return true;
         }
@@ -106,10 +164,12 @@ namespace InventorySystem
         public bool TrySetItem(int slotIndex, InventoryItem item, out InventoryItem replacedItem)
         {
             replacedItem = null;
+            if (IsReservedSlot(slotIndex)) return false;
             if (!IsValidSlotIndex(slotIndex) || !slots[slotIndex].CanStore(item))
                 return false;
 
             replacedItem = slots[slotIndex].SetItem(item);
+            CompactItemsToStart();
             RaiseInventoryChanged();
             return true;
         }
@@ -124,6 +184,7 @@ namespace InventorySystem
 
         public bool TryConsumeItem(int slotIndex, int amount)
         {
+            if (IsReservedSlot(slotIndex)) return false;
             if (!IsValidSlotIndex(slotIndex) || amount <= 0)
                 return false;
 
@@ -135,7 +196,10 @@ namespace InventorySystem
                 return false;
 
             if (item.IsEmpty)
+            {
                 slots[slotIndex].Clear();
+                CompactItemsToStart();
+            }
 
             RaiseInventoryChanged();
             return true;
@@ -151,6 +215,11 @@ namespace InventorySystem
 
             if (slots.Count > slotCount)
                 slots.RemoveRange(slotCount, slots.Count - slotCount);
+        }
+
+        private bool IsReservedSlot(int slotIndex)
+        {
+            return ReservedBridgeItem != null && ReferenceEquals(PeekItem(slotIndex), ReservedBridgeItem);
         }
 
         private bool IsValidSlotIndex(int slotIndex)
@@ -194,6 +263,7 @@ namespace InventorySystem
             Func<GemInstanceSaveData, GemInstance> gemResolver,
             Func<string, ItemDefinition> itemResolver)
         {
+            ReservedBridgeItem = null;
             EnsureSlotCount();
             ClearAllInternal();
 
@@ -218,6 +288,7 @@ namespace InventorySystem
                 }
             }
 
+            CompactItemsToStart();
             RaiseInventoryChanged();
         }
 
@@ -230,6 +301,29 @@ namespace InventorySystem
         {
             for (int i = 0; i < slots.Count; i++)
                 slots[i].Clear();
+        }
+
+        private void CompactItemsToStart()
+        {
+            int targetIndex = 0;
+
+            for (int sourceIndex = 0; sourceIndex < slots.Count; sourceIndex++)
+            {
+                InventorySlot sourceSlot = slots[sourceIndex];
+                if (sourceSlot.IsEmpty)
+                    continue;
+
+                if (sourceIndex != targetIndex)
+                    slots[targetIndex].SetItem(sourceSlot.Clear());
+
+                targetIndex++;
+            }
+
+            for (int i = targetIndex; i < slots.Count; i++)
+            {
+                if (!slots[i].IsEmpty)
+                    slots[i].Clear();
+            }
         }
     }
 }

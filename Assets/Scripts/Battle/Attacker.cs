@@ -6,16 +6,19 @@ namespace Battle
     public class Attacker : MonoBehaviour, IUnitComponent
     {
         private const float AttackCycleProgress = 1f;
+        // Bound self-feeding progress callbacks without discarding accumulated progress.
+        private const int MaxAttackCyclesPerTick = 128;
 
         private Unit _owner;
         private BaseUnitModifiers _attackSnapshot;
         private DamageInfo _attackDamageInfo;
         public ITarget Target { get; private set; }
 
-        public float AttackProgress => _attackTimer;
+        public float AttackProgress => (float)_attackTimer;
         public bool ExternalAttackProgressLocked => _externalAttackProgressLockCount > 0;
 
-        private float _attackTimer;
+        private double _attackTimer;
+        private bool _isAttacking;
         private int _externalAttackProgressLockCount;
         private readonly List<float> _extraAttackMoments = new List<float>();
         private readonly List<float> _triggeredExtraAttackMomentsThisCycle = new List<float>();
@@ -39,15 +42,32 @@ namespace Battle
 
         public void CombatTick(float deltaTime)
         {
-            if (_attackTimer < 1)
+            double remainingTime = Mathf.Max(0f, deltaTime);
+            for (int cycle = 0; cycle < MaxAttackCyclesPerTick; cycle++)
             {
-                AddAttackProgress(GetCalculatedAttackSpeed() * deltaTime);
-            }
-            else if (Target?.UnitObject != null && !IsAttackSuppressed())
-            {
+                if (!_owner.isActiveAndEnabled || IsAttackSuppressed()) return;
+
+                if (_attackTimer < AttackCycleProgress)
+                {
+                    float speed = GetCalculatedAttackSpeed();
+                    if (speed <= 0f || remainingTime <= 0f) return;
+
+                    double step = System.Math.Min(remainingTime, (AttackCycleProgress - _attackTimer) / speed);
+                    remainingTime = System.Math.Max(0d, remainingTime - step);
+                    AddAttackProgress(speed * step);
+                    if (System.Math.Abs(_attackTimer - AttackCycleProgress) <= 1e-7)
+                        _attackTimer = AttackCycleProgress;
+                }
+
+                if (_attackTimer < AttackCycleProgress || Target?.UnitObject == null ||
+                    !_owner.isActiveAndEnabled || IsAttackSuppressed()) return;
+
                 AttackTarget();
                 ConsumeAttackCycle();
+                TryTriggerExtraAttacks(0f, _attackTimer);
             }
+
+            _attackTimer += Mathf.Max(0f, GetCalculatedAttackSpeed()) * remainingTime;
         }
 
         private float GetCalculatedAttackSpeed()
@@ -63,7 +83,7 @@ namespace Battle
         
         public void ConsumeAttackCycle()
         {
-            _attackTimer = Mathf.Max(0f, _attackTimer - AttackCycleProgress);
+            _attackTimer = System.Math.Max(0d, _attackTimer - AttackCycleProgress);
             _triggeredExtraAttackMomentsThisCycle.Clear();
         }
 
@@ -106,21 +126,22 @@ namespace Battle
             _externalAttackProgressLockCount = Mathf.Max(0, _externalAttackProgressLockCount - 1);
         }
 
-        private void AddAttackProgress(float deltaProgress)
+        private void AddAttackProgress(double deltaProgress)
         {
-            if (Mathf.Approximately(deltaProgress, 0f))
+            if (deltaProgress == 0d)
             {
                 return;
             }
 
-            float previousProgress = _attackTimer;
-            _attackTimer = Mathf.Max(0f, _attackTimer + deltaProgress);
+            double previousProgress = _attackTimer;
+            _attackTimer = System.Math.Max(0d, _attackTimer + deltaProgress);
 
             TryTriggerExtraAttacks(previousProgress, _attackTimer);
         }
 
-        private void TryTriggerExtraAttacks(float previousProgress, float currentProgress)
+        private void TryTriggerExtraAttacks(double previousProgress, double currentProgress)
         {
+            if (_isAttacking || !_owner.isActiveAndEnabled) return;
             if (_extraAttackMoments.Count == 0)
             {
                 return;
@@ -145,15 +166,16 @@ namespace Battle
                     continue;
                 }
 
-                AttackTarget();
                 _triggeredExtraAttackMomentsThisCycle.Add(extraAttackMoment);
+                AttackTarget();
+                if (!_owner.isActiveAndEnabled || Target?.UnitObject == null || IsAttackSuppressed()) return;
             }
         }
 
         private bool IsAttackSuppressed()
         {
             return _owner?.effectController != null &&
-                   _owner.effectController.GetAllEffectsOfType<Freeze>().Count > 0;
+                   _owner.effectController.HasEffect<Freeze>();
         }
 
         private static bool ContainsMoment(List<float> moments, float value)
@@ -183,12 +205,29 @@ namespace Battle
 
         private void AttackTarget()
         {
-            _owner.OnAttackStarted(Target);
-            _attackSnapshot.CopyFrom(_owner.BaseUnitModifiers);
-            _attackDamageInfo.Reset(_owner, _attackSnapshot);
-            
-            AttackProcessor.HandleAttack(_owner, _attackDamageInfo, Target);
-            _owner.OnAttackFinished(Target);
+            if (_isAttacking) return;
+            // Resolve before callbacks: selection changes only affect subsequent attacks.
+            Unit attackTarget = Target?.UnitObject;
+            if (attackTarget == null)
+            {
+                return;
+            }
+
+            _isAttacking = true;
+            try
+            {
+                _owner.OnAttackStarted(attackTarget);
+                _attackSnapshot.CopyFrom(_owner.BaseUnitModifiers);
+                _attackDamageInfo.Reset(_owner, _attackSnapshot);
+                _owner.PrepareAttack(_attackDamageInfo);
+
+                AttackProcessor.HandleAttack(_owner, _attackDamageInfo, attackTarget);
+                _owner.OnAttackFinished(attackTarget);
+            }
+            finally
+            {
+                _isAttacking = false;
+            }
         }
     }
 }

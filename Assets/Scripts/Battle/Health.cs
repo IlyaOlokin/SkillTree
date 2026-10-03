@@ -14,29 +14,90 @@ namespace Battle
         private float _currentHealth = 100f;
         private float _cachedRegenerationSpeed;
         private float _cachedProfanedHealthPercent01;
+        private float _cachedHallowedHealthPercent01;
         public float CurrentHealth01 => MaxHealth > 0f ? CurrentHealth / MaxHealth : 0f;
-        public float ProfanedHealthPercent01 => _cachedProfanedHealthPercent01;
-        public float ProfanedHealthThreshold => MaxHealth * (1f - _cachedProfanedHealthPercent01);
-        public float ProfanedHealthSegmentStart01 => Mathf.Clamp01(1f - _cachedProfanedHealthPercent01);
-        public float CurrentProfanedHealth => _cachedProfanedHealthPercent01 > 0f
-            ? Mathf.Max(0f, CurrentHealth - ProfanedHealthThreshold)
-            : 0f;
-        public float CurrentProfanedHealth01 => MaxHealth > 0f ? CurrentProfanedHealth / MaxHealth : 0f;
-        public float CurrentProfanedHealthSegment01
-        {
-            get
-            {
-                float profanedPool = MaxHealth * _cachedProfanedHealthPercent01;
-                if (profanedPool <= 0f)
-                {
-                    return 0f;
-                }
 
-                return Mathf.Clamp01(CurrentProfanedHealth / profanedPool);
-            }
+        public float ProfanedHealthPercent01 => _cachedProfanedHealthPercent01;
+        public bool IsProfanedHealthOnHighSide => !AreSacredHealthSegmentsSwapped;
+        public float ProfanedHealthSegmentStart01 => GetHealthSegmentStart01(_cachedProfanedHealthPercent01, IsProfanedHealthOnHighSide);
+        public float ProfanedHealthThreshold => MaxHealth * ProfanedHealthSegmentStart01;
+        public float CurrentProfanedHealth => GetCurrentHealthInSegment(_cachedProfanedHealthPercent01, IsProfanedHealthOnHighSide);
+        public float CurrentProfanedHealth01 => MaxHealth > 0f ? CurrentProfanedHealth / MaxHealth : 0f;
+        public float CurrentProfanedHealthSegment01 => GetCurrentHealthSegment01(_cachedProfanedHealthPercent01, IsProfanedHealthOnHighSide);
+        public bool HasProfanedHealth => CurrentProfanedHealth > 0f;
+
+        public float HallowedHealthPercent01 => _cachedHallowedHealthPercent01;
+        public bool IsHallowedHealthOnHighSide => AreSacredHealthSegmentsSwapped;
+        public float HallowedHealthSegmentStart01 => GetHealthSegmentStart01(_cachedHallowedHealthPercent01, IsHallowedHealthOnHighSide);
+        public float HallowedHealthThreshold => MaxHealth * HallowedHealthSegmentStart01;
+        public float CurrentHallowedHealth => GetCurrentHealthInSegment(_cachedHallowedHealthPercent01, IsHallowedHealthOnHighSide);
+        public float CurrentHallowedHealth01 => MaxHealth > 0f ? CurrentHallowedHealth / MaxHealth : 0f;
+        public float CurrentHallowedHealthSegment01 => GetCurrentHealthSegment01(_cachedHallowedHealthPercent01, IsHallowedHealthOnHighSide);
+        public bool HasHallowedHealth => CurrentHallowedHealth > 0f;
+
+        private bool _areSacredHealthSegmentsSwapped;
+
+        private bool AreSacredHealthSegmentsSwapped => _areSacredHealthSegmentsSwapped;
+
+        public void ResetSacredHealthSegmentsSwap()
+        {
+            SetSacredHealthSegmentsSwapped(false);
         }
 
-        public bool HasProfanedHealth => CurrentProfanedHealth > 0f;
+        public void SetSacredHealthSegmentsSwapped(bool swapped)
+        {
+            if (_areSacredHealthSegmentsSwapped == swapped)
+            {
+                return;
+            }
+
+            _areSacredHealthSegmentsSwapped = swapped;
+            OnProfanedHealthChanged?.Invoke();
+            OnHallowedHealthChanged?.Invoke();
+        }
+
+        private float GetCurrentHealthInSegment(float percent01, bool highSide)
+        {
+            if (percent01 <= 0f || MaxHealth <= 0f)
+            {
+                return 0f;
+            }
+
+            float threshold = MaxHealth * GetHealthSegmentStart01(percent01, highSide);
+            return highSide
+                ? Mathf.Max(0f, CurrentHealth - threshold)
+                : CurrentHealth < MaxHealth * percent01
+                    ? CurrentHealth
+                    : 0f;
+        }
+
+        private float GetCurrentHealthSegment01(float percent01, bool highSide)
+        {
+            float pool = MaxHealth * percent01;
+            if (pool <= 0f)
+            {
+                return 0f;
+            }
+
+            return Mathf.Clamp01(GetCurrentHealthInSegment(percent01, highSide) / pool);
+        }
+
+        private static float GetHealthSegmentStart01(float percent01, bool highSide)
+        {
+            return highSide
+                ? Mathf.Clamp01(1f - percent01)
+                : 0f;
+        }
+
+        public bool IsHealthInsideHallowedThreshold => _cachedHallowedHealthPercent01 > 0f && MaxHealth > 0f
+            && (IsHallowedHealthOnHighSide
+                ? CurrentHealth > HallowedHealthThreshold
+                : CurrentHealth < MaxHealth * _cachedHallowedHealthPercent01);
+
+        public bool IsHealthInsideProfanedThreshold => _cachedProfanedHealthPercent01 > 0f && MaxHealth > 0f
+            && (IsProfanedHealthOnHighSide
+                ? CurrentHealth > ProfanedHealthThreshold
+                : CurrentHealth < MaxHealth * _cachedProfanedHealthPercent01);
         public float CurrentHealth
         {
             get => _currentHealth;
@@ -47,6 +108,7 @@ namespace Battle
         public event Action OnHealthChanged;
         public event Action OnMaximumHealthChanged;
         public event Action OnProfanedHealthChanged;
+        public event Action OnHallowedHealthChanged;
         public event Action OnHealthZero;
 
         public void Init(Unit owner)
@@ -87,6 +149,7 @@ namespace Battle
             if (displayHeal) OnHealthChangedDelta?.Invoke(previousHealth - CurrentHealth);
             OnHealthChanged?.Invoke();
             OnProfanedHealthChanged?.Invoke();
+            OnHallowedHealthChanged?.Invoke();
             ValidateAbsorptionDeathThreshold();
         }
 
@@ -115,6 +178,7 @@ namespace Battle
             if (displayDamage) OnHealthChangedDelta?.Invoke(previousHealth - CurrentHealth);
             OnHealthChanged?.Invoke();
             OnProfanedHealthChanged?.Invoke();
+            OnHallowedHealthChanged?.Invoke();
             if (CurrentHealth <= 0f)
             {
                 NotifyHealthZero();
@@ -129,18 +193,21 @@ namespace Battle
             _deathNotified = false;
             OnHealthChanged?.Invoke();
             OnProfanedHealthChanged?.Invoke();
+            OnHallowedHealthChanged?.Invoke();
         }
 
         private void UpdateHealthValues()
         {
             _cachedRegenerationSpeed = _owner.BaseUnitModifiers.GetStatValue(StatType.HealthRegenerationPerSecond);
             _cachedProfanedHealthPercent01 = Mathf.Clamp01(_owner.BaseUnitModifiers.GetStatValue(StatType.ProfanedHealthPercent));
+            _cachedHallowedHealthPercent01 = Mathf.Clamp01(_owner.BaseUnitModifiers.GetStatValue(StatType.HallowedHealthPercent));
             
             float currentHealthPercentage = CurrentHealth / MaxHealth;
             MaxHealth = _owner.BaseUnitModifiers.GetStatValue(StatType.MaximumHealth);
             CurrentHealth = MaxHealth * currentHealthPercentage;
             OnMaximumHealthChanged?.Invoke();
             OnProfanedHealthChanged?.Invoke();
+            OnHallowedHealthChanged?.Invoke();
             ValidateAbsorptionDeathThreshold();
         }
 

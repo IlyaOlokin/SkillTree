@@ -18,9 +18,42 @@ namespace SkillTree
         [Inject] private PlayerUnit _player;
 
         [SerializeField] private NodeVisual nodeVisual;
-        [SerializeField] private WeaponIcon[] icons;
+        [SerializeField] private WeaponIcon[] icons = CreateWeaponIcons();
 
         private Sprite _fallbackIcon;
+
+        private static WeaponIcon[] CreateWeaponIcons()
+        {
+            return new[]
+            {
+                new WeaponIcon { weaponType = WeaponType.Sword },
+                new WeaponIcon { weaponType = WeaponType.Hammer },
+                new WeaponIcon { weaponType = WeaponType.FireStaff },
+                new WeaponIcon { weaponType = WeaponType.ColdStaff },
+                new WeaponIcon { weaponType = WeaponType.LightningStaff }
+            };
+        }
+
+        private void OnValidate()
+        {
+            WeaponIcon[] weaponIcons = CreateWeaponIcons();
+            if (icons != null)
+            {
+                for (int i = 0; i < weaponIcons.Length; i++)
+                {
+                    for (int j = 0; j < icons.Length; j++)
+                    {
+                        if (icons[j].weaponType != weaponIcons[i].weaponType)
+                            continue;
+
+                        weaponIcons[i].icon = icons[j].icon;
+                        break;
+                    }
+                }
+            }
+
+            icons = weaponIcons;
+        }
 
         private void Awake()
         {

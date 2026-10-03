@@ -34,6 +34,10 @@ MonoBehaviour:
     m_Localized: "Gain [[0]] [[1]] for every allocated node in this zone\nCurrent [[1]]: [[2]]"
     m_Metadata:
       m_Items: []
+  - m_Id: 1777468216597000010
+    m_Localized: You can invest unlimited skill points in this node.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

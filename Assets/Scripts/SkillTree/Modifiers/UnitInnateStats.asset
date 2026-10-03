@@ -47,5 +47,9 @@ MonoBehaviour:
   - modifierType: 0
     statType: 16
     value: 0.05
+  - modifierType: 0
+    statType: 72
+    value: 0.5
   runtimeModifiers:
   - {fileID: 11400000, guid: f51a2f3da1835f744aad48792adf7d09, type: 2}
+  - {fileID: 11400000, guid: 6a790c51a71f43a4da2692e9a050a0a9, type: 2}

@@ -18,6 +18,8 @@ Shader "Unlit/SkillTreeFogOfWar"
         _LayerAlphaA ("Layer Alpha A", Range(0, 1)) = 0.65
         _LayerAlphaB ("Layer Alpha B", Range(0, 1)) = 0.42
         _LayerAlphaC ("Layer Alpha C", Range(0, 1)) = 0.24
+        _BlackLayerOpacity ("Black Layer Opacity", Range(0, 1)) = 1.0
+        _BlackLayerEdgeSoftness ("Black Layer Edge Softness", Range(0.001, 1.2)) = 0.42
         _VeilOpacity ("Veil Opacity", Range(0, 1)) = 0.28
         _VeilWidth ("Veil Width", Range(0.01, 1)) = 0.34
         _VeilNoiseScale ("Veil Noise Scale", Float) = 0.52
@@ -68,6 +70,8 @@ Shader "Unlit/SkillTreeFogOfWar"
             float _LayerAlphaA;
             float _LayerAlphaB;
             float _LayerAlphaC;
+            float _BlackLayerOpacity;
+            float _BlackLayerEdgeSoftness;
             float _VeilOpacity;
             float _VeilWidth;
             float _VeilNoiseScale;
@@ -214,6 +218,7 @@ Shader "Unlit/SkillTreeFogOfWar"
                 float fogMaskA = ComputeFogLayerMask(revealSoft, _EdgeSoftness, edgeNoiseA) * _LayerAlphaA;
                 float fogMaskB = ComputeFogLayerMask(revealSoft, _EdgeSoftnessLayerB, edgeNoiseB) * _LayerAlphaB;
                 float fogMaskC = ComputeFogLayerMask(revealWide, _EdgeSoftnessLayerC, edgeNoiseC) * _LayerAlphaC;
+                float blackLayerMask = ComputeFogLayerMask(revealWide, _BlackLayerEdgeSoftness, edgeNoiseC * 0.45) * _BlackLayerOpacity;
 
                 float transitionBand = saturate(1.0 - abs(revealWide * 2.0 - 1.0) / max(_VeilWidth, 0.0001));
                 float veilNoise = Fbm(baseUv * _VeilNoiseScale + warp * 0.8 + float2(time * 0.025, -time * 0.018));
@@ -225,7 +230,9 @@ Shader "Unlit/SkillTreeFogOfWar"
                 float density = saturate(_FogOpacity + (innerMovement - 0.5) * _InnerNoiseOpacity * 2.0);
                 float highlight = saturate(innerMovement * 1.15);
                 float3 color = lerp(_FogColor.rgb, _FogHighlightColor.rgb, highlight);
-                float alpha = fogMask * density;
+                float fogAlpha = fogMask * density;
+                float alpha = saturate(blackLayerMask + fogAlpha * (1.0 - blackLayerMask));
+                color = alpha > 0.0001 ? color * fogAlpha / alpha : float3(0.0, 0.0, 0.0);
 
                 return float4(color, alpha);
             }

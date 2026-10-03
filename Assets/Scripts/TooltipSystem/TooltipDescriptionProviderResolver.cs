@@ -19,6 +19,14 @@ namespace TooltipSystem
                 }
             }
 
+            foreach (MonoBehaviour behaviour in owner.GetComponentsInParent<MonoBehaviour>())
+            {
+                if (behaviour is ITooltipDescriptionProvider provider)
+                {
+                    return provider;
+                }
+            }
+
             return null;
         }
     }

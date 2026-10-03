@@ -15,6 +15,13 @@ MonoBehaviour:
   m_GroupName: Localization-String-Tables-Russian (ru)
   m_GUID: 01dd0f8518a50304ca668715eb39d9dd
   m_SerializeEntries:
+  - m_GUID: 47b68af64b0c7104188bf7ec7db1cfaa
+    m_Address: Tutorial_ru
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ru
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0312974ab9f69e14fb34261b06b43640
     m_Address: Items_ru
     m_ReadOnly: 1
@@ -54,6 +61,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-ru
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9e9fe60a928f994db3fabb25ff9c092
+    m_Address: Enemies_ru
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ru
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: dd90b1b53af68af42bb01720a74f1fb5, type: 2}

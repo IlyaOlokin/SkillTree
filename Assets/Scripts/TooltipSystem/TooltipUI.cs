@@ -35,6 +35,7 @@ namespace TooltipSystem
         private Object _pendingHideOwner;
         private TooltipCanvasTarget _currentCanvasTarget = TooltipCanvasTarget.SkillTree;
         private Vector2 _currentScreenPosition;
+        private bool _showOptionalDescriptions;
         private readonly Dictionary<TooltipCanvasTarget, TooltipCanvasState> _canvasStates = new();
 
         private void Awake()
@@ -45,6 +46,17 @@ namespace TooltipSystem
 
         private void Update()
         {
+            bool showOptionalDescriptions = IsTooltipPinned();
+            if (_showOptionalDescriptions != showOptionalDescriptions)
+            {
+                _showOptionalDescriptions = showOptionalDescriptions;
+                bool pendingHideRequest = _pendingHideRequest;
+                Object pendingHideOwner = _pendingHideOwner;
+                RefreshCurrentTooltip();
+                _pendingHideRequest = pendingHideRequest;
+                _pendingHideOwner = pendingHideOwner;
+            }
+
             if (!_pendingHideRequest || IsTooltipPinned() || IsPointerOverVisibleTooltip())
             {
                 return;
@@ -102,6 +114,7 @@ namespace TooltipSystem
             _currentTooltipDescriptionProvider = tooltipDescriptionProvider;
             _currentCanvasTarget = canvasTarget;
             _currentScreenPosition = screenPosition;
+            _showOptionalDescriptions = IsTooltipPinned();
             _pendingHideOwner = null;
             _pendingHideRequest = false;
 
@@ -112,7 +125,15 @@ namespace TooltipSystem
 
             bool shouldShowTitle = tooltipDescriptionProvider.ShouldShowTooltipTitle();
             string title = tooltipDescriptionProvider.GetTooltipTitle();
-            ShowTooltipWindow(canvasState, 0, tooltipDescriptionProvider.GetTooltipDescriptions(), screenPosition, shouldShowTitle, title, animate);
+            ShowTooltipWindow(
+                canvasState,
+                0,
+                GetTooltipDescriptions(tooltipDescriptionProvider),
+                GetTooltipIcons(tooltipDescriptionProvider),
+                screenPosition,
+                shouldShowTitle,
+                title,
+                animate);
         }
 
         public void RefreshCurrentTooltip()
@@ -201,6 +222,7 @@ namespace TooltipSystem
                 canvasState,
                 tooltipLevel,
                 description.Descriptions,
+                null,
                 screenPosition,
                 description.ShowTooltipTitle,
                 description.Title,
@@ -235,6 +257,7 @@ namespace TooltipSystem
                 canvasState,
                 0,
                 description.Descriptions,
+                null,
                 screenPosition,
                 description.ShowTooltipTitle,
                 description.Title,
@@ -330,12 +353,14 @@ namespace TooltipSystem
             TooltipCanvasState canvasState,
             int tooltipLevel,
             IReadOnlyList<string> descriptions,
+            IReadOnlyList<TooltipIconData> icons,
             Vector2 screenPosition,
             bool shouldShowTitle,
             string title,
             bool animate)
         {
             TooltipWindow tooltipWindow = canvasState.TooltipWindows[tooltipLevel];
+            tooltipWindow.SetIcons(icons);
             tooltipWindow.SetTexts(descriptions, shouldShowTitle, title);
             tooltipWindow.PrepareForShow();
             Canvas.ForceUpdateCanvases();
@@ -364,6 +389,25 @@ namespace TooltipSystem
 
             Debug.LogWarning($"Tooltip term '{linkId}' was not found in database '{tooltipTermDatabase.name}'.", tooltipTermDatabase);
             return false;
+        }
+
+        private static IReadOnlyList<TooltipIconData> GetTooltipIcons(ITooltipDescriptionProvider provider)
+        {
+            return provider is ITooltipIconProvider iconProvider
+                ? iconProvider.GetTooltipIcons()
+                : null;
+        }
+
+        private IReadOnlyList<string> GetTooltipDescriptions(ITooltipDescriptionProvider provider)
+        {
+            if (provider is ITooltipDescriptionLineProvider lineProvider)
+            {
+                return TooltipDescriptionLine.GetVisibleTexts(
+                    lineProvider.GetTooltipDescriptionLines(),
+                    _showOptionalDescriptions);
+            }
+
+            return provider.GetTooltipDescriptions();
         }
 
         private void HideTooltipWindowsFrom(TooltipCanvasState canvasState, int tooltipLevel)

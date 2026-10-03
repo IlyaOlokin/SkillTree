@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b465eb30c5f2b5549a674796df215ee1, type: 3}
   m_Name: PhysicalDamage_0.2
   m_EditorClassIdentifier: 
-  affixName: Strong
-  modifiers:
-  - modifierType: 1
-    statType: 4
-    value: 0.2
+  affixName: enemy.affix.strong
+  moreExperience: 0.2
+  addedStatWeights:
+  - statType: 4
+    weight: 0.2
+  modifiers: []

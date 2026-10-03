@@ -1495,6 +1495,38 @@ MonoBehaviour:
     m_Key: modifier.profanedDamageTaken.description
     m_Metadata:
       m_Items: []
+  - m_Id: 487906223460365
+    m_Key: modifier.container.added.HallowedHealthPercent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460366
+    m_Key: modifier.container.increased.HallowedHealthPercent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460367
+    m_Key: modifier.container.decreased.HallowedHealthPercent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460368
+    m_Key: modifier.container.more.HallowedHealthPercent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460369
+    m_Key: modifier.container.less.HallowedHealthPercent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460370
+    m_Key: modifier.container.none.HallowedHealthPercent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460371
+    m_Key: modifier.hallowedDamageTaken.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460372
+    m_Key: modifier.swapProfanedAndHallowedHealth.description
+    m_Metadata:
+      m_Items: []
   - m_Id: 487906223460362
     m_Key: node.title.default
     m_Metadata:
@@ -1504,7 +1536,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 487906223460364
-    m_Key: modifier.barrierRestorationGrantsBarrierSurge.description
+    m_Key: modifier.barrierLossGrantsBarrierSurge.description
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311680
@@ -1701,6 +1733,26 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 5084156906311727
     m_Key: modifier.modifierPerPlayerLevel.noModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311789
+    m_Key: modifier.modifierPerPlayerLevel.level.single
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311790
+    m_Key: modifier.modifierPerPlayerLevel.level.multi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311791
+    m_Key: modifier.modifierContainerPerProfanedHealthPercent.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311792
+    m_Key: modifier.modifierContainerPerProfanedHealthPercent.noModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311793
+    m_Key: modifier.modifierContainerPerProfanedHealthPercent.percentInterval
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311728
@@ -1939,14 +1991,458 @@ MonoBehaviour:
     m_Key: modifier.timedNextAttackModifierContainer.description
     m_Metadata:
       m_Items: []
+  - m_Id: 5084156906311787
+    m_Key: modifier.unlockMiniGameEvent.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311788
+    m_Key: modifier.attributeBasedResistances.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845362088054784
+    m_Key: modifier.ailmentAbsorptionCooldown.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845421148049408
+    m_Key: effect.ailmentAbsorption.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311794
+    m_Key: modifier.lightningDamageContributesToIgnite.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000001
+    m_Key: modifier.modifierContainerIfAbsorptionState.hasAbsorption.noModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000002
+    m_Key: modifier.modifierContainerIfAbsorptionState.noAbsorption.noModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000003
+    m_Key: modifier.modifierContainerIfAbsorptionState.hasAbsorption.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000004
+    m_Key: modifier.modifierContainerIfAbsorptionState.noAbsorption.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000005
+    m_Key: modifier.modifierContainerIfTargetFullLife.noModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000006
+    m_Key: modifier.modifierContainerIfTargetFullLife.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000007
+    m_Key: modifier.cyclicAilmentChance.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000008
+    m_Key: modifier.criticalHitsDealDoubleBarrierDamage.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000009
+    m_Key: modifier.distractReducesAttackProgress.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000010
+    m_Key: modifier.sunderReducesDamage.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000011
+    m_Key: modifier.exposeReducesResistances.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000012
+    m_Key: modifier.lowLife.noModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000013
+    m_Key: modifier.lowLife.withModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000014
+    m_Key: modifier.lowLifeThreshold.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000015
+    m_Key: modifier.dexterityElementalResistanceBypass.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000016
+    m_Key: modifier.bleedGrantsPhysicalDamageBuff.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000017
+    m_Key: effect.BleedPhysicalDamageBuff.linkedName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000018
+    m_Key: modifier.barrierRestorationGrantsAdditionalBarrierChance.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000019
+    m_Key: modifier.armorGrantsMysticNegation.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000010
+    m_Key: modifier.container.added.ParryChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000011
+    m_Key: modifier.container.increased.ParryChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000012
+    m_Key: modifier.container.decreased.ParryChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000013
+    m_Key: modifier.container.more.ParryChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000014
+    m_Key: modifier.container.less.ParryChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000015
+    m_Key: modifier.container.none.ParryChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000022
+    m_Key: modifier.container.added.ParryPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000023
+    m_Key: modifier.container.increased.ParryPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000024
+    m_Key: modifier.container.decreased.ParryPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000025
+    m_Key: modifier.container.more.ParryPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000026
+    m_Key: modifier.container.less.ParryPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000027
+    m_Key: modifier.container.none.ParryPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000028
+    m_Key: modifier.parryRestoresHealth.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845700000000001
+    m_Key: modifier.maxBarriersLostPerAttack.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845800000000001
+    m_Key: modifier.repeatAppliedOverchargeChance.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845900000000001
+    m_Key: modifier.elementalDamageTakenAsPhysicalChance.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000001
+    m_Key: modifier.container.added.DamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000002
+    m_Key: modifier.container.increased.DamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000003
+    m_Key: modifier.container.decreased.DamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000004
+    m_Key: modifier.container.more.DamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000005
+    m_Key: modifier.container.less.DamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000006
+    m_Key: modifier.container.none.DamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000007
+    m_Key: modifier.container.added.ElementalDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000008
+    m_Key: modifier.container.increased.ElementalDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000009
+    m_Key: modifier.container.decreased.ElementalDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000010
+    m_Key: modifier.container.more.ElementalDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000011
+    m_Key: modifier.container.less.ElementalDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000012
+    m_Key: modifier.container.none.ElementalDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000013
+    m_Key: modifier.container.added.MysticDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000014
+    m_Key: modifier.container.increased.MysticDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000015
+    m_Key: modifier.container.decreased.MysticDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000016
+    m_Key: modifier.container.more.MysticDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000017
+    m_Key: modifier.container.less.MysticDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000018
+    m_Key: modifier.container.none.MysticDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000019
+    m_Key: modifier.container.added.PhysicalDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000020
+    m_Key: modifier.container.increased.PhysicalDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000021
+    m_Key: modifier.container.decreased.PhysicalDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000022
+    m_Key: modifier.container.more.PhysicalDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000023
+    m_Key: modifier.container.less.PhysicalDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000024
+    m_Key: modifier.container.none.PhysicalDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000025
+    m_Key: modifier.container.added.FireDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000026
+    m_Key: modifier.container.increased.FireDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000027
+    m_Key: modifier.container.decreased.FireDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000028
+    m_Key: modifier.container.more.FireDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000029
+    m_Key: modifier.container.less.FireDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000030
+    m_Key: modifier.container.none.FireDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000031
+    m_Key: modifier.container.added.ColdDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000032
+    m_Key: modifier.container.increased.ColdDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000033
+    m_Key: modifier.container.decreased.ColdDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000034
+    m_Key: modifier.container.more.ColdDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000035
+    m_Key: modifier.container.less.ColdDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000036
+    m_Key: modifier.container.none.ColdDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000037
+    m_Key: modifier.container.added.LightningDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000038
+    m_Key: modifier.container.increased.LightningDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000039
+    m_Key: modifier.container.decreased.LightningDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000040
+    m_Key: modifier.container.more.LightningDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000041
+    m_Key: modifier.container.less.LightningDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000042
+    m_Key: modifier.container.none.LightningDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000043
+    m_Key: modifier.container.added.LightDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000044
+    m_Key: modifier.container.increased.LightDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000045
+    m_Key: modifier.container.decreased.LightDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000046
+    m_Key: modifier.container.more.LightDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000047
+    m_Key: modifier.container.less.LightDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000048
+    m_Key: modifier.container.none.LightDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000049
+    m_Key: modifier.container.added.DarknessDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000050
+    m_Key: modifier.container.increased.DarknessDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000051
+    m_Key: modifier.container.decreased.DarknessDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000052
+    m_Key: modifier.container.more.DarknessDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000053
+    m_Key: modifier.container.less.DarknessDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000054
+    m_Key: modifier.container.none.DarknessDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000055
+    m_Key: modifier.container.added.PoisonDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000056
+    m_Key: modifier.container.increased.PoisonDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000057
+    m_Key: modifier.container.decreased.PoisonDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000058
+    m_Key: modifier.container.more.PoisonDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000059
+    m_Key: modifier.container.less.PoisonDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000060
+    m_Key: modifier.container.none.PoisonDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000061
+    m_Key: modifier.evadeToMitigationCharges.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000062
+    m_Key: modifier.evadeRestoresHealth.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000100
+    m_Key: modifier.container.added.SteelWisp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000101
+    m_Key: modifier.container.added.AshWisp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000102
+    m_Key: modifier.container.added.FrostWisp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000103
+    m_Key: modifier.container.added.StormWisp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000200
+    m_Key: modifier.modifierContainerPerWisp.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000201
+    m_Key: modifier.modifierContainerPerWisp.unconfigured
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000300
+    m_Key: modifier.barrierSacrificeAttack.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000301
+    m_Key: modifier.barrierSacrificeAttack.unconfigured
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46849000000000001
+    m_Key: modifier.offensiveDefensiveStance.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
-    rid: 2049264645172101204
+    rid: 7797646379449319723
   references:
     version: 2
     RefIds:
-    - rid: 2049264645172101204
+    - rid: 7797646379449319723
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
       data:
-        m_CustomEpoch: 1776332227868
+        m_CustomEpoch: 1791037062100

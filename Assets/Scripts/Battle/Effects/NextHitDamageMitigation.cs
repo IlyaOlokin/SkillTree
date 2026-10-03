@@ -6,7 +6,7 @@ namespace Battle
     public class NextHitDamageMitigation : BaseEffect
     {
         private readonly Unit _owner;
-        private readonly DamageMitigation _modifier;
+        private readonly BaseModifier _modifier;
         private bool _isUsed;
         private bool _isApplied;
         private bool _isSubscribed;
@@ -15,7 +15,7 @@ namespace Battle
         public override EffectVisualType VisualType => EffectVisualType.NextHitDamageMitigation;
         
         
-        public NextHitDamageMitigation(Unit owner, DamageMitigation modifier)
+        public NextHitDamageMitigation(Unit owner, BaseModifier modifier)
         {
             _owner = owner;
             _modifier = modifier;
@@ -34,6 +34,7 @@ namespace Battle
 
             unit.AddOuterModifier(_modifier);
             _isApplied = true;
+            AttackProcessor.RunAfterCurrentAttack(unit.ProcessPendingModRecalculation);
         }
         
         public override bool IsReadyToBeRemoved(Unit unit)
@@ -53,12 +54,24 @@ namespace Battle
             {
                 unit.RemoveOuterModifier(_modifier);
                 _isApplied = false;
+                AttackProcessor.RunAfterCurrentAttack(unit.ProcessPendingModRecalculation);
             }
         }
 
         private void HandleOwnerHit(DamageInfo _)
         {
+            if (_isUsed)
+                return;
+
             _isUsed = true;
+            foreach (ActiveEffect active in _owner.effectController.GetAllEffectsOfType<NextHitDamageMitigation>())
+            {
+                if (ReferenceEquals(active.Effect, this))
+                {
+                    _owner.effectController.RemoveEffect(active);
+                    break;
+                }
+            }
         }
     }
 }

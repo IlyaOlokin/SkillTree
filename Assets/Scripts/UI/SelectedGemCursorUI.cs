@@ -16,6 +16,8 @@ namespace UI
         [SerializeField] private TMP_Text stackCountText;
 
         [Inject] private InventorySelectionState _selectionState;
+        [Inject] private GemPlacementService _placement;
+        private readonly BridgePlacementLine _bridgeLine = new();
 
         [SerializeField] private Camera UICamera;
         [SerializeField] private Canvas parentCanvas;
@@ -23,6 +25,7 @@ namespace UI
 
         private void Start()
         {
+            if (_placement != null) _placement.OnPlacementChanged += RefreshState;
             if (_selectionState != null)
                 _selectionState.OnSelectionChanged += RefreshState;
 
@@ -31,18 +34,21 @@ namespace UI
 
         private void OnDestroy()
         {
+            _bridgeLine.Dispose();
+            if (_placement != null) _placement.OnPlacementChanged -= RefreshState;
             if (_selectionState != null)
                 _selectionState.OnSelectionChanged -= RefreshState;
         }
 
         private void Update()
         {
+            if (_placement != null && _placement.TryCancelPlacementInput()) return;
             if (_selectionState == null || !_selectionState.HasSelectedItem)
                 return;
 
             if (Input.GetMouseButtonDown(1) && !IsPointerHandledElsewhere())
             {
-                _selectionState.ClearSelection();
+                _placement.ClearSelection();
                 return;
             }
             
@@ -56,6 +62,14 @@ namespace UI
             root.anchoredPosition = localPoint;
         }
 
+        private void LateUpdate()
+        {
+            _bridgeLine.Draw(_placement?.PendingBridgeSocket,
+                iconImage != null ? iconImage.rectTransform : root, parentCanvas, canvasRectTransform, UICamera);
+        }
+
+        private void OnDisable() => _bridgeLine.Hide();
+
         private void RefreshState()
         {
             InventoryItem selectedItem = _selectionState != null ? _selectionState.SelectedItem : null;
@@ -63,6 +77,8 @@ namespace UI
 
             if (root != null)
                 root.gameObject.SetActive(hasSelectedItem);
+
+            if (iconImage != null) iconImage.enabled = hasSelectedItem;
 
             if (!hasSelectedItem)
             {
@@ -82,7 +98,8 @@ namespace UI
                 return;
 
             int stackCount = selectedItem?.StackCount ?? 0;
-            bool shouldShowStackCount = stackCount > 1;
+            bool secondEnd = _placement?.IsPlacingBridge == true;
+            bool shouldShowStackCount = !secondEnd && stackCount > 1;
             stackCountText.gameObject.SetActive(shouldShowStackCount);
             stackCountText.text = shouldShowStackCount ? stackCount.ToString() : string.Empty;
         }

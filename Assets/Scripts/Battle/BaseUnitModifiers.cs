@@ -79,7 +79,7 @@ namespace Battle
 
         public void SetStatValue(StatType statType, float value)
         {
-            _statValues[statType] = value;
+            _statValues[statType] = WispStats.Normalize(statType, value);
         }
         
         public StatModifier GetModifier(StatType statType)

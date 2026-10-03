@@ -4,7 +4,7 @@ namespace Battle
 {
     public static class MysticNegation
     {
-        public static void ApplyMysticNegationMitigation(DamageInstance damage, Unit defender)
+        public static void ApplyMysticNegationMitigation(DamageInstance damage, Unit defender, float additionalNegation = 0f)
         {
             if (damage?.Damage == null || defender?.BaseUnitModifiers == null || defender.health == null)
             {
@@ -12,14 +12,10 @@ namespace Battle
             }
 
             float negationPercent = Mathf.Max(0f, defender.BaseUnitModifiers.GetStatValue(StatType.MysticNegation));
-            if (negationPercent <= 0f)
-            {
-                return;
-            }
-
             float maximumHealth = Mathf.Max(0f, defender.health.MaxHealth);
             float barrierCapacity = Mathf.Max(0f, defender.BaseUnitModifiers.GetStatValue(StatType.BarrierCapacity));
-            float negationAmount = (maximumHealth + barrierCapacity) * negationPercent;
+            float negationAmount = (maximumHealth + barrierCapacity) * negationPercent
+                                   + Mathf.Max(0f, additionalNegation);
             if (negationAmount <= 0f)
             {
                 return;

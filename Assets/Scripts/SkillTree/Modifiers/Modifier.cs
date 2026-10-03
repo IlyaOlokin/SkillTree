@@ -16,18 +16,32 @@ namespace SkillTree
 
         public readonly Node SourceNode;
         public readonly float Power;
+        private readonly float? effectMultiplier;
+        private readonly bool highlightEffect;
 
         public ModifierPowerContext(Node sourceNode, float power)
         {
             SourceNode = sourceNode;
             Power = power;
+            effectMultiplier = null;
+            highlightEffect = false;
         }
 
-        public float Multiplier => GetMultiplier(Power);
-        public bool HasPositivePower => Power > 0f;
+        private ModifierPowerContext(Node node, int points)
+        {
+            SourceNode = node;
+            Power = 0f;
+            effectMultiplier = Mathf.Max(1, points);
+            highlightEffect = points > 0;
+        }
+
+        public float Multiplier => effectMultiplier ?? GetMultiplier(Power);
+        public bool HasPositivePower => Power > 0f || highlightEffect;
 
         public static ModifierPowerContext FromNode(Node node)
         {
+            if (node != null && node.IsInfinite)
+                return new ModifierPowerContext(node, node.InvestedSkillPoints);
             return node != null
                 ? new ModifierPowerContext(node, node.Power)
                 : None;
@@ -374,7 +388,7 @@ namespace SkillTree
         private string FormatAddedValue()
         {
             bool isPercentStat = StatTypeDisplayRules.IsPercentStat(statType);
-            float displayValue = isPercentStat ? value * 100f : value;
+            float displayValue = StatTypeDisplayRules.ScaleForDisplay(statType, value);
             string suffix = isPercentStat ? "%" : string.Empty;
             return $"{displayValue:+0.##;-0.##;0}{suffix}";
         }

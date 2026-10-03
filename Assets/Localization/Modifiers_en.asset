@@ -42,10 +42,6 @@ MonoBehaviour:
     m_Localized: You have no {armor|Armor}
     m_Metadata:
       m_Items: []
-  - m_Id: 3860179587072
-    m_Localized: You have no {evasion|Evasion}
-    m_Metadata:
-      m_Items: []
   - m_Id: 3497212907520
     m_Localized: '[[0]] to {evasion|Evasion}'
     m_Metadata:
@@ -64,6 +60,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 3497212907524
     m_Localized: '[[0]]% less {evasion|Evasion}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3860179587072
+    m_Localized: You have no {evasion|Evasion}
     m_Metadata:
       m_Items: []
   - m_Id: 7780222242816
@@ -235,51 +235,51 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602985
-    m_Localized: '[[0]] to Light {damage|Damage}'
+    m_Localized: '[[0]] to {light|Light} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602986
-    m_Localized: '[[0]]% increased Light {damage|Damage}'
+    m_Localized: '[[0]]% increased {light|Light} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602987
-    m_Localized: '[[0]]% decreased Light {damage|Damage}'
+    m_Localized: '[[0]]% decreased {light|Light} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602988
-    m_Localized: '[[0]]% more Light {damage|Damage}'
+    m_Localized: '[[0]]% more {light|Light} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602989
-    m_Localized: '[[0]]% less Light {damage|Damage}'
+    m_Localized: '[[0]]% less {light|Light} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602990
-    m_Localized: You have no Light {damage|Damage}
+    m_Localized: You have no {light|Light} {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602991
-    m_Localized: '[[0]] to Darkness {damage|Damage}'
+    m_Localized: '[[0]] to {darkness|Darkness} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602992
-    m_Localized: '[[0]]% increased Darkness {damage|Damage}'
+    m_Localized: '[[0]]% increased {darkness|Darkness} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602993
-    m_Localized: '[[0]]% decreased Darkness {damage|Damage}'
+    m_Localized: '[[0]]% decreased {darkness|Darkness} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602994
-    m_Localized: '[[0]]% more Darkness {damage|Damage}'
+    m_Localized: '[[0]]% more {darkness|Darkness} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602995
-    m_Localized: '[[0]]% less Darkness {damage|Damage}'
+    m_Localized: '[[0]]% less {darkness|Darkness} {damage|Damage}'
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602996
-    m_Localized: You have no Darkness {damage|Damage}
+    m_Localized: You have no {darkness|Darkness} {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 7780251602997
@@ -304,6 +304,126 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 7780251603002
     m_Localized: You have no Poison {damage|Damage}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603003
+    m_Localized: '[[0]] to {ailment|Ailment} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603004
+    m_Localized: '[[0]]% increased {ailment|Ailment} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603005
+    m_Localized: '[[0]]% decreased {ailment|Ailment} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603006
+    m_Localized: '[[0]]% more {ailment|Ailment} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603007
+    m_Localized: '[[0]]% less {ailment|Ailment} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603008
+    m_Localized: You have no {ailment|Ailment} {power|Power}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603009
+    m_Localized: '[[0]] to {ignite|Ignite} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603010
+    m_Localized: '[[0]]% increased {ignite|Ignite} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603011
+    m_Localized: '[[0]]% decreased {ignite|Ignite} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603012
+    m_Localized: '[[0]]% more {ignite|Ignite} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603013
+    m_Localized: '[[0]]% less {ignite|Ignite} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603014
+    m_Localized: You have no {ignite|Ignite} {power|Power}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603015
+    m_Localized: '[[0]] to {chill|Chill} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603016
+    m_Localized: '[[0]]% increased {chill|Chill} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603017
+    m_Localized: '[[0]]% decreased {chill|Chill} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603018
+    m_Localized: '[[0]]% more {chill|Chill} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603019
+    m_Localized: '[[0]]% less {chill|Chill} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603020
+    m_Localized: You have no {chill|Chill} {power|Power}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603021
+    m_Localized: '[[0]] to {overcharge|Overcharge} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603022
+    m_Localized: '[[0]]% increased {overcharge|Overcharge} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603023
+    m_Localized: '[[0]]% decreased {overcharge|Overcharge} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603024
+    m_Localized: '[[0]]% more {overcharge|Overcharge} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603025
+    m_Localized: '[[0]]% less {overcharge|Overcharge} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603026
+    m_Localized: You have no {overcharge|Overcharge} {power|Power}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603027
+    m_Localized: '[[0]] to {bleed|Bleed} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603028
+    m_Localized: '[[0]]% increased {bleed|Bleed} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603029
+    m_Localized: '[[0]]% decreased {bleed|Bleed} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603030
+    m_Localized: '[[0]]% more {bleed|Bleed} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603031
+    m_Localized: '[[0]]% less {bleed|Bleed} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780251603032
+    m_Localized: You have no {bleed|Bleed} {power|Power}
     m_Metadata:
       m_Items: []
   - m_Id: 7780251603033
@@ -546,6 +666,30 @@ MonoBehaviour:
     m_Localized: You have no {sunder|Sunder} Chance
     m_Metadata:
       m_Items: []
+  - m_Id: 7780255797275
+    m_Localized: '[[0]] to {sunder|Sunder} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797276
+    m_Localized: '[[0]]% increased {sunder|Sunder} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797277
+    m_Localized: '[[0]]% decreased {sunder|Sunder} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797278
+    m_Localized: '[[0]]% more {sunder|Sunder} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797279
+    m_Localized: '[[0]]% less {sunder|Sunder} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797280
+    m_Localized: You have no {sunder|Sunder} {power|Power}
+    m_Metadata:
+      m_Items: []
   - m_Id: 7780255797281
     m_Localized: '[[0]] to {sunderMitigation|Sunder Mitigation}'
     m_Metadata:
@@ -592,6 +736,30 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 7780255797292
     m_Localized: You have no {distract|Distract} Chance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797293
+    m_Localized: '[[0]] to {distract|Distract} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797294
+    m_Localized: '[[0]]% increased {distract|Distract} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797295
+    m_Localized: '[[0]]% decreased {distract|Distract} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797296
+    m_Localized: '[[0]]% more {distract|Distract} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797297
+    m_Localized: '[[0]]% less {distract|Distract} {power|Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780255797298
+    m_Localized: You have no {distract|Distract} {power|Power}
     m_Metadata:
       m_Items: []
   - m_Id: 7780255797299
@@ -834,8 +1002,28 @@ MonoBehaviour:
     m_Localized: You have no {barrierCount|Barrier Count}
     m_Metadata:
       m_Items: []
+  - m_Id: 7780259991565
+    m_Localized: '[[0]] to {barrierCapacity|Barrier Capacity}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991566
+    m_Localized: '[[0]]% increased {barrierCapacity|Barrier Capacity}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991567
+    m_Localized: '[[0]]% decreased {barrierCapacity|Barrier Capacity}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991568
+    m_Localized: '[[0]]% more {barrierCapacity|Barrier Capacity}'
+    m_Metadata:
+      m_Items: []
   - m_Id: 7780259991569
     m_Localized: '[[0]]% less {barrierCapacity|Barrier Capacity}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7780259991570
+    m_Localized: You have no {barrierCapacity|Barrier Capacity}
     m_Metadata:
       m_Items: []
   - m_Id: 7780259991571
@@ -1272,194 +1460,6 @@ MonoBehaviour:
     m_Localized: You have no {mysticNegation|Mystic Negation}
     m_Metadata:
       m_Items: []
-  - m_Id: 7780251603003
-    m_Localized: '[[0]] to {ailment|Ailment} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603004
-    m_Localized: '[[0]]% increased {ailment|Ailment} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603005
-    m_Localized: '[[0]]% decreased {ailment|Ailment} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603006
-    m_Localized: '[[0]]% more {ailment|Ailment} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603007
-    m_Localized: '[[0]]% less {ailment|Ailment} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603008
-    m_Localized: You have no {ailment|Ailment} {power|Power}
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603009
-    m_Localized: '[[0]] to {ignite|Ignite} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603010
-    m_Localized: '[[0]]% increased {ignite|Ignite} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603011
-    m_Localized: '[[0]]% decreased {ignite|Ignite} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603012
-    m_Localized: '[[0]]% more {ignite|Ignite} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603013
-    m_Localized: '[[0]]% less {ignite|Ignite} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603014
-    m_Localized: You have no {ignite|Ignite} {power|Power}
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603015
-    m_Localized: '[[0]] to {chill|Chill} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603016
-    m_Localized: '[[0]]% increased {chill|Chill} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603017
-    m_Localized: '[[0]]% decreased {chill|Chill} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603018
-    m_Localized: '[[0]]% more {chill|Chill} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603019
-    m_Localized: '[[0]]% less {chill|Chill} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603020
-    m_Localized: You have no {chill|Chill} {power|Power}
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603021
-    m_Localized: '[[0]] to {overcharge|Overcharge} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603022
-    m_Localized: '[[0]]% increased {overcharge|Overcharge} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603023
-    m_Localized: '[[0]]% decreased {overcharge|Overcharge} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603024
-    m_Localized: '[[0]]% more {overcharge|Overcharge} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603025
-    m_Localized: '[[0]]% less {overcharge|Overcharge} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603026
-    m_Localized: You have no {overcharge|Overcharge} {power|Power}
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603027
-    m_Localized: '[[0]] to {bleed|Bleed} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603028
-    m_Localized: '[[0]]% increased {bleed|Bleed} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603029
-    m_Localized: '[[0]]% decreased {bleed|Bleed} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603030
-    m_Localized: '[[0]]% more {bleed|Bleed} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603031
-    m_Localized: '[[0]]% less {bleed|Bleed} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603032
-    m_Localized: You have no {bleed|Bleed} {power|Power}
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797275
-    m_Localized: '[[0]] to {sunder|Sunder} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797276
-    m_Localized: '[[0]]% increased {sunder|Sunder} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797277
-    m_Localized: '[[0]]% decreased {sunder|Sunder} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797278
-    m_Localized: '[[0]]% more {sunder|Sunder} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797279
-    m_Localized: '[[0]]% less {sunder|Sunder} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797280
-    m_Localized: You have no {sunder|Sunder} {power|Power}
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797293
-    m_Localized: '[[0]] to {distract|Distract} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797294
-    m_Localized: '[[0]]% increased {distract|Distract} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797295
-    m_Localized: '[[0]]% decreased {distract|Distract} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797296
-    m_Localized: '[[0]]% more {distract|Distract} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797297
-    m_Localized: '[[0]]% less {distract|Distract} {power|Power}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780255797298
-    m_Localized: You have no {distract|Distract} {power|Power}
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780259991565
-    m_Localized: '[[0]] to {barrierCapacity|Barrier Capacity}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780259991566
-    m_Localized: '[[0]]% increased {barrierCapacity|Barrier Capacity}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780259991567
-    m_Localized: '[[0]]% decreased {barrierCapacity|Barrier Capacity}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780259991568
-    m_Localized: '[[0]]% more {barrierCapacity|Barrier Capacity}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780259991570
-    m_Localized: You have no {barrierCapacity|Barrier Capacity}
-    m_Metadata:
-      m_Items: []
   - m_Id: 487906223460352
     m_Localized: 'While you have no Armor, [[0]]'
     m_Metadata:
@@ -1497,8 +1497,41 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 487906223460361
-    m_Localized: While you have {profanedHealth|Profaned Health}, take 50% more
+    m_Localized: While you have {profanedHealth|Profaned Health}, take 100% more
       {damage|Damage}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460365
+    m_Localized: You have [[0]] {hallowedHealth|Hallowed Health}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460366
+    m_Localized: '[[0]]% increased {hallowedHealth|Hallowed Health}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460367
+    m_Localized: '[[0]]% decreased {hallowedHealth|Hallowed Health}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460368
+    m_Localized: '[[0]]% more {hallowedHealth|Hallowed Health}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460369
+    m_Localized: '[[0]]% less {hallowedHealth|Hallowed Health}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460370
+    m_Localized: You have no {hallowedHealth|Hallowed Health}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460371
+    m_Localized: While you have {hallowedHealth|Hallowed Health}, take 50% less {damage|Damage}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487906223460372
+    m_Localized: '{profanedHealth|Profaned Health} and {hallowedHealth|Hallowed Health}
+      swap sides of the Health bar.'
     m_Metadata:
       m_Items: []
   - m_Id: 487906223460362
@@ -1510,7 +1543,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 487906223460364
-    m_Localized: Each restored {barrier|Barrier} grants {barrierSurge|Barrier Surge}
+    m_Localized: Each lost {barrier|Barrier} grants one stack of {barrierSurge|Barrier Surge} for [[2]] seconds. Each stack grants [[0]]% increased Barrier Regeneration Speed and [[1]]% increased {elemental|Elemental} Damage and has its own duration.
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311680
@@ -1637,8 +1670,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 5084156906311709
     m_Localized: Crits against targets with {bleed|Bleed} instantly deal all remaining
-      {bleed|Bleed} {damage|damage} and grant [[0]]% Attack Progress. That hit cannot apply
-      new {bleed|Bleed}.
+      {bleed|Bleed} {damage|damage} and grant [[0]]% Attack Progress. That hit cannot
+      apply new {bleed|Bleed}.
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311710
@@ -1646,8 +1679,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311711
-    m_Localized: '[[0]] {damage|Damage} to your highest {elemental|Elemental} {damage|Damage} type
-      if it is higher than the others'
+    m_Localized: '[[0]] {damage|Damage} to your highest {elemental|Elemental} {damage|Damage}
+      type if it is higher than the others'
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311712
@@ -1711,11 +1744,31 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311726
-    m_Localized: Adds '[[0]]' per Player Level
+    m_Localized: 'Adds ''[[0]]'' per [[1]]'
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311727
-    m_Localized: Applies modifier per Player Level
+    m_Localized: 'Applies modifier per [[0]]'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311789
+    m_Localized: Player Level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311790
+    m_Localized: '[[0]] Player Levels'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311791
+    m_Localized: Adds '[[0]]' per [[1]] {profanedHealth|Profaned Health}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311792
+    m_Localized: Adds modifier per [[0]] {profanedHealth|Profaned Health}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311793
+    m_Localized: '[[0]]%'
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311728
@@ -1856,8 +1909,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 5084156906311762
     m_Localized: If a target has at least [[0]] {bleed|Bleed} stacks, those stacks
-      merge into one {bleed|Bleed} with [[1]]% more remaining {damage|damage}
-      and refreshed duration.
+      merge into one {bleed|Bleed} with [[1]]% more remaining {damage|damage} and
+      refreshed duration.
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311763
@@ -1932,11 +1985,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311779
-    m_Localized: Added Fire {damage|Damage} is converted to added Light {damage|Damage}
+    m_Localized: Added Fire {damage|Damage} is converted to added {light|Light} {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311780
-    m_Localized: Added Cold {damage|Damage} is converted to added Darkness {damage|Damage}
+    m_Localized: Added Cold {damage|Damage} is converted to added {darkness|Darkness}
+      {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311781
@@ -1962,6 +2016,459 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 5084156906311786
     m_Localized: Every [[0]] seconds, your next attack gains [[1]].
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311787
+    m_Localized: Adds a battle mini-game to the pool.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311788
+    m_Localized: You cannot gain {resistance|Resistance} from normal modifiers.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845362088054784
+    m_Localized: Absorbs the next incoming {ailment|Ailment}, then recharges after
+      [[0]] seconds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845421148049408
+    m_Localized: Ailment Absorption
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5084156906311794
+    m_Localized: '{ignite|Ignite} damage is based on Fire and Lightning {damage|Damage}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000001
+    m_Localized: While you have Absorption, applies modifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000002
+    m_Localized: While you have no Absorption, applies modifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000003
+    m_Localized: 'While you have {lightAbsorption|Light Absorption} or {darknessAbsorption|Darkness
+      Absorption}, [[0]]'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000004
+    m_Localized: 'While you have no {lightAbsorption|Light Absorption} or {darknessAbsorption|Darkness
+      Absorption}, [[0]]'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000005
+    m_Localized: Attacks against targets on Full Life have an unconfigured modifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000006
+    m_Localized: 'Attacks against targets on Full Life have [[0]]'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000007
+    m_Localized: Attacks cycle between +[[0]]% to {ignite|Ignite}, {chill|Chill},
+      and {overcharge|Overcharge} Chance.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000008
+    m_Localized: Critical hits deal double damage to {barrier|Barrier}.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000009
+    m_Localized: '{distract|Distract} also reduces enemy Attack Progress by [[0]]%'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000010
+    m_Localized: '{sunder|Sunder} also applies [[0]]% less {damage|Damage}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000011
+    m_Localized: '{expose|Expose} also applies [[0]]% to Fire, Cold, and Lightning
+      {resistance|Resistance} and [[1]]% to {elementalResistance|Elemental Resistance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000012
+    m_Localized: While on Low Life, applies modifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000013
+    m_Localized: 'While on Low Life, [[0]]'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000014
+    m_Localized: Low Life threshold is [[0]]% of Maximum Health.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000015
+    m_Localized: Every [[0]] {dexterity|Dexterity} grants [[1]]% chance for Hits
+      to treat positive {resistance|Resistances} as 0%. Critical hits have double
+      this chance.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000016
+    m_Localized: 'When your attack applies {bleed|Bleed}: gain {bleedPhysicalDamageBuff|Bleed
+      Physical Damage} for [[1]] seconds. Each stack grants [[0]] added {physical|Physical}
+      {damage|Damage} and has its own duration.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000017
+    m_Localized: '{bleedPhysicalDamageBuff|Bleed Physical Damage}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000018
+    m_Localized: 'Each restored {barrier|Barrier} has a [[0]]% chance to restore 1 additional Barrier, up to your maximum. Additional Barriers cannot trigger this bonus.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845500000000019
+    m_Localized: 'Gain [[0]]% of your {armor|Armor} as additional {mysticNegation|Mystic Negation}.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000010
+    m_Localized: '[[0]] to {parryChance|Parry Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000011
+    m_Localized: '[[0]]% increased {parryChance|Parry Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000012
+    m_Localized: '[[0]]% decreased {parryChance|Parry Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000013
+    m_Localized: '[[0]]% more {parryChance|Parry Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000014
+    m_Localized: '[[0]]% less {parryChance|Parry Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000015
+    m_Localized: 'You have no {parryChance|Parry Chance}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000022
+    m_Localized: '[[0]] to {parryPower|Parry Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000023
+    m_Localized: '[[0]]% increased {parryPower|Parry Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000024
+    m_Localized: '[[0]]% decreased {parryPower|Parry Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000025
+    m_Localized: '[[0]]% more {parryPower|Parry Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000026
+    m_Localized: '[[0]]% less {parryPower|Parry Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000027
+    m_Localized: 'You have no {parryPower|Parry Power}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000028
+    m_Localized: 'On {parryChance|Parry}: restore [[0]]% of Maximum Health.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845700000000001
+    m_Localized: 'A single attack against you can destroy at most [[0]] {barrier|Barriers}. Remaining damage passes through.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845800000000001
+    m_Localized: '[[0]]% chance when you apply {overcharge|Overcharge} to apply it again'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845900000000001
+    m_Localized: '[[0]]% chance to take all Fire, Cold and Lightning Damage from an incoming attack as Physical Damage instead, before mitigation.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000001
+    m_Localized: '[[0]] to Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000002
+    m_Localized: '[[0]]% increased Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000003
+    m_Localized: '[[0]]% decreased Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000004
+    m_Localized: '[[0]]% more Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000005
+    m_Localized: '[[0]]% less Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000006
+    m_Localized: 'You have no Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000007
+    m_Localized: '[[0]] to Elemental Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000008
+    m_Localized: '[[0]]% increased Elemental Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000009
+    m_Localized: '[[0]]% decreased Elemental Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000010
+    m_Localized: '[[0]]% more Elemental Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000011
+    m_Localized: '[[0]]% less Elemental Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000012
+    m_Localized: 'You have no Elemental Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000013
+    m_Localized: '[[0]] to Mystic Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000014
+    m_Localized: '[[0]]% increased Mystic Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000015
+    m_Localized: '[[0]]% decreased Mystic Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000016
+    m_Localized: '[[0]]% more Mystic Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000017
+    m_Localized: '[[0]]% less Mystic Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000018
+    m_Localized: 'You have no Mystic Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000019
+    m_Localized: '[[0]] to Physical Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000020
+    m_Localized: '[[0]]% increased Physical Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000021
+    m_Localized: '[[0]]% decreased Physical Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000022
+    m_Localized: '[[0]]% more Physical Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000023
+    m_Localized: '[[0]]% less Physical Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000024
+    m_Localized: 'You have no Physical Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000025
+    m_Localized: '[[0]] to Fire Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000026
+    m_Localized: '[[0]]% increased Fire Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000027
+    m_Localized: '[[0]]% decreased Fire Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000028
+    m_Localized: '[[0]]% more Fire Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000029
+    m_Localized: '[[0]]% less Fire Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000030
+    m_Localized: 'You have no Fire Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000031
+    m_Localized: '[[0]] to Cold Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000032
+    m_Localized: '[[0]]% increased Cold Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000033
+    m_Localized: '[[0]]% decreased Cold Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000034
+    m_Localized: '[[0]]% more Cold Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000035
+    m_Localized: '[[0]]% less Cold Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000036
+    m_Localized: 'You have no Cold Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000037
+    m_Localized: '[[0]] to Lightning Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000038
+    m_Localized: '[[0]]% increased Lightning Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000039
+    m_Localized: '[[0]]% decreased Lightning Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000040
+    m_Localized: '[[0]]% more Lightning Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000041
+    m_Localized: '[[0]]% less Lightning Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000042
+    m_Localized: 'You have no Lightning Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000043
+    m_Localized: '[[0]] to Light Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000044
+    m_Localized: '[[0]]% increased Light Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000045
+    m_Localized: '[[0]]% decreased Light Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000046
+    m_Localized: '[[0]]% more Light Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000047
+    m_Localized: '[[0]]% less Light Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000048
+    m_Localized: 'You have no Light Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000049
+    m_Localized: '[[0]] to Darkness Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000050
+    m_Localized: '[[0]]% increased Darkness Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000051
+    m_Localized: '[[0]]% decreased Darkness Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000052
+    m_Localized: '[[0]]% more Darkness Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000053
+    m_Localized: '[[0]]% less Darkness Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000054
+    m_Localized: 'You have no Darkness Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000055
+    m_Localized: '[[0]] to Poison Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000056
+    m_Localized: '[[0]]% increased Poison Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000057
+    m_Localized: '[[0]]% decreased Poison Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000058
+    m_Localized: '[[0]]% more Poison Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000059
+    m_Localized: '[[0]]% less Poison Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000060
+    m_Localized: 'You have no Poison Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000061
+    m_Localized: 'Each Evade grants a charge: [[0]]% added Damage Mitigation per charge. All charges are removed after taking a hit.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000062
+    m_Localized: 'On {evade|Evade}: restore [[0]]% of Maximum Health.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000100
+    m_Localized: '[[0]] to Steel Wisps'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000101
+    m_Localized: '[[0]] to Ash Wisps'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000102
+    m_Localized: '[[0]] to Frost Wisps'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000103
+    m_Localized: '[[0]] to Storm Wisps'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000200
+    m_Localized: Adds '[[0]]' for each [[1]] you have
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000201
+    m_Localized: Requires a Wisp type and a non-Wisp stat modifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000300
+    m_Localized: "Before every [[0]] attacks, spend up to [[1]] available {barrier|Barriers}. Grant '[[2]]' to that attack per Barrier spent, as one modifier with its value multiplied by the number spent. Counts completed attacks, including misses. Spent Barriers and the bonus are lost on a miss. Spending triggers Barrier loss reactions."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000301
+    m_Localized: Requires an attack modifier.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46849000000000001
+    m_Localized: 'Start combat in Offence: [[0]]% increased Damage. After [[1]] completed attacks, including misses, switch to Defence: [[2]]% increased Armor and Evasion instead. After [[3]] incoming attacks that are not evaded, return to Offence. Blocked and fully absorbed attacks count.'
     m_Metadata:
       m_Items: []
   references:

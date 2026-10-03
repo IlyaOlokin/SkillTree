@@ -30,11 +30,107 @@ public class SkillTreeAnalyzerWindow : EditorWindow
         public int Occurrences;
     }
 
+    private sealed class StatTotalsRow
+    {
+        public StatType StatType;
+        public float AddedPositive;
+        public readonly HashSet<Node> AddedPositiveNodes = new HashSet<Node>();
+        public float AddedNegative;
+        public readonly HashSet<Node> AddedNegativeNodes = new HashSet<Node>();
+        public float IncreasedPositive;
+        public readonly HashSet<Node> IncreasedPositiveNodes = new HashSet<Node>();
+        public float IncreasedNegative;
+        public readonly HashSet<Node> IncreasedNegativeNodes = new HashSet<Node>();
+        public float MorePositive;
+        public readonly HashSet<Node> MorePositiveNodes = new HashSet<Node>();
+        public float MoreNegative;
+        public readonly HashSet<Node> MoreNegativeNodes = new HashSet<Node>();
+    }
+
+    private sealed class StatTotalsWindow : EditorWindow
+    {
+        private List<StatTotalsRow> _rows = new List<StatTotalsRow>();
+        private int _totalNodeCount;
+        private int _emptyNodeCount;
+        private bool _applyNodePower;
+        private Vector2 _scroll;
+
+        public static void Open(List<StatTotalsRow> rows, int totalNodeCount, int emptyNodeCount, bool applyNodePower)
+        {
+            var window = GetWindow<StatTotalsWindow>(true, "All Stat Totals");
+            window._rows = rows;
+            window._totalNodeCount = totalNodeCount;
+            window._emptyNodeCount = emptyNodeCount;
+            window._applyNodePower = applyNodePower;
+            window.minSize = new Vector2(760f, 420f);
+            window.Show();
+        }
+
+        private void OnGUI()
+        {
+            EditorGUILayout.LabelField("All Stat Totals", EditorStyles.boldLabel);
+            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+            {
+                EditorGUILayout.LabelField("Total nodes in tree", _totalNodeCount.ToString());
+                EditorGUILayout.LabelField("Empty nodes", _emptyNodeCount.ToString());
+                EditorGUILayout.LabelField("Apply Node Power", _applyNodePower ? "Yes" : "No");
+            }
+
+            EditorGUILayout.Space(6f);
+
+            using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar))
+            {
+                EditorGUILayout.LabelField("Stat Type", EditorStyles.toolbarButton, GUILayout.Width(180f));
+                EditorGUILayout.LabelField("Added +", EditorStyles.toolbarButton, GUILayout.Width(90f));
+                EditorGUILayout.LabelField("Nodes", EditorStyles.toolbarButton, GUILayout.Width(50f));
+                EditorGUILayout.LabelField("Increased +", EditorStyles.toolbarButton, GUILayout.Width(100f));
+                EditorGUILayout.LabelField("Nodes", EditorStyles.toolbarButton, GUILayout.Width(50f));
+                EditorGUILayout.LabelField("More +", EditorStyles.toolbarButton, GUILayout.Width(90f));
+                EditorGUILayout.LabelField("Nodes", EditorStyles.toolbarButton, GUILayout.Width(50f));
+                EditorGUILayout.LabelField("Added -", EditorStyles.toolbarButton, GUILayout.Width(90f));
+                EditorGUILayout.LabelField("Nodes", EditorStyles.toolbarButton, GUILayout.Width(50f));
+                EditorGUILayout.LabelField("Increased -", EditorStyles.toolbarButton, GUILayout.Width(100f));
+                EditorGUILayout.LabelField("Nodes", EditorStyles.toolbarButton, GUILayout.Width(50f));
+                EditorGUILayout.LabelField("More -", EditorStyles.toolbarButton, GUILayout.Width(90f));
+                EditorGUILayout.LabelField("Nodes", EditorStyles.toolbarButton, GUILayout.Width(50f));
+            }
+
+            _scroll = EditorGUILayout.BeginScrollView(_scroll);
+
+            foreach (StatTotalsRow row in _rows)
+            {
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    EditorGUILayout.LabelField(row.StatType.ToString(), GUILayout.Width(180f));
+                    EditorGUILayout.LabelField(FormatPositiveValue(row.AddedPositive), GUILayout.Width(90f));
+                    EditorGUILayout.LabelField(row.AddedPositiveNodes.Count.ToString(), GUILayout.Width(50f));
+                    EditorGUILayout.LabelField(FormatPositivePercent(row.IncreasedPositive), GUILayout.Width(100f));
+                    EditorGUILayout.LabelField(row.IncreasedPositiveNodes.Count.ToString(), GUILayout.Width(50f));
+                    EditorGUILayout.LabelField(FormatPositivePercent(row.MorePositive), GUILayout.Width(90f));
+                    EditorGUILayout.LabelField(row.MorePositiveNodes.Count.ToString(), GUILayout.Width(50f));
+                    EditorGUILayout.LabelField(FormatNegativeValue(row.AddedNegative), GUILayout.Width(90f));
+                    EditorGUILayout.LabelField(row.AddedNegativeNodes.Count.ToString(), GUILayout.Width(50f));
+                    EditorGUILayout.LabelField(FormatNegativePercent(row.IncreasedNegative), GUILayout.Width(100f));
+                    EditorGUILayout.LabelField(row.IncreasedNegativeNodes.Count.ToString(), GUILayout.Width(50f));
+                    EditorGUILayout.LabelField(FormatNegativePercent(row.MoreNegative), GUILayout.Width(90f));
+                    EditorGUILayout.LabelField(row.MoreNegativeNodes.Count.ToString(), GUILayout.Width(50f));
+                }
+            }
+
+            if (_rows.Count == 0)
+                EditorGUILayout.LabelField("No stat modifiers found.");
+
+            EditorGUILayout.EndScrollView();
+        }
+    }
+
     private AnalysisMode _mode;
     private StatType _selectedStatType = StatType.Empty;
     private Modifier _selectedModifier;
     private bool _applyNodePower = true;
     private Vector2 _scroll;
+    private int _totalNodeCount;
+    private int _emptyNodeCount;
     private readonly List<StatRow> _statRows = new List<StatRow>();
     private readonly List<ModifierRow> _modifierRows = new List<ModifierRow>();
 
@@ -89,6 +185,9 @@ public class SkillTreeAnalyzerWindow : EditorWindow
             if (GUILayout.Button("Refresh", EditorStyles.toolbarButton, GUILayout.Width(70f)))
                 Rebuild();
 
+            if (GUILayout.Button("All Stat Totals", EditorStyles.toolbarButton, GUILayout.Width(100f)))
+                ShowAllStatTotalsWindow();
+
             using (new EditorGUI.DisabledScope(GetFoundNodes().Count == 0))
             {
                 if (GUILayout.Button("Select Nodes", EditorStyles.toolbarButton, GUILayout.Width(90f)))
@@ -135,6 +234,8 @@ public class SkillTreeAnalyzerWindow : EditorWindow
         EditorGUILayout.LabelField("Summary", EditorStyles.boldLabel);
         using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
         {
+            EditorGUILayout.LabelField("Total nodes in tree", _totalNodeCount.ToString());
+            EditorGUILayout.LabelField("Empty nodes", _emptyNodeCount.ToString());
             EditorGUILayout.LabelField("Nodes containing stat", nodeCount.ToString());
             EditorGUILayout.LabelField("Modifier entries", modifierCount.ToString());
             EditorGUILayout.LabelField("Added total", FormatValue(added));
@@ -151,6 +252,8 @@ public class SkillTreeAnalyzerWindow : EditorWindow
         EditorGUILayout.LabelField("Summary", EditorStyles.boldLabel);
         using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
         {
+            EditorGUILayout.LabelField("Total nodes in tree", _totalNodeCount.ToString());
+            EditorGUILayout.LabelField("Empty nodes", _emptyNodeCount.ToString());
             EditorGUILayout.LabelField("Nodes containing modifier", nodeCount.ToString());
             EditorGUILayout.LabelField("Modifier occurrences", occurrences.ToString());
 
@@ -250,6 +353,8 @@ public class SkillTreeAnalyzerWindow : EditorWindow
         _modifierRows.Clear();
 
         Node[] nodes = FindSceneNodes();
+        _totalNodeCount = nodes.Length;
+        _emptyNodeCount = nodes.Count(node => node == null || node.Modifiers == null || node.Modifiers.Count == 0);
 
         if (_mode == AnalysisMode.StatType)
         {
@@ -390,6 +495,87 @@ public class SkillTreeAnalyzerWindow : EditorWindow
             .ToArray();
     }
 
+    private void ShowAllStatTotalsWindow()
+    {
+        Node[] nodes = FindSceneNodes();
+        var totals = new Dictionary<StatType, StatTotalsRow>();
+
+        foreach (Node node in nodes)
+        {
+            if (node == null || node.Modifiers == null)
+                continue;
+
+            foreach (Modifier modifier in node.Modifiers)
+            {
+                foreach (ModifierContainer container in GetModifierContainers(modifier))
+                {
+                    if (container == null || container.statType == StatType.Empty)
+                        continue;
+
+                    float multiplier = _applyNodePower && ShouldScaleStat(container.statType)
+                        ? node.PowerMultiplier
+                        : 1f;
+                    float effectiveValue = container.value * multiplier;
+
+                    if (!totals.TryGetValue(container.statType, out StatTotalsRow row))
+                    {
+                        row = new StatTotalsRow { StatType = container.statType };
+                        totals.Add(container.statType, row);
+                    }
+
+                    AddToTotals(row, node, container.modifierType, effectiveValue);
+                }
+            }
+        }
+
+        List<StatTotalsRow> rows = Enum.GetValues(typeof(StatType))
+            .Cast<StatType>()
+            .Where(statType => statType != StatType.Empty)
+            .Select(statType => totals.TryGetValue(statType, out StatTotalsRow row)
+                ? row
+                : new StatTotalsRow { StatType = statType })
+            .ToList();
+
+        int emptyNodeCount = nodes.Count(node => node == null || node.Modifiers == null || node.Modifiers.Count == 0);
+        StatTotalsWindow.Open(rows, nodes.Length, emptyNodeCount, _applyNodePower);
+    }
+
+    private static void AddToTotals(StatTotalsRow row, Node node, ModifierType modifierType, float value)
+    {
+        switch (modifierType)
+        {
+            case ModifierType.Added:
+                AddSignedValue(value, node, ref row.AddedPositive, row.AddedPositiveNodes, ref row.AddedNegative, row.AddedNegativeNodes);
+                break;
+            case ModifierType.Increased:
+                AddSignedValue(value, node, ref row.IncreasedPositive, row.IncreasedPositiveNodes, ref row.IncreasedNegative, row.IncreasedNegativeNodes);
+                break;
+            case ModifierType.More:
+                AddSignedValue(value, node, ref row.MorePositive, row.MorePositiveNodes, ref row.MoreNegative, row.MoreNegativeNodes);
+                break;
+        }
+    }
+
+    private static void AddSignedValue(
+        float value,
+        Node node,
+        ref float positiveTotal,
+        HashSet<Node> positiveNodes,
+        ref float negativeTotal,
+        HashSet<Node> negativeNodes)
+    {
+        if (value > 0f)
+        {
+            positiveTotal += value;
+            positiveNodes.Add(node);
+        }
+        else if (value < 0f)
+        {
+            negativeTotal += value;
+            negativeNodes.Add(node);
+        }
+    }
+
     private static bool ShouldScaleStat(StatType statType)
     {
         return statType != StatType.BarrierDamageTypeMask
@@ -432,5 +618,25 @@ public class SkillTreeAnalyzerWindow : EditorWindow
     private static string FormatPercent(float value)
     {
         return (value * 100f).ToString("+0.###;-0.###;0") + "%";
+    }
+
+    private static string FormatPositiveValue(float value)
+    {
+        return Mathf.Approximately(value, 0f) ? "0" : FormatValue(value);
+    }
+
+    private static string FormatNegativeValue(float value)
+    {
+        return Mathf.Approximately(value, 0f) ? "0" : FormatValue(value);
+    }
+
+    private static string FormatPositivePercent(float value)
+    {
+        return Mathf.Approximately(value, 0f) ? "0%" : FormatPercent(value);
+    }
+
+    private static string FormatNegativePercent(float value)
+    {
+        return Mathf.Approximately(value, 0f) ? "0%" : FormatPercent(value);
     }
 }

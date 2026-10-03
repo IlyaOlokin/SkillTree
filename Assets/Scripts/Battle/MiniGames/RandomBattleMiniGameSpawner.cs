@@ -31,7 +31,7 @@ namespace Battle.MiniGames
             }
 
             List<BattleMiniGameEventDefinition> events = controller.GetAvailableEvents();
-            PruneUnavailableTimers(events);
+            PruneInvalidTimers();
 
             for (int i = 0; i < events.Count; i++)
             {
@@ -58,12 +58,12 @@ namespace Battle.MiniGames
             }
         }
 
-        private void PruneUnavailableTimers(List<BattleMiniGameEventDefinition> availableEvents)
+        private void PruneInvalidTimers()
         {
             List<BattleMiniGameEventDefinition> keysToRemove = null;
             foreach (BattleMiniGameEventDefinition definition in _timeLeftByEvent.Keys)
             {
-                if (definition != null && definition.RandomSpawnEnabled && availableEvents.Contains(definition))
+                if (definition != null && definition.RandomSpawnEnabled)
                 {
                     continue;
                 }

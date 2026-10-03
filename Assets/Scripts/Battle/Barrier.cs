@@ -11,7 +11,7 @@ namespace Battle
         private int _barrierCount;
         private int _maxBarrierCount;
 
-        public static readonly float BarrierCooldown = 5f;
+        public static readonly float BarrierCooldown = 4f;
 
         private float _cooldownProgress;
         private float _regenSpeedMult;
@@ -25,10 +25,12 @@ namespace Battle
 
         public bool HasBarrier => _maxBarrierCount > 0;
         public bool IsFull => _barrierCount >= _maxBarrierCount;
+        public bool IsRestoringAdditionalBarrier { get; private set; }
 
         public event Action OnBarrierCountChanged;
         public event Action OnMaxBarrierChanged;
         public event Action OnBarrierRestored;
+        public event Action<int> OnBarriersLost;
 
         public void Init(Unit unit)
         {
@@ -47,7 +49,8 @@ namespace Battle
             Regenerate(deltaTime);
         }
 
-        public void TakeDamage(DamageInstance damage)
+        public void TakeDamage(DamageInstance damage, float barrierDamageMultiplier = 1f,
+            int maxBarriersLostPerAttack = int.MaxValue)
         {
             float blockedDamage = 0f;
 
@@ -59,20 +62,23 @@ namespace Battle
 
             if (blockedDamage <= 0f || _barrierCount <= 0)
                 return;
-            
-            float remainingDamage = blockedDamage;
 
-            while (_barrierCount > 0 && remainingDamage > 0f)
+            float remainingBarrierDamage = blockedDamage * Mathf.Max(0f, barrierDamageMultiplier);
+            int consumedBarrierCount = 0;
+            int barrierLossLimit = Mathf.Max(1, maxBarriersLostPerAttack);
+
+            while (_barrierCount > 0 && remainingBarrierDamage > 0f && consumedBarrierCount < barrierLossLimit)
             {
                 _barrierCount--;
-                remainingDamage -= _barrierPower;
+                consumedBarrierCount++;
+                remainingBarrierDamage -= _barrierPower;
             }
 
             OnBarrierCountChanged?.Invoke();
-            
-            float multiplier = remainingDamage > 0f
-                ? remainingDamage / blockedDamage
-                : 0f;
+
+            float absorbedDamage = Mathf.Min(blockedDamage, consumedBarrierCount * _barrierPower);
+            float remainingDamage = Mathf.Max(0f, blockedDamage - absorbedDamage);
+            float multiplier = remainingDamage / blockedDamage;
 
             var damageTypes = new List<DamageType>(damage.Damage.Keys);
             foreach (var damageType in damageTypes)
@@ -82,11 +88,15 @@ namespace Battle
                     damage.Damage[damageType] *= multiplier;
                 }
             }
+
+            if (consumedBarrierCount > 0)
+                OnBarriersLost?.Invoke(consumedBarrierCount);
         }
         
         private void UpdateBarrierValues()
         {
-            _maxBarrierCount = (int)_owner.BaseUnitModifiers.GetStatValue(StatType.BarrierCount);
+            _maxBarrierCount = Mathf.Max(0, (int)_owner.BaseUnitModifiers.GetStatValue(StatType.BarrierCount));
+            _barrierCount = Mathf.Clamp(_barrierCount, 0, _maxBarrierCount);
             _barrierPower = Mathf.Max(1f, _owner.BaseUnitModifiers.GetStatValue(StatType.BarrierCapacity));
             _regenSpeedMult = _owner.BaseUnitModifiers.GetStatValue(StatType.BarrierRegenerationSpeed);
             _blockedTypes = (DamageType) _owner.BaseUnitModifiers.GetStatValue(StatType.BarrierDamageTypeMask);
@@ -122,6 +132,38 @@ namespace Battle
             _barrierCount = _maxBarrierCount;
             _cooldownProgress = 0f;
             OnBarrierCountChanged?.Invoke();
+        }
+
+        // Spend an exact cost and publish the same count notification as damage loss.
+        public bool TryConsume(int amount)
+        {
+            if (amount <= 0 || _barrierCount < amount)
+                return false;
+
+            _barrierCount -= amount;
+            OnBarrierCountChanged?.Invoke();
+            OnBarriersLost?.Invoke(amount);
+            return true;
+        }
+
+        // Keep normal restoration notifications, but prevent bonus restoration chains
+        // across all modifier bindings on this barrier.
+        public int RestoreAdditional(int amount)
+        {
+            if (IsRestoringAdditionalBarrier)
+            {
+                return 0;
+            }
+
+            IsRestoringAdditionalBarrier = true;
+            try
+            {
+                return Restore(amount);
+            }
+            finally
+            {
+                IsRestoringAdditionalBarrier = false;
+            }
         }
 
         public int Restore(int amount)

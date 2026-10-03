@@ -8,6 +8,39 @@ namespace Battle
 {
     public abstract class BaseEffect
     {
+        private List<SkillTree.Modifier> _runtimeModifiers;
+
+        protected T CreateRuntimeModifier<T>() where T : SkillTree.Modifier
+        {
+            T modifier = UnityEngine.ScriptableObject.CreateInstance<T>();
+            OwnRuntimeModifier(modifier);
+            return modifier;
+        }
+
+        protected void OwnRuntimeModifier(SkillTree.Modifier modifier)
+        {
+            if (modifier == null) return;
+            _runtimeModifiers ??= new List<SkillTree.Modifier>();
+            if (!_runtimeModifiers.Contains(modifier)) _runtimeModifiers.Add(modifier);
+        }
+
+        protected void ReleaseRuntimeModifier(SkillTree.Modifier modifier)
+        {
+            if (_runtimeModifiers == null || !_runtimeModifiers.Remove(modifier)) return;
+            if (modifier != null) UnityEngine.Object.Destroy(modifier);
+        }
+
+        // Called by the controller after detaching an effect, or discarding a stack candidate.
+        internal void ReleaseRuntimeModifiers()
+        {
+            if (_runtimeModifiers == null) return;
+            foreach (var modifier in _runtimeModifiers)
+            {
+                if (modifier != null) UnityEngine.Object.Destroy(modifier);
+            }
+            _runtimeModifiers.Clear();
+        }
+
         public abstract bool IsStackable { get; set; }
         public virtual EffectVisualType VisualType => EffectVisualType.None;
         public virtual bool CanDisplayMultipleIcons => false;
@@ -99,7 +132,19 @@ namespace Battle
             TooltipDescriptionData description = GetDescription();
             if (description != null && description.Descriptions.Count > 0)
             {
-                return description.Descriptions;
+                return description.GetDescriptions(GetDescriptionArguments());
+            }
+
+            string fallbackDescription = GetDescriptionFallback();
+            if (!string.IsNullOrWhiteSpace(fallbackDescription))
+            {
+                return new[]
+                {
+                    GameLocalization.FormatContent(
+                        GetDescriptionLocalizationKey(),
+                        fallbackDescription,
+                        GetDescriptionArguments())
+                };
             }
 
             return new[] { GetDisplayName() };
@@ -108,6 +153,21 @@ namespace Battle
         protected virtual string GetDescriptionId()
         {
             return GetType().Name;
+        }
+
+        protected virtual string GetDescriptionLocalizationKey()
+        {
+            return $"effect.{GetDescriptionId()}.description";
+        }
+
+        protected virtual string GetDescriptionFallback()
+        {
+            return null;
+        }
+
+        protected virtual object[] GetDescriptionArguments()
+        {
+            return Array.Empty<object>();
         }
 
         protected virtual string GetDisplayName()

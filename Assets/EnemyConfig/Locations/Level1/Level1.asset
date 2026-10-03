@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d219f318536ff974580c180788e87719, type: 3}
+  m_Name: Level1
+  m_EditorClassIdentifier: 
+  locationId: level-1
+  displayName: Level 1
+  description: 
+  mapIcon: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
+  battleBackground: {fileID: -3521884470877836325, guid: 802cc36259ac0dc42886417f42a230d1, type: 3}
+  kind: 0
+  enemyDatabase: {fileID: 11400000, guid: b89dbc099b0773449954e02193c1b3c7, type: 2}
+  shopDefinition: {fileID: 0}
+  levelRewards:
+  - levelNumber: 5
+    itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
+    amount: 1
+  - levelNumber: 5
+    itemDefinition: {fileID: 11400000, guid: 246f05a48cb3e654f8b0b92e562522f9, type: 2}
+    amount: 1
+  unlockPrerequisites: []

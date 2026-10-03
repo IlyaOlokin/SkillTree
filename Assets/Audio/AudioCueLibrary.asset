@@ -27,7 +27,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 326f10f7d429e3c4b975f6159437d801, type: 3}
     volume: 0.594
     randomPitchRange: 0.02
-    minimumInterval: 0.03
+    minimumInterval: 0.4
     spatialBlend: 0
   - id: combat.attack.sword
     bus: 0

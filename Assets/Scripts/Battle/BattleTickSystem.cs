@@ -45,7 +45,22 @@ namespace Battle
             get => speedMultiplier;
             set => speedMultiplier = Mathf.Max(0f, value);
         }
-        public bool IsPaused => _isPaused;
+        private readonly HashSet<object> _pauseOwners = new();
+        public bool IsPaused => _isPaused || _pauseOwners.Count > 0;
+
+        // Independent modal locks cannot be cleared by the existing Resume() callers.
+        public void AcquirePause(object owner)
+        {
+            if (owner == null) throw new System.ArgumentNullException(nameof(owner));
+            _pauseOwners.Add(owner);
+            _accumulator = 0f;
+        }
+
+        public void ReleasePause(object owner)
+        {
+            _pauseOwners.Remove(owner);
+            _accumulator = 0f;
+        }
 
         public void SetTickRate(float tickRate)
         {
@@ -116,13 +131,13 @@ namespace Battle
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.P))
+            if (_pauseOwners.Count == 0 && Input.GetKeyDown(KeyCode.P))
             {
                 if (!_isPaused) Pause();
                 else Resume();
             }
             
-            if (_isPaused)
+            if (IsPaused)
             {
                 return;
             }

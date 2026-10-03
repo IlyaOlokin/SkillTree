@@ -19,21 +19,24 @@ namespace TooltipSystem
 
         public IReadOnlyList<string> Descriptions
         {
-            get
+            get => GetDescriptions();
+        }
+
+        public IReadOnlyList<string> GetDescriptions(params object[] arguments)
+        {
+            List<string> localizedDescriptions = new(descriptions.Count);
+            for (int i = 0; i < descriptions.Count; i++)
             {
-                List<string> localizedDescriptions = new(descriptions.Count);
-                for (int i = 0; i < descriptions.Count; i++)
-                {
-                    string localizedDescription = GameLocalization.LocalizeValueOrKey(
-                        GameLocalization.DescriptionsTable,
-                        descriptions[i]);
+                string localizedDescription = GameLocalization.FormatValueOrKey(
+                    GameLocalization.DescriptionsTable,
+                    descriptions[i],
+                    arguments);
 
-                    if (!string.IsNullOrWhiteSpace(localizedDescription))
-                        localizedDescriptions.Add(localizedDescription);
-                }
-
-                return localizedDescriptions;
+                if (!string.IsNullOrWhiteSpace(localizedDescription))
+                    localizedDescriptions.Add(localizedDescription);
             }
+
+            return localizedDescriptions;
         }
     }
 }

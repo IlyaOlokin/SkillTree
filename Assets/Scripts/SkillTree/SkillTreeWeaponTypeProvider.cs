@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Battle;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 namespace SkillTree
@@ -12,7 +13,10 @@ namespace SkillTree
         [SerializeField] private MainSkillTree skillTree;
         [SerializeField] private List<Node> hammerNodes = new();
         [SerializeField] private List<Node> swordNodes = new();
-        [SerializeField] private List<Node> staffNodes = new();
+        [FormerlySerializedAs("staffNodes")]
+        [SerializeField] private List<Node> fireStaffNodes = new();
+        [SerializeField] private List<Node> coldStaffNodes = new();
+        [SerializeField] private List<Node> lightningStaffNodes = new();
 
         public WeaponType CurrentWeaponType { get; private set; } = WeaponType.Unarmed;
 
@@ -25,7 +29,7 @@ namespace SkillTree
         private void OnEnable()
         {
             if (skillTree != null)
-                skillTree.OnSkillTreeChanged += UpdateWeaponType;
+                skillTree.OnActiveModifiersChanged += UpdateWeaponType;
 
             UpdateWeaponType();
         }
@@ -33,19 +37,23 @@ namespace SkillTree
         private void OnDisable()
         {
             if (skillTree != null)
-                skillTree.OnSkillTreeChanged -= UpdateWeaponType;
+                skillTree.OnActiveModifiersChanged -= UpdateWeaponType;
         }
 
         private void UpdateWeaponType()
         {
             bool hasHammer = HasActiveNode(hammerNodes);
             bool hasSword = HasActiveNode(swordNodes);
-            bool hasStaff = HasActiveNode(staffNodes);
+            bool hasFireStaff = HasActiveNode(fireStaffNodes);
+            bool hasColdStaff = HasActiveNode(coldStaffNodes);
+            bool hasLightningStaff = HasActiveNode(lightningStaffNodes);
 
             int activeWeaponCount = 0;
             if (hasHammer) activeWeaponCount++;
             if (hasSword) activeWeaponCount++;
-            if (hasStaff) activeWeaponCount++;
+            if (hasFireStaff) activeWeaponCount++;
+            if (hasColdStaff) activeWeaponCount++;
+            if (hasLightningStaff) activeWeaponCount++;
 
             if (activeWeaponCount > 1)
                 Debug.LogWarning("Skill tree has conflicting weapon nodes. First matching weapon will be used.", this);
@@ -55,8 +63,12 @@ namespace SkillTree
                 weaponType = WeaponType.Hammer;
             else if (hasSword)
                 weaponType = WeaponType.Sword;
-            else if (hasStaff)
-                weaponType = WeaponType.Staff;
+            else if (hasFireStaff)
+                weaponType = WeaponType.FireStaff;
+            else if (hasColdStaff)
+                weaponType = WeaponType.ColdStaff;
+            else if (hasLightningStaff)
+                weaponType = WeaponType.LightningStaff;
 
             CurrentWeaponType = weaponType;
 

@@ -8,6 +8,8 @@ namespace Battle
         private const float BASE_DAMAGE_PERCENTAGE = 0.3f;
         private const float BASE_DURATION = 5f;
         private float _remainingDamage;
+        private readonly float _damagePerSecond;
+        private float _remainingDuration;
 
         public override bool IsStackable { get; set; } = false;
         public override EffectVisualType VisualType => EffectVisualType.Bleed;
@@ -16,24 +18,35 @@ namespace Battle
 
         private Bleed(DamageInfo damageInfo, Unit defender, float physicalDamageDealt, float duration)
         {
-            _remainingDamage = CalculateTotalDamage(damageInfo, defender, physicalDamageDealt);
+            _remainingDamage = Mathf.Max(0f, CalculateTotalDamage(damageInfo, defender, physicalDamageDealt));
             Duration = duration;
+            _remainingDuration = duration;
+            _damagePerSecond = _remainingDamage / Mathf.Max(duration, Mathf.Epsilon);
         }
 
         private Bleed(float remainingDamage, float duration)
         {
             _remainingDamage = Mathf.Max(0f, remainingDamage);
             Duration = duration;
+            _remainingDuration = duration;
+            _damagePerSecond = _remainingDamage / Mathf.Max(duration, Mathf.Epsilon);
         }
 
         public override void OnTick(Unit unit, float dt)
         {
-            if (_remainingDamage <= 0f)
+            if (_remainingDamage <= 0f || dt <= 0f)
             {
                 return;
             }
 
-            float bleedDamage = _remainingDamage * (1f / Mathf.Max(BASE_DURATION, Mathf.Epsilon)) * dt;
+            float tickDuration = Mathf.Min(dt, Mathf.Max(0f, _remainingDuration));
+            _remainingDuration = Mathf.Max(0f, _remainingDuration - tickDuration);
+            if (_remainingDuration <= 0.00001f)
+                _remainingDuration = 0f;
+            // Finish the remainder on the last tick to avoid floating-point residue.
+            float bleedDamage = _remainingDuration <= 0f
+                ? _remainingDamage
+                : _damagePerSecond * tickDuration;
 
             ApplyBleedDamage(unit, bleedDamage);
         }
@@ -91,7 +104,9 @@ namespace Battle
 
             if (damageInfo.AttackEffectPayload.IsGuaranteed<Bleed>())
             {
-                effectTarget.effectController.AddEffect(() => new Bleed(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Physical], BASE_DURATION));
+                if (AilmentAbsorption.TryAbsorbIncomingAilment(effectTarget)) return;
+
+                effectTarget.effectController.AddEffect(() => new Bleed(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Physical], BASE_DURATION), attacker);
                 attacker.BleedApplied(effectTarget);
                 return;
             }
@@ -100,7 +115,9 @@ namespace Battle
             damagePercentOfMaxHealth *= 1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.BleedChance);
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
-                effectTarget.effectController.AddEffect(() => new Bleed(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Physical], BASE_DURATION));
+                if (AilmentAbsorption.TryAbsorbIncomingAilment(effectTarget)) return;
+
+                effectTarget.effectController.AddEffect(() => new Bleed(damageInfo, effectTarget, damageInfo.DamageInstance.Damage[DamageType.Physical], BASE_DURATION), attacker);
                 attacker.BleedApplied(effectTarget);
             }
         }

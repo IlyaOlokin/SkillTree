@@ -459,6 +459,162 @@ MonoBehaviour:
     m_Key: description.mystic4
     m_Metadata:
       m_Items: []
+  - m_Id: 16309371590021121
+    m_Key: effect.miniGameDamageBuff.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16309371590021122
+    m_Key: effect.miniGameDamageBuff.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16309371590021123
+    m_Key: effect.miniGameAttackSpeedBuff.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16309371590021124
+    m_Key: effect.miniGameAttackSpeedBuff.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40253849958748160
+    m_Key: description.hallowedHealth1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40253849958748161
+    m_Key: effect.ailmentAbsorption.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40253849958748162
+    m_Key: effect.ailmentAbsorption.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40253849958748163
+    m_Key: effect.cyclicAilmentChance.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40253849958748164
+    m_Key: effect.cyclicAilmentChance.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40253849958748165
+    m_Key: effect.bleedPhysicalDamageBuff.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40253849958748166
+    m_Key: effect.bleedPhysicalDamageBuff.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000001
+    m_Key: enum.StatType.ParryChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000002
+    m_Key: combat.notification.parry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000020
+    m_Key: enum.StatType.ParryPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000029
+    m_Key: description.parry1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000030
+    m_Key: description.parry2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000031
+    m_Key: item.unlockNode.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000032
+    m_Key: item.unlockNode.flavor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000033
+    m_Key: item.unlockNode.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000034
+    m_Key: node.locked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000001
+    m_Key: enum.StatType.DamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000002
+    m_Key: enum.StatType.ElementalDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000003
+    m_Key: enum.StatType.MysticDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000004
+    m_Key: enum.StatType.PhysicalDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000005
+    m_Key: enum.StatType.FireDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000006
+    m_Key: enum.StatType.ColdDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000007
+    m_Key: enum.StatType.LightningDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000008
+    m_Key: enum.StatType.LightDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000009
+    m_Key: enum.StatType.DarknessDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000010
+    m_Key: enum.StatType.PoisonDamageMitigation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000000
+    m_Key: enum.StatType.SteelWisp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000002
+    m_Key: enum.StatType.AshWisp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000004
+    m_Key: enum.StatType.FrostWisp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000006
+    m_Key: enum.StatType.StormWisp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46848000000000001
+    m_Key: effect.BarrierSurge.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46849000000000002
+    m_Key: effect.offensiveStance.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46849000000000003
+    m_Key: effect.defensiveStance.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46849000000000004
+    m_Key: effect.offensiveStance.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46849000000000005
+    m_Key: effect.defensiveStance.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

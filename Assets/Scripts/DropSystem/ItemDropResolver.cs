@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Battle;
 using InventorySystem;
 using UnityEngine.Scripting.APIUpdating;
 
@@ -32,20 +31,5 @@ namespace DropSystem
             return droppedItems;
         }
 
-        public List<InventoryItem> Resolve(EnemySpawnData spawnData)
-        {
-            if (spawnData?.Archetype == null)
-                return new List<InventoryItem>();
-
-            return Resolve(spawnData.Archetype.ItemDropTable, ItemDropContext.FromSpawnData(spawnData));
-        }
-
-        public List<InventoryItem> Resolve(EnemyUnit enemyUnit)
-        {
-            if (enemyUnit == null)
-                return new List<InventoryItem>();
-
-            return Resolve(enemyUnit.SpawnData);
-        }
     }
 }

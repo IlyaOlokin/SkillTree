@@ -138,14 +138,14 @@ public class PlayerStatsWindow : MonoBehaviour
                 continue;
             
             bool isPercent = StatTypeDisplayRules.IsPercentStat(statText.stat);
-            float displayValue = CalculateDisplayValue(statText.stat, rawValue, isPercent);
-            string prefix = GetStatPrefix(statText.stat, rawValue);
+            float displayValue = StatTypeDisplayRules.GetDisplayValue(statText.stat, rawValue, _player.BaseUnitModifiers.GetStatValue);
+            string prefix = GetStatPrefix(statText.stat);
             string suffix = GetStatSuffix(statText.stat, rawValue);
             string label = statText.needToOverrideText
                 ? GameLocalization.LocalizeValueOrKey(GameLocalization.ContentTable, statText.overrideText)
                 : GameLocalization.LocalizeEnum(statText.stat);
             statText.labelText.text = $"{label}:";
-            statText.valueText.text = FormatStatValue(displayValue, isPercent, prefix, suffix, GetStatDecimalPlaces(statText.stat));
+            statText.valueText.text = FormatStatValue(displayValue, isPercent, prefix, suffix, StatTypeDisplayRules.GetDecimalPlaces(statText.stat));
         }
     }
     
@@ -164,41 +164,6 @@ public class PlayerStatsWindow : MonoBehaviour
         return isPercent ? $"{prefix}{numberText}%{suffix}" : $"{prefix}{numberText}{suffix}";
     }
 
-    private int GetStatDecimalPlaces(StatType stat)
-    {
-        return stat == StatType.AttackSpeed ? 2 : 1;
-    }
-    
-    private float CalculateDisplayValue(StatType stat, float rawValue, bool isPercent)
-    {
-        float normalizedValue = isPercent ? rawValue * 100f : rawValue;
-
-        switch (stat)
-        {
-            case StatType.ElementalResistance:
-                return Mathf.Min(
-                    rawValue,
-                    _player.BaseUnitModifiers.GetStatValue(StatType.MaxElementalResistance)) * (isPercent ? 100f : 1f);
-            case StatType.FireResistance:
-                return Mathf.Min(
-                    rawValue,
-                    _player.BaseUnitModifiers.GetStatValue(StatType.MaxFireResistance)) * (isPercent ? 100f : 1f);
-            case StatType.ColdResistance:
-                return Mathf.Min(
-                    rawValue,
-                    _player.BaseUnitModifiers.GetStatValue(StatType.MaxColdResistance)) * (isPercent ? 100f : 1f);
-            case StatType.LightningResistance:
-                return Mathf.Min(
-                    rawValue,
-                    _player.BaseUnitModifiers.GetStatValue(StatType.MaxLightningResistance)) * (isPercent ? 100f : 1f);
-            case StatType.BarrierRegenerationSpeed:
-                return Barrier.BarrierCooldown / rawValue;
-            
-            default:
-                return normalizedValue;
-        }
-    }
-
     private void UpdateDamageTexts()
     {
         float damage = CalculateHitDamage();
@@ -207,9 +172,9 @@ public class PlayerStatsWindow : MonoBehaviour
         float critDamageBonus = _player.BaseUnitModifiers.GetStatValue(StatType.CritDamageBonus);
         DPSText.text = $"{FormatStatValue(damage * attackSpeed * (1 + critChance * critDamageBonus), false)}";
         DamageText.text = $"{FormatStatValue(damage, false)}";
-        AttackSpeedText.text = $"{FormatStatValue(attackSpeed, false, decimalPlaces: GetStatDecimalPlaces(StatType.AttackSpeed))}";
-        CritChanceText.text = $"{FormatStatValue(CalculateDisplayValue(StatType.CritChance, critChance, true), true)}";
-        CritDamageBonusText.text = $"{FormatStatValue(CalculateDisplayValue(StatType.CritDamageBonus, critDamageBonus, true), true)}";
+        AttackSpeedText.text = $"{FormatStatValue(attackSpeed, false, decimalPlaces: StatTypeDisplayRules.GetDecimalPlaces(StatType.AttackSpeed))}";
+        CritChanceText.text = $"{FormatStatValue(StatTypeDisplayRules.GetDisplayValue(StatType.CritChance, critChance), true)}";
+        CritDamageBonusText.text = $"{FormatStatValue(StatTypeDisplayRules.GetDisplayValue(StatType.CritDamageBonus, critDamageBonus), true)}";
     }
 
     private float CalculateHitDamage()
@@ -267,16 +232,13 @@ public class PlayerStatsWindow : MonoBehaviour
     
     private string GetStatSuffix(StatType stat, float rawValue)
     {
+        if (StatTypeDisplayRules.TryGetMaximumResistanceStat(stat, out StatType maximumResistanceStat))
+        {
+            return GetUncappedResistanceSuffix(rawValue, maximumResistanceStat);
+        }
+
         switch (stat)
         {
-            case StatType.ElementalResistance:
-                return GetUncappedResistanceSuffix(rawValue, StatType.MaxElementalResistance);
-            case StatType.FireResistance:
-                return GetUncappedResistanceSuffix(rawValue, StatType.MaxFireResistance);
-            case StatType.ColdResistance:
-                return GetUncappedResistanceSuffix(rawValue, StatType.MaxColdResistance);
-            case StatType.LightningResistance:
-                return GetUncappedResistanceSuffix(rawValue, StatType.MaxLightningResistance);
             case StatType.Armor:
                 return GetEstimatedArmorMitigationSuffix(rawValue);
             case StatType.Evasion:
@@ -290,36 +252,9 @@ public class PlayerStatsWindow : MonoBehaviour
         }
     }
 
-    private string GetStatPrefix(StatType stat, float rawValue)
+    private string GetStatPrefix(StatType stat)
     {
-        switch (stat)
-        {
-            case StatType.IgniteChance:
-                return "+";
-            case StatType.ChillChance:
-                return "+";
-            case StatType.OverchargeChance:
-                return "+";
-            case StatType.BleedPower:
-                return "+";
-            case StatType.IgnitePower:
-                return "+";
-            case StatType.ChillPower:
-                return "+";
-            case StatType.OverchargePower:
-                return "+";
-            case StatType.ElementalResistancePenetration:
-                return "+";
-            case StatType.FireResistancePenetration:
-                return "+";
-            case StatType.ColdResistancePenetration:
-                return "+";
-            case StatType.LightningResistancePenetration:
-                return "+";
-            
-            default:
-                return string.Empty;
-        }
+        return StatTypeDisplayRules.UsesExplicitPositivePrefix(stat) ? "+" : string.Empty;
     }
 
     private string GetUncappedResistanceSuffix(float rawValue, StatType maxResistanceStat)

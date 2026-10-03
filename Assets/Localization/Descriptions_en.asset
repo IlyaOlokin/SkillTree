@@ -80,7 +80,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 247590371332096
-    m_Localized: Block negates all {damage|damage} from a hit
+    m_Localized: Block reduces {damage|damage} from a hit
     m_Metadata:
       m_Items: []
   - m_Id: 247601490432000
@@ -228,7 +228,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3211732585680896
-    m_Localized: +2 Maximum Health per 1 Strength
+    m_Localized: +1 Maximum Health per 2 Strength
     m_Metadata:
       m_Items: []
   - m_Id: 3213892748709888
@@ -252,12 +252,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3214420366987265
-    m_Localized: While you have Profaned Health, take 50% more {damage|Damage}
+    m_Localized: While your current Health is within Profaned Health, take 100% more
+      {damage|Damage}
     m_Metadata:
       m_Items: []
   - m_Id: 5085118307897344
-    m_Localized: Grants 30% increased {ailment|Ailment} Power and 20% increased {mystic|Mystic}
-      {damage|Damage} for 6 seconds.
+    m_Localized: Each stack grants [[0]]% increased Barrier Regeneration Speed and [[1]]% increased {elemental|Elemental} Damage for [[2]] seconds.
     m_Metadata:
       m_Items: []
   - m_Id: 5086869182353408
@@ -483,6 +483,179 @@ MonoBehaviour:
   - m_Id: 16309371590021120
     m_Localized: '{light|Light} and {darkness|Darkness} {damage|Damage} cancel each
       other and each other''s absorption'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16309371590021121
+    m_Localized: Battle Focus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16309371590021122
+    m_Localized: Grants [[0]]% more {damage|Damage} for [[1]] seconds.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16309371590021123
+    m_Localized: Battle Tempo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16309371590021124
+    m_Localized: Grants [[0]]% more Attack Speed for [[1]] seconds.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40253849958748160
+    m_Localized: While your current Health is within Hallowed Health,, take 50% less
+      {damage|Damage}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40253849958748161
+    m_Localized: Ailment Absorption
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40253849958748162
+    m_Localized: Absorbs the next incoming {ailment|Ailment}, then recharges after
+      [[0]] seconds.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40253849958748163
+    m_Localized: Cyclic Ailment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40253849958748164
+    m_Localized: Next attack has +[[0]]% to [[1]] Chance.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40253849958748165
+    m_Localized: Bleed Physical Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40253849958748166
+    m_Localized: Grants [[0]] added {physical|Physical} {damage|Damage} for [[1]]
+      seconds.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000001
+    m_Localized: Parry Chance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000002
+    m_Localized: Parry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000003
+    m_Localized: Chance to parry a successfully blocked hit. With 50% Block Chance
+      and 10% Parry Chance, 5% of incoming hits are parried. Each parry grants +30%
+      attack progress, scaled by {parryPower|Parry Power}. Parrying preserves the
+      normal damage reduction from Block.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000020
+    m_Localized: Parry Power
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000021
+    m_Localized: Increases the attack progress granted by {parryChance|Parry}. Base
+      gain is 30% of an attack cycle, multiplied by (1 + Parry Power). With +50%
+      Parry Power, a parry grants 45% attack progress. The gain cannot be negative.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000029
+    m_Localized: Parry chance is based on {block|Block} chance and only applies to
+      blocked hits.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000030
+    m_Localized: Parry grants 30% attack progress, increased by Parry Power.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000031
+    m_Localized: Node Key
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000032
+    m_Localized: A key that opens new paths through the skill tree.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000033
+    m_Localized: Apply to a locked node to unlock it for allocation.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46845600000000034
+    m_Localized: This node is locked. Use an unlocking item before allocating it.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000001
+    m_Localized: 'Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000002
+    m_Localized: 'Elemental Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000003
+    m_Localized: 'Mystic Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000004
+    m_Localized: 'Physical Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000005
+    m_Localized: 'Fire Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000006
+    m_Localized: 'Cold Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000007
+    m_Localized: 'Lightning Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000008
+    m_Localized: 'Light Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000009
+    m_Localized: 'Darkness Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46846000000000010
+    m_Localized: 'Poison Damage Mitigation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000000
+    m_Localized: 'Steel Wisp'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000002
+    m_Localized: 'Ash Wisp'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000004
+    m_Localized: 'Frost Wisp'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46847000000000006
+    m_Localized: 'Storm Wisp'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46848000000000001
+    m_Localized: 'Barrier Surge'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46849000000000002
+    m_Localized: 'Offence'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46849000000000003
+    m_Localized: 'Defence'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46849000000000004
+    m_Localized: '[[0]]% increased Damage. Completed attacks: [[1]]/[[2]], including misses. At [[2]], switch to Defence.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46849000000000005
+    m_Localized: '[[0]]% increased Armor and Evasion. Incoming attacks: [[1]]/[[2]]. Evades do not count; blocked and fully absorbed attacks count. At [[2]], return to Offence.'
     m_Metadata:
       m_Items: []
   references:

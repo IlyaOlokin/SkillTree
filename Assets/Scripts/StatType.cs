@@ -57,13 +57,28 @@ public enum StatType
     AttackSpeed = 18,
     
     // Defence
+    DamageMitigation = 75,
+    ElementalDamageMitigation = 76,
+    MysticDamageMitigation = 77,
+    PhysicalDamageMitigation = 78,
+    FireDamageMitigation = 79,
+    ColdDamageMitigation = 80,
+    LightningDamageMitigation = 81,
+    LightDamageMitigation = 82,
+    DarknessDamageMitigation = 83,
+    PoisonDamageMitigation = 84,
+
     Armor = 19,
     Evasion = 20,
     BlockChance = 42,
+    BlockPower = 72,
+    ParryChance = 73,
+    ParryPower = 74,
     Defence = 26,
     Accuracy = 21,
     MaximumHealth = 22,
     ProfanedHealthPercent = 59,
+    HallowedHealthPercent = 71,
     HealingReceived = 60,
     HealthRegenerationPerSecond = 31,
     BarrierCount = 32,
@@ -96,4 +111,10 @@ public enum StatType
     Dexterity = 24,
     Intelligence = 25,
     AllAttributes = 69,
+
+    // Wisp counts. IDs 89-93 are retired; do not reuse. Keep 85-88 stable.
+    SteelWisp = 85,
+    AshWisp = 86,
+    FrostWisp = 87,
+    StormWisp = 88,
 }

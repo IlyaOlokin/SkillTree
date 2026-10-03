@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Localization-Assets-Shared
   m_GUID: e3b325c7b1bb74547b473d448f2cfa6b
   m_SerializeEntries:
+  - m_GUID: 63a30683e43859e478937df81bcdc2d6
+    m_Address: Assets/Localization/Tutorial Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 342165d7a160b0246b5690311bb45121
     m_Address: Assets/Localization/MainMenu Shared Data.asset
     m_ReadOnly: 1
@@ -37,6 +42,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7af0af1b1f46bc84e923d66598115da6
     m_Address: Assets/Localization/GameUI Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a42d94994a1f1e741a8ceccfe7a9a08b
+    m_Address: Assets/Localization/Locales/Enemies Shared Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

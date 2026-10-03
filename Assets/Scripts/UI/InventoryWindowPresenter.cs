@@ -22,6 +22,7 @@ namespace UI
 
         private void Start()
         {
+            if (_gemPlacementService != null) _gemPlacementService.OnPlacementChanged += RefreshAll;
             RebuildSlots();
             RefreshAll();
 
@@ -34,6 +35,7 @@ namespace UI
 
         private void OnDestroy()
         {
+            if (_gemPlacementService != null) _gemPlacementService.OnPlacementChanged -= RefreshAll;
             if (_playerInventory != null)
                 _playerInventory.OnInventoryChanged -= RefreshAll;
 
@@ -53,16 +55,18 @@ namespace UI
                 return;
             }
 
+            _gemPlacementService?.CancelPendingBridge();
             if (_itemUseService != null && _itemUseService.TryUseItem(slotIndex))
                 _tooltipUI?.RefreshCurrentTooltip();
         }
 
         public void HandleSlotRightClicked(int slotIndex)
         {
+            if (_gemPlacementService != null && _gemPlacementService.TryCancelPlacementInput()) return;
             if (_selectionState == null || !_selectionState.HasSelectedItem)
                 return;
 
-            _selectionState.ClearSelection();
+            _gemPlacementService.ClearSelection();
         }
 
         public void RefreshAll()
@@ -70,11 +74,15 @@ namespace UI
             if (_playerInventory == null)
                 return;
 
-            EnsureSlotCount();
-            for (int i = 0; i < _slotViews.Count; i++)
+            List<int> itemSlotIndices = GetItemSlotIndices();
+            EnsureSlotCount(itemSlotIndices.Count);
+
+            for (int i = 0; i < itemSlotIndices.Count && i < _slotViews.Count; i++)
             {
-                InventoryItem item = _playerInventory.PeekItem(i);
-                bool isSelected = _selectionState != null && _selectionState.IsSelected(i);
+                int slotIndex = itemSlotIndices[i];
+                InventoryItem item = _playerInventory.PeekItem(slotIndex);
+                bool isSelected = _selectionState != null && _selectionState.IsSelected(slotIndex);
+                _slotViews[i].Initialize(slotIndex, this);
                 _slotViews[i].Refresh(item, isSelected);
             }
 
@@ -84,20 +92,48 @@ namespace UI
         public void RebuildSlots()
         {
             ClearSlotViews();
-            EnsureSlotCount();
+            RefreshAll();
         }
 
-        private void EnsureSlotCount()
+        private void EnsureSlotCount(int targetCount)
         {
             if (_playerInventory == null || slotPrefab == null || slotsRoot == null)
                 return;
 
-            while (_slotViews.Count < _playerInventory.SlotCount)
+            while (_slotViews.Count < targetCount)
             {
                 InventorySlotUI slotView = _container.InstantiatePrefabForComponent<InventorySlotUI>(slotPrefab, slotsRoot);
                 slotView.Initialize(_slotViews.Count, this);
                 _slotViews.Add(slotView);
             }
+
+            for (int i = _slotViews.Count - 1; i >= targetCount; i--)
+            {
+                if (_slotViews[i] != null)
+                {
+                    _slotViews[i].gameObject.SetActive(false);
+                    Destroy(_slotViews[i].gameObject);
+                }
+
+                _slotViews.RemoveAt(i);
+            }
+        }
+
+        private List<int> GetItemSlotIndices()
+        {
+            List<int> itemSlotIndices = new();
+
+            if (_playerInventory == null)
+                return itemSlotIndices;
+
+            for (int i = 0; i < _playerInventory.SlotCount; i++)
+            {
+                InventoryItem item = _playerInventory.PeekItem(i);
+                if (item != null && !item.IsEmpty)
+                    itemSlotIndices.Add(i);
+            }
+
+            return itemSlotIndices;
         }
 
         private void ClearSlotViews()
@@ -105,7 +141,10 @@ namespace UI
             for (int i = _slotViews.Count - 1; i >= 0; i--)
             {
                 if (_slotViews[i] != null)
+                {
+                    _slotViews[i].gameObject.SetActive(false);
                     Destroy(_slotViews[i].gameObject);
+                }
             }
 
             _slotViews.Clear();

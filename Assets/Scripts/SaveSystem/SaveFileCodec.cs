@@ -13,7 +13,12 @@ namespace SaveSystem
 
         public string Encode<T>(SaveDocumentType documentType, int documentVersion, T data)
         {
-            string payloadJson = JsonUtility.ToJson(data);
+            return EncodeJson(documentType, documentVersion, JsonUtility.ToJson(data));
+        }
+
+        // The caller can freeze live state into JSON before handing work to a worker.
+        public string EncodeJson(SaveDocumentType documentType, int documentVersion, string payloadJson)
+        {
             byte[] payloadBytes = Encoding.UTF8.GetBytes(payloadJson);
             byte[] compressedBytes = Compress(payloadBytes);
             byte[] encodedBytes = Xor(compressedBytes);
@@ -60,7 +65,7 @@ namespace SaveSystem
             if (data == null)
                 throw new InvalidDataException("Save payload is empty.");
 
-            int sourceVersion = Mathf.Max(1, envelope.documentVersion);
+            int sourceVersion = Math.Max(1, envelope.documentVersion);
             if (sourceVersion != currentDocumentVersion)
                 data = migrationPipeline.Migrate(data, sourceVersion, currentDocumentVersion);
 

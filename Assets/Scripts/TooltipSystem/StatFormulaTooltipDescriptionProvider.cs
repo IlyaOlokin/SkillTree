@@ -60,7 +60,7 @@ namespace TooltipSystem
         private string FormatValue(float value)
         {
             bool isPercent = StatTypeDisplayRules.IsPercentStat(statType);
-            float displayValue = isPercent ? value * 100f : value;
+            float displayValue = StatTypeDisplayRules.ScaleForDisplay(statType, value);
             float roundedValue = Mathf.Round(displayValue * 100f) / 100f;
 
             string text = roundedValue.ToString(

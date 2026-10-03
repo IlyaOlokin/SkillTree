@@ -99,7 +99,7 @@ namespace Battle
         {
             for (int i = 0; i < _modifierContainers.Count; i++)
             {
-                BaseModifier modifier = ScriptableObject.CreateInstance<BaseModifier>();
+                BaseModifier modifier = CreateRuntimeModifier<BaseModifier>();
                 ModifierContainer modifierContainer = _modifierContainers[i];
                 modifier.modifierContainer = new ModifierContainer(
                     modifierContainer.modifierType,
@@ -115,6 +115,7 @@ namespace Battle
             for (int i = 0; i < _cachedModifiers.Count; i++)
             {
                 unit.RemoveOuterModifier(_cachedModifiers[i]);
+                ReleaseRuntimeModifier(_cachedModifiers[i]);
             }
 
             _cachedModifiers.Clear();
@@ -139,9 +140,11 @@ namespace Battle
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
                 Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Chill>() ? attacker : defender;
+                if (AilmentAbsorption.TryAbsorbIncomingAilment(effectTarget)) return;
+
                 Chill chillSnapshot = new Chill(damageInfo, effectTarget, BASE_DURATION);
                 BaseEffect CreateChillFromSnapshot() => chillSnapshot.CloneForReapply();
-                effectTarget.effectController.AddEffect(CreateChillFromSnapshot);
+                effectTarget.effectController.AddEffect(CreateChillFromSnapshot, attacker);
                 damageInfo.RegisterAppliedChill(effectTarget, CreateChillFromSnapshot);
                 attacker.AilmentApplied(effectTarget);
             }
@@ -160,7 +163,7 @@ namespace Battle
             Unit effectTarget = damageInfo.AppliedChillTarget;
             var chillAfterFreezeFactory = damageInfo.ChillAfterFreezeFactory;
             effectTarget.effectController.RemoveEffectsOfType<Chill>();
-            effectTarget.effectController.AddEffect(() => new Freeze(chillAfterFreezeFactory));
+            effectTarget.effectController.AddEffect(() => new Freeze(chillAfterFreezeFactory), damageInfo.Owner);
             damageInfo.ClearAppliedChill();
         }
 

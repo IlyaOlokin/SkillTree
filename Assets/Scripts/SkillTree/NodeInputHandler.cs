@@ -24,7 +24,9 @@ namespace SkillTree
 
         private void OnMouseOver()
         {
-            if (IsPointerOverUI() || (_fogOfWarController != null && !_fogOfWarController.IsNodeDiscovered(_node)))
+            if (IsPointerOverUI()) return;
+            if (_gemPlacementService != null && _gemPlacementService.TryCancelPlacementInput()) return;
+            if (_fogOfWarController != null && !_fogOfWarController.IsNodeDiscovered(_node))
             {
                 return;
             }
@@ -41,7 +43,6 @@ namespace SkillTree
                 }
 
                 if (_node is SocketNode socketNode
-                    && socketNode.IsActive
                     && _gemPlacementService != null
                     && _gemPlacementService.SelectionState.HasSelectedGem)
                 {
@@ -51,6 +52,7 @@ namespace SkillTree
                     return;
                 }
 
+                if (_gemPlacementService != null && _gemPlacementService.IsPlacingBridge) return;
                 if (_skillTree != null)
                     _skillTree.TryAllocateOrQueue(_node);
                 else
@@ -60,6 +62,14 @@ namespace SkillTree
             }
             else if (Input.GetMouseButtonDown(1))
             {
+                if (_node is SocketNode socketNode && socketNode.HasGem && _gemPlacementService != null)
+                {
+                    if (_gemPlacementService.TryExtractGemAndSelect(socketNode))
+                        _tooltipUI?.RefreshCurrentTooltip();
+
+                    return;
+                }
+
                 if (_skillTree != null && _skillTree.CancelQueuedAllocation(_node))
                 {
                     _tooltipUI?.RefreshCurrentTooltip();
@@ -68,14 +78,6 @@ namespace SkillTree
 
                 if (_skillTree != null && _skillTree.IsNodeQueuedForAllocation(_node))
                     return;
-
-                if (_node is SocketNode socketNode && socketNode.HasGem && _gemPlacementService != null)
-                {
-                    if (_gemPlacementService.TryExtractGemAndSelect(socketNode))
-                        _tooltipUI?.RefreshCurrentTooltip();
-
-                    return;
-                }
 
                 if (_gemPlacementService != null && _gemPlacementService.SelectionState.HasSelectedItem)
                 {

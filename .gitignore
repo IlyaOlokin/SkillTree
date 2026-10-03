@@ -60,3 +60,15 @@ crashlytics-build.properties
 
 
 Assets/Scripts/StatTypef.cs
+
+UserSettings/Layouts/default-6000.dwlt
+
+UserSettings/AI.Image/TextureGeneratorSettings.asset
+
+UserSettings/
+
+ProfilerCaptures/
+
+# Unity recovery scenes
+/Assets/_Recovery/
+/Assets/_Recovery.meta

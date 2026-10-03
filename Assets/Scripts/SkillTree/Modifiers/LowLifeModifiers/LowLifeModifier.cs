@@ -10,8 +10,33 @@ namespace SkillTree
     {
         [SerializeField] public ModifierContainer modifierContainer;
         
-        public override bool IsApplicable(Unit unit) => unit.IsOnLowLife();
-        
+        public override bool IsApplicable(Unit unit) => unit != null && unit.IsOnLowLife();
+
+        public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
+        {
+            if (unit?.health == null)
+            {
+                return null;
+            }
+
+            bool wasApplicable = IsApplicable(unit);
+
+            void OnHealthChanged()
+            {
+                bool isApplicable = IsApplicable(unit);
+                if (isApplicable == wasApplicable)
+                {
+                    return;
+                }
+
+                wasApplicable = isApplicable;
+                unit.RequestModRecalculation();
+            }
+
+            return new DelegateModifierRuntimeBinding(
+                () => unit.health.OnHealthChanged += OnHealthChanged,
+                () => unit.health.OnHealthChanged -= OnHealthChanged);
+        }
 
         public override void ApplyEffect(Unit unit)
         {

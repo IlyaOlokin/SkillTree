@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Enemies_de
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: de
+  m_SharedData: {fileID: 11400000, guid: a42d94994a1f1e741a8ceccfe7a9a08b, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 1783254310893000001
+    m_Localized: "Flink"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000002
+    m_Localized: "Frostgeboren"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000003
+    m_Localized: "Feuergeboren"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000004
+    m_Localized: "Sturmgeboren"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000005
+    m_Localized: "Stark"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000006
+    m_Localized: "Zäh"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000007
+    m_Localized: "Treffsicher"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000008
+    m_Localized: "Sengend"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000009
+    m_Localized: "Eisig"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000010
+    m_Localized: "Funkenstobend"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000011
+    m_Localized: "Zerfleischend"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000012
+    m_Localized: "Schildtragend"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000013
+    m_Localized: "Widerstandsfähig"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000014
+    m_Localized: "Feuerresistent"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000015
+    m_Localized: "Kälteresistent"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000016
+    m_Localized: "Blitzresistent"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1783254310893000017
+    m_Localized: "Elementarresistent"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

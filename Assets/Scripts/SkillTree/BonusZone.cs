@@ -11,6 +11,7 @@ namespace SkillTree
         [SerializeField] private List<Node> nodes = new List<Node>();
         [SerializeField] private ModifierContainer modContainer;
         public int AllocatedNodesCount { get; private set; }
+        private BaseModifier _runtimeModifier;
 
         private void Awake()
         {
@@ -28,6 +29,7 @@ namespace SkillTree
 
         private void OnDestroy()
         {
+            if (_runtimeModifier != null) Destroy(_runtimeModifier);
             foreach (var node in nodes)
             {
                 if (node != null)
@@ -40,14 +42,38 @@ namespace SkillTree
 
         public Modifier CollectModifier()
         {
+            // Loading can update nodes without individual change notifications.
             RecalculateAllocatedNodesCount();
-            var mod = ScriptableObject.CreateInstance<BaseModifier>();
-            mod.modifierContainer = new ModifierContainer(
-                modContainer.modifierType,
-                modContainer.statType,
-                modContainer.value) * AllocatedNodesCount;
+            if (_runtimeModifier == null)
+            {
+                _runtimeModifier = ScriptableObject.CreateInstance<BaseModifier>();
+                UpdateRuntimeModifier();
+            }
 
-            return mod;
+            return _runtimeModifier;
+        }
+
+        private void UpdateRuntimeModifier()
+        {
+            if (_runtimeModifier == null) return;
+            if (modContainer == null)
+            {
+                _runtimeModifier.modifierContainer = null;
+                return;
+            }
+
+            if (_runtimeModifier.modifierContainer == null)
+                _runtimeModifier.modifierContainer = new ModifierContainer(
+                    modContainer.modifierType, modContainer.statType, 0f);
+
+            _runtimeModifier.modifierContainer.modifierType = modContainer.modifierType;
+            _runtimeModifier.modifierContainer.statType = modContainer.statType;
+            _runtimeModifier.modifierContainer.value = modContainer.value * AllocatedNodesCount;
+        }
+
+        private void OnValidate()
+        {
+            RecalculateAllocatedNodesCount();
         }
 
         public string GetCurrentModifierDescription()
@@ -74,6 +100,7 @@ namespace SkillTree
             }
 
             AllocatedNodesCount = allocatedNodes;
+            UpdateRuntimeModifier();
         }
     }
 }

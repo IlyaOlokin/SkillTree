@@ -18,6 +18,10 @@ MonoBehaviour:
   m_Metadata:
     m_Items: []
   m_TableData: []
+  - m_Id: 1777468216597000010
+    m_Localized: In diesen Knoten können beliebig viele Fertigkeitspunkte investiert werden.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

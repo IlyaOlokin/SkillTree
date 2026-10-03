@@ -410,8 +410,8 @@ MonoBehaviour:
   approachSuccessWindowColor: {r: 0.34901962, g: 1, b: 0.45098042, a: 1}
   approachWindowColorDuration: 0.08
   perfectTimeSeconds: 0.8
-  successWindowBeforeSeconds: 0.06
-  successWindowAfterSeconds: 0.06
+  successWindowBeforeSeconds: 0.08
+  successWindowAfterSeconds: 0.08
   perfectWindowSeconds: 0.03
   approachStartScale: 3
   targetScale: 1.448453
@@ -421,7 +421,7 @@ MonoBehaviour:
   - {fileID: 2710824571735697968}
   - {fileID: 8588409903534866350}
   resolvedAlpha: 0
-  resolvedFadeDuration: 0.25
+  resolvedFadeDuration: 0.4
   successPulseTarget: {fileID: 1170356554732403502}
   successPulseScale: 1.18
   successPulseInDuration: 0.12
@@ -438,7 +438,7 @@ MonoBehaviour:
   successIconTransform: {fileID: 4628025735359418107}
   failIconTransform: {fileID: 2894038752613233486}
   resultIconShowDuration: 0.16
-  resultIconHoldDuration: 0.25
+  resultIconHoldDuration: 0.4
   resultIconHideDuration: 0.14
   resultIconShowEase: 27
   resultIconHideEase: 26

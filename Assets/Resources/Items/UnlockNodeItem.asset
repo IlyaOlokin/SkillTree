@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41baf69053cc4c0ebf0fc1f489c038e2, type: 3}
+  m_Name: UnlockNodeItem
+  m_EditorClassIdentifier: Assembly-CSharp::Items.UnlockNodeItemDefinition
+  saveDefinitionId: 70a0b7aa39664940a49187e084d08825
+  displayName: item.unlockNode.name
+  description: item.unlockNode.flavor
+  icon: {fileID: 21300000, guid: d90b0dfed1b3cc84693092ad13bfe3c4, type: 3}
+  maxStack: 99

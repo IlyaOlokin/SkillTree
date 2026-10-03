@@ -12,14 +12,14 @@ namespace SkillTree
             return priority == ModifierPriority.OnAttack;
         }
 
-        public override void ApplyEffect(AttackContext context)
+        public override void ApplyEffect(DamageInfo damageInfo)
         {
-            if (context?.DamageInfo == null)
+            if (damageInfo == null)
             {
                 return;
             }
 
-            context.DamageInfo.AllowsMultiCrit = true;
+            damageInfo.AllowsMultiCrit = true;
         }
 
         public override string GetDescription()

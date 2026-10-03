@@ -7,9 +7,12 @@ namespace Battle
     public class EffectController : MonoBehaviour, IUnitComponent
     {
         private Unit _owner;
+        private bool _isClearing;
 
         public readonly List<ActiveEffect> Effects = new List<ActiveEffect>();
         public event Action<Func<BaseEffect>> OnEffectReceived;
+        public event Action OnEffectsChanged;
+        public event Action<BaseEffect> OnEffectAdded;
 
         public void Init(Unit owner)
         {
@@ -23,29 +26,47 @@ namespace Battle
 
         public void AddEffect(Func<BaseEffect> effectFactory)
         {
-            if (effectFactory == null)
-            {
-                return;
-            }
-
-            AddEffect(effectFactory(), effectFactory, true);
+            AddEffect(effectFactory, null);
         }
 
-        public void AddRepeatedEffect(Func<BaseEffect> effectFactory)
+        // Pass the source for effects that should notify its application listeners.
+        // The factory must create a fresh effect and is intended for synchronous repeats.
+        public void AddEffect(Func<BaseEffect> effectFactory, Unit source)
         {
             if (effectFactory == null)
             {
                 return;
             }
 
-            AddEffect(effectFactory(), null, false);
+            BaseEffect effect = effectFactory();
+            if (AddEffect(effect, effectFactory, true) && source != null && _owner != null)
+            {
+                source.EffectApplied(_owner, effect.GetType(), effectFactory);
+            }
         }
 
-        private void AddEffect(BaseEffect newEffect, Func<BaseEffect> repeatFactory, bool notifyReceived)
+        public bool AddRepeatedEffect(Func<BaseEffect> effectFactory)
+        {
+            if (effectFactory == null)
+            {
+                return false;
+            }
+
+            // Repeats notify neither received-effect nor source-side application listeners.
+            return AddEffect(effectFactory(), null, false);
+        }
+
+        private bool AddEffect(BaseEffect newEffect, Func<BaseEffect> repeatFactory, bool notifyReceived)
         {
             if (newEffect == null)
             {
-                return;
+                return false;
+            }
+
+            if (_isClearing)
+            {
+                newEffect.ReleaseRuntimeModifiers();
+                return false;
             }
 
             var existing = Effects
@@ -54,10 +75,14 @@ namespace Battle
             if (existing != null)
             {
                 existing.Effect.OnStack(_owner, newEffect, existing);
+                OnEffectsChanged?.Invoke();
                 if (existing.Effect.IsStackable)
                 {
+                    if (!ReferenceEquals(existing.Effect, newEffect))
+                        newEffect.ReleaseRuntimeModifiers();
                     NotifyEffectReceived(repeatFactory, notifyReceived);
-                    return;
+                    OnEffectAdded?.Invoke(existing.Effect);
+                    return true;
                 }
             }
 
@@ -65,8 +90,11 @@ namespace Battle
 
             Effects.Add(active);
             newEffect.OnApply(_owner);
+            OnEffectsChanged?.Invoke();
 
             NotifyEffectReceived(repeatFactory, notifyReceived);
+            OnEffectAdded?.Invoke(newEffect);
+            return true;
         }
 
         private void NotifyEffectReceived(Func<BaseEffect> repeatFactory, bool notifyReceived)
@@ -80,16 +108,22 @@ namespace Battle
 
         public void CombatTick(float deltaTime)
         {
-            for (int i = Effects.Count - 1; i >= 0; i--)
+            // Tick callbacks can clear effects, kill the owner, or add replacements.
+            var snapshot = Effects.ToArray();
+            for (int i = snapshot.Length - 1; i >= 0; i--)
             {
-                var e = Effects[i];
+                var e = snapshot[i];
+                if (!Effects.Contains(e)) continue;
 
-                e.Effect.OnTick(_owner, deltaTime);
+                float tickDuration = e.TimeLeft < 0f
+                    ? Mathf.Max(0f, deltaTime)
+                    : Mathf.Min(Mathf.Max(0f, deltaTime), e.TimeLeft);
+                e.Effect.OnTick(_owner, tickDuration);
+                if (!Effects.Contains(e)) continue;
 
                 if (e.Effect.IsReadyToBeRemoved(_owner))
                 {
-                    e.Effect.OnRemove(_owner);
-                    Effects.RemoveAt(i);
+                    RemoveEffect(e);
                     continue;
                 }
 
@@ -98,11 +132,10 @@ namespace Battle
                     continue;
                 }
 
-                e.TimeLeft -= deltaTime;
+                e.TimeLeft -= tickDuration;
                 if (e.TimeLeft <= 0)
                 {
-                    e.Effect.OnRemove(_owner);
-                    Effects.RemoveAt(i);
+                    RemoveEffect(e);
                 }
             }
         }
@@ -118,6 +151,16 @@ namespace Battle
                 }
             }
             return result;
+        }
+
+        public bool HasEffect<T>() where T : BaseEffect
+        {
+            for (int i = 0; i < Effects.Count; i++)
+            {
+                if (Effects[i].Effect.GetType() == typeof(T)) return true;
+            }
+
+            return false;
         }
 
         public bool HasEffectOfVisualType(EffectVisualType effectType)
@@ -140,15 +183,10 @@ namespace Battle
 
         public void RemoveEffectsOfType<T>()
         {
-            for (int i = Effects.Count - 1; i >= 0; i--)
+            var snapshot = GetAllEffectsOfType<T>();
+            for (int i = snapshot.Count - 1; i >= 0; i--)
             {
-                if (Effects[i].Effect.GetType() != typeof(T))
-                {
-                    continue;
-                }
-
-                Effects[i].Effect.OnRemove(_owner);
-                Effects.RemoveAt(i);
+                RemoveEffect(snapshot[i]);
             }
         }
 
@@ -165,17 +203,38 @@ namespace Battle
                 return;
             }
 
-            Effects[index].Effect.OnRemove(_owner);
             Effects.RemoveAt(index);
+            try
+            {
+                activeEffect.Effect.OnRemove(_owner);
+            }
+            finally
+            {
+                activeEffect.Effect.ReleaseRuntimeModifiers();
+            }
+            if (!_isClearing) OnEffectsChanged?.Invoke();
         }
 
         public void ClearAllEffects()
         {
-            for (int i = Effects.Count - 1; i >= 0; i--)
+            if (_isClearing) return;
+            bool hadEffects = Effects.Count > 0;
+            _isClearing = true;
+            try
             {
-                Effects[i].Effect.OnRemove(_owner);
+                while (Effects.Count > 0)
+                    RemoveEffect(Effects[Effects.Count - 1]);
             }
-            Effects.Clear();
+            finally
+            {
+                _isClearing = false;
+            }
+            if (hadEffects) OnEffectsChanged?.Invoke();
+        }
+
+        private void OnDestroy()
+        {
+            ClearAllEffects();
         }
     }
 }

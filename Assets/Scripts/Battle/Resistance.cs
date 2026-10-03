@@ -11,33 +11,38 @@ public static class Resistance
         }
 
         BaseUnitModifiers attackerModifiers = damageInfo.BaseUnitModifiers;
+        bool bypassesElementalResistance = RollElementalResistanceBypass(damageInfo);
         var elementalResistance = GetEffectiveResistance(
             defender,
             attackerModifiers,
             StatType.ElementalResistance,
             StatType.MaxElementalResistance,
-            StatType.ElementalResistancePenetration);
+            StatType.ElementalResistancePenetration,
+            bypassesElementalResistance);
 
         var fireResistance = GetEffectiveResistance(
             defender,
             attackerModifiers,
             StatType.FireResistance,
             StatType.MaxFireResistance,
-            StatType.FireResistancePenetration);
+            StatType.FireResistancePenetration,
+            bypassesElementalResistance);
 
         var coldResistance = GetEffectiveResistance(
             defender,
             attackerModifiers,
             StatType.ColdResistance,
             StatType.MaxColdResistance,
-            StatType.ColdResistancePenetration);
+            StatType.ColdResistancePenetration,
+            bypassesElementalResistance);
 
         var lightningResistance = GetEffectiveResistance(
             defender,
             attackerModifiers,
             StatType.LightningResistance,
             StatType.MaxLightningResistance,
-            StatType.LightningResistancePenetration);
+            StatType.LightningResistancePenetration,
+            bypassesElementalResistance);
 
         damageInfo.DamageInstance.Damage[DamageType.Fire] *= (1 - elementalResistance) * (1 - fireResistance);
         damageInfo.DamageInstance.Damage[DamageType.Cold] *= (1 - elementalResistance) * (1 - coldResistance);
@@ -49,13 +54,26 @@ public static class Resistance
         BaseUnitModifiers attackerModifiers,
         StatType resistanceStat,
         StatType maxResistanceStat,
-        StatType penetrationStat)
+        StatType penetrationStat,
+        bool bypassesElementalResistance)
     {
         var cappedResistance = Mathf.Min(
             defender.BaseUnitModifiers.GetStatValue(resistanceStat),
             defender.BaseUnitModifiers.GetStatValue(maxResistanceStat));
 
         float penetration = attackerModifiers?.GetStatValue(penetrationStat) ?? 0f;
-        return Mathf.Max(0f, cappedResistance - Mathf.Max(0f, penetration));
+        float effectiveResistance = cappedResistance > 0f
+            ? Mathf.Max(0f, cappedResistance - Mathf.Max(0f, penetration))
+            : cappedResistance;
+
+        return bypassesElementalResistance
+            ? Mathf.Min(0f, effectiveResistance)
+            : effectiveResistance;
+    }
+
+    private static bool RollElementalResistanceBypass(DamageInfo damageInfo)
+    {
+        float chance = damageInfo?.AttackEffectPayload?.GetElementalResistanceBypassChance() ?? 0f;
+        return chance > 0f && Random.Range(0f, 1f) < Mathf.Clamp01(chance);
     }
 }

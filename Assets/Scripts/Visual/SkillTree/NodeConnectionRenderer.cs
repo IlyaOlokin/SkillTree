@@ -44,6 +44,9 @@ namespace SkillTree
         private ConnectionVisualState[] _connectionStates = Array.Empty<ConnectionVisualState>();
         private float[] _connectionLengths = Array.Empty<float>();
         private Dictionary<Node, bool> _nodeAllocationStates = new();
+        private readonly Dictionary<Node, List<int>> _connectionIdsByNode = new();
+        private readonly List<int> _activeConnections = new();
+        private readonly HashSet<int> _activeConnectionIds = new();
         private const string ChunkObjectPrefix = "__ConnectionChunk_";
 
 
@@ -80,26 +83,31 @@ namespace SkillTree
 
         private void Update()
         {
-            if (!Application.isPlaying || _connectionStates.Length == 0 || _progressTexture == null)
+            if (!Application.isPlaying || _activeConnections.Count == 0 || _progressTexture == null)
                 return;
 
             float speed = Mathf.Max(0.0001f, connectionGrowSpeed);
             bool hasChanges = false;
 
-            for (int i = 0; i < _connectionStates.Length; i++)
+            for (int activeIndex = _activeConnections.Count - 1; activeIndex >= 0; activeIndex--)
             {
+                int i = _activeConnections[activeIndex];
                 ref ConnectionVisualState state = ref _connectionStates[i];
-                if (Mathf.Approximately(state.progress, state.targetProgress))
-                {
-                    FinalizeConnectionVisualState(i, ref state);
-                    continue;
-                }
-
                 float connectionLength = i < _connectionLengths.Length ? Mathf.Max(_connectionLengths[i], 0.0001f) : 0.0001f;
                 float step = (speed * Time.deltaTime) / connectionLength;
+                if (step <= 0f)
+                    continue;
                 state.progress = Mathf.MoveTowards(state.progress, state.targetProgress, step);
                 SetConnectionProgress(i, state.progress, state.reverse, true);
-                FinalizeConnectionVisualState(i, ref state);
+                if (Mathf.Approximately(state.progress, state.targetProgress))
+                {
+                    state.progress = state.targetProgress;
+                    FinalizeConnectionVisualState(i, ref state);
+                    _activeConnectionIds.Remove(i);
+                    int lastIndex = _activeConnections.Count - 1;
+                    _activeConnections[activeIndex] = _activeConnections[lastIndex];
+                    _activeConnections.RemoveAt(lastIndex);
+                }
                 hasChanges = true;
             }
 
@@ -113,36 +121,68 @@ namespace SkillTree
 #if UNITY_EDITOR
         public void ConstructNodeConnections()
         {
+            if (rootNode == null)
+            {
+                Debug.LogWarning("Cannot synchronize connections without a root node.", this);
+                return;
+            }
+
             var pairs = NodeGraphTraversalService.CollectUniquePairs(rootNode);
+            var currentPairs = new HashSet<NodePair>(pairs);
+            Undo.RecordObject(this, "Synchronize Node Connections");
+
+            // Cached geometry must not outlive the graph edge it represents.
+            // Retain the existing data for surviving edges to preserve their curves.
+            for (int i = nodeConnections.Count - 1; i >= 0; i--)
+            {
+                NodeConnectionData connection = nodeConnections[i];
+                if (connection != null && connection.pair.A != null && connection.pair.B != null &&
+                    currentPairs.Contains(connection.pair))
+                    continue;
+
+                if (connection?.spline != null)
+                    Undo.DestroyObjectImmediate(connection.spline.gameObject);
+                nodeConnections.RemoveAt(i);
+            }
 
             foreach (var pair in pairs)
             {
                 if (nodeConnections.Exists(x => x.pair.Equals(pair)))
                 {
                     NodeConnectionData existingConnection = nodeConnections.Find(x => x.pair.Equals(pair));
-                    SyncSplineToPair(existingConnection);
-                    PrefabUtility.RecordPrefabInstancePropertyModifications(existingConnection.spline);
+                    if (existingConnection.spline != null)
+                    {
+                        SyncSplineToPair(existingConnection);
+                        existingConnection.ClearBakedPolyline();
+                        PrefabUtility.RecordPrefabInstancePropertyModifications(existingConnection.spline);
+                    }
 
                     continue;
                 }
-                SplineContainer spline =
-                    (SplineContainer)PrefabUtility.InstantiatePrefab(
-                        connectionPrefab, transform);
-
-
-                spline.transform.localPosition = Vector3.zero;
-                spline.transform.localRotation = Quaternion.identity;
-                spline.transform.localScale = Vector3.one;
+                SplineContainer spline = null;
+                if (connectionPrefab != null)
+                {
+                    spline = (SplineContainer)PrefabUtility.InstantiatePrefab(connectionPrefab, transform);
+                    Undo.RegisterCreatedObjectUndo(spline.gameObject, "Create Node Connection");
+                    spline.transform.localPosition = Vector3.zero;
+                    spline.transform.localRotation = Quaternion.identity;
+                    spline.transform.localScale = Vector3.one;
+                }
 
                 var connectionData = new NodeConnectionData
                 {
                     pair = pair,
                     spline = spline
                 };
-                SyncSplineToPair(connectionData, true);
+                if (spline != null)
+                {
+                    SyncSplineToPair(connectionData, true);
+                    connectionData.ClearBakedPolyline();
+                }
                 nodeConnections.Add(connectionData);
             }
 
+            PrefabUtility.RecordPrefabInstancePropertyModifications(this);
             EditorUtility.SetDirty(this);
         }
 
@@ -244,6 +284,78 @@ namespace SkillTree
 
             return removedCount;
         }
+
+        public int StripSplineConnectionObjects()
+        {
+            Undo.RecordObject(this, "Strip Skill Tree Spline Connections");
+
+            int removedCount = 0;
+            foreach (NodeConnectionData connection in nodeConnections)
+            {
+                if (connection?.spline == null)
+                    continue;
+
+                SyncSplineToPair(connection);
+                BakeConnectionPolyline(connection);
+                Undo.DestroyObjectImmediate(connection.spline.gameObject);
+                connection.spline = null;
+                removedCount++;
+            }
+
+            if (removedCount > 0)
+            {
+                PrefabUtility.RecordPrefabInstancePropertyModifications(this);
+                EditorUtility.SetDirty(this);
+                BuildMesh();
+            }
+
+            return removedCount;
+        }
+
+        public int ForceCreateSplineConnectionObjects()
+        {
+            if (connectionPrefab == null)
+            {
+                Debug.LogWarning($"{nameof(NodeConnectionRenderer)} requires a connection prefab to recreate spline objects.", this);
+                return 0;
+            }
+
+            Undo.RecordObject(this, "Force Create Skill Tree Spline Connections");
+
+            int createdCount = 0;
+            foreach (NodeConnectionData connection in nodeConnections)
+            {
+                if (connection == null || connection.pair.A == null || connection.pair.B == null)
+                    continue;
+
+                if (connection.spline != null)
+                {
+                    SyncSplineToPair(connection);
+                    BakeConnectionPolyline(connection);
+                    Undo.DestroyObjectImmediate(connection.spline.gameObject);
+                }
+
+                SplineContainer spline = (SplineContainer)PrefabUtility.InstantiatePrefab(connectionPrefab, transform);
+                Undo.RegisterCreatedObjectUndo(spline.gameObject, "Create Skill Tree Spline Connection");
+                spline.transform.localPosition = Vector3.zero;
+                spline.transform.localRotation = Quaternion.identity;
+                spline.transform.localScale = Vector3.one;
+
+                connection.spline = spline;
+                RestoreSplineShape(connection);
+                connection.ClearBakedPolyline();
+                createdCount++;
+            }
+
+            if (createdCount > 0)
+            {
+                PrefabUtility.RecordPrefabInstancePropertyModifications(this);
+                EditorUtility.SetDirty(this);
+                BuildMesh();
+            }
+
+            return createdCount;
+        }
 #endif
 
     public void BuildMesh()
@@ -302,16 +414,14 @@ namespace SkillTree
 
         foreach (var nodeConnection in nodeConnections)
         {
-            var spline = nodeConnection.spline;
-            if (spline == null || spline.Splines.Count == 0)
+            if (!TryGetConnectionPosition(nodeConnection, 0f, out Vector3 prevPos))
             {
                 connectionId++;
                 continue;
             }
 
-            _connectionLengths[connectionId] = EstimateSplineLength(spline);
+            _connectionLengths[connectionId] = EstimateConnectionLength(nodeConnection);
             int segmentCount = GetSegmentCountForLength(_connectionLengths[connectionId]);
-            Vector3 prevPos = spline.EvaluatePosition(0f);
 
             for (int i = 1; i < segmentCount; i++)
             {
@@ -319,7 +429,8 @@ namespace SkillTree
                     FlushChunk();
 
                 float t = i / (float)(segmentCount - 1);
-                Vector3 currPos = spline.EvaluatePosition(t);
+                if (!TryGetConnectionPosition(nodeConnection, t, out Vector3 currPos))
+                    break;
 
                 Vector3 dir = (currPos - prevPos).normalized;
                 Vector3 normal = Vector3.Cross(dir, Vector3.forward);
@@ -377,6 +488,128 @@ namespace SkillTree
     {
         return ConnectionRendererUtility.EstimateSplineLength(spline);
     }
+
+    private float EstimateConnectionLength(NodeConnectionData connection)
+    {
+        if (connection?.spline != null && connection.spline.Splines.Count > 0)
+            return EstimateSplineLength(connection.spline);
+
+        if (connection?.HasBakedPolyline == true)
+            return EstimatePolylineLength(connection.bakedPolyline);
+
+        if (connection?.pair.A == null || connection.pair.B == null)
+            return 0f;
+
+        return Vector3.Distance(connection.pair.A.transform.position, connection.pair.B.transform.position);
+    }
+
+    private float EstimatePolylineLength(IReadOnlyList<Vector3> polyline)
+    {
+        float length = 0f;
+        for (int i = 1; i < polyline.Count; i++)
+            length += Vector3.Distance(polyline[i - 1], polyline[i]);
+
+        return length;
+    }
+
+    private bool TryGetConnectionPosition(NodeConnectionData connection, float t, out Vector3 position)
+    {
+        position = default;
+        if (connection == null)
+            return false;
+
+        if (connection.spline != null && connection.spline.Splines.Count > 0)
+        {
+            position = connection.spline.EvaluatePosition(t);
+            return true;
+        }
+
+        if (connection.HasBakedPolyline)
+        {
+            position = EvaluatePolyline(connection.bakedPolyline, t);
+            return true;
+        }
+
+        if (connection.pair.A == null || connection.pair.B == null)
+            return false;
+
+        position = Vector3.Lerp(
+            connection.pair.A.transform.position,
+            connection.pair.B.transform.position,
+            t);
+        return true;
+    }
+
+    private Vector3 EvaluatePolyline(IReadOnlyList<Vector3> polyline, float t)
+    {
+        if (polyline.Count == 1)
+            return polyline[0];
+
+        float totalLength = EstimatePolylineLength(polyline);
+        if (totalLength <= 0f)
+            return polyline[0];
+
+        float targetDistance = Mathf.Clamp01(t) * totalLength;
+        float distance = 0f;
+        for (int i = 1; i < polyline.Count; i++)
+        {
+            Vector3 from = polyline[i - 1];
+            Vector3 to = polyline[i];
+            float segmentLength = Vector3.Distance(from, to);
+            if (segmentLength <= 0f)
+                continue;
+
+            if (distance + segmentLength >= targetDistance)
+                return Vector3.Lerp(from, to, (targetDistance - distance) / segmentLength);
+
+            distance += segmentLength;
+        }
+
+        return polyline[^1];
+    }
+
+#if UNITY_EDITOR
+    private void BakeConnectionPolyline(NodeConnectionData connection)
+    {
+        if (connection?.spline == null || connection.spline.Splines.Count == 0)
+            return;
+
+        float length = EstimateSplineLength(connection.spline);
+        int sampleCount = Mathf.Max(2, GetSegmentCountForLength(length));
+        connection.bakedPolyline.Clear();
+
+        for (int i = 0; i < sampleCount; i++)
+        {
+            float t = i / (float)(sampleCount - 1);
+            connection.bakedPolyline.Add(connection.spline.EvaluatePosition(t));
+        }
+    }
+
+    private void RestoreSplineShape(NodeConnectionData connection)
+    {
+        if (connection?.spline == null)
+            return;
+
+        Spline spline = connection.spline.Spline;
+        if (spline == null)
+            return;
+
+        spline.Clear();
+
+        if (connection.HasBakedPolyline)
+        {
+            foreach (Vector3 worldPosition in connection.bakedPolyline)
+                spline.Add(new BezierKnot((float3)connection.spline.transform.InverseTransformPoint(worldPosition)));
+            return;
+        }
+
+        if (connection.pair.A == null || connection.pair.B == null)
+            return;
+
+        spline.Add(new BezierKnot((float3)connection.spline.transform.InverseTransformPoint(connection.pair.A.transform.position)));
+        spline.Add(new BezierKnot((float3)connection.spline.transform.InverseTransformPoint(connection.pair.B.transform.position)));
+    }
+#endif
 
     private Mesh GetOrCreateChunkMesh(int chunkIndex)
     {
@@ -445,8 +678,16 @@ namespace SkillTree
 
         private void SyncSplineToPair(NodeConnectionData connection, bool resetSpline = false)
         {
-            if (connection?.spline == null || connection.pair.A == null || connection.pair.B == null)
+            if (connection == null || connection.pair.A == null || connection.pair.B == null)
                 return;
+
+            if (connection.spline == null)
+            {
+                if (connection.HasBakedPolyline)
+                    MovePolylineEndpoints(connection.bakedPolyline,
+                        connection.pair.A.transform.position, connection.pair.B.transform.position);
+                return;
+            }
 
             Spline spline = connection.spline.Spline;
             if (spline == null)
@@ -458,19 +699,55 @@ namespace SkillTree
             while (spline.Count < 2)
                 spline.Add(new BezierKnot(float3.zero));
 
-            int lastKnotIndex = spline.Count - 1;
-            BezierKnot startKnot = spline[0];
-            BezierKnot endKnot = spline[lastKnotIndex];
+            var positions = new List<Vector3>(spline.Count);
+            for (int i = 0; i < spline.Count; i++)
+                positions.Add(connection.spline.transform.TransformPoint((Vector3)spline[i].Position));
 
-            startKnot.Position = (float3)connection.spline.transform.InverseTransformPoint(connection.pair.A.transform.position);
-            endKnot.Position = (float3)connection.spline.transform.InverseTransformPoint(connection.pair.B.transform.position);
+            if (!MovePolylineEndpoints(positions, connection.pair.A.transform.position, connection.pair.B.transform.position))
+                return;
 
-            spline[0] = startKnot;
-            spline[lastKnotIndex] = endKnot;
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                Undo.RecordObject(connection.spline, "Move Connection Spline");
+#endif
+            for (int i = 0; i < spline.Count; i++)
+            {
+                BezierKnot knot = spline[i];
+                knot.Position = (float3)connection.spline.transform.InverseTransformPoint(positions[i]);
+                spline[i] = knot;
+            }
+        }
+
+        private bool MovePolylineEndpoints(List<Vector3> positions, Vector3 targetStart, Vector3 targetEnd)
+        {
+            Vector3 startOffset = targetStart - positions[0];
+            Vector3 endOffset = targetEnd - positions[^1];
+            if (startOffset.sqrMagnitude < 1e-12f && endOffset.sqrMagnitude < 1e-12f)
+                return false;
+
+            // Blend endpoint movement over the original shape, retaining its bends.
+            float totalLength = EstimatePolylineLength(positions);
+            float distance = 0f;
+            Vector3 previous = positions[0];
+            for (int i = 0; i < positions.Count; i++)
+            {
+                Vector3 original = positions[i];
+                distance += Vector3.Distance(previous, original);
+                float t = totalLength > 0f ? distance / totalLength : i / (float)(positions.Count - 1);
+                positions[i] = original + Vector3.Lerp(startOffset, endOffset, t);
+                previous = original;
+            }
+
+            positions[0] = targetStart;
+            positions[^1] = targetEnd;
+            return true;
         }
         
         private void CreateStateTexture()
         {
+            RebuildConnectionIndex();
+            _activeConnections.Clear();
+            _activeConnectionIds.Clear();
             CacheMaterialReference();
             ConnectionRendererUtility.ReleaseTexture(_stateTexture);
             ConnectionRendererUtility.ReleaseTexture(_progressTexture);
@@ -490,7 +767,7 @@ namespace SkillTree
                 float progress = isAllocated ? 1f : 0f;
                 Color color = ConnectionRendererUtility.GetShaderColor(isAllocated ? allocatedColor : defaultColor);
                 float thickness = isAllocated ? allocatedLineWidth : defaultLineWidth;
-                _connectionLengths[i] = EstimateSplineLength(nodeConnections[i].spline);
+                _connectionLengths[i] = EstimateConnectionLength(nodeConnections[i]);
 
                 _stateTexture.SetPixel(i, 0, new Color(thickness, color.r, color.g, color.b));
                 _progressTexture.SetPixel(i, 0, new Color(progress, 0f, 0f, 0f));
@@ -513,16 +790,20 @@ namespace SkillTree
         {
             if (_stateTexture == null || _progressTexture == null || _connectionStates.Length != nodeConnections.Count)
                 return;
+            if (node == null || !_connectionIdsByNode.TryGetValue(node, out List<int> connectionIds))
+                return;
 
             bool wasAllocated = _nodeAllocationStates.TryGetValue(node, out bool previousAllocated) && previousAllocated;
             bool isAllocated = node.IsAllocated;
             bool progressChanged = false;
 
-            for (var i = 0; i < nodeConnections.Count; i++)
+            for (int connectionIndex = 0; connectionIndex < connectionIds.Count; connectionIndex++)
             {
+                int i = connectionIds[connectionIndex];
                 var connection = nodeConnections[i];
                 if (connection.pair.Contains(node))
                 {
+                    bool connectionChanged = false;
                     bool pairAllocated = connection.pair.IsAllocated();
                     ref ConnectionVisualState state = ref _connectionStates[i];
 
@@ -534,6 +815,7 @@ namespace SkillTree
                         SetConnectionState(i, true);
                         SetConnectionProgress(i, state.progress, state.reverse, true);
                         progressChanged = true;
+                        connectionChanged = true;
                     }
                     else if (!pairAllocated && !isAllocated && wasAllocated)
                     {
@@ -554,6 +836,7 @@ namespace SkillTree
                             SetConnectionProgress(i, 0f, false, false);
                         }
                         progressChanged = true;
+                        connectionChanged = true;
                     }
                     else
                     {
@@ -567,16 +850,37 @@ namespace SkillTree
                                 SetConnectionState(i, false);
                             SetConnectionProgress(i, state.progress, state.reverse, false);
                             progressChanged = true;
+                            connectionChanged = true;
                         }
                     }
+
+                    if (connectionChanged)
+                        ScheduleConnectionTransition(i, ref state);
                 }
             }
             
-            _stateTexture.Apply(false);
             if (progressChanged)
+            {
+                _stateTexture.Apply(false);
                 _progressTexture.Apply(false);
+            }
 
             _nodeAllocationStates[node] = isAllocated;
+        }
+
+        private void ScheduleConnectionTransition(int id, ref ConnectionVisualState state)
+        {
+            if (Mathf.Approximately(state.progress, state.targetProgress))
+            {
+                state.progress = state.targetProgress;
+                FinalizeConnectionVisualState(id, ref state);
+                if (_activeConnectionIds.Remove(id))
+                    _activeConnections.Remove(id);
+            }
+            else if (_activeConnectionIds.Add(id))
+            {
+                _activeConnections.Add(id);
+            }
         }
         
         public void SetConnectionState(int id, bool isAllocated)
@@ -604,6 +908,8 @@ namespace SkillTree
             if (_connectionStates.Length != nodeConnections.Count || _progressTexture == null)
                 return;
 
+            _activeConnections.Clear();
+            _activeConnectionIds.Clear();
             for (int i = 0; i < nodeConnections.Count; i++)
             {
                 bool isAllocated = nodeConnections[i].pair.IsAllocated();
@@ -631,6 +937,30 @@ namespace SkillTree
                 if (connection?.pair.B != null && !_nodeAllocationStates.ContainsKey(connection.pair.B))
                     _nodeAllocationStates.Add(connection.pair.B, connection.pair.B.IsAllocated);
             }
+        }
+
+        private void RebuildConnectionIndex()
+        {
+            _connectionIdsByNode.Clear();
+            for (int i = 0; i < nodeConnections.Count; i++)
+            {
+                var pair = nodeConnections[i].pair;
+                AddConnectionIndex(pair.A, i);
+                if (pair.B != pair.A)
+                    AddConnectionIndex(pair.B, i);
+            }
+        }
+
+        private void AddConnectionIndex(Node node, int id)
+        {
+            if (node == null)
+                return;
+            if (!_connectionIdsByNode.TryGetValue(node, out List<int> ids))
+            {
+                ids = new List<int>();
+                _connectionIdsByNode.Add(node, ids);
+            }
+            ids.Add(id);
         }
 
         private void ApplyMaterialProperties()
@@ -748,5 +1078,13 @@ namespace SkillTree
     {
         [SerializeField] public NodePair pair;
         [SerializeField] public SplineContainer spline;
+        [SerializeField] public List<Vector3> bakedPolyline = new();
+
+        public bool HasBakedPolyline => bakedPolyline != null && bakedPolyline.Count >= 2;
+
+        public void ClearBakedPolyline()
+        {
+            bakedPolyline?.Clear();
+        }
     }
 }

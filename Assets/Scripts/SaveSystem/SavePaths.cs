@@ -25,6 +25,11 @@ namespace SaveSystem
             return Path.Combine(GetProfileDirectory(profileId), "player.sav");
         }
 
+        public static string GetProfileSnapshotFile(string profileId)
+        {
+            return Path.Combine(GetProfileDirectory(profileId), "profile.sav");
+        }
+
         public static string GetProgressFile(string profileId)
         {
             return Path.Combine(GetProfileDirectory(profileId), "progress.sav");

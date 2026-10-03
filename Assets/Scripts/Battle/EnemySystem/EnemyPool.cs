@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Visual;
+using UnityEngine.Serialization;
 using Zenject;
 
 namespace Battle
@@ -10,8 +10,10 @@ namespace Battle
         [SerializeField] private Unit enemyPrefab;
         [SerializeField] private int poolSize = 3;
         [SerializeField] public AttackResolver attackResolver;
-        [SerializeField] private List<Transform> spawnPositions;
-        [SerializeField] private List<Vector3> visualScalesBySpawnPosition = new();
+        [SerializeField] private List<Transform> spawnPositionsFor1Enemy = new();
+        [SerializeField] private List<Transform> spawnPositionsFor2Enemies = new();
+        [FormerlySerializedAs("spawnPositions")]
+        [SerializeField] private List<Transform> spawnPositionsFor3Enemies;
         [Inject] private DiContainer _container;
 
         private List<Unit> _units = new();
@@ -23,37 +25,30 @@ namespace Battle
             {
                 var unit = _container.InstantiatePrefabForComponent<Unit>(enemyPrefab, transform);
                 unit.gameObject.SetActive(false);
-                unit.gameObject.transform.position = spawnPositions[i].position;
                 _units.Add(unit);
             }
             attackResolver.SetNewEnemies(_units);
         }
 
-        public void ApplyVisualScaleForSlot(Unit unit, int slotIndex)
+        public void PositionEnemies(int enemyCount)
         {
-            if (unit == null)
+            List<Transform> positions = enemyCount switch
             {
-                return;
-            }
+                1 => spawnPositionsFor1Enemy,
+                2 => spawnPositionsFor2Enemies,
+                _ => spawnPositionsFor3Enemies
+            };
 
-            UnitVisual visual = unit.GetComponentInChildren<UnitVisual>(true);
-            if (visual == null)
+            for (int i = 0; i < enemyCount && i < _units.Count; i++)
             {
-                return;
+                Transform position = positions != null && i < positions.Count ? positions[i] : null;
+                // Preserve existing scene layouts until the new lists are assigned.
+                if (position == null && spawnPositionsFor3Enemies != null && i < spawnPositionsFor3Enemies.Count)
+                    position = spawnPositionsFor3Enemies[i];
+
+                if (position != null)
+                    _units[i].transform.position = position.position;
             }
-
-            visual.SetVisualScale(GetVisualScaleForSlot(slotIndex));
-        }
-
-        private Vector3 GetVisualScaleForSlot(int slotIndex)
-        {
-            if (slotIndex < 0 || slotIndex >= visualScalesBySpawnPosition.Count)
-            {
-                return Vector3.one;
-            }
-
-            Vector3 scale = visualScalesBySpawnPosition[slotIndex];
-            return scale == Vector3.zero ? Vector3.one : scale;
         }
     }
 }

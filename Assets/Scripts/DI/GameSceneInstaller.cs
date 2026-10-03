@@ -1,6 +1,8 @@
 using Battle;
+using CurrencySystem;
 using InventorySystem;
 using SaveSystem;
+using ShopSystem;
 using SkillTree;
 using TooltipSystem;
 using UnityEngine;
@@ -14,6 +16,8 @@ public static class TargetIds
 
 public class GameSceneInstaller : MonoInstaller
 {
+    [SerializeField] private Tutorials.TutorialCatalog tutorialCatalog;
+
     public override void InstallBindings()
     {
         Container.Bind<BattleTickSystem>()
@@ -40,9 +44,11 @@ public class GameSceneInstaller : MonoInstaller
         Container.Bind<TooltipUI>().FromComponentInHierarchy().AsSingle();
         Container.Bind<InventorySocketService>().AsSingle();
         Container.Bind<InventorySelectionState>().AsSingle();
-        Container.Bind<GemPlacementService>().AsSingle();
+        Container.BindInterfacesAndSelfTo<GemPlacementService>().AsSingle();
         Container.Bind<InventoryItemUseService>().AsSingle();
         Container.Bind<NodeItemUseService>().AsSingle();
+        Container.BindInterfacesAndSelfTo<PlayerWallet>().AsSingle();
+        Container.Bind<ShopService>().AsSingle();
         Container.Bind<SkillTreeNodeHighlightService>().AsSingle();
         Container.BindInterfacesAndSelfTo<SelectedNodeItemHighlightController>().AsSingle().NonLazy();
         Container.Bind<SaveFileCodec>().AsSingle();
@@ -52,7 +58,10 @@ public class GameSceneInstaller : MonoInstaller
         Container.Bind<SaveProfileManager>().AsSingle();
         Container.Bind<CloudSettingsService>().AsSingle();
         Container.Bind<LocalSettingsService>().AsSingle();
+        Container.Bind<Tutorials.TutorialService>().AsSingle().WithArguments((object)
+            (tutorialCatalog != null ? tutorialCatalog.Tutorials : System.Array.Empty<Tutorials.TutorialDefinition>()));
         Container.BindInterfacesAndSelfTo<global::SaveSystem.GameSaveCoordinator>().AsSingle().NonLazy();
+        Container.BindInterfacesTo<Tutorials.TutorialEventAdapter>().AsSingle().NonLazy();
 
         Container.Bind<ITarget>().WithId(TargetIds.Player).To<PlayerUnit>().FromResolve();
         Container.Bind<ITarget>().WithId(TargetIds.Enemies).To<AttackResolver>().FromResolve();

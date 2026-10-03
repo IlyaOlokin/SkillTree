@@ -9,8 +9,10 @@ namespace Battle
         private const float BASE_DURATION = 5f;
         private const float BASE_REDUCED_ARMOR = -0.2f;
 
-        private BaseModifier _cachedModifier;
+        private BaseModifier _cachedArmorModifier;
         private float _armorReduction;
+        private readonly List<ModifierContainer> _additionalModifierContainers = new List<ModifierContainer>();
+        private readonly List<BaseModifier> _cachedAdditionalModifiers = new List<BaseModifier>();
 
         public override bool IsStackable { get; set; } = true;
         public override EffectVisualType VisualType => EffectVisualType.Sunder;
@@ -19,14 +21,12 @@ namespace Battle
         {
             Duration = BASE_DURATION;
             _armorReduction = CalculateArmorReduction(damageInfo, defender);
+            CopyModifierContainers(damageInfo.AttackEffectPayload.GetEffectModifiers<Sunder>());
         }
 
         public override void OnApply(Unit unit)
         {
-            _cachedModifier = ScriptableObject.CreateInstance<BaseModifier>();
-            _cachedModifier.modifierContainer =
-                new ModifierContainer(ModifierType.Increased, StatType.Armor, _armorReduction);
-            unit.AddOuterModifier(_cachedModifier);
+            ApplyModifiers(unit);
         }
 
         public override void OnStack(Unit unit, BaseEffect newEffect, ActiveEffect existing)
@@ -38,18 +38,66 @@ namespace Battle
                 return;
             }
 
-            unit.RemoveOuterModifier(_cachedModifier);
+            RemoveModifiers(unit);
             _armorReduction = sunder._armorReduction;
-            _cachedModifier.modifierContainer.value = _armorReduction;
-            unit.AddOuterModifier(_cachedModifier);
+            CopyModifierContainers(sunder._additionalModifierContainers);
+            ApplyModifiers(unit);
         }
 
         public override void OnRemove(Unit unit)
         {
-            if (_cachedModifier != null)
+            RemoveModifiers(unit);
+        }
+
+        private void ApplyModifiers(Unit unit)
+        {
+            _cachedArmorModifier = CreateRuntimeModifier<BaseModifier>();
+            _cachedArmorModifier.modifierContainer =
+                new ModifierContainer(ModifierType.Increased, StatType.Armor, _armorReduction);
+            unit.AddOuterModifier(_cachedArmorModifier);
+
+            for (int i = 0; i < _additionalModifierContainers.Count; i++)
             {
-                unit.RemoveOuterModifier(_cachedModifier);
+                BaseModifier modifier = CreateRuntimeModifier<BaseModifier>();
+                modifier.modifierContainer = CloneModifierContainer(_additionalModifierContainers[i]);
+                _cachedAdditionalModifiers.Add(modifier);
+                unit.AddOuterModifier(modifier);
             }
+        }
+
+        private void RemoveModifiers(Unit unit)
+        {
+            if (_cachedArmorModifier != null)
+            {
+                unit.RemoveOuterModifier(_cachedArmorModifier);
+                ReleaseRuntimeModifier(_cachedArmorModifier);
+                _cachedArmorModifier = null;
+            }
+
+            for (int i = 0; i < _cachedAdditionalModifiers.Count; i++)
+            {
+                unit.RemoveOuterModifier(_cachedAdditionalModifiers[i]);
+                ReleaseRuntimeModifier(_cachedAdditionalModifiers[i]);
+            }
+
+            _cachedAdditionalModifiers.Clear();
+        }
+
+        private void CopyModifierContainers(IReadOnlyList<ModifierContainer> modifierContainers)
+        {
+            _additionalModifierContainers.Clear();
+            for (int i = 0; i < modifierContainers.Count; i++)
+            {
+                _additionalModifierContainers.Add(CloneModifierContainer(modifierContainers[i]));
+            }
+        }
+
+        private static ModifierContainer CloneModifierContainer(ModifierContainer modifierContainer)
+        {
+            return new ModifierContainer(
+                modifierContainer.modifierType,
+                modifierContainer.statType,
+                modifierContainer.value);
         }
 
         public override string GetIconText(IReadOnlyList<ActiveEffect> activeEffects)
@@ -71,7 +119,7 @@ namespace Battle
 
             if (damageInfo.AttackEffectPayload.IsGuaranteed<Sunder>())
             {
-                effectTarget.effectController.AddEffect(() => new Sunder(damageInfo, effectTarget));
+                effectTarget.effectController.AddEffect(() => new Sunder(damageInfo, effectTarget), attacker);
                 return;
             }
 
@@ -83,7 +131,7 @@ namespace Battle
 
             if (Random.Range(0f, 1f) < chance)
             {
-                effectTarget.effectController.AddEffect(() => new Sunder(damageInfo, effectTarget));
+                effectTarget.effectController.AddEffect(() => new Sunder(damageInfo, effectTarget), attacker);
             }
         }
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using InventorySystem;
 using Items;
+using ShopSystem;
 using UnityEngine;
 
 namespace Battle
@@ -17,7 +18,9 @@ namespace Battle
         [SerializeField] private string description;
         [SerializeField] private Sprite mapIcon;
         [SerializeField] private Sprite battleBackground;
+        [SerializeField] private LocationKind kind = LocationKind.Battle;
         [SerializeField] private EnemyConfigDatabase enemyDatabase;
+        [SerializeField] private ShopDefinition shopDefinition;
         [SerializeField] private List<LocationLevelRewardEntry> levelRewards = new();
         [Header("Unlock requirements")]
         [Tooltip("If empty, this location is available immediately. If filled, completing any one listed location unlocks this location.")]
@@ -28,7 +31,11 @@ namespace Battle
         public string Description => description;
         public Sprite MapIcon => mapIcon;
         public Sprite BattleBackground => battleBackground;
+        public LocationKind Kind => kind;
+        public bool IsBattle => kind == LocationKind.Battle;
+        public bool IsShop => kind == LocationKind.Shop;
         public EnemyConfigDatabase EnemyDatabase => enemyDatabase;
+        public ShopDefinition ShopDefinition => shopDefinition;
         public IReadOnlyList<LocationLevelRewardEntry> LevelRewards => levelRewards;
         public IReadOnlyList<LocationDefinition> UnlockPrerequisites => unlockPrerequisites;
         public bool HasUnlockPrerequisites => unlockPrerequisites != null && unlockPrerequisites.Count > 0;
@@ -38,6 +45,12 @@ namespace Battle
             return string.IsNullOrWhiteSpace(value) ||
                    string.Equals(value, DefaultLocationIdPlaceholder, System.StringComparison.Ordinal);
         }
+    }
+
+    public enum LocationKind
+    {
+        Battle = 0,
+        Shop = 1
     }
 
     [Serializable]

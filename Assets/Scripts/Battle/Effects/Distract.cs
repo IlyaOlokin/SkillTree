@@ -23,7 +23,7 @@ namespace Battle
 
         public override void OnApply(Unit unit)
         {
-            _cachedModifier = ScriptableObject.CreateInstance<BaseModifier>();
+            _cachedModifier = CreateRuntimeModifier<BaseModifier>();
             _cachedModifier.modifierContainer =
                 new ModifierContainer(ModifierType.Increased, StatType.Accuracy, _accuracyReduction);
             unit.AddOuterModifier(_cachedModifier);
@@ -71,7 +71,8 @@ namespace Battle
 
             if (damageInfo.AttackEffectPayload.IsGuaranteed<Distract>())
             {
-                effectTarget.effectController.AddEffect(() => new Distract(damageInfo, effectTarget));
+                effectTarget.effectController.AddEffect(() => new Distract(damageInfo, effectTarget), attacker);
+                ReduceEnemyAttackProgress(damageInfo, effectTarget, defender);
                 return;
             }
 
@@ -83,8 +84,26 @@ namespace Battle
 
             if (Random.Range(0f, 1f) < chance)
             {
-                effectTarget.effectController.AddEffect(() => new Distract(damageInfo, effectTarget));
+                effectTarget.effectController.AddEffect(() => new Distract(damageInfo, effectTarget), attacker);
+                ReduceEnemyAttackProgress(damageInfo, effectTarget, defender);
             }
+        }
+
+        private static void ReduceEnemyAttackProgress(DamageInfo damageInfo, Unit effectTarget, Unit defender)
+        {
+            if (effectTarget == null || effectTarget != defender)
+            {
+                return;
+            }
+
+            float attackProgressReduction = Mathf.Clamp01(
+                damageInfo.AttackEffectPayload.GetDistractAttackProgressReduction());
+            if (attackProgressReduction <= 0f)
+            {
+                return;
+            }
+
+            effectTarget.attacker?.ModifyAttackProgress(-attackProgressReduction);
         }
     }
 }

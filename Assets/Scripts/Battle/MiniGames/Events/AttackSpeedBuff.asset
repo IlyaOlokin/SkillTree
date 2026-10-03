@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a1671e5ff76d7b4c91bd216860b58fe, type: 3}
+  m_Name: AttackSpeedBuff
+  m_EditorClassIdentifier: Assembly-CSharp::Battle.MiniGames.BattleMiniGameEventDefinition
+  id: damage
+  activatorPrefab: {fileID: 6270856319063007783, guid: 338d162b7bc1ab941948119fb60b5e35, type: 3}
+  miniGamePrefab: {fileID: 7513513224078512546, guid: be3de15625af9c44db1cdb140b6a5e9d, type: 3}
+  reward: {fileID: 11400000, guid: b811f263f37c8ac4f9bd7c161693e880, type: 2}
+  activationTime: 4
+  miniGameTime: 5
+  basePower: 1
+  miniGameSpawnPlacement: 1
+  miniGameSpawnOffset: {x: 0, y: 0}
+  randomSpawnEnabled: 1
+  randomMinInterval: 60
+  randomMaxInterval: 120
+  triggerCooldown: 30

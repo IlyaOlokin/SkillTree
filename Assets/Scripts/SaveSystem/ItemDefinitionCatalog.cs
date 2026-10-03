@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace SaveSystem
 {
-    public sealed class ItemDefinitionCatalog
+    public abstract class SaveDefinitionCatalog<TDefinition> where TDefinition : ItemDefinition
     {
-        private readonly Dictionary<string, ItemDefinition> _definitionsById = new(StringComparer.Ordinal);
+        private readonly Dictionary<string, TDefinition> _definitionsById = new(StringComparer.Ordinal);
 
-        public bool TryResolve(string definitionId, out ItemDefinition definition)
+        public bool TryResolve(string definitionId, out TDefinition definition)
         {
             if (string.IsNullOrWhiteSpace(definitionId))
             {
@@ -30,10 +30,12 @@ namespace SaveSystem
         public void Rebuild()
         {
             _definitionsById.Clear();
-            ItemDefinition[] definitions = Resources.FindObjectsOfTypeAll<ItemDefinition>();
+            // Built-in items must be resolvable in a player build even before they are equipped.
+            Resources.LoadAll<TDefinition>("Items");
+            TDefinition[] definitions = Resources.FindObjectsOfTypeAll<TDefinition>();
             for (int i = 0; i < definitions.Length; i++)
             {
-                ItemDefinition definition = definitions[i];
+                TDefinition definition = definitions[i];
                 if (definition == null)
                     continue;
 
@@ -44,5 +46,9 @@ namespace SaveSystem
                 _definitionsById.Add(saveDefinitionId, definition);
             }
         }
+    }
+
+    public sealed class ItemDefinitionCatalog : SaveDefinitionCatalog<ItemDefinition>
+    {
     }
 }

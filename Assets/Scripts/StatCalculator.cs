@@ -34,6 +34,8 @@ public static class StatCalculator
 
     public static void RecalculateStats(Unit unit, List<CollectedModifier> mods)
     {
+        ApplyLowLifeThresholdModifiers(unit, mods);
+
         foreach (var mod in mods)
         {
             if (mod.IsInPriority(ModifierPriority.PreAttribute) && mod.IsApplicable(unit)) mod.ApplyEffect(unit);
@@ -58,10 +60,22 @@ public static class StatCalculator
         }
         
         MergeDamageModifiers(unit.BaseUnitModifiers);
+        MergeDamageMitigationModifiers(unit.BaseUnitModifiers);
         MergeDefenceModifiers(unit.BaseUnitModifiers);
         MergeAilmentModifiers(unit.BaseUnitModifiers);
 
         CacheStatValues(unit);
+    }
+
+    private static void ApplyLowLifeThresholdModifiers(Unit unit, List<CollectedModifier> mods)
+    {
+        foreach (var mod in mods)
+        {
+            if (mod.Modifier is LowLifeThresholdModifier && mod.IsApplicable(unit))
+            {
+                mod.ApplyEffect(unit);
+            }
+        }
     }
 
     public static void LightRecalculateAttackStats(BaseUnitModifiers baseUnitModifiers)
@@ -163,7 +177,7 @@ public static class StatCalculator
         }
         
         
-        return result;
+        return WispStats.Normalize(statType, result);
     }
 
     private static void CacheStatValues(Unit unit)
@@ -183,6 +197,40 @@ public static class StatCalculator
         unit.attributes.ApplyAttributeModifiers(AttributeType.Dexterity, dex, unit.BaseUnitModifiers);
         unit.attributes.ApplyAttributeModifiers(AttributeType.Intelligence, intl, unit.BaseUnitModifiers);
         unit.attributes.ApplyAttributeModifiers(AttributeType.AllAttributes, str + dex + intl, unit.BaseUnitModifiers);
+    }
+
+    public static void MergeDamageMitigationModifiers(BaseUnitModifiers modifiers)
+    {
+        foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
+        {
+            modifiers.MergeModifier(GetCorrespondingDamageMitigationStat(damageType), modifiers.GetModifier(StatType.DamageMitigation));
+        }
+
+        // Poison has a stat but is not currently an active DamageType.
+        modifiers.MergeModifier(StatType.PoisonDamageMitigation, modifiers.GetModifier(StatType.DamageMitigation));
+        modifiers.MergeModifier(StatType.FireDamageMitigation, modifiers.GetModifier(StatType.ElementalDamageMitigation));
+        modifiers.MergeModifier(StatType.ColdDamageMitigation, modifiers.GetModifier(StatType.ElementalDamageMitigation));
+        modifiers.MergeModifier(StatType.LightningDamageMitigation, modifiers.GetModifier(StatType.ElementalDamageMitigation));
+        modifiers.MergeModifier(StatType.LightDamageMitigation, modifiers.GetModifier(StatType.MysticDamageMitigation));
+        modifiers.MergeModifier(StatType.DarknessDamageMitigation, modifiers.GetModifier(StatType.MysticDamageMitigation));
+
+        modifiers.ClearModifier(StatType.DamageMitigation);
+        modifiers.ClearModifier(StatType.ElementalDamageMitigation);
+        modifiers.ClearModifier(StatType.MysticDamageMitigation);
+    }
+
+    public static StatType GetCorrespondingDamageMitigationStat(DamageType damageType)
+    {
+        switch (damageType)
+        {
+            case DamageType.Physical: return StatType.PhysicalDamageMitigation;
+            case DamageType.Fire: return StatType.FireDamageMitigation;
+            case DamageType.Cold: return StatType.ColdDamageMitigation;
+            case DamageType.Lightning: return StatType.LightningDamageMitigation;
+            case DamageType.Light: return StatType.LightDamageMitigation;
+            case DamageType.Darkness: return StatType.DarknessDamageMitigation;
+            default: return StatType.Empty;
+        }
     }
     
     public static StatType GetCorespondingDamageStat(DamageType damageType)

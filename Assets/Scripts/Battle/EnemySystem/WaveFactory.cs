@@ -7,9 +7,14 @@ namespace Battle
     public class WaveFactory
     {
         private const float WaveResourceBudget = 1f;
-        private const float UnderfillTolerance = 0.2f;
+        private const float UnderfillTolerance = 0.21f;
         private const float OverfillTolerance = 0.2f;
         private const int SelectionAttempts = 8;
+        private const float MinEnemyWaveWeight = 0.2f;
+        private const float MaxEnemyWaveWeight = 1f;
+        private const float EnemyWaveWeightStep = 0.05f;
+        private const float EnemyWaveWeightMean = 0.35f;
+        private const float EnemyWaveWeightStandardDeviation = 0.15f;
 
         private readonly EnemyFactory _enemyFactory;
         private readonly EnemyConfigDatabase _database;
@@ -20,7 +25,7 @@ namespace Battle
             _database = database;
         }
 
-        public List<EnemySpawnData> CreateWave(WaveContext context)
+        public List<EnemySpawnData> CreateWave(WaveContext context, EnemyAffixGenerationRules affixRules = null)
         {
             float totalPower = _database != null
                 ? _database.GetPowerForLevel(context.Level)
@@ -47,83 +52,85 @@ namespace Battle
                 if (!ignoreBudgetLimit && result.Count > 0 && remainingResource <= UnderfillTolerance)
                     break;
 
-                if (TrySelectEnemy(context, rarityCounts, result.Count, bossesToSpawn, remainingResource, ignoreBudgetLimit, out var rarity, out var archetype) == false)
+                if (TryRollRarity(context, rarityCounts, result.Count, bossesToSpawn, out var rarity) == false)
                     break;
 
-                float enemyWeight = archetype.WaveWeight;
-                float enemyPower = totalPower * enemyWeight;
-                var data = _enemyFactory.CreateEnemyStats(context, rarity, archetype, enemyPower, totalPower);
+                int slotsLeft = maxEnemyCount - result.Count;
+                var data = rarity == EnemyRarity.Boss
+                    ? _enemyFactory.CreateEnemyStats(context, rarity, result.Count, MaxEnemyWaveWeight, totalPower, affixRules)
+                    : CreateGeneratedEnemy(context, rarity, result.Count, remainingResource, slotsLeft, ignoreBudgetLimit, totalPower, affixRules);
                 if (data == null)
                     break;
 
                 result.Add(data);
-                spentResource += enemyWeight;
+                spentResource += data.Definition != null ? data.Definition.WaveWeight : 0f;
                 AddRarityCount(rarityCounts, rarity);
             }
 
             return result;
         }
 
-        private bool TrySelectEnemy(
+        private EnemySpawnData CreateGeneratedEnemy(
             WaveContext context,
-            Dictionary<EnemyRarity, int> rarityCounts,
+            EnemyRarity rarity,
             int enemyIndex,
-            int bossesToSpawn,
             float remainingResource,
+            int slotsLeft,
             bool ignoreBudgetLimit,
-            out EnemyRarity selectedRarity,
-            out EnemyArchetype selectedArchetype)
+            float totalPower,
+            EnemyAffixGenerationRules affixRules)
         {
-            selectedRarity = default;
-            selectedArchetype = null;
-
-            EnemyRarity fallbackRarity = default;
-            EnemyArchetype fallbackArchetype = null;
-            float fallbackOverflow = float.MaxValue;
-
             for (int attempt = 0; attempt < SelectionAttempts; attempt++)
             {
-                if (TryRollRarity(context, rarityCounts, enemyIndex, bossesToSpawn, out var rarity) == false)
-                    return false;
+                if (!TryRollEnemyWeight(remainingResource, slotsLeft, ignoreBudgetLimit, out float enemyWeight))
+                    return null;
 
-                var archetype = _database != null
-                    ? _database.GetRandomArchetype(context, rarity, enemyIndex)
-                    : null;
-                if (archetype == null)
-                    return false;
-
-                if (ignoreBudgetLimit)
-                {
-                    selectedRarity = rarity;
-                    selectedArchetype = archetype;
-                    return true;
-                }
-
-                float weight = archetype.WaveWeight;
-                float overflow = weight - remainingResource;
-                if (overflow <= OverfillTolerance)
-                {
-                    selectedRarity = rarity;
-                    selectedArchetype = archetype;
-                    return true;
-                }
-
-                if (overflow < fallbackOverflow)
-                {
-                    fallbackOverflow = overflow;
-                    fallbackRarity = rarity;
-                    fallbackArchetype = archetype;
-                }
+                var data = _enemyFactory.CreateEnemyStats(context, rarity, enemyIndex, enemyWeight, totalPower, affixRules);
+                if (data != null)
+                    return data;
             }
 
-            if (enemyIndex == 0 && fallbackArchetype != null)
-            {
-                selectedRarity = fallbackRarity;
-                selectedArchetype = fallbackArchetype;
-                return true;
-            }
+            return null;
+        }
 
-            return false;
+        private static bool TryRollEnemyWeight(
+            float remainingResource,
+            int slotsLeft,
+            bool ignoreBudgetLimit,
+            out float enemyWeight)
+        {
+            enemyWeight = 0f;
+
+            if (!ignoreBudgetLimit && remainingResource < MinEnemyWaveWeight)
+                return false;
+
+            float maxAllowedWeight = ignoreBudgetLimit
+                ? MaxEnemyWaveWeight
+                : Mathf.Min(MaxEnemyWaveWeight, remainingResource + OverfillTolerance);
+
+            if (slotsLeft <= 1 && !ignoreBudgetLimit)
+                maxAllowedWeight = Mathf.Min(maxAllowedWeight, Mathf.Max(MinEnemyWaveWeight, remainingResource));
+
+            int minStep = Mathf.CeilToInt(MinEnemyWaveWeight / EnemyWaveWeightStep);
+            int maxStep = Mathf.FloorToInt(maxAllowedWeight / EnemyWaveWeightStep);
+
+            if (maxStep < minStep)
+                return false;
+
+            int selectedStep = Mathf.Clamp(
+                Mathf.RoundToInt(RollNormal(EnemyWaveWeightMean, EnemyWaveWeightStandardDeviation) / EnemyWaveWeightStep),
+                minStep,
+                maxStep);
+            enemyWeight = selectedStep * EnemyWaveWeightStep;
+            return true;
+        }
+
+        private static float RollNormal(float mean, float standardDeviation)
+        {
+            float u1 = Mathf.Max(Random.value, 0.0001f);
+            float u2 = Random.value;
+            float standardNormal = Mathf.Sqrt(-2f * Mathf.Log(u1)) * Mathf.Cos(2f * Mathf.PI * u2);
+            return mean + standardDeviation * standardNormal;
         }
 
         private bool TryRollRarity(

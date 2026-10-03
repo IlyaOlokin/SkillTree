@@ -103,6 +103,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -489,7 +490,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da7b67d71be7c01478e772f893972245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  border: {fileID: 0}
   fill: {fileID: 983058714723758844}
+  fillVisualMode: 0
+  maskedFillViewport: {fileID: 0}
+  maskedFillContent: {fileID: 0}
+  maskedFillWidthReference: {fileID: 0}
   needSecondaryFill: 0
   secondaryFill: {fileID: 2386444945300768442}
   needText: 0

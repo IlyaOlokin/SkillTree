@@ -16,4 +16,5 @@ MonoBehaviour:
   modifierContainer:
     modifierType: 0
     statType: 22
-    value: 0.2
+    value: 0.05
+  levelsPerModifier: 1

@@ -18,6 +18,10 @@ MonoBehaviour:
   m_Metadata:
     m_Items: []
   m_TableData: []
+  - m_Id: 1777468216597000010
+    m_Localized: В эту ноду можно вложить сколько угодно очков навыков.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

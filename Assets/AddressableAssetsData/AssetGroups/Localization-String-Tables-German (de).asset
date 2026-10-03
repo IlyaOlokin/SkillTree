@@ -15,6 +15,13 @@ MonoBehaviour:
   m_GroupName: Localization-String-Tables-German (de)
   m_GUID: 0d97c36dc0f30534aae64911aa94d1f7
   m_SerializeEntries:
+  - m_GUID: a08285e0beffa8648a5a974b7d689e8c
+    m_Address: Tutorial_de
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-de
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 21fb0bd2a5fc0d549bfd1f8a20647300
     m_Address: Descriptions_de
     m_ReadOnly: 1
@@ -28,6 +35,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-de
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 54b4f6dc051894f4597f96ace14057de
+    m_Address: Enemies_de
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-de
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 594714a387af2264b8ec8ac693b38cdf
     m_Address: GameUI_de
