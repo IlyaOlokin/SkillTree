@@ -62,6 +62,8 @@ Unit geometry and painterly shader controls are described in
 | `Assets/Localization` | Localization assets |
 | `Assets/Prefabs`, `Assets/Scenes` | Authored objects and scene wiring |
 | `Assets/Editor` | Tree editing/analyzing tools, enemy editors and CI build script; [tooling guide](Reference/EditorAndBuildTools.md) |
+| `Reports/BalanceSimulation` | Single home for final balance artifacts; dated gzip datasets, offline stats/tree viewers and unfinished recovery data; [report convention](../Reports/BalanceSimulation/README.md) |
+| `Tools/BalanceSimulation` | External Runtime adapters, Internal orchestration, offline recovery and progression campaigns with XP/allocation/rewards; [scope and measured throughput](../Tools/BalanceSimulation/README.md) |
 | `Tests/CombatRegression` | .NET 9 combat checks using production files and Unity/game stubs |
 | `Tests/SaveRegression` | .NET 9 save regression checks using stubs and disposable saves |
 | `.github/workflows` | Manual Windows/WebGL build and itch.io deployment workflows |

@@ -91,6 +91,47 @@ player build, scene rebuild or gameplay playtest was run.
 
 ## Existing automated checks
 
+### Isolated balance runner (2026-10-04)
+
+The [isolated balance simulator](../../Tools/BalanceSimulation/README.md) lives outside
+Assets. `Run.ps1` uses `Runtime/FixedBattle.cs` for independent numeric builds;
+`RunCampaign.ps1` uses `Runtime/Campaign.cs` for actual XP, allocation, boss rewards,
+simple items and location progression. Production combat advances at 1/60 second
+with disposable preview-scene actors. It requires MainScene in Edit Mode, restores
+Random state and does not use the profile-save path.
+
+`Internal/UnityBridge.ps1` caches each adapter delegate by source hash in the Editor
+AppDomain. Later calls compile a small dispatcher; source changes/domain reloads
+invalidate the cache. `Runtime/EditorEffectOwnership.cs` owns transient effect
+modifiers for immediate Edit Mode cleanup. Large payloads are atomically written
+through `Runtime/EditorExports.cs`, avoiding large CLI response serialization.
+
+[Reports/BalanceSimulation](../../Reports/BalanceSimulation/README.md) is the only
+result home. Finished runs contain gzip JSON, a portable offline HTML stats/tree
+viewer and Markdown summaries. `report.json.work` contains unfinished metadata,
+graph and one export per completed campaign; full publication deletes it.
+`Recover.ps1` validates/assembles saved campaigns offline, with explicit partial
+opt-in. It cannot resume a partly played bot. `RebuildReport.ps1` regenerates viewers
+and migrates legacy raw JSON after round-trip equality validation.
+
+The default three-build preset prioritizes strength/physical, dexterity/physical
+and intelligence/lightning damage, with two-edge lookahead and earned-point
+spending. Policies are greedy and exclude shops, gems, infinite nodes and special
+node mechanics. Fixed battles exclude XP/rewards. See the runner's scope rather
+than interpreting these comparisons as optimal builds or complete balance coverage.
+
+Pipeline's five-second operation/response limit still applies. Chunk budgets stop
+at full stage boundaries; an unusually expensive single stage can still exceed it.
+The 2026-10-04 reorganization compiled both external adapters and ran three fixed
+fights plus three bounded two-location campaigns. Archive equality and JavaScript
+syntax were checked; no game/player build or new test suite was run. Viewer
+appearance/live interaction remain unverified due to blocked local-file browsing.
+The retained 30-bot report was used for a same-data compression comparison, then
+restored to uncompressed JSON/HTML at the owner's request; it was not replayed.
+The owner subsequently removed previous run folders. `Presets/balanced-push.json`
+defines five balanced policies (strength, dexterity, intelligence/fire/lightning/cold)
+with equal offensive/defensive category weights; these are policy comparisons.
+
 | Command from repository root | Scope |
 | --- | --- |
 | `dotnet run --project Tests/CombatRegression` | Selected production combat files with Unity/game stubs; arithmetic, callbacks and ownership cases |
@@ -142,3 +183,15 @@ deployment or assert runner credentials/tool availability.
 - `Assets/Editor/MenuConnectionRendererEditor.cs`
 - `Assets/Editor/CodexTwoClusters.cs`
 - `Assets/Editor/CI/BuildScript.cs`
+
+## Adaptive balance-tool follow-up, 2026-10-04
+
+The isolated campaign adapter now performs controlled post-defeat tree search with
+frozen level/XP/points and identical per-round wave seeds. It records proposals,
+score deltas, commits and normal-stage confirmation; it retains winning layouts and
+growth priorities. This is experimental respec support outside Assets, not a change
+to production allocation/refund/save behavior. Probe XP/gold/rewards/progress are
+suppressed, and trial wave/time totals are separate in reports. The bounded pilot
+compiled through Unity CLI: two substituted nodes improved the frozen stage-7
+result from failure to victory, then normal progression confirmed it. Full adaptive
+campaign execution is recorded in the report directory when completed.

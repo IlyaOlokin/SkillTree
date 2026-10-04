@@ -47,6 +47,11 @@ The documented path now connects character development to combat:
 
 For development workflows, use [editor tools, checks and builds](Reference/EditorAndBuildTools.md).
 
+Live balance observations: [2026-10-04 first-location playtest](Reference/BalancePlaytest20261004.md).
+Progression simulations: [adaptive five-build campaigns](../Reports/BalanceSimulation/20261004-135038-237-campaign/verification.md),
+[balanced baseline](../Reports/BalanceSimulation/20261004-124706-435-campaign/verification.md)
+and [historical references](Reference/BalanceCampaign20261004.md).
+
 These are related systems, so they live in `Systems`. Add future system pages
 there instead of creating a folder for each mechanic.
 
@@ -76,6 +81,9 @@ there instead of creating a folder for each mechanic.
 | Change Pain, Vengeance or temporary buffs | [Reactive effects](Systems/ReactiveCombatEffects.md) | [Modifier ownership](Systems/StatsAndModifiers.md) |
 | Use editor tools, tests or build workflows | [Editor and build tools](Reference/EditorAndBuildTools.md) | Relevant content guide and system page |
 | Work on another area | [Project map](ProjectMap.md) | Relevant source files and existing reference |
+
+[Balance report directory and viewer](../Reports/BalanceSimulation/README.md) contains dated
+compressed simulation outputs, offline bot stats/tree inspection and saved-run recovery.
 
 ## Documentation conventions
 

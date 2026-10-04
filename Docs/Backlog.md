@@ -69,6 +69,27 @@ Evidence types:
 
 ## Tooling and remaining verification
 
+BL-032 evidence update, 2026-10-04: a [live first-location balance playtest](Reference/BalancePlaytest20261004.md)
+completed nine one-point starting-node comparisons and one Fire/barrier route
+through the first boss. Background-focus stalls limited early wall-time data.
+This adds bounded gameplay evidence; later locations, other boss builds, gems
+and the broader integration/target-platform coverage remain unverified. BL-032
+remains open.
+
+Additional 2026-10-04 evidence: [120 isolated progression campaigns](Reference/BalanceCampaign20261004.md)
+executed 5,010 waves with real XP, numeric-node allocation and simple boss reward
+use. Seven locations were reached; stage 40 was attempted. This narrows the numeric
+policy simulation gap, but does not verify later-location Play Mode/UI integration,
+gems, special builds or target-platform behavior. BL-032 remains open.
+
+Reporting/progression follow-up, 2026-10-04: 30 historical damage-build campaigns (raw artifacts subsequently deleted by the owner)
+recorded 3,299 waves across four reached locations. Reports now include numeric
+stat snapshots, active/allocated trees, Power and chronology. The five-second
+export failure was addressed with direct on-disk per-campaign exports; the final
+dataset was recovered from 29 saved records plus one rerun. Full-run speed metrics
+and visual HTML interaction checks are unavailable for this run. This does not
+close BL-032 or establish optimal-build balance.
+
 | ID | Priority / evidence | Finding and possible impact | Next step and closure criterion | Reference |
 | --- | --- | --- | --- | --- |
 | BL-028 | P2 / Verification gap | Required `Tools/Locations/check_locations.py` was absent during the documentation survey. The documented content checks cannot currently be relied on. | Locate or restore the intended checker, confirm its rules against the owner guide, then run it for location-content work. Do not invent a substitute and label historical checks passed. | [Location validation](Locations/LocationCreationGuide.md), [tooling](Reference/EditorAndBuildTools.md#content-tools) |
@@ -250,3 +271,29 @@ Level7's missing visual GUID references are explicitly intentional in the owner
 guide. Freeze runtime support does not authorize new Freeze content, and historical
 balance notes do not authorize rebalancing. Documentation corrections already made
 (such as moved source paths) are not open gameplay defects.
+
+
+Simulator maintenance, 2026-10-04: the external adapters/report pipeline were
+reorganized and exercised with three fixed fights plus three bounded two-location
+campaigns. Cached dispatch, direct atomic exports and full-publication work cleanup
+were exercised. The retained 30-bot dataset was used for a same-data compression comparison
+with JSON equality validation, preserving snapshots and graph data. Its original
+uncompressed storage was restored at the owner's request. This adds narrow tooling evidence;
+heavy-stage Pipeline timeouts, partial-bot resumption and visual viewer interaction
+remain outside verified coverage. BL-032 remains open.
+
+Balanced-campaign evidence, 2026-10-04: [50 five-policy runs](../Reports/BalanceSimulation/20261004-124706-435-campaign/verification.md)
+recorded 8,071 waves, 6,268 snapshots and 12 reached locations. Archive/viewer payload
+and final snapshot consistency were checked; temporary actors/modifiers were absent
+after execution. Cold seeds 106/110 had no remaining supported numeric frontier
+within the selected starter route and retained 3/7 points. This narrows numeric
+policy coverage but does not close BL-032 or validate full cold/special/gem gameplay.
+
+Adaptive policy evidence, 2026-10-04: [25 five-policy campaigns](../Reports/BalanceSimulation/20261004-135038-237-campaign/verification.md)
+ran 3,535 normal and 2,683 probe waves. Frozen trial budgets/XP/seeds and progression
+log isolation were checked; 156 changed layouts were committed, with 41 normal-stage
+wins following changed-layout commits. On seeds 101–105, mean strength progression
+improved 17→25 but dexterity regressed 51→42; elemental means stayed 14. The current
+stage-only objective and persistent growth priorities can harm later progression;
+this is a measured tool/policy limitation, not an established gameplay defect.
+BL-032 remains open. No gameplay source, assets or profile-save contract changed.

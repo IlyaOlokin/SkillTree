@@ -92,6 +92,12 @@ root-connected allocation and must keep its existing exceptions.
 
 ## Player interaction
 
+A [fresh-profile playtest on 2026-10-04](../Reference/BalancePlaytest20261004.md)
+compared three one-point starting choices and followed the Fire/barrier route
+through the first boss. Before selecting a starting node, that session had zero
+calculated attack damage. These observations cover initial progression only;
+they do not approve the full tree's balance or test gems and later scaling.
+
 `NodeInputHandler` first rejects pointer input over UI and input on undiscovered
 nodes. Selection affects what a click means:
 
@@ -329,3 +335,12 @@ the three staff entries and configure the corresponding node lists in the
 Inspector. Unarmed or an unassigned sprite uses the root's original icon. All
 three staff types share the existing staff attack sprite, sound and hit effect.
 This change extends selection/presentation; it does not alter damage stats.
+
+## Isolated adaptive-build search
+
+The external [balance simulator](../../Tools/BalanceSimulation/README.md#adaptive-allocation-after-defeat)
+can rebuild disposable numeric trees after a defeat. It refunds the point budget
+in simulation bookkeeping and buys candidates through production allocation/zone
+predicates. This does not exercise the runtime refund queue, change scene nodes or
+alter profile persistence. Trial/normal trees are distinguished by allocation
+revision and exact node order; free points can remain when supported routes end.
