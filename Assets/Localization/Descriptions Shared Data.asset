@@ -623,6 +623,22 @@ MonoBehaviour:
     m_Key: effect.damageDebt.description
     m_Metadata:
       m_Items: []
+  - m_Id: 46853000000000002
+    m_Key: effect.fortification.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46853000000000003
+    m_Key: effect.fortification.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46855000000000002
+    m_Key: effect.criticalCharge.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46855000000000003
+    m_Key: effect.criticalCharge.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

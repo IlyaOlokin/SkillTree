@@ -2439,6 +2439,34 @@ MonoBehaviour:
     m_Key: modifier.deferredAttackDamage.description
     m_Metadata:
       m_Items: []
+  - m_Id: 46851000000000001
+    m_Key: modifier.enemyKillRestoresBarrier.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46852000000000001
+    m_Key: modifier.bleedHealsInsteadOfDamage.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46853000000000001
+    m_Key: modifier.barrierRestorationGrantsFortification.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46854000000000001
+    m_Key: modifier.lowestElementalDamagePenetratesResistance.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46855000000000001
+    m_Key: modifier.nonCriticalHitsGrantCriticalCharge.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46856000000000001
+    m_Key: modifier.modifierContainerPerAnyWisp.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46856000000000002
+    m_Key: modifier.modifierContainerPerAnyWisp.unconfigured
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

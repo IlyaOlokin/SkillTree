@@ -20,13 +20,21 @@ public static class Resistance
             StatType.ElementalResistancePenetration,
             bypassesElementalResistance);
 
+        // Compare final attack damage before resistance mitigation. Ties retain
+        // the first maximum in Fire, Cold, Lightning order, leaving exactly two selected.
+        bool penetratesLowest = damageInfo.AttackEffectPayload?.HasLowestElementalDamagePenetration() == true;
+        DamageType highestElement = DamageType.Fire;
+        var damage = damageInfo.DamageInstance.Damage;
+        if (damage[DamageType.Cold] > damage[highestElement]) highestElement = DamageType.Cold;
+        if (damage[DamageType.Lightning] > damage[highestElement]) highestElement = DamageType.Lightning;
+
         var fireResistance = GetEffectiveResistance(
             defender,
             attackerModifiers,
             StatType.FireResistance,
             StatType.MaxFireResistance,
             StatType.FireResistancePenetration,
-            bypassesElementalResistance);
+            bypassesElementalResistance || (penetratesLowest && highestElement != DamageType.Fire));
 
         var coldResistance = GetEffectiveResistance(
             defender,
@@ -34,7 +42,7 @@ public static class Resistance
             StatType.ColdResistance,
             StatType.MaxColdResistance,
             StatType.ColdResistancePenetration,
-            bypassesElementalResistance);
+            bypassesElementalResistance || (penetratesLowest && highestElement != DamageType.Cold));
 
         var lightningResistance = GetEffectiveResistance(
             defender,
@@ -42,7 +50,7 @@ public static class Resistance
             StatType.LightningResistance,
             StatType.MaxLightningResistance,
             StatType.LightningResistancePenetration,
-            bypassesElementalResistance);
+            bypassesElementalResistance || (penetratesLowest && highestElement != DamageType.Lightning));
 
         damageInfo.DamageInstance.Damage[DamageType.Fire] *= (1 - elementalResistance) * (1 - fireResistance);
         damageInfo.DamageInstance.Damage[DamageType.Cold] *= (1 - elementalResistance) * (1 - coldResistance);
@@ -77,3 +85,5 @@ public static class Resistance
         return chance > 0f && Random.Range(0f, 1f) < Mathf.Clamp01(chance);
     }
 }
+
+

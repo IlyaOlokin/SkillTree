@@ -110,3 +110,8 @@ unmapped effects use its default icon. English name/description fallbacks are
 provided. See the [combat contract](CombatAndEffects.md#deferred-attack-hp-damage-2026-10-03)
 and [manual setup](StatsAndModifiers.md#deferred-attack-damage-2026-10-03).
 No UI layout or serialized visual configuration was changed or visually verified.
+
+Critical Charge (2026-10-04) adds the registered term `criticalCharge` and a static
+Descriptions tooltip. Status text shows 1–3 charges and the border tracks its shared
+four-second timer; assign the new visual type in EffectIconsConfig manually. See
+[the effect contract](ReactiveCombatEffects.md#critical-charge-2026-10-04).

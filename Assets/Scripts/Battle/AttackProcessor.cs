@@ -53,6 +53,7 @@ namespace Battle
 
                 StatCalculator.RecalculateAttackStat(damageInfo.BaseUnitModifiers, StatType.CritChance);
                 DamageCalculator.RollCriticalHit(damageInfo);
+                CriticalCharge.ApplyCriticalCharge(context);
                 RunModifiers(attackerUnit.GetAllModifiers(), ModifierPriority.AfterCriticalHit, attackerUnit, context);
 
                 DamageCalculator.CalculateAttackDamage(damageInfo);
@@ -180,3 +181,4 @@ namespace Battle
         }
     }
 }
+

@@ -12,6 +12,7 @@ namespace Battle
         private bool _includeLightningDamageInIgnite;
         private float _distractAttackProgressReduction;
         private float _elementalResistanceBypassChance;
+        private bool _lowestElementalDamagePenetration;
         private readonly Dictionary<Type, List<ModifierContainer>> _effectModifiers =
             new Dictionary<Type, List<ModifierContainer>>();
 
@@ -23,6 +24,7 @@ namespace Battle
             _includeLightningDamageInIgnite = false;
             _distractAttackProgressReduction = 0f;
             _elementalResistanceBypassChance = 0f;
+            _lowestElementalDamagePenetration = false;
             _effectModifiers.Clear();
         }
 
@@ -75,6 +77,10 @@ namespace Battle
         {
             return _distractAttackProgressReduction;
         }
+
+        public void EnableLowestElementalDamagePenetration() => _lowestElementalDamagePenetration = true;
+
+        public bool HasLowestElementalDamagePenetration() => _lowestElementalDamagePenetration;
 
         public void AddElementalResistanceBypassChance(float chance)
         {
@@ -159,3 +165,4 @@ namespace Battle
         }
     }
 }
+

@@ -666,6 +666,24 @@ MonoBehaviour:
     m_Localized: 'Deferred attack damage is paid evenly as Health loss. Each debt has its own deadline; new hits do not extend it. Payments bypass defences and cannot create new debt. The icon shows total remaining damage.'
     m_Metadata:
       m_Items: []
+  - m_Id: 46853000000000002
+    m_Localized: 'Fortification'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46853000000000003
+    m_Localized: 'Each stack grants 5% added Physical Damage Mitigation for 6 seconds. Maximum 10 stacks, each expiring independently. At maximum stacks, new restoration does not refresh them. The icon shows stack count; its border tracks the next expiry.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46855000000000002
+    m_Localized: 'Critical Charge'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46855000000000003
+    m_Localized: 'Critical hits consume all charges, gaining +15% Critical Damage Bonus per charge. Lasts 4 seconds. Maximum 3 charges. Gaining a charge refreshes the duration.'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
+
+

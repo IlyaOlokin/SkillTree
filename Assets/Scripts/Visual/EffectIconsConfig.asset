@@ -39,9 +39,9 @@ MonoBehaviour:
   - effectType: 12
     icon: {fileID: 21300000, guid: 3c034d7f857bc1040bebfcc3a186cfa4, type: 3}
   - effectType: 13
-    icon: {fileID: 21300000, guid: b2a3a45fda3b8774aa4c547c4297bd28, type: 3}
+    icon: {fileID: 21300000, guid: 134166f6d805d764ab41658f6bb87b1c, type: 3}
   - effectType: 14
-    icon: {fileID: 21300000, guid: 58be3832980e0b34db72a081633cded0, type: 3}
+    icon: {fileID: 21300000, guid: e7517f27e810ec24cb016291bc771182, type: 3}
   - effectType: 15
     icon: {fileID: 21300000, guid: 05147ef71b331c34ebd4b2fb9a011d20, type: 3}
   - effectType: 16
@@ -57,7 +57,7 @@ MonoBehaviour:
   - effectType: 21
     icon: {fileID: 21300000, guid: 91bf174d5ed4a5a4ab40b4d8541bef7d, type: 3}
   - effectType: 22
-    icon: {fileID: 21300000, guid: 326f171a756b2dc4789432658fc986c9, type: 3}
+    icon: {fileID: 21300000, guid: 593abf75f85ff834cbaf3d926a80866e, type: 3}
   - effectType: 23
     icon: {fileID: 21300000, guid: f4af24a6d8db4974da5beb43021bbb17, type: 3}
   - effectType: 24
@@ -66,3 +66,7 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 4de80490241683c4eb4d4233f20aff77, type: 3}
   - effectType: 26
     icon: {fileID: 21300000, guid: c574dc356fe2f6d4c8e75721f1a3e067, type: 3}
+  - effectType: 27
+    icon: {fileID: 21300000, guid: 81545d6cb37ae63429d9ebb731ecddf6, type: 3}
+  - effectType: 28
+    icon: {fileID: 21300000, guid: 92ae2b4fbadd82448ae82d7eaf818081, type: 3}

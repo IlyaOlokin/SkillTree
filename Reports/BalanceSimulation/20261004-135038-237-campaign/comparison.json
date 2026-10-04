@@ -1,0 +1,174 @@
+{
+  "comparisons": [
+    {
+      "strategy": "dexterity-balanced",
+      "baselineMean": 51,
+      "adaptiveMean": 42,
+      "baselineBest": 79,
+      "adaptiveBest": 44,
+      "paired": [
+        {
+          "seed": 101,
+          "before": 44,
+          "after": 44
+        },
+        {
+          "seed": 102,
+          "before": 44,
+          "after": 39
+        },
+        {
+          "seed": 103,
+          "before": 44,
+          "after": 44
+        },
+        {
+          "seed": 104,
+          "before": 79,
+          "after": 44
+        },
+        {
+          "seed": 105,
+          "before": 44,
+          "after": 39
+        }
+      ]
+    },
+    {
+      "strategy": "intelligence-cold-balanced",
+      "baselineMean": 14,
+      "adaptiveMean": 14,
+      "baselineBest": 14,
+      "adaptiveBest": 14,
+      "paired": [
+        {
+          "seed": 101,
+          "before": 14,
+          "after": 14
+        },
+        {
+          "seed": 102,
+          "before": 14,
+          "after": 14
+        },
+        {
+          "seed": 103,
+          "before": 14,
+          "after": 14
+        },
+        {
+          "seed": 104,
+          "before": 14,
+          "after": 14
+        },
+        {
+          "seed": 105,
+          "before": 14,
+          "after": 14
+        }
+      ]
+    },
+    {
+      "strategy": "intelligence-fire-balanced",
+      "baselineMean": 14,
+      "adaptiveMean": 14,
+      "baselineBest": 14,
+      "adaptiveBest": 14,
+      "paired": [
+        {
+          "seed": 101,
+          "before": 14,
+          "after": 14
+        },
+        {
+          "seed": 102,
+          "before": 14,
+          "after": 14
+        },
+        {
+          "seed": 103,
+          "before": 14,
+          "after": 14
+        },
+        {
+          "seed": 104,
+          "before": 14,
+          "after": 14
+        },
+        {
+          "seed": 105,
+          "before": 14,
+          "after": 14
+        }
+      ]
+    },
+    {
+      "strategy": "intelligence-lightning-balanced",
+      "baselineMean": 14,
+      "adaptiveMean": 14,
+      "baselineBest": 14,
+      "adaptiveBest": 14,
+      "paired": [
+        {
+          "seed": 101,
+          "before": 14,
+          "after": 14
+        },
+        {
+          "seed": 102,
+          "before": 14,
+          "after": 14
+        },
+        {
+          "seed": 103,
+          "before": 14,
+          "after": 14
+        },
+        {
+          "seed": 104,
+          "before": 14,
+          "after": 14
+        },
+        {
+          "seed": 105,
+          "before": 14,
+          "after": 14
+        }
+      ]
+    },
+    {
+      "strategy": "strength-balanced",
+      "baselineMean": 17,
+      "adaptiveMean": 25,
+      "baselineBest": 29,
+      "adaptiveBest": 29,
+      "paired": [
+        {
+          "seed": 101,
+          "before": 9,
+          "after": 29
+        },
+        {
+          "seed": 102,
+          "before": 29,
+          "after": 19
+        },
+        {
+          "seed": 103,
+          "before": 9,
+          "after": 29
+        },
+        {
+          "seed": 104,
+          "before": 9,
+          "after": 29
+        },
+        {
+          "seed": 105,
+          "before": 29,
+          "after": 19
+        }
+      ]
+    }
+  ]
+}

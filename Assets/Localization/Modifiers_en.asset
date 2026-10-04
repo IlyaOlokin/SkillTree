@@ -2475,6 +2475,34 @@ MonoBehaviour:
     m_Localized: '[[0]]% of attack damage that would remove Health after defences becomes a debt, paid evenly over [[1]] seconds. Each hit has its own deadline. Damage over Time and mystic absorption are not deferred. Debt payments bypass defences and cannot create new debt.'
     m_Metadata:
       m_Items: []
+  - m_Id: 46851000000000001
+    m_Localized: 'Killing an enemy restores 1 {barrier|Barrier}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46852000000000001
+    m_Localized: 'Bleed on you restores Health instead of dealing Damage.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46853000000000001
+    m_Localized: 'Each restored {barrier|Barrier} grants 1 stack of {fortification|Fortification}.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46854000000000001
+    m_Localized: 'The two lowest-damage elements in each attack fully penetrate their Resistances.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46855000000000001
+    m_Localized: 'Non-critical hits grant a charge of {criticalCharge|Critical Charge}.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46856000000000001
+    m_Localized: 'Adds ''[[0]]'' for each Wisp you have, counting all Wisp types'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46856000000000002
+    m_Localized: 'Requires a Base Modifier with a non-Wisp stat'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

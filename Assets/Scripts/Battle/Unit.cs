@@ -60,6 +60,12 @@ namespace Battle
         public event Action<AttackContext> OnParryResolved;
         public event Action<AttackContext> OnAttackParried;
         public event Action<Unit> OnDeath;
+        public event Action<Unit> OnEnemyKilled;
+
+        internal void NotifyEnemyKilled(Unit enemy)
+        {
+            OnEnemyKilled?.Invoke(enemy);
+        }
 
         public MysticHealth MysticHealth => mysticHealth;
         public WeaponType WeaponType => weaponType;

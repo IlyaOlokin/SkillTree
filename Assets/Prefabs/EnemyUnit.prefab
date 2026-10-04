@@ -1519,7 +1519,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 459397728628502778, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
       propertyPath: Seed
-      value: 27092
+      value: 12852
       objectReference: {fileID: 0}
     - target: {fileID: 459397728628502778, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
       propertyPath: Style
@@ -1552,6 +1552,10 @@ PrefabInstance:
     - target: {fileID: 459397728628502778, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
       propertyPath: Thickness
       value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 459397728628502778, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
+      propertyPath: FillAmount
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 459397728628502778, guid: f54fb8033cf685f47bdfdd06daf6828b, type: 3}
       propertyPath: Jaggedness

@@ -1,5 +1,32 @@
 # Stats and Modifiers
 
+## Enemy kills restore Barrier (2026-10-04)
+
+`EnemyKillRestoresBarrier` follows `BlockRestoresBarrier` and binds to the owner's
+`Unit.OnEnemyKilled` with symmetric delegate subscription cleanup. Each copy
+restores exactly one charge through `Barrier.Restore(1)`, bounded by the maximum,
+without power scaling or resetting regeneration progress. Normal restoration
+reactions can grant additional charges. No charge is gained at zero capacity.
+
+`EnemyUnit.Death` notifies its injected player target after the normal death
+notification/deactivation and before experience delivery. This credits enemy deaths
+to the player, including DoT, rather than tracking the final damage source. Health's
+existing death guard prevents repeated notifications until combat state reset.
+Inactive owners do not restore charges. Removing/recalculating the modifier
+unsubscribes its runtime binding. No persistent effect or new status icon is used.
+
+Asset: `Assets/Scripts/SkillTree/Modifiers/ReactMods/EnemyKillRestoresBarrier.asset`.
+Modifiers table key: `modifier.enemyKillRestoresBarrier.description`.
+English: `Killing an enemy restores 1 {barrier|Barrier}`.
+Russian/German translations remain translator TODOs; no entries were overwritten
+or added to those locale tables. Node assignment, icon mapping and optional glossary
+configuration remain manual Editor steps. Source inspected; gameplay not playtested.
+Verification: Visual Studio Roslyn `csc.exe @Temp/EnemyKillModifierCompile.rsp`
+compiled gameplay sources against installed Unity/project DLL references with zero
+errors. Existing field-assignment warnings were emitted; no warning pointed to the
+new modifier. Script GUID/asset reference and shared/English localization ID pairing
+were checked. No tests, player build or runtime playtest were performed.
+
 [Home](../Home.md) · [Project map](../ProjectMap.md) · [Combat and effects](CombatAndEffects.md)
 
 Status: **source-reviewed, 2026-09-27**. This page covers calculation and ownership
@@ -303,3 +330,178 @@ letters, numbers, logos, borders, or watermarks.
 
 No image was generated or imported. Compilation is recorded on the linked combat
 page; runtime and visual verification are pending.
+
+## Bleed heals instead of damage (2026-10-04)
+
+`BleedHealsInsteadOfDamage` is a passive marker modifier in
+`Assets/Scripts/SkillTree/Modifiers/SpecialMods`. It follows the collected-source
+lookup used by `AilmentAbsorption`; there is no runtime binding, separate effect,
+new event or enum. A collected applicable copy enables conversion for its owner.
+Multiple copies and node power do not multiply the conversion.
+
+When a Bleed is created on an owner with this modifier, `CalculateTotalDamage`
+uses zero Bleed Mitigation, including payload-redirection recipients. The initial
+pool remains a snapshot: acquiring or removing the modifier does not recalculate
+existing pools. Each tick and burst checks the recipient's currently collected
+modifiers and consumes the normal remaining pool, calling `Health.TakeHeal`
+instead of `ReceiveDoT` while conversion is enabled. Existing healing-received
+scaling and maximum Health apply; excess healing is consumed, not saved. Removing
+the modifier makes subsequent payments deal damage from the same remaining pool.
+Merge retains its existing sum, multiplier and refreshed duration. Ailment
+absorption still prevents application before this conversion can operate.
+
+Bleed keeps its current status icon and remaining-pool number; no extra status
+icon or effect display-name key is introduced. The plain modifier description has
+an English fallback and requires no new glossary record.
+
+Localization added to **Modifiers** and its shared key table:
+`modifier.bleedHealsInsteadOfDamage.description` =
+`Bleed on you restores Health instead of dealing Damage.`
+The description intentionally omits mitigation details. ru/de translations are
+TODOs; no translated or empty entries were added.
+
+### Manual Unity Editor Steps
+
+Use the supplied
+`Assets/Scripts/SkillTree/Modifiers/SpecialMods/BleedHealsInsteadOfDamage.asset`.
+Its script GUID is configured and it has no numeric settings. Assign it to the
+intended ordinary node's modifier list and configure the node icon through the
+existing visual setup. Infinite nodes do not support this special mechanic.
+No nodes, icons, tooltip databases, scenes or prefabs were edited for this change.
+No new tooltip record is required by the plain description. Translate the exact
+key above into ru/de through the normal translation workflow.
+
+### Icon Generation Prompt
+
+Proposed style; no visual icon reference was inspected:
+
+Create a square dark-fantasy RPG skill icon showing three crimson blood droplets
+flowing into a wounded heart and sealing its crack with soft emerald light. A
+single bold heart silhouette at the center, droplets clearly entering from above,
+a subtle warm glow where the wound closes. Deep burgundy, charcoal and restrained
+emerald palette, dramatic rim lighting, dark smoky background, painterly detail
+with strong contrast and simple shapes readable at small skill-tree icon sizes.
+No text, letters, numbers, logos, borders or watermarks.
+
+No image was generated or imported.
+
+Verification: Visual Studio Roslyn
+`csc.exe @Temp/BleedHealingModifierCompile.rsp` compiled gameplay sources against
+the installed Unity/project references with exit code 0. Existing field-assignment
+warnings remain. Script GUID/asset reference and shared/English key ID were
+inspected. No tests, player build, gameplay or visual playtest were run.
+
+## Fortification from restored Barrier (2026-10-04)
+
+BarrierRestorationGrantsFortification follows the barrier restoration delegate
+binding and BarrierSurge independent timed-effect patterns. Each actual restored
+charge, including bonus restoration, adds one FortificationEffect for six seconds.
+RestoreFull/combat reset is not a restoration trigger. At ten active stacks on the
+owner, new restoration is ignored without refreshing or replacing a stack.
+Multiple modifier copies share the cap and add in subscription order. The first
+accepted copies fill the available slots. No repeat factory is supplied, so generic
+received-effect repetition cannot exceed the cap.
+
+Each stack owns an Added PhysicalDamageMitigation BaseModifier. FortificationEffect hardcodes its value to 0.05; node power does not scale it. Duration and cap stay fixed. Expiry removes its
+external modifier and the controller releases the runtime ScriptableObject.
+Unbinding stops future grants but leaves granted stacks until expiry; combat reset
+clears them. Ordinary modifier recalculation scheduling remains unchanged.
+Without power or other mitigation modifiers, ten stacks contribute 0.50 mitigation.
+Per-type mitigation retains its existing clamp; this is not a new uncapped layer.
+
+EffectVisualType.Fortification = 27 groups stacks into one icon. Text always shows
+stack count, including one; inherited timer progress tracks the closest expiry.
+Icon mapping uses the existing default sprite until manual setup.
+
+Definition:
+Assets/Scripts/SkillTree/Modifiers/ReactMods/BarrierRestorationGrantsFortification.asset
+The producer has no numeric settings. Node assignment and icon mapping remain manual Unity Editor steps. The requested fortification glossary entry is configured in TooltipTerms.asset, with Descriptions/Fortification.asset referencing the localized effect name and description.
+
+English localization and shared IDs added:
+- Modifiers, modifier.barrierRestorationGrantsFortification.description:
+  Each restored {barrier|Barrier} grants 1 stack of {fortification|Fortification}.
+- Descriptions, effect.fortification.name: Fortification
+- Descriptions, effect.fortification.description:
+  Each stack grants 5% added Physical Damage Mitigation for 6 seconds. Maximum 10 stacks, each expiring independently. At maximum stacks, new restoration does not refresh them. The icon shows stack count; its border tracks the next expiry.
+
+All three keys remain translator TODOs for ru/de; no translations or empty entries
+were added. Explicit English fallbacks work without tooltip database configuration.
+
+Icon generation prompt (proposed style; no icon reference inspected):
+Create a square dark-fantasy RPG skill icon showing a luminous blue barrier shard
+fusing into a solid steel shield, with layered armor plates forming around its
+center. One bold shield silhouette, cold azure energy and silver steel, restrained
+warm highlights, dramatic rim lighting, dark smoky background, painterly detail
+and strong contrast readable at small skill-tree and status-icon sizes. No text,
+letters, numbers, logos, borders, or watermarks.
+
+Verification: Visual Studio Roslyn csc.exe @Temp/FortificationCompile.rsp compiled
+gameplay sources against installed Unity/project DLL references with exit code 0, zero errors and existing field-assignment warnings. Script GUID/asset linkage and English/shared localization IDs were inspected. No tests, player
+build, gameplay or visual playtest were run. Runtime behavior and sprite setup
+remain to be checked in Unity.
+
+## Lowest elemental damage penetration (2026-10-04)
+
+`LowestElementalDamagePenetratesResistance` follows the attack-local payload pattern
+of `DexterityElementalResistanceBypass`. OnAttack enables a boolean in the attack
+payload; Resistance selects the two lowest amounts among Fire, Cold and Lightning
+immediately before resistance mitigation, after attack damage calculation and
+IncomingPreMitigation modifiers. Armor only changes Physical damage.
+The selected elements fully bypass their own positive capped resistances, preserving
+negative resistance bonuses. Shared Elemental Resistance and its ordinary penetration
+remain unchanged. Exactly two elements are selected, including zero-damage elements.
+Ties leave the first highest element in Fire, Cold, Lightning order unselected.
+Multiple copies are idempotent; node power does not scale this binary rule.
+The payload resets between attacks. No runtime binding, persistent effect, status
+icon, new event or enum value is required. Direct DoT does not use this attack rule.
+
+Asset: `Assets/Scripts/SkillTree/Modifiers/SpecialMods/LowestElementalDamagePenetratesResistance.asset`.
+Modifiers key: `modifier.lowestElementalDamagePenetratesResistance.description`.
+English: `The two lowest-damage elements in each attack fully penetrate their Resistances.`
+Shared/English entries added; Russian/German translations remain translator TODOs.
+Node assignment and node icon mapping remain manual Unity Editor steps; the modifier
+has no numeric settings. The description has an explicit English fallback.
+
+Icon Generation Prompt (proposed style; no icon reference inspected):
+Create a square dark-fantasy RPG skill icon: two slender luminous spears, one icy
+cyan and one electric violet, piercing matching translucent shields, beneath a
+large amber flame. Centered compact composition, clear silhouettes, painterly
+metal and crystal textures, dramatic rim lighting, dark charcoal background,
+strong contrast readable at small sizes. No text, letters, numbers, logos or watermarks.
+
+Verification: Visual Studio Roslyn `csc.exe @Temp/LowestElementalCompile.rsp`
+compiled gameplay sources against installed Unity/project DLL references with exit
+code 0. Existing field-assignment warnings remain; none reference the new modifier.
+Script GUID matches the asset reference; shared and English localization IDs match.
+No tests, player build or runtime playtest were performed.
+
+## Modifier container per any Wisp (2026-10-04)
+
+`ModifierContainerPerAnyWisp` follows `ModifierContainerPerWisp` in `PreAttribute2`,
+reading current buckets through `StatCalculator.GetStat` rather than cached values.
+It sums the individually normalized Steel, Ash, Frost and Storm Wisp counts and
+adds the referenced `BaseModifier.modifierContainer`, scaled by source power and
+that total. More is a single scaled contribution, not one factor per Wisp.
+The referenced asset supplies the container only; its priorities are not executed.
+Missing references, empty stats and Wisp reward stats disable the modifier and
+show an explicit English configuration message. No runtime binding, persistent
+effect, status icon, event or enum change is needed. Ordinary stat rebuilds update
+this bonus. Copies contribute independently; the referenced asset is not mutated.
+
+Script and initially unconfigured asset:
+`Assets/Scripts/SkillTree/Modifiers/SpecialMods/ModifierContainerPerAnyWisp.cs` and
+`ModifierContainerPerAnyWisp.asset` in the same directory. Select a Base Modifier,
+assign to nodes, and configure node icons/optional tooltips manually in Unity.
+
+Added shared and English entries in the `Modifiers` table:
+- `modifier.modifierContainerPerAnyWisp.description`: `Adds '[[0]]' for each Wisp you have, counting all Wisp types`
+- `modifier.modifierContainerPerAnyWisp.unconfigured`: `Requires a Base Modifier with a non-Wisp stat`
+
+Russian/German translations are translator TODOs; their tables were not changed.
+No separate effect name is required. Icon style is proposed, without inspected art
+references: four differently colored Wisps converging into one luminous core.
+Source inspected; no tests, player build or gameplay playtest performed.
+
+Verification: Visual Studio Roslyn `csc.exe @Temp/AnyWispCompile.rsp` completed
+with exit code 0 against installed Unity/project references. Existing field-assignment
+warnings remain; no compiler error. Unity runtime behavior remains unverified.
