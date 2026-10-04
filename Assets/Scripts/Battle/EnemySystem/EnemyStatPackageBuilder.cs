@@ -80,25 +80,25 @@ namespace Battle
             definition.AddHealthEntries(entries);
             float healthCategoryRatio = definition.CoreProfile.healthWeight / totalCategoryWeight;
             float healthBudget = power * healthCategoryRatio;
-            ApplyConfiguredStats(package, healthBudget, healthCategoryRatio, entries, statBudgetConfig);
+            ApplyConfiguredStats(package, healthBudget, healthCategoryRatio, entries, statBudgetConfig, power);
 
             entries.Clear();
             definition.AddOffenceEntries(entries);
             float offenceCategoryRatio = definition.CoreProfile.offenceWeight / totalCategoryWeight;
             float offenceBudget = power * offenceCategoryRatio;
-            ApplyConfiguredStats(package, offenceBudget, offenceCategoryRatio, entries, statBudgetConfig);
+            ApplyConfiguredStats(package, offenceBudget, offenceCategoryRatio, entries, statBudgetConfig, power);
 
             entries.Clear();
             definition.AddDefenceEntries(entries);
             float defenceCategoryRatio = definition.CoreProfile.defenceWeight / totalCategoryWeight;
             float defenceBudget = power * defenceCategoryRatio;
-            ApplyConfiguredStats(package, defenceBudget, defenceCategoryRatio, entries, statBudgetConfig);
+            ApplyConfiguredStats(package, defenceBudget, defenceCategoryRatio, entries, statBudgetConfig, power);
 
             entries.Clear();
             definition.AddUtilityEntries(entries);
             float utilityCategoryRatio = definition.CoreProfile.utilityWeight / totalCategoryWeight;
             float utilityBudget = power * utilityCategoryRatio;
-            ApplyConfiguredStats(package, utilityBudget, utilityCategoryRatio, entries, statBudgetConfig);
+            ApplyConfiguredStats(package, utilityBudget, utilityCategoryRatio, entries, statBudgetConfig, power);
         }
         
         private void ApplyConfiguredStats(
@@ -106,7 +106,8 @@ namespace Battle
             float categoryBudget,
             float categoryAllocationRatio,
             List<EnemyStatWeightEntry> entries,
-            EnemyStatBudgetConfig statBudgetConfig)
+            EnemyStatBudgetConfig statBudgetConfig,
+            float power)
         {
             if (categoryBudget <= 0f || entries == null || entries.Count == 0)
                 return;
@@ -126,7 +127,7 @@ namespace Battle
                 float normalizedStatWeight = entry.Weight / totalStatWeight;
                 float statBudget = categoryBudget * normalizedStatWeight;
                 float allocationRatio = categoryAllocationRatio * normalizedStatWeight;
-                ApplyConfiguredStat(package, entry.StatType, statBudget, allocationRatio, statBudgetConfig);
+                ApplyConfiguredStat(package, entry.StatType, statBudget, allocationRatio, statBudgetConfig, power);
             }
         }
 
@@ -135,7 +136,8 @@ namespace Battle
             StatType statType,
             float budget,
             float allocationRatio,
-            EnemyStatBudgetConfig statBudgetConfig)
+            EnemyStatBudgetConfig statBudgetConfig,
+            float power)
         {
             if (budget <= 0f)
                 return;
@@ -165,6 +167,14 @@ namespace Battle
             }
 
             float value = rule.Evaluate(budget, allocationRatio);
+            if (statType == StatType.MaximumHealth || statType == StatType.BarrierCapacity)
+            {
+                float survivabilityMultiplier = statBudgetConfig != null
+                    ? statBudgetConfig.GetSurvivabilityMultiplier(power)
+                    : EnemyStatBudgetConfig.CalculateSurvivabilityMultiplier(power);
+                value *= survivabilityMultiplier;
+            }
+
             if (value <= 0f)
                 return;
 
@@ -466,7 +476,7 @@ namespace Battle
                 float normalizedStatWeight = entry.Weight / normalizationWeight;
                 float statBudget = categoryBudget * normalizedStatWeight;
                 float allocationRatio = categoryRatio * normalizedStatWeight;
-                ApplyConfiguredStat(package, entry.StatType, statBudget, allocationRatio, statBudgetConfig);
+                ApplyConfiguredStat(package, entry.StatType, statBudget, allocationRatio, statBudgetConfig, power);
             }
         }
 

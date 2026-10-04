@@ -66,6 +66,30 @@ back to the corresponding three-enemy position for existing scene compatibility.
 Enemies are not rearranged after deaths. This change was source-reviewed on
 2026-09-30; no Unity playtest was run.
 
+## Enemy survivability growth (2026-10-04)
+
+`EnemyStatBudgetConfig` exposes `survivabilityStartPower` (12 by default) and
+`survivabilityGrowth` (0.1 by default). EnemyStatPackageBuilder multiplies evaluated
+budget contributions to MaximumHealth and BarrierCapacity by
+`max(1, finalPower / survivabilityStartPower) ^ survivabilityGrowth`. This applies
+to both core/module budgets and affix-added stat weights. It preserves the existing
+budget allocation and stat conversion rules; other stats are not directly scaled.
+The shared config currently uses these defaults. Missing configs use the same
+defaults. A growth of zero disables the additional scaling; the denominator is
+bounded to 0.0001 and growth to nonnegative values at evaluation time.
+
+The input is individual final enemy power, including wave weight, rarity,
+definition multipliers and random variance, not absolute stage power. Bosses and
+rarer enemies therefore also receive the stronger growth. Stage power tables,
+experience/reward power, barrier count and regeneration speed are unchanged.
+Budget-derived HP regeneration already uses generated maximum health and therefore
+also grows indirectly. Mystic negation uses health and barrier capacity, so it can
+increase indirectly too. These consequences require balance playtesting; no target
+fight duration is guaranteed by the formula.
+
+Source: `Assets/Scripts/Battle/EnemySystem/EnemyStatBudgetConfig.cs`,
+`Assets/Scripts/Battle/EnemySystem/EnemyStatPackageBuilder.cs`.
+
 ## Death, wave clear and completion
 
 An active enemy death is handled once: remove it, unsubscribe and resolve gold.

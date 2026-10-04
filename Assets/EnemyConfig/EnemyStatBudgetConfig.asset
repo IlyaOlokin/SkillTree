@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c14f6c6fc85a2489d841e1fc912290, type: 3}
   m_Name: EnemyStatBudgetConfig
   m_EditorClassIdentifier: 
+  survivabilityStartPower: 15
+  survivabilityGrowth: 0.1
   rules: []

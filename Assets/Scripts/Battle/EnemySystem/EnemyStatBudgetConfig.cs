@@ -58,9 +58,31 @@ namespace Battle
     [CreateAssetMenu(menuName = "Enemies/Stat Budget Config")]
     public class EnemyStatBudgetConfig : ScriptableObject
     {
+        public const float DefaultSurvivabilityStartPower = 12f;
+        public const float DefaultSurvivabilityGrowth = 0.1f;
+
+        [Tooltip("Enemy power up to which health and barrier capacity retain their existing scaling.")]
+        [SerializeField, Min(0.0001f)] private float survivabilityStartPower = DefaultSurvivabilityStartPower;
+        [Tooltip("Additional health and barrier capacity growth above the starting power. Zero disables it.")]
+        [SerializeField, Min(0f)] private float survivabilityGrowth = DefaultSurvivabilityGrowth;
         [SerializeField] private List<EnemyStatBudgetRule> rules = new();
 
         public IReadOnlyList<EnemyStatBudgetRule> Rules => rules;
+
+        public float GetSurvivabilityMultiplier(float power)
+        {
+            return CalculateSurvivabilityMultiplier(power, survivabilityStartPower, survivabilityGrowth);
+        }
+
+        public static float CalculateSurvivabilityMultiplier(
+            float power,
+            float startPower = DefaultSurvivabilityStartPower,
+            float growth = DefaultSurvivabilityGrowth)
+        {
+            return Mathf.Pow(
+                Mathf.Max(1f, power / Mathf.Max(0.0001f, startPower)),
+                Mathf.Max(0f, growth));
+        }
 
         public EnemyStatBudgetRule GetRule(StatType statType)
         {
