@@ -19,6 +19,18 @@ MonoBehaviour:
     m_Key: description.socketNode
     m_Metadata:
       m_Items: []
+  - m_Id: 46857000000000001
+    m_Key: description.blockPower1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000002
+    m_Key: description.blockPower2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000003
+    m_Key: enum.StatType.BlockPower
+    m_Metadata:
+      m_Items: []
   - m_Id: 246914488602624
     m_Key: description.accuracy1
     m_Metadata:

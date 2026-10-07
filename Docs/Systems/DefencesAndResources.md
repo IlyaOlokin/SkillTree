@@ -66,8 +66,14 @@ at this stage; later type mitigation and barrier masking still operate separatel
 
 ## Block and parry
 
-Block chance and power are each clamped to 0..0.9. A successful roll multiplies
-all damage components by `1 - blockPower`. A zero-power block still counts as a
+Block chance is clamped to 0..0.9. BlockPower is a nonnegative flat damage amount,
+displayed as a number rather than a percentage (changed 2026-10-07). For total
+damage `D` immediately before block, a successful roll multiplies every component
+by `max(0, D - BlockPower) / D`; zero total damage remains zero without division.
+Power at or above `D` fully blocks damage. For example, 30 physical + 20 fire with
+10 BlockPower becomes 24 physical + 16 fire. Existing authored BlockPower values
+are now interpreted as flat amounts; no content rebalance or save migration was
+performed. A zero-power block still counts as a
 successful block and can emit events or enable parry. Block cannot cancel ailments
 already attempted earlier in the attack.
 

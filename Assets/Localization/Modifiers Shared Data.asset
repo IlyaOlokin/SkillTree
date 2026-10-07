@@ -19,6 +19,30 @@ MonoBehaviour:
     m_Key: modifier.container.added.Armor
     m_Metadata:
       m_Items: []
+  - m_Id: 46857000000000010
+    m_Key: modifier.container.added.BlockPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000011
+    m_Key: modifier.container.increased.BlockPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000012
+    m_Key: modifier.container.decreased.BlockPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000013
+    m_Key: modifier.container.more.BlockPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000014
+    m_Key: modifier.container.less.BlockPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000015
+    m_Key: modifier.container.none.BlockPower
+    m_Metadata:
+      m_Items: []
   - m_Id: 85905772544
     m_Key: modifier.container.increased.Armor
     m_Metadata:

@@ -80,7 +80,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 247590371332096
-    m_Localized: Block reduces {damage|damage} from a hit
+    m_Localized: Block reduces incoming {damage|damage} by {blockPower|Block Power}.
     m_Metadata:
       m_Items: []
   - m_Id: 247601490432000
@@ -680,6 +680,18 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 46855000000000003
     m_Localized: 'Critical hits consume all charges, gaining +15% Critical Damage Bonus per charge. Lasts 4 seconds. Maximum 3 charges. Gaining a charge refreshes the duration.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000001
+    m_Localized: 'On {block|Block}, subtract Block Power from total incoming {damage|damage}, reducing all damage types proportionally. Damage cannot fall below zero.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000002
+    m_Localized: 'Base Block Power is 10.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000003
+    m_Localized: 'Block Power'
     m_Metadata:
       m_Items: []
   references:

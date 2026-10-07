@@ -9,6 +9,15 @@ builds, audits, or repeated checks unless the user explicitly requests them.
 This rule takes precedence over broader verification guidance in this file and
 referenced project guides.
 
+## Tooltip authoring
+
+Whenever creating or updating a `TooltipDescriptionData` asset, also update
+`Assets/Scripts/TooltipSystem/TooltipTerms.asset` (the `TooltipTermDatabase`):
+register new terms and keep existing term IDs and description references correct.
+Verify that links in tooltip text resolve to the registered description asset.
+Creating a tooltip includes its database registration; do not leave this as a
+manual step when the user has requested the tooltip.
+
 ## Project documentation
 
 Use [Docs/Home.md](Docs/Home.md) as the documentation entry point and

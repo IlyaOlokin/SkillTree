@@ -166,3 +166,15 @@ connected Pipeline Editor, so Editor import/rendering remains unverified.
 
 The six additional modifier notification gates and configured assets are documented
 in [Stats and modifiers](StatsAndModifiers.md#additional-queued-modifier-proc-icons-2026-10-07).
+
+## Block Power tooltip (2026-10-07)
+
+The registered `blockPower` term resolves to `Descriptions/BlockPower.asset`,
+using Descriptions keys `description.blockPower1` and `description.blockPower2`.
+English text explains flat subtraction, proportional reduction and the base value
+of 10, confirmed in UnitInnateStats. `description.block1` links to this term,
+and all six `modifier.container.<semantic>.BlockPower` English entries in Modifiers
+use `{blockPower|Block Power}`. The Descriptions enum label is
+`enum.StatType.BlockPower`. Russian and German tables were left unchanged; the new
+keys remain translator TODOs. Serialized IDs, keys and GUID references were checked;
+no Unity tooltip preview was performed.

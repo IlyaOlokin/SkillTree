@@ -9,12 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e19ac7d065514e46b31f8bc78e052c9, type: 3}
-  m_Name: AddedBlockPowerPerProfanedHealthPercent_0.02
-  m_EditorClassIdentifier: Assembly-CSharp::SkillTree.ModifierContainerPerProfanedHealthPercent
+  m_Script: {fileID: 11500000, guid: 4ae2ce54539276c4fa2012760a983831, type: 3}
+  m_Name: AddedBlockPower_8
+  m_EditorClassIdentifier: Assembly-CSharp::SkillTree.BaseModifier
   <Priorities>k__BackingField: 00000000
   modifierContainer:
     modifierType: 0
     statType: 72
-    value: 0.02
-  profanedHealthPercentPerModifier: 0.1
+    value: 8
