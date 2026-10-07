@@ -522,6 +522,7 @@ namespace SkillTree
         Big = 3,
         Special = 4,
         Socket = 5,
-        Infinite = 6
+        Infinite = 6,
+        Limited = 7
     }
 }

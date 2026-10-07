@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: ReduceTargetAttackProgressOnHit_0.05_0.2
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 00000000
+  procIcon: {fileID: -7264819947070398934, guid: 11faffd7374fb3a40b8f7c3ad1270074, type: 3}
   triggerChance: 0.05
   attackProgressReduction: 0.2

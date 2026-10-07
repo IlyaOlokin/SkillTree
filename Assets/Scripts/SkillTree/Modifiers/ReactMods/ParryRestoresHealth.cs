@@ -7,6 +7,7 @@ namespace SkillTree
     [CreateAssetMenu(menuName = "Modifiers/Reactive/Parry Restores Health", fileName = "New ParryRestoresHealth")]
     public class ParryRestoresHealth : Modifier
     {
+        [SerializeField] private Sprite procIcon;
         [SerializeField, Range(0f, 1f)] private float maxHealthRestored = 0.1f;
 
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
@@ -30,7 +31,10 @@ namespace SkillTree
                     return;
                 }
 
+                float previousHealth = unit.health.CurrentHealth;
                 unit.ReceiveHeal(unit.health.MaxHealth * restoredFraction);
+                if (unit.health.CurrentHealth > previousHealth)
+                    unit.NotifyModifierProc(procIcon);
             }
 
             return new DelegateModifierRuntimeBinding(

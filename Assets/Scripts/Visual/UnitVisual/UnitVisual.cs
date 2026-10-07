@@ -1,5 +1,6 @@
 using AudioSystem;
 using Battle;
+using System.Collections.Generic;
 using LocalizationSupport;
 using TooltipSystem;
 using UnityEngine;
@@ -10,6 +11,9 @@ namespace Visual
     public class UnitVisual : MonoBehaviour
     {
         [Inject] private TooltipUI _tooltipUI;
+        private const double IconNotificationInterval = 0.2;
+        private double _nextIconNotificationTime = double.NegativeInfinity;
+        private readonly Queue<(Sprite icon, Color? tint)> _iconNotifications = new();
         [SerializeField] private Unit unit;
         [SerializeField] private UnitNotificationEffect unitNotificationEffect;
         [SerializeField] private UnitVisualEffectsController effectsController;
@@ -38,6 +42,7 @@ namespace Visual
             unit.OnAttack += DisplayAttackAnimation;
             unit.OnEvade += DisplayEvadeNotification;
             unit.OnBlock += DisplayBlockNotification;
+            unit.OnModifierProc += DisplayModifierProcNotification;
             unit.OnParry += DisplayParryNotification;
             unit.OnWeaponTypeChanged += DisplayWeaponTypeChanged;
             DisplayWeaponTypeChanged(unit.WeaponType);
@@ -57,6 +62,7 @@ namespace Visual
                 unit.OnAttack -= DisplayAttackAnimation;
                 unit.OnEvade -= DisplayEvadeNotification;
                 unit.OnBlock -= DisplayBlockNotification;
+                unit.OnModifierProc -= DisplayModifierProcNotification;
                 unit.OnParry -= DisplayParryNotification;
                 unit.OnWeaponTypeChanged -= DisplayWeaponTypeChanged;
             }
@@ -81,6 +87,7 @@ namespace Visual
         private void Update()
         {
             effectsController?.UpdateEffectIcons(unit);
+            TryDisplayQueuedIcon();
         }
 
         private void DisplayHealthChangedNotification(float deltaHealth)
@@ -101,6 +108,30 @@ namespace Visual
         {
             var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
             newEffect.WriteMessage(GameLocalization.Get("combat.notification.evade", "Evade"));
+        }
+
+        /// <summary>Show a transient proc icon. Gameplay callers choose when it fires.</summary>
+        private void DisplayModifierProcNotification(Sprite icon)
+        {
+            DisplayIconNotification(icon);
+        }
+
+        public void DisplayIconNotification(Sprite icon, Color? tint = null)
+        {
+            if (icon == null || unitNotificationEffect == null) return;
+            _iconNotifications.Enqueue((icon, tint));
+            TryDisplayQueuedIcon();
+        }
+
+        private void TryDisplayQueuedIcon()
+        {
+            if (!isActiveAndEnabled || unitNotificationEffect == null || _iconNotifications.Count == 0) return;
+            double now = Time.unscaledTimeAsDouble;
+            if (now < _nextIconNotificationTime) return;
+            var request = _iconNotifications.Dequeue();
+            _nextIconNotificationTime = now + IconNotificationInterval;
+            var notification = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
+            notification.ShowIcon(request.icon, request.tint);
         }
 
         private void DisplayBlockNotification()

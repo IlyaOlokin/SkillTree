@@ -7,6 +7,7 @@ namespace SkillTree
     [CreateAssetMenu(menuName = "Modifiers/Reactive/Barrier Restoration Grants Additional Barrier Chance", fileName = "New BarrierRestorationGrantsAdditionalBarrierChance")]
     public class BarrierRestorationGrantsAdditionalBarrierChance : Modifier
     {
+        [SerializeField] private Sprite procIcon;
         [SerializeField, Range(0f, 1f)] private float chance = 0.1f;
 
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
@@ -36,7 +37,8 @@ namespace SkillTree
                     return;
                 }
 
-                barrier.RestoreAdditional(1);
+                if (barrier.RestoreAdditional(1) > 0)
+                    unit.NotifyModifierProc(procIcon);
             }
 
             return new DelegateModifierRuntimeBinding(

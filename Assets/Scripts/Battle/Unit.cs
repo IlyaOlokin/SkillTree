@@ -61,6 +61,13 @@ namespace Battle
         public event Action<AttackContext> OnAttackParried;
         public event Action<Unit> OnDeath;
         public event Action<Unit> OnEnemyKilled;
+        public event Action<Sprite> OnModifierProc;
+
+        public void NotifyModifierProc(Sprite icon)
+        {
+            if (icon != null)
+                OnModifierProc?.Invoke(icon);
+        }
 
         internal void NotifyEnemyKilled(Unit enemy)
         {

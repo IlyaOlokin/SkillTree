@@ -147,6 +147,31 @@ Read the [effect event contract](../Reference/EffectApplicationEvents.md) for th
 Runtime binding creation is separate from phase application; implement the
 conditions needed by the binding itself rather than assuming the phase loop filters it.
 
+## Conditional and Wisp content clarification (2026-10-07)
+
+Source inspection for the [Big-node design proposals](../../Design/BigNodes50.md)
+confirmed that `HasBarrierModifier.IsApplicable` reads `Barrier.HasBarrier`, whose
+condition is **maximum charges greater than zero**, not current charges greater
+than zero. Spending the last current charge does not turn this condition off.
+The existing description's "While Barrier is active" wording can obscure this
+distinction. A current-charge, full-barrier or empty-barrier condition needs a
+different predicate; no runtime or localization change was made in this review.
+
+`FullLifeModifier` delegates to `Unit.IsOnFullLife`, which checks a current-health
+fraction strictly greater than `0.999`. Its reversed condition means not Full Life,
+not Low Life. New design copy uses the existing Full Life terminology.
+
+Live Big-node inspection also found `IgnitePowerPerAshWisp`,
+`ChillPowerPerFrostWisp` and `OverchargePowerPerStormWisp` configured as Increased
+power modifiers. Increased for these power stats is forbidden by the current
+[filling guide](../SkillTree/SkillTreeFillingGuide.md). Their presence is a content
+discrepancy, not permission to author more; the proposals use Added power instead.
+Existing assets were not changed. `ModifierContainerPerWisp` scales a configured
+non-Wisp container by a normalized counter and has no inherent reward cap.
+
+These statements distinguish inspected source and live serialized configuration
+from gameplay verification. No playtest, test runner or build was performed.
+
 ## Attack-local modification
 
 An attack modifier must change `DamageInfo.BaseUnitModifiers`, the attack snapshot,
@@ -505,3 +530,71 @@ Source inspected; no tests, player build or gameplay playtest performed.
 Verification: Visual Studio Roslyn `csc.exe @Temp/AnyWispCompile.rsp` completed
 with exit code 0 against installed Unity/project references. Existing field-assignment
 warnings remain; no compiler error. Unity runtime behavior remains unverified.
+
+## Block restores Barrier proc notification (2026-10-07)
+
+`BlockRestoresBarrier` retains its per-owner OnBlock delegate binding. After
+`Barrier.Restore(1)` returns a positive restored count, it calls
+`Unit.NotifyModifierProc(procIcon)`. Full or zero-capacity barriers do not notify.
+Power scaling, restoration reactions and subscription cleanup remain unchanged.
+Multiple copies can each notify if their own restoration succeeds.
+
+`Unit.OnModifierProc(Sprite)` forwards the request to UnitVisual's existing
+[floating icon notification](HudAndTooltips.md#floating-proc-icons-2026-10-07).
+UnitVisual subscribes in Awake, unsubscribes on destruction, and queues requests
+while disabled, resuming display when enabled. A missing sprite suppresses the visual without affecting restoration.
+No separate effect or status icon is created.
+
+The asset `Assets/Scripts/SkillTree/Modifiers/ReactMods/BlockRestoresBarrier.asset`
+now assigns `Assets/Sprites/Icons/BlockrestoresBarrier.png` to Proc Icon. Change
+this field on the modifier asset to customize the flying sprite; no node wiring
+or tooltip changes are required for existing users of this modifier.
+The existing Modifiers key `modifier.blockRestoresBarrier.description` retains
+its English text: `After {block|Block}: restore 1 {barrier|Barrier}`.
+No localization entries or translations were added or changed.
+Source and sprite GUID/fileID inspected; Unity runtime appearance is unverified.
+
+Verification: dotnet build Assembly-CSharp.csproj --no-restore -v:q /clp:ErrorsOnly
+passed with zero errors and 13 dependency warnings. No tests or Unity playtest run.
+
+## Additional queued modifier proc icons (2026-10-07)
+
+Six reactive modifiers now follow BlockRestoresBarrier's serialized procIcon and
+per-owner delegate-binding pattern. Each accepted visual request joins UnitVisual's
+FIFO queue with at least 0.2 seconds between icon spawns. No new effects, enum
+values, runtime components, combat rules, localization entries or node wiring.
+Missing sprites suppress only the visual. Sprite choices are reusable existing art,
+not newly generated mechanic-specific illustrations.
+
+| Modifier / asset basename in Assets/Scripts/SkillTree/Modifiers/ReactMods | Notification gate | Assigned sprite in Assets/Sprites/Icons |
+| --- | --- | --- |
+| EnemyKillRestoresBarrier.asset | active owner and Restore(1) returns positive | BarrierCountIcon.png |
+| BarrierRestorationGrantsAdditionalBarrierChance_0.1.asset | chance succeeds and RestoreAdditional(1) returns positive | BarrierRegenerationSpeedIcon.png |
+| EvadeRestoresHealth_0.05.asset | HP increases after its ReceiveHeal call | RegenerationIcon.png |
+| ParryRestoresHealth_0.1.asset | HP increases after its ReceiveHeal call | HealthIcon.png |
+| ReduceTargetAttackProgressOnHit_0.05_0.2.asset | chance succeeds and target AttackProgress decreases | AttackSpeedIcon.png |
+| RepeatReceivedEffectChance.asset | chance succeeds and AddRepeatedEffect accepts the copy | RepeatEffectIcon.png |
+
+RepeatReceivedEffectChance does not filter beneficial effects; the proc indicates
+successful repetition, including debuffs. Attack progress checks suppress icons
+when progress is zero or externally locked. The progress-reduction icon appears on
+the modifier owner, matching the shared notification path. Restoration/healing
+notification gates preserve the existing event timing and scaling.
+
+Existing Modifiers English keys/text are unchanged (ru/de also unchanged):
+
+| Key | English text |
+| --- | --- |
+| modifier.enemyKillRestoresBarrier.description | Killing an enemy restores 1 {barrier\|Barrier} |
+| modifier.barrierRestorationGrantsAdditionalBarrierChance.description | Each restored {barrier\|Barrier} has a [[0]]% chance to restore 1 additional Barrier, up to your maximum. Additional Barriers cannot trigger this bonus. |
+| modifier.evadeRestoresHealth.description | On {evade\|Evade}: restore [[0]]% of Maximum Health. |
+| modifier.parryRestoresHealth.description | On {parryChance\|Parry}: restore [[0]]% of Maximum Health. |
+| modifier.reduceTargetAttackProgressOnHit.description | On Hit: [[0]]% chance to reduce target Attack Progress by [[1]]% |
+| modifier.repeatReceivedEffectChance.description | [[0]]% chance when you receive an {effect\|Effect} to receive it again |
+
+Manual customization: change Proc Icon on each listed modifier asset. Existing
+modifier users need no new node, tooltip or status-icon configuration.
+
+Verification: dotnet build Assembly-CSharp.csproj --no-restore -v:q /clp:ErrorsOnly
+passed with zero errors and 13 dependency warnings. All six saved procIcon references
+and script GUIDs were checked against their metadata. No tests or Unity playtest run.

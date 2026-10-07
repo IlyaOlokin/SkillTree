@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: BlockRestoresBarrier
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 00000000
+  procIcon: {fileID: 21300000, guid: 6ea29a5024325424582c8cc983477e86, type: 3}

@@ -73,6 +73,31 @@ These are rendering/presentation references, not alternate definitions of health
 absorption or damage. Render-path and target-hardware checks remain necessary when
 changing shaders, masks or Canvas composition.
 
+## Floating proc icons (2026-10-07)
+
+`UnitVisual.DisplayIconNotification(Sprite, Color?)` spawns the existing
+`unitNotificationEffect` prefab at the unit position. Callers supply the sprite and optional tint.
+Notifications share a 0.2-second minimum interval per UnitVisual, measured with
+unscaled time. Valid requests enter a FIFO queue preserving their sprite and tint.
+The first request displays immediately when allowed; Update displays subsequent
+requests at least 0.2 seconds apart, without catch-up bursts or dropping requests.
+Disabling the visual pauses draining while preserving queued/new requests; enabling
+it resumes draining. Destroying the visual discards its owned queue. Modifier
+gameplay and text notifications are unaffected.
+BlockRestoresBarrier now requests a notification via Unit.OnModifierProc only when its block reaction restores a charge. Its modifier asset owns the sprite; other combat triggers remain unconnected.
+`UnitNotificationEffect.ShowIcon` configures a fresh instance before `Start`, hides
+its TMP text and critical decoration, and enables the preconfigured non-interactive uGUI Image
+under `objectToMove`. No components are created for icon notifications. The prefab's canvas, movement distance, position spread and
+moving transform scale are reused.
+
+DOTween grows the icon with OutBack easing, moves it along Icon Move Direction with OutCubic easing,
+then shrinks and fades it to zero. The UnitNotification prefab exposes icon size
+(48 x 48 local units), lifetime (0.9 s), growth (0.2 s), disappearance (0.25 s)
+and peak scale (1.2 times the moving transform's initial scale).
+Animation uses scaled time. Completion destroys the instance; disabling it kills
+its sequence and destroys it. Text notifications retain their existing animation.
+Visual timing and appearance have not been previewed in Unity.
+
 ## Verification and sources
 
 Suggested checks: resource changes during pause; immediate versus animated fill;
@@ -115,3 +140,29 @@ Critical Charge (2026-10-04) adds the registered term `criticalCharge` and a sta
 Descriptions tooltip. Status text shows 1–3 charges and the border tracks its shared
 four-second timer; assign the new visual type in EffectIconsConfig manually. See
 [the effect contract](ReactiveCombatEffects.md#critical-charge-2026-10-04).
+
+Scoped verification: dotnet build Assembly-CSharp.csproj --no-restore -v:q passed
+with zero errors and assembly-reference conflict warnings; no Unity visual preview.
+
+### Proc icon direction and circular fade (2026-10-07)
+
+The notification prefab now exposes Icon Move Direction (world XY, normalized;
+default -1, 1 for up-left) and Icon Move Distance (default 1.3 world units).
+A zero direction keeps the icon stationary. Text movement settings are separate.
+
+ProcIcon uses `Assets/Materials/UIProcIconCircle.mat` with the `UI/Proc Icon Circle`
+shader. Circle Radius defaults to 0.5 of the shorter rendered side; Edge Fade Width
+(default 0.08) fades alpha smoothly inward from its boundary. Image tint, sprite
+alpha and the animation fade multiply the circular coverage. The existing
+UIBarContour mesh effect is configured on ProcIcon in the prefab to supply UV1
+coordinates and aspect ratio; no component is created at runtime. This keeps the
+circle independent of sprite atlas UVs, transform scale and Canvas batching.
+UI stencil masking and RectMask2D softness are supported. No icon artwork changes.
+Shader compilation/rendering has not been verified in Unity.
+Material assignment correction: ProcIcon Image's saved m_Material reference was
+found empty and explicitly assigned to UIProcIconCircle (GUID cf5e5a5743ed4bd89db5fa7bf9ea4cec).
+The saved reference and material/shader metadata were checked. Unity CLI found no
+connected Pipeline Editor, so Editor import/rendering remains unverified.
+
+The six additional modifier notification gates and configured assets are documented
+in [Stats and modifiers](StatsAndModifiers.md#additional-queued-modifier-proc-icons-2026-10-07).

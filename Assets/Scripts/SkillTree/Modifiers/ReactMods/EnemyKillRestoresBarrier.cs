@@ -7,6 +7,7 @@ namespace SkillTree
     [CreateAssetMenu(menuName = "Modifiers/Reactive/Enemy Kill Restores Barrier", fileName = "New EnemyKillRestoresBarrier")]
     public class EnemyKillRestoresBarrier : Modifier
     {
+        [SerializeField] private Sprite procIcon;
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
         {
             if (unit?.barrier == null)
@@ -14,8 +15,8 @@ namespace SkillTree
 
             void HandleEnemyKilled(Unit enemy)
             {
-                if (unit.isActiveAndEnabled)
-                    unit.barrier.Restore(1);
+                if (unit.isActiveAndEnabled && unit.barrier.Restore(1) > 0)
+                    unit.NotifyModifierProc(procIcon);
             }
 
             return new DelegateModifierRuntimeBinding(

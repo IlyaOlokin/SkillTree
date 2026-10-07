@@ -8,6 +8,7 @@ namespace SkillTree
     public class BlockRestoresBarrier : Modifier
     {
         private const int BarrierRestoreAmount = 1;
+        [SerializeField] private Sprite procIcon;
 
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
         {
@@ -18,7 +19,8 @@ namespace SkillTree
 
             void HandleBlock()
             {
-                unit.barrier.Restore(BarrierRestoreAmount);
+                if (unit.barrier.Restore(BarrierRestoreAmount) > 0)
+                    unit.NotifyModifierProc(procIcon);
             }
 
             return new DelegateModifierRuntimeBinding(
