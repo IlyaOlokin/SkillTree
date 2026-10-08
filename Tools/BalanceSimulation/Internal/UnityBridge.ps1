@@ -18,8 +18,9 @@ function ConvertTo-CSharpLiteral($Value) {
 }
 $taskEffectSource = Get-Content (Join-Path $taskToolsRoot 'Runtime/EditorEffectOwnership.cs') -Raw
 $taskExportSource = Get-Content (Join-Path $taskToolsRoot 'Runtime/EditorExports.cs') -Raw
+$taskDecisionSource = if ($taskAdapterKind -eq 'campaign') { Get-Content (Join-Path $taskToolsRoot 'Runtime/DecisionPolicy.cs') -Raw } else { '' }
 $taskAdapterBody = 'var requestExistingModifiers = new System.Collections.Generic.HashSet<SkillTree.Modifier>(UnityEngine.Resources.FindObjectsOfTypeAll<SkillTree.Modifier>());' +
-    [Environment]::NewLine + $taskEffectSource + [Environment]::NewLine + $taskExportSource +
+    [Environment]::NewLine + $taskEffectSource + [Environment]::NewLine + $taskExportSource + [Environment]::NewLine + $taskDecisionSource +
     [Environment]::NewLine + 'try {' + [Environment]::NewLine + $taskSource + [Environment]::NewLine +
     '} catch (System.Exception exception) { return new { adapterError = exception.ToString() }; } finally {' +
     ' DisposeEditorEffects(); System.AppDomain.CurrentDomain.SetData("balanceSimulation.config", null);' +

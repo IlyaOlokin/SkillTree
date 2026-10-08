@@ -21,6 +21,8 @@ Run from the project root:
 ./Tools/BalanceSimulation/RunCampaign.ps1 -Preset Tools/BalanceSimulation/Presets/balanced-push.json -RunsPerStrategy 10
 # Adapt the tree after defeats; five policies, five seeds each.
 ./Tools/BalanceSimulation/RunCampaign.ps1 -Preset Tools/BalanceSimulation/Presets/adaptive-balanced-push.json -RunsPerStrategy 5
+# Fifteen balanced campaigns: five each for strength, dexterity, intelligence/lightning.
+./Tools/BalanceSimulation/RunCampaign.ps1 -Preset Tools/BalanceSimulation/Presets/balanced-shops.json -RunsPerStrategy 5
 
 # Independent fixed-level fights: strength, dexterity and intelligence/lightning starters.
 ./Tools/BalanceSimulation/Run.ps1 -RunsPerBuild 10
@@ -96,10 +98,40 @@ Fixed battles use explicit node IDs/point budgets and check authored root paths
 and zone limits. They exclude XP, rewards and progression. Supply a JSON `-Preset`
 with `schemaVersion: 1`, unique `builds` (`name`, `nodeIds`, `pointBudget`) and
 `scenarios` (`name`, `locationId`, `stage`, `playerLevel`, `waveNumber`, `maxSeconds`).
-Both modes use exact numeric BaseModifier/ModifierPerPlayerLevel implementations;
-gems, sockets, infinite nodes, wisps, special/reactive node modifiers, shops,
-mini-games and UI-driven decisions are outside current coverage. Catalog support
+Both modes use exact numeric BaseModifier/ModifierPerPlayerLevel implementations.
+Campaigns additionally support socket allocation and numeric LocalModifiers gems,
+shop purchases and gold completion rewards (see below). Fixed battles still exclude
+sockets and shops. Infinite nodes, wisps, special/reactive modifiers, influence/bridge
+gems, mini-games and UI-driven decisions are outside current coverage. Catalog support
 flags are mode-specific. Unsupported content must not be interpreted as balanced.
+
+## Campaign shops and local gems (2026-10-08)
+
+At stage boundaries, bots fill active empty sockets with supported inventory gems.
+If none is available, they visit an unlocked shop using production location selection,
+buy affordable in-stock gems through `ShopService.TryBuy`, return to the battle
+location/stage, and insert through `InventorySocketService.TryInsertGem`. They do
+not farm extra gold or buy without an empty active socket. Existing gems are not
+replaced. The current choice uses projected build utility (see policy v2 below);
+shop offers are ranked by positive estimated gain per gold.
+Socket allocation receives the best available inventory/affordable-shop gem score
+in addition to its travel value. This heuristic does not prove optimal placement.
+
+Gold, purchased stock, inventory and socket instances persist in isolated campaign
+checkpoints. Socket modifiers enter production `MainSkillTree.CollectAllModifiers`.
+Snapshots include gold and socket contents; `shopLog` records visits, transactions
+and insertions. The viewer exposes both the log and snapshot socket contents.
+Gold completion rewards now credit gold on a successful claim rather than accessing
+a null item. Costs and point budgets preserve the current floating-point contract.
+No scene, content asset or profile save is edited by this adapter.
+
+Verification: the adapter compiled against installed Unity/game assemblies with
+zero errors and ran through live Unity CLI. The [15 balanced campaigns](../../Reports/BalanceSimulation/20261008-185017-292-campaign/verification.md)
+completed on seeds 101–105, five each for strength, dexterity and intelligence/lightning.
+They bought and inserted 53 gems (strength 2, dexterity 51, intelligence 0).
+All intelligence bots stopped before completing Level3, so Shop1 remained locked.
+The final gold and socket counts match the last snapshots for all 15 unique bots.
+UI navigation, influence/bridge gems and adaptive gem respec behavior were not verified.
 
 Pipeline has a five-second operation/response limit. Campaign
 `-ComputeBudgetMs` (250–2000, default 1500) stops only at complete stage boundaries;
@@ -202,3 +234,59 @@ changed-layout commits. Same-cohort mean cleared stage changed strength 17→25,
 dexterity 51→42, and each element remained 14. This first local-stage search is
 functional but not a general progression improvement. The report separates frozen
 trial victories, unchanged-incumbent confirmations and normal-stage confirmations.
+
+## Counterfactual decision policy v2 (2026-10-08)
+
+The campaign adapter now projects candidate numeric modifiers through production
+`StatCalculator` on a disposable decision actor. This preserves attribute thresholds,
+Added/Increased/More arithmetic, player-level scaling, source power and aggregate
+expansion. Projected node paths also replace affected BonusZone contributions,
+including correct replacement of More factors. The current actor's combat state,
+XP, wallet and tree allocation are not changed during evaluation.
+
+A deterministic representative final wave of the current stage supplies opponent
+stats (including the boss override when applicable). Generation runs with isolated
+Random state, zero XP and no combat/drop callbacks. These are representative authored
+threats, not a prediction of the exact next random encounter. A separate deterministic
+metric estimates offensive output and survival: damage families, accuracy/evasion,
+armor, capped resistance and penetration, crit layers, block/parry, healing,
+lifesteal masks, barrier charges/mask/regeneration and mystic negation/cleanse.
+Ailment/control contributions and encounter duration are bounded approximations.
+
+Candidates are ranked by weighted logarithmic gain relative to the current build:
+balanced gives attack and defence equal weight; damage/defence styles use 80/20.
+Existing adaptive focus can shift these weights. The prior attribute/family heuristic
+only chooses a shortlist of eight frontier nodes. Up to three linked nodes are
+projected together, branching to two second nodes and one third node; future scores
+are discounted and divided by total point cost. Execution still checks production
+allocation predicates. Locked nodes are excluded from projected paths, but future
+zone constraints are not fully solved; this remains a bounded greedy search.
+Points are retained if the shortlist has no positive immediate/path utility.
+
+Inventory and shop gems must have positive projected utility. Shop offers use gain
+per gold and actual unlocks, affordability and stock. The baseline is refreshed after
+each insertion, so saturation and diminishing returns affect the next purchase.
+Capacity alone yields no barrier value without integer charges and matching damage
+mask; its separate contribution to MysticNegation is retained against mystic damage.
+Zero chance/power prerequisites, healing masks and stat caps are respected by the
+metric. Already equipped gems are not replaced; influence/bridge gems remain excluded.
+Allocation and purchase logs record `decisionPolicy`, `decisionScore`,
+`estimatedOffenceGain` and `estimatedDefenceGain`. These are projections, not measured
+battle improvements. The viewer labels them as forecasts. Old reports retain their
+original choices and may show no forecasts.
+
+Verification: the full adapter compiled against installed Unity/game assemblies
+with zero errors (Unity Roslyn csc.dll). Scoped in-memory metric checks passed for
+capacity without charges/negation, useful active barriers, capacity/negation synergy
+without charges, and BlockChance saturation at 0.9 (float tolerance). No new test
+files or suite were added. Live v2 execution was subsequently checked in
+[15 balanced campaigns](../../Reports/BalanceSimulation/20261008-192754-223-campaign/verification.md):
+mean cleared stages were strength 51, dexterity 95 and intelligence/lightning 15.
+All 64 purchases had positive v2 scores; no capacity gems were purchased. Final
+snapshots and temporary-object cleanup were checked. An algorithm-only comparison
+and a matched throughput benchmark remain unverified: 238 attribute nodes also
+changed from 2 to 1 between cohorts. The preceding
+15-bot dataset used v1; it is not evidence for v2 or an improvement comparison.
+This policy does not learn across campaigns or save model parameters. Persistent
+learning would require a separate training loop, progression/cost-based rewards,
+and evaluation on seeds excluded from training.

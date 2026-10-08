@@ -31,7 +31,7 @@ SkillTree.ModifierContainer Container(SkillTree.Modifier m) {
         return (SkillTree.ModifierContainer)Field(m, typeof(SkillTree.ModifierPerPlayerLevel), "modifierContainer");
     return null;
 }
-bool Numeric(SkillTree.Node n) => n != null && !n.IsInfinite && !(n is SkillTree.SocketNode) && n.RuntimePower == 0f &&
+bool Numeric(SkillTree.Node n) => n != null && !n.IsInfinite && n.RuntimePower == 0f &&
     n.Modifiers != null && n.Modifiers.All(m => Container(m) != null && !Container(m).statType.ToString().Contains("Wisp"));
 var eligible = originals.Where(Numeric).ToArray();
 var progressType = typeof(Battle.EnemySpawner).Assembly.GetType("Battle.EnemyLocationProgressService", true);
@@ -69,6 +69,9 @@ if (checkpoint == null) {
             { "progress", null }, { "allocated", new System.Collections.Generic.List<string>() },
             { "unlocked", new System.Collections.Generic.List<string>() }, { "powers", new System.Collections.Generic.Dictionary<string,float>() },
             { "inventory", new System.Collections.Generic.List<InventorySystem.InventoryItem>() },
+            { "socketGems", new System.Collections.Generic.Dictionary<string,Gems.GemInstance>() },
+            { "shopPurchases", new System.Collections.Generic.List<SaveSystem.ShopPurchaseSaveData>() },
+            { "shopLog", new System.Collections.Generic.List<object>() },
             { "waveLog", new System.Collections.Generic.List<object>() }, { "allocationLog", new System.Collections.Generic.List<object>() },
             { "rewardLog", new System.Collections.Generic.List<object>() }, { "completedLocations", new System.Collections.Generic.List<string>() },
             { "snapshots", new System.Collections.Generic.List<object>() },
@@ -152,7 +155,7 @@ try {
             UnityEngine.JsonUtility.FromJsonOverwrite(UnityEngine.JsonUtility.ToJson(sourcePlayer.UnitLevel), level);
             var startData = (SaveSystem.PlayerSaveData)state["player"];
             level.ApplySaveData(isProbe ? new SaveSystem.PlayerSaveData { level = startData.level, currentExp = startData.currentExp,
-                skillPoints = (int)search["budget"] - allocated.Sum(id => (int)Field(byId[id], typeof(SkillTree.Node), "nodeCost")) } : startData);
+                skillPoints = System.Convert.ToSingle(search["budget"]) - allocated.Sum(id => System.Convert.ToSingle(Field(byId[id], typeof(SkillTree.Node), "nodeCost"))) } : startData);
             var tree = playerRoot.AddComponent<SkillTree.MainSkillTree>();
             var inventory = playerRoot.AddComponent<InventorySystem.PlayerInventory>();
             var sourceInventory = UnityEngine.Object.FindAnyObjectByType<InventorySystem.PlayerInventory>(UnityEngine.FindObjectsInactive.Include);
@@ -162,8 +165,13 @@ try {
             var copies = new System.Collections.Generic.Dictionary<SkillTree.Node,SkillTree.Node>();
             SkillTree.Node Copy(SkillTree.Node original) {
                 if (copies.TryGetValue(original, out var existing)) return existing;
-                var copy = original is SkillTree.RootNode ? playerRoot.AddComponent<SkillTree.RootNode>() : playerRoot.AddComponent<SkillTree.Node>();
+                SkillTree.Node copy = original is SkillTree.RootNode ? playerRoot.AddComponent<SkillTree.RootNode>() :
+                    original is SkillTree.SocketNode ? (SkillTree.Node)playerRoot.AddComponent<SkillTree.SocketNode>() : playerRoot.AddComponent<SkillTree.Node>();
                 UnityEngine.JsonUtility.FromJsonOverwrite(UnityEngine.JsonUtility.ToJson(original), copy);
+                if (copy is SkillTree.SocketNode socket) {
+                    var savedGems = (System.Collections.Generic.Dictionary<string,Gems.GemInstance>)state["socketGems"];
+                    socket.SetSocketedGemFromSave(savedGems.ContainsKey(original.SaveId) ? savedGems[original.SaveId] : null);
+                }
                 FieldSet(copy, typeof(SkillTree.Node), "connectedNodes", new System.Collections.Generic.List<SkillTree.Node>());
                 FieldSet(copy, typeof(SkillTree.Node), "_unitLevel", level);
                 FieldSet(copy, typeof(SkillTree.Node), "permanentPower", powers.ContainsKey(original.SaveId) ? powers[original.SaveId] : original.DefaultPermanentPower);
@@ -237,10 +245,87 @@ try {
             string style = (string)strategy["style"], starterId = (string)strategy["starterId"];
             string damageFamily = strategy.ContainsKey("damageFamily") ? (string)strategy["damageFamily"] : "Physical";
             string attribute = strategy.ContainsKey("attribute") ? (string)strategy["attribute"] : "";
-            double Score(SkillTree.Node node) {
+            var decisionPlayer = (Battle.PlayerUnit)Actor(NewRoot("BalanceSimulationCampaignDecision"), sourcePlayer, true);
+            var resetDecision = typeof(Battle.Unit).GetMethod("ResetUnit", privateFlags);
+            var statTypes = System.Enum.GetValues(typeof(StatType)).Cast<StatType>().Where(s => s != StatType.Empty).ToArray();
+            System.Collections.Generic.Dictionary<StatType,float> ReadStats(Battle.Unit unit) => statTypes.ToDictionary(s => s, s => unit.BaseUnitModifiers.GetStatValue(s));
+            var opponentStats = new System.Collections.Generic.Dictionary<StatType,float>();
+            var decisionRandom = UnityEngine.Random.state;
+            try {
+                UnityEngine.Random.InitState(unchecked((int)state["seed"] ^ stage * 104729 ^ 0x1D3C));
+                var sampleContext = new Battle.WaveContext(stage, waveQuota, waveQuota);
+                if (database.BossBalance != null && database.BossBalance.TryGetRule(sampleContext, out var sampleRule))
+                    sampleContext = new Battle.WaveContext(stage, waveQuota, waveQuota, true, sampleRule.BossCount, sampleRule.TotalEnemiesInWave, sampleRule.MaxBossAffixes);
+                var samplePackages = new Battle.WaveFactory(new Battle.EnemyFactory(database), database).CreateWave(sampleContext).Take(poolSize).ToArray();
+                foreach (var package in samplePackages) {
+                    definitionsToDispose.Add(package.Modifiers);
+                    var sampleEnemy = (Battle.EnemyUnit)Actor(NewRoot("BalanceSimulationCampaignDecisionEnemy"), sourceEnemy, false);
+                    sampleEnemy.Initialize(new Battle.EnemySpawnData(package.Definition, package.Rarity, package.Power, 0,
+                        package.Modifiers, package.Affixes, package.BaseEvasion, false));
+                    sampleEnemy.CombatTick(0f, Battle.CombatTickPhase.Mods);
+                    foreach (var stat in statTypes) {
+                        if (!opponentStats.ContainsKey(stat)) opponentStats[stat] = 0;
+                        opponentStats[stat] += sampleEnemy.BaseUnitModifiers.GetStatValue(stat) / System.Math.Max(1, samplePackages.Length);
+                    }
+                    DisposeRoot(sampleEnemy.gameObject);
+                    if (package.Modifiers != null) UnityEngine.Object.DestroyImmediate(package.Modifiers);
+                }
+                if (samplePackages.Length == 0) throw new System.InvalidOperationException("No opponents for decision profile.");
+            } finally { UnityEngine.Random.state = decisionRandom; }
+            var decisionZoneModifiers = new System.Collections.Generic.Dictionary<SkillTree.BonusZone,SkillTree.BaseModifier>();
+            System.Collections.Generic.Dictionary<StatType,float> ProjectStats(System.Collections.Generic.IEnumerable<SkillTree.CollectedModifier> additions, SkillTree.Node[] path = null) {
+                resetDecision.Invoke(decisionPlayer, null);
+                var mods = decisionPlayer.GetAllModifiers(); mods.AddRange(additions);
+                if (path != null) foreach (var pair in bonusCopies) {
+                    var members = (System.Collections.Generic.List<SkillTree.Node>)Field(pair.Key, typeof(SkillTree.BonusZone), "nodes");
+                    int extra = path.Count(n => members.Contains(n) && !copies[n].IsActive);
+                    if (extra == 0) continue;
+                    var originalBonus = pair.Value.CollectModifier();
+                    if (!decisionZoneModifiers.TryGetValue(pair.Key, out var replacement)) {
+                        replacement = UnityEngine.Object.Instantiate((SkillTree.BaseModifier)originalBonus);
+                        definitionsToDispose.Add(replacement); decisionZoneModifiers[pair.Key] = replacement;
+                    }
+                    var container = (SkillTree.ModifierContainer)Field(pair.Key, typeof(SkillTree.BonusZone), "modContainer");
+                    replacement.modifierContainer = new SkillTree.ModifierContainer(container.modifierType, container.statType,
+                        container.value * (pair.Value.AllocatedNodesCount + extra));
+                    // Replace rather than append: multiple More factors multiply.
+                    mods.RemoveAll(m => m.Modifier == originalBonus);
+                    mods.Add(SkillTree.CollectedModifier.WithoutPower(replacement));
+                }
+                StatCalculator.RecalculateStats(decisionPlayer, mods);
+                return ReadStats(decisionPlayer);
+            }
+            var decisionBase = ProjectStats(System.Array.Empty<SkillTree.CollectedModifier>());
+            var decisionMetrics = DecisionMetrics(decisionBase, opponentStats);
+            var projectionCache = new System.Collections.Generic.Dictionary<string,double[]>();
+            void RefreshDecision() {
+                projectionCache.Clear(); decisionBase = ProjectStats(System.Array.Empty<SkillTree.CollectedModifier>());
+                decisionMetrics = DecisionMetrics(decisionBase, opponentStats);
+            }
+            double[] ProjectGain(System.Collections.Generic.IEnumerable<SkillTree.CollectedModifier> additions, SkillTree.Node[] path = null) {
+                var next = DecisionMetrics(ProjectStats(additions, path), opponentStats);
+                return new[] { System.Math.Log(next[0] / decisionMetrics[0]), System.Math.Log(next[1] / decisionMetrics[1]) };
+            }
+            double GainScore(double[] gain) {
+                double offenceWeight = style == "damage" ? 0.8 : style == "defence" ? 0.2 : 0.5;
+                if (focus == "offence" || focus == "speed") offenceWeight = System.Math.Min(0.9, offenceWeight + 0.2);
+                if (focus == "health" || focus == "barrier") offenceWeight = System.Math.Max(0.1, offenceWeight - 0.2);
+                return 100 * (offenceWeight * gain[0] + (1 - offenceWeight) * gain[1]);
+            }
+            double[] NodeGain(SkillTree.Node[] path) {
+                string key = string.Join("/", path.Select(n => n.SaveId));
+                if (!projectionCache.TryGetValue(key, out var gain)) {
+                    gain = ProjectGain(path.SelectMany(n => n.Modifiers.Select(m => new SkillTree.CollectedModifier(m, SkillTree.ModifierPowerContext.FromNode(Copy(n))))), path);
+                    projectionCache[key] = gain;
+                }
+                return gain;
+            }
+            bool SupportedGem(Gems.GemDefinition gem) => gem != null && gem.Kind == Gems.GemKind.LocalModifiers &&
+                gem.ModifierTemplates.Count > 0 && gem.ModifierTemplates.All(m => Container(m) != null && !Container(m).statType.ToString().Contains("Wisp"));
+            double ModifierScore(System.Collections.Generic.IEnumerable<SkillTree.Modifier> modifiers) {
                 double score = 0.01;
-                foreach (var mod in node.Modifiers) {
-                    var c = Container(mod); string stat = c.statType.ToString();
+                foreach (var mod in modifiers) {
+                    var c = Container(mod); if (c == null) continue; string stat = c.statType.ToString();
                     bool defence = stat.Contains("Health") || stat.Contains("Armor") || stat.Contains("Evasion") || stat.Contains("Barrier") ||
                         stat.Contains("Resistance") || stat.Contains("Mitigation") || stat.Contains("Block") || stat.Contains("Guard");
                     bool offence = !defence && (stat.Contains("Damage") || stat.Contains("AttackSpeed") || stat.Contains("Crit") || stat.Contains("Accuracy") ||
@@ -262,20 +347,65 @@ try {
                         stat.Contains("Chance") || stat.Contains("AttackSpeed") ? 0.05 : stat.Contains("Damage") ? 2 : 1) : 0.1;
                     score += weight * System.Math.Sqrt(c.value / scale);
                 }
+                return score;
+            }
+            double[] GemGain(Gems.GemDefinition gem) {
+                string key = "gem/" + UnityEditor.AssetDatabase.GetAssetPath(gem);
+                if (!projectionCache.TryGetValue(key, out var gain)) {
+                    gain = ProjectGain(gem.ModifierTemplates.Select(SkillTree.CollectedModifier.WithoutPower)); projectionCache[key] = gain;
+                }
+                return gain;
+            }
+            double GemScore(Gems.GemDefinition gem) => SupportedGem(gem) ? System.Math.Max(0, GainScore(GemGain(gem))) : 0;
+            var policyWallet = new CurrencySystem.PlayerWallet(); policyWallet.ApplySaveData((int)state["gold"]);
+            var policyShop = new ShopSystem.ShopService(policyWallet, inventory);
+            policyShop.ApplySaveData((System.Collections.Generic.List<SaveSystem.ShopPurchaseSaveData>)state["shopPurchases"]);
+            var availableGems = inventory.Slots.Where(s => s.Item?.Gem != null).Select(s => s.Item.Gem.Definition)
+                .Concat(locations.Values.Where(l => l.IsShop && l.ShopDefinition != null && (bool)ProgressCall(progress, "IsLocationUnlocked", l))
+                    .SelectMany(l => l.ShopDefinition.Entries.Where(e => e.Price <= (int)state["gold"] && policyShop.GetRemainingStock(l.ShopDefinition, e) != 0))
+                    .Select(e => e.ItemDefinition as Gems.GemDefinition)).Where(SupportedGem).Distinct().ToArray();
+            double HeuristicScore(SkillTree.Node node) {
+                double score = ModifierScore(node.Modifiers);
+                if (node is SkillTree.SocketNode) {
+                    score += availableGems.Select(GemScore).DefaultIfEmpty(0).Max();
+                }
                 uint hash = unchecked((uint)((int)state["seed"] + variant * 7919));
                 foreach (char character in node.SaveId) hash = unchecked(hash * 16777619u ^ character);
                 double diversity = variant == 0 ? 1 : 0.75 + (hash % 1000) / 2000d;
-                return diversity * score / System.Math.Max(1, (int)Field(node, typeof(SkillTree.Node), "nodeCost"));
+                return diversity * score / System.Math.Max(1, System.Convert.ToSingle(Field(node, typeof(SkillTree.Node), "nodeCost")));
             }
+            double Score(SkillTree.Node node) => System.Math.Max(0, GainScore(NodeGain(new[] { node }))) /
+                System.Math.Max(0.01, System.Convert.ToSingle(Field(node, typeof(SkillTree.Node), "nodeCost")));
             bool growing = false;
             bool probeCombatStarted = false;
             int currentWave = 0;
-            // Two-edge lookahead can pay for travel nodes; it is an agent heuristic, not a game rule.
-            double RouteScore(SkillTree.Node node) {
+            // A bounded three-node lookahead can pay for prerequisites and travel nodes.
+            double HeuristicRouteScore(SkillTree.Node node) {
                 double future = node.ConnectedNodes.Where(n => Numeric(n) && !allocated.Contains(n.SaveId) && !(n is SkillTree.RootNode))
-                    .Select(n => Score(n) + 0.35 * n.ConnectedNodes.Where(x => Numeric(x) && x != node && !allocated.Contains(x.SaveId) && !(x is SkillTree.RootNode))
-                        .Select(Score).DefaultIfEmpty(0).Max()).DefaultIfEmpty(0).Max();
-                return Score(node) + (strategy.ContainsKey("lookahead") && (bool)strategy["lookahead"] ? 0.5 * future : 0);
+                    .Select(n => HeuristicScore(n) + 0.35 * n.ConnectedNodes.Where(x => Numeric(x) && x != node && !allocated.Contains(x.SaveId) && !(x is SkillTree.RootNode))
+                        .Select(HeuristicScore).DefaultIfEmpty(0).Max()).DefaultIfEmpty(0).Max();
+                return HeuristicScore(node) + (strategy.ContainsKey("lookahead") && (bool)strategy["lookahead"] ? 0.5 * future : 0);
+            }
+            double RouteScore(SkillTree.Node node) {
+                double PathScore(SkillTree.Node[] path) {
+                    double cost = path.Sum(n => System.Convert.ToSingle(Field(n, typeof(SkillTree.Node), "nodeCost")));
+                    double value = System.Math.Max(0, GainScore(NodeGain(path)));
+                    // Empty sockets gain value only from a currently obtainable, useful gem.
+                    if (path.Any(n => n is SkillTree.SocketNode)) value += availableGems.Select(GemScore).DefaultIfEmpty(0).Max();
+                    return value / System.Math.Max(0.01, cost);
+                }
+                double best = PathScore(new[] { node });
+                if (strategy.ContainsKey("lookahead") && (bool)strategy["lookahead"]) {
+                    var next = node.ConnectedNodes.Where(n => Numeric(n) && !(n is SkillTree.RootNode) && !allocated.Contains(n.SaveId) && !Copy(n).IsLocked)
+                        .OrderByDescending(HeuristicScore).Take(2);
+                    foreach (var second in next) {
+                        best = System.Math.Max(best, 0.8 * PathScore(new[] { node, second }));
+                        foreach (var third in second.ConnectedNodes.Where(n => n != node && Numeric(n) && !(n is SkillTree.RootNode) && !allocated.Contains(n.SaveId) && !Copy(n).IsLocked)
+                            .OrderByDescending(HeuristicScore).Take(1))
+                            best = System.Math.Max(best, 0.6 * PathScore(new[] { node, second, third }));
+                    }
+                }
+                return best;
             }
             void Grow() {
                 if (isProbe && (probeIndex == 0 || probeCombatStarted)) return;
@@ -289,13 +419,22 @@ try {
                         var candidates = frontier.Where(n => copies[n].CanBeAllocated() && copies[n].HasEnoughSkillPoints()).ToArray();
                         if (attribute.Length > 0) candidates = candidates.Where(n => n.SaveId == starterId || !n.ConnectedNodes.Any(x => x is SkillTree.RootNode)).ToArray();
                         if (allocated.Count == 0) candidates = candidates.Where(n => n.SaveId == starterId).ToArray();
-                        var next = candidates.OrderByDescending(RouteScore).ThenBy(n => n.SaveId, System.StringComparer.Ordinal).FirstOrDefault();
+                        RefreshDecision();
+                        var ranked = candidates.OrderByDescending(HeuristicRouteScore).ThenBy(n => n.SaveId, System.StringComparer.Ordinal).Take(8)
+                            .Select(n => new { node = n, score = RouteScore(n) }).OrderByDescending(n => n.score).ThenBy(n => n.node.SaveId, System.StringComparer.Ordinal).ToArray();
+                        var choice = ranked.FirstOrDefault();
+                        var next = choice?.node;
                         if (next == null) break;
-                        int before = level.SkillPoints;
+                        // Keep points for a useful reachable route instead of buying a dead stat.
+                        if (choice.score <= 0.000001 && allocated.Count > 0) break;
+                        var estimatedGain = NodeGain(new[] { next });
+                        float before = level.SkillPoints;
                         if (!copies[next].Allocate()) throw new System.InvalidOperationException("Allocation predicate changed unexpectedly.");
                         allocated.Add(next.SaveId); RefreshTree(); player.RequestModRecalculation();
                         if (!isProbe) allocations.Add(new { revision = (int)state["revision"], location = location.LocationId, stage, wave = currentWave, level = level.Level, nodeId = next.SaveId,
-                            modifiers = next.Modifiers.Select(m => m.name).ToArray(), pointsSpent = before - level.SkillPoints, pointsRemaining = level.SkillPoints });
+                            modifiers = next.Modifiers.Select(m => m.name).ToArray(), pointsSpent = before - level.SkillPoints, pointsRemaining = level.SkillPoints,
+                            decisionScore = choice.score, estimatedOffenceGain = System.Math.Exp(estimatedGain[0]) - 1,
+                            estimatedDefenceGain = System.Math.Exp(estimatedGain[1]) - 1, decisionPolicy = "counterfactual-v2" });
                     }
                 } finally { growing = false; }
             }
@@ -335,6 +474,50 @@ try {
                 }
             }
             if (!isProbe) UseSimpleItems();
+            void EquipAndShop() {
+                if (isProbe) return;
+                var socketService = new InventorySystem.InventorySocketService();
+                var wallet = new CurrencySystem.PlayerWallet(); wallet.ApplySaveData((int)state["gold"]);
+                var shopService = new ShopSystem.ShopService(wallet, inventory);
+                shopService.ApplySaveData((System.Collections.Generic.List<SaveSystem.ShopPurchaseSaveData>)state["shopPurchases"]);
+                var log = (System.Collections.Generic.List<object>)state["shopLog"];
+                foreach (var socket in copies.Values.OfType<SkillTree.SocketNode>().Where(s => s.IsActive && !s.HasGem).OrderBy(s => s.SaveId)) {
+                    RefreshDecision();
+                    int bestSlot = Enumerable.Range(0, inventory.SlotCount)
+                        .Where(i => SupportedGem(inventory.PeekItem(i)?.Gem?.Definition) && GemScore(inventory.PeekItem(i).Gem.Definition) > 0.000001)
+                        .OrderByDescending(i => GemScore(inventory.PeekItem(i).Gem.Definition)).ThenBy(i => i).DefaultIfEmpty(-1).First();
+                    if (bestSlot < 0) {
+                        var offers = locations.Values.Where(l => l.IsShop && l.ShopDefinition != null && (bool)ProgressCall(progress, "IsLocationUnlocked", l))
+                            .SelectMany(l => l.ShopDefinition.Entries.Select(e => new { location = l, entry = e, gem = e.ItemDefinition as Gems.GemDefinition }))
+                            .Where(o => SupportedGem(o.gem) && GemScore(o.gem) > 0.000001 && o.entry.Price <= wallet.Gold && shopService.GetRemainingStock(o.location.ShopDefinition, o.entry) != 0)
+                            .OrderByDescending(o => GemScore(o.gem) / System.Math.Max(1, o.entry.Price))
+                            .ThenBy(o => o.location.LocationId, System.StringComparer.Ordinal).ThenBy(o => o.entry.EntryId, System.StringComparer.Ordinal);
+                        foreach (var offer in offers) {
+                            if (!(bool)ProgressCall(progress, "TrySelectLocation", offer.location.LocationId)) continue;
+                            log.Add(new { action = "visit", location = offer.location.LocationId, stage, gold = wallet.Gold });
+                            var estimatedGain = GemGain(offer.gem);
+                            bool bought = shopService.TryBuy(offer.location.ShopDefinition, offer.entry, out var transaction);
+                            log.Add(new { action = "buy", location = offer.location.LocationId, stage, item = offer.gem.name,
+                                price = offer.entry.Price, amount = offer.entry.Amount, success = bought, result = transaction.ToString(), gold = wallet.Gold,
+                                decisionScore = GemScore(offer.gem), estimatedOffenceGain = System.Math.Exp(estimatedGain[0]) - 1,
+                                estimatedDefenceGain = System.Math.Exp(estimatedGain[1]) - 1, decisionPolicy = "counterfactual-v2" });
+                            if (!(bool)ProgressCall(progress, "TrySelectLocation", location.LocationId)) throw new System.InvalidOperationException("Could not return from shop.");
+                            ProgressCall(progress, "SetSelectedLevel", stage);
+                            if (!bought) continue;
+                            bestSlot = Enumerable.Range(0, inventory.SlotCount).First(i => inventory.PeekItem(i)?.Gem?.Definition == offer.gem);
+                            break;
+                        }
+                    }
+                    if (bestSlot < 0) continue;
+                    string gemName = inventory.PeekItem(bestSlot).Gem.Definition.name;
+                    if (!socketService.TryInsertGem(inventory, bestSlot, socket)) throw new System.InvalidOperationException("Gem insertion failed: " + socketService.FailureReason);
+                    log.Add(new { action = "insert", location = location.LocationId, stage, socketId = socket.SaveId, item = gemName });
+                }
+                state["gold"] = wallet.Gold; state["shopPurchases"] = shopService.CaptureSaveData();
+                state["socketGems"] = copies.Values.OfType<SkillTree.SocketNode>().Where(s => s.HasGem).ToDictionary(s => s.SaveId, s => s.SavedSocketedGem);
+                RefreshTree(); player.RequestModRecalculation();
+            }
+            EquipAndShop(); player.ResetCombatState();
             void Snapshot(string boundary) {
                 // Only at existing reset boundaries. No combat effects contaminate the build stats.
                 player.RequestModRecalculation(); player.CombatTick(0f, Battle.CombatTickPhase.Mods);
@@ -343,6 +526,8 @@ try {
                 ((System.Collections.Generic.List<object>)state["snapshots"]).Add(new {
                     boundary, location = location.LocationId, stage, attempt = stageAttempt,
                     level = level.Level, experience = level.CurrentExp, freePoints = level.SkillPoints, stats,
+                    gold = (int)state["gold"], shopCount = ((System.Collections.Generic.List<object>)state["shopLog"]).Count,
+                    socketGems = copies.Values.OfType<SkillTree.SocketNode>().Where(s => s.HasGem).Select(s => new { socketId = s.SaveId, item = s.SavedSocketedGem.Definition.name, active = s.IsGemActive }).ToArray(),
                     allocationCount = allocations.Count, rewardCount = rewards.Count, waveCount = (int)state["waves"],
                     revision = (int)state["revision"], probe = isProbe, probeIndex, buildOrder = allocated.ToArray(),
                     searchCount = ((System.Collections.Generic.List<object>)state["searchLog"]).Count +
@@ -442,7 +627,7 @@ try {
                 player.ResetCombatState(); Snapshot("after-probe");
                 ((System.Collections.Generic.List<object>)state["searchLog"]).Add(new {
                     action = "evaluate", location = location.LocationId, stage, round = (int)search["round"], candidate = probeIndex,
-                    focus, variant, level = startData.level, experience = startData.currentExp, budget = (int)search["budget"],
+                    focus, variant, level = startData.level, experience = startData.currentExp, budget = System.Convert.ToSingle(search["budget"]),
                     waveSeedAttempt = (int)search["seedAttempt"], duplicate = duplicateProposal, won = stageWon, completedWaves, probeKills,
                     fitness, baselineFitness = (double)search["baselineFitness"], delta = fitness - (double)search["baselineFitness"], improved,
                     simulatedSeconds = stageSeconds, freePoints = level.SkillPoints,
@@ -454,12 +639,12 @@ try {
                     var bestNodes = (System.Collections.Generic.List<string>)search["bestNodes"];
                     bool changedBuild = !new System.Collections.Generic.HashSet<string>(baseNodes).SetEquals(bestNodes);
                     state["allocated"] = bestNodes; state["focus"] = search["bestFocus"]; state["variant"] = search["bestVariant"];
-                    startData.skillPoints = (int)search["bestFree"];
+                    startData.skillPoints = System.Convert.ToSingle(search["bestFree"]);
                     if (changedBuild) {
                         state["revision"] = (int)state["revision"] + 1;
                         foreach (string id in bestNodes) allocations.Add(new { revision = (int)state["revision"], location = location.LocationId, stage,
                             wave = 0, level = startData.level, nodeId = id, modifiers = byId[id].Modifiers.Select(m => m.name).ToArray(),
-                            pointsSpent = (int)Field(byId[id], typeof(SkillTree.Node), "nodeCost"), pointsRemaining = startData.skillPoints });
+                            pointsSpent = System.Convert.ToSingle(Field(byId[id], typeof(SkillTree.Node), "nodeCost")), pointsRemaining = startData.skillPoints });
                     }
                     ((System.Collections.Generic.List<object>)state["searchLog"]).Add(new { action = "commit", location = location.LocationId,
                         stage, round = (int)search["round"], changedBuild, won = stageWon, focus = (string)state["focus"],
@@ -478,11 +663,12 @@ try {
                 if (wasBoss && firstCompletion) {
                     var pending = (System.Collections.Generic.List<Battle.PendingLocationReward>)ProgressCall(progress, "GetPendingLocationRewards", stage);
                     foreach (var reward in pending) {
-                        bool delivered = inventory.TryAddItem(reward.Item, out _);
+                        bool delivered = reward.IsGold || inventory.TryAddItem(reward.Item, out _);
                         // Match the currently inspected completion window, including BL-001 on insertion failure.
                         bool claimed = (bool)ProgressCall(progress, "TryClaimReward", reward);
+                        if (reward.IsGold && claimed) state["gold"] = (int)state["gold"] + reward.GoldAmount;
                         rewards.Add(new { action = "claim", location = location.LocationId, stage, rewardId = reward.RewardId,
-                            item = reward.Item.ItemDefinition.name, amount = reward.Item.StackCount, delivered, claimed });
+                            item = reward.IsGold ? "Gold" : reward.Item.ItemDefinition.name, amount = reward.IsGold ? reward.GoldAmount : reward.Item.StackCount, delivered, claimed });
                     }
                     UseSimpleItems();
                 }
@@ -498,6 +684,7 @@ try {
                     state["status"] = "stopped"; state["reason"] = "Stage retry limit: " + location.LocationId + "/" + stage;
                 }
             }
+            EquipAndShop();
             state["player"] = level.CaptureSaveData(); state["progress"] = ProgressCall(progress, "CaptureSaveData");
             state["inventory"] = inventory.Slots.Where(s => s.Item != null && !s.Item.IsEmpty).Select(s => s.Item.CreateCopy()).ToList();
             player.ResetCombatState(); Snapshot(stageWon ? "after-win" : "after-failure");
@@ -516,7 +703,7 @@ try {
                 state["search"] = new System.Collections.Generic.Dictionary<string,object> {
                     { "next", 0 }, { "round", (int)state["searchRounds"] }, { "seedAttempt", (int)state["attempt"] - 1 },
                     { "baseNodes", new System.Collections.Generic.List<string>(allocated) },
-                    { "budget", level.SkillPoints + allocated.Sum(id => (int)Field(byId[id], typeof(SkillTree.Node), "nodeCost")) },
+                    { "budget", level.SkillPoints + allocated.Sum(id => System.Convert.ToSingle(Field(byId[id], typeof(SkillTree.Node), "nodeCost"))) },
                     { "bestNodes", new System.Collections.Generic.List<string>(allocated) }, { "bestFree", level.SkillPoints },
                     { "bestFocus", state["focus"] }, { "bestVariant", state["variant"] }, { "bestFitness", -1d }, { "baselineFitness", 0d },
                     { "seen", new System.Collections.Generic.HashSet<string>(System.StringComparer.Ordinal) }
@@ -551,6 +738,8 @@ var results = exportCampaign ? campaignStates.Skip(exportIndex).Take(1).Select(s
     inventory = ((System.Collections.Generic.List<InventorySystem.InventoryItem>)state["inventory"]).Select(i => new { item = i.ItemDefinition.name, amount = i.StackCount }).ToArray(),
     waveLog = (System.Collections.Generic.List<object>)state["waveLog"], allocationLog = (System.Collections.Generic.List<object>)state["allocationLog"], rewardLog = (System.Collections.Generic.List<object>)state["rewardLog"],
     snapshots = (System.Collections.Generic.List<object>)state["snapshots"]
+    , shopLog = (System.Collections.Generic.List<object>)state["shopLog"], shopPurchases = state["shopPurchases"],
+    socketGems = ((System.Collections.Generic.Dictionary<string,Gems.GemInstance>)state["socketGems"]).Select(p => new { socketId = p.Key, item = p.Value.Definition.name }).ToArray()
     , searchLog = (System.Collections.Generic.List<object>)state["searchLog"], trialWaves = (int)state["trialWaves"],
     trialSimulatedSeconds = (double)state["trialSeconds"], allocationRevision = (int)state["revision"], learnedFocus = (string)state["focus"]
 }).ToArray() : null;
@@ -562,7 +751,7 @@ var response = new { schemaVersion = 2, mode = "progression-campaign", finished,
         id = n.SaveId, name = n.name, type = n.GetType().Name, supported = Numeric(n), root = n is SkillTree.RootNode,
         x = sourcePlayer.SkillTree.transform.InverseTransformPoint(n.transform.position).x,
         y = sourcePlayer.SkillTree.transform.InverseTransformPoint(n.transform.position).y,
-        cost = n is SkillTree.RootNode ? 0 : (int)Field(n, typeof(SkillTree.Node), "nodeCost"),
+        cost = n is SkillTree.RootNode ? 0 : System.Convert.ToSingle(Field(n, typeof(SkillTree.Node), "nodeCost")),
         connectedIds = n.ConnectedNodes.Where(x => x != null).Select(x => x.SaveId).ToArray(),
         modifiers = n.Modifiers.Select(m => new { name = m == null ? "missing" : m.name, type = m == null ? "missing" : m.GetType().Name,
             serialized = m == null ? null : UnityEngine.JsonUtility.ToJson(m),
@@ -576,4 +765,3 @@ if (exportCampaign || exportCatalog) {
     return WriteEditorExport(response, (string)request["exportPath"]);
 }
 return response;
-

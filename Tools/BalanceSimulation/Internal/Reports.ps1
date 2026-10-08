@@ -25,6 +25,8 @@ function Publish-BalanceReport([string]$Path, $Result) {
     finally { $gzip.Dispose() }
     $compressed = $memory.ToArray(); $memory.Dispose()
     $template = Get-Content (Join-Path $taskToolsRoot 'Templates/Report.html') -Raw
+    $strategySummary = Get-Content (Join-Path $taskToolsRoot 'Templates/StrategySummary.js') -Raw
+    $template = $template.Replace('__STRATEGY_SUMMARY_JS__', $strategySummary)
     $indexLink = [IO.Path]::GetRelativePath((Split-Path $htmlPath), (Join-Path $taskReportRoot 'index.html')).Replace('\','/')
     $template = $template.Replace('href="../index.html"', 'href="' + [Net.WebUtility]::HtmlEncode($indexLink) + '"')
     $template = $template.Replace('href="report.md"', 'href="' + [Net.WebUtility]::HtmlEncode([IO.Path]::GetFileName([IO.Path]::ChangeExtension($Path, '.md'))) + '"')

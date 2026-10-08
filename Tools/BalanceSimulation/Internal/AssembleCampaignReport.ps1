@@ -39,6 +39,8 @@ $taskSummary = @($taskRows | Group-Object strategy | ForEach-Object {
         rewardsClaimed = @($taskRewardActions | Where-Object { $_.action -eq 'claim' -and $_.claimed }).Count
         rewardsUsed = @($taskRewardActions | Where-Object action -eq 'used').Count
         rewardsLostOnInsertion = @($taskRewardActions | Where-Object { $_.action -eq 'claim' -and $_.claimed -and -not $_.delivered }).Count
+        gemsBought = @($_.Group | ForEach-Object shopLog | Where-Object { $_.action -eq 'buy' -and $_.success }).Count
+        gemsInserted = @($_.Group | ForEach-Object shopLog | Where-Object action -eq 'insert').Count
     }
 })
 $taskLocationSummary = @($taskRows | ForEach-Object {
@@ -92,7 +94,7 @@ if ($Preset.adaptive) {
 if ($IsPartial) { $taskMarkdown.Add('INCOMPLETE RUN: only completed, saved campaigns are included.'); $taskMarkdown.Add('') }
 $taskMarkdown.Add(('[Open interactive stats and skill tree]({0}). Select a campaign and a stage boundary. Build stats exclude temporary combat effects; all numeric values are raw production stat values.' -f [IO.Path]::GetFileName([IO.Path]::ChangeExtension($taskOutput, '.html'))))
 $taskMarkdown.Add('')
-$taskMarkdown.Add('Fresh authored player defaults. XP comes from actual enemy kills; nodes are allocated as points arrive. Boss rewards are claimed and simple supported items are consumed. Repeated failures retain earned XP and investment. Unsupported mechanics/items are excluded or retained; this is not a full UI/shop/gem playthrough.')
+$taskMarkdown.Add('Fresh authored player defaults. XP comes from actual enemy kills; nodes are allocated as points arrive. Boss rewards, including gold, are claimed and simple supported items are consumed. Campaigns with shopLog support numeric local gems: bots visit unlocked shops when an active empty socket needs a gem, buy affordable stock through ShopService and insert through InventorySocketService. Gold, stock and socket contents persist across stages. Repeated failures retain earned XP and investment. Influence/bridge gems and UI navigation remain outside coverage. Older reports without shopLog exclude shops and gems.')
 $taskMarkdown.Add('')
 $taskMarkdown.Add('| Strategy | Runs | Route completed | Mean stage cleared | Maximum stage | Mean final level | Mean nodes | Mean free points | Deaths | Rewards used |')
 $taskMarkdown.Add('| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |')

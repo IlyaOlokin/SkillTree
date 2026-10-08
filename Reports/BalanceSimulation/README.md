@@ -52,3 +52,30 @@ purchases. Select a search-table row to view that candidate's stats/tree. Earlie
 allocation revisions remain in the dataset. Trial wave counts are separate from
 normal-progression wave tables. A free experimental tree respec is a simulator
 search capability, not a change to gameplay refund rules.
+
+Campaign snapshots authored since 2026-10-08 additionally contain gold, socket gem
+contents and a shop-log cursor. The viewer includes shop visits, purchase outcomes,
+prices and socket insertions. Older reports without these fields keep their
+original shop/gem exclusions. See [policy scope](../../Tools/BalanceSimulation/README.md#campaign-shops-and-local-gems-2026-10-08).
+
+## Strategy averages and heat map
+
+The HTML viewer offers a strategy selector with equal-weight averages across its
+bots. Each bot contributes its last non-probe reset-boundary snapshot once;
+longer runs and repeated deaths do not receive additional weight. It shows mean,
+minimum and maximum results and scalar stats, with the stat sample count. TypeMask
+stats display observed mask variants instead of an invalid arithmetic mean.
+
+Heat-map frequency is the fraction of the strategy's bots whose final tree contains
+a node; the activity selector instead counts final active nodes. Roots are shown
+for graph context. Colours range from grey (0%) through blue to yellow (100%);
+clicking a node shows counts and seeds. This is final build consistency, not node
+purchase frequency over time, causal effectiveness or an averaged playable build.
+Runs may end at different levels/stages. Existing individual-bot views remain.
+
+Verification: JavaScript syntax check passed. The summary module executed against
+the real 15-bot dataset with a lightweight in-memory DOM; all three strategy means
+and MaximumHealth means matched independent calculations, and strategy/heat-map
+mode switching completed without script errors. Embedded viewer data matches the
+archive. Browser visual interaction was not checked: the in-app browser blocks
+local file URLs. No additional simulations or Unity build were run for this view.

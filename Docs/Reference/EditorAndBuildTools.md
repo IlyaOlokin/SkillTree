@@ -1,5 +1,12 @@
 # Editor tools, checks and builds
 
+Campaign tooling update, 2026-10-08: the external campaign adapter now models
+numeric local gems, socket allocation, production shop purchases/stock and gold
+completion rewards. The three-attribute `balanced-shops.json` preset selects
+strength, dexterity and intelligence/lightning; five runs per strategy means
+15 campaigns. See [campaign shops and local gems](../../Tools/BalanceSimulation/README.md#campaign-shops-and-local-gems-2026-10-08)
+for policy and coverage. Earlier campaign records exclude these additions.
+
 [Home](../Home.md) · [Project map](../ProjectMap.md)
 
 Status: **source-reviewed entry-point map, 2026-09-28**. Build script/workflows and
@@ -195,3 +202,18 @@ suppressed, and trial wave/time totals are separate in reports. The bounded pilo
 compiled through Unity CLI: two substituted nodes improved the frozen stage-7
 result from failure to victory, then normal progression confirmed it. Full adaptive
 campaign execution is recorded in the report directory when completed.
+
+Decision-policy v2, 2026-10-08: candidate stats now use an isolated production
+recalculation and representative current-stage opponents. Nodes use a bounded
+three-node path search; gems require positive projected utility, with caps and
+mechanic prerequisites. See [decision scope and verification](../../Tools/BalanceSimulation/README.md#counterfactual-decision-policy-v2-2026-10-08).
+Compilation and scoped metric checks passed; live v2 campaigns are not verified.
+The earlier 15-campaign report records v1 and was not rerun or overwritten.
+
+Live v2 follow-up, 2026-10-08: [15 balanced campaigns](../../Reports/BalanceSimulation/20261008-192754-223-campaign/verification.md)
+completed after Pipeline restart, with mean cleared stages 51 / 95 / 15 for
+strength / dexterity / intelligence-lightning. All 64 purchases had positive v2
+scores; no BarrierCapacity gem was purchased. Final snapshot gold/socket counts
+and temporary actor cleanup were checked. The catalog also records 238 attribute
+nodes changed from 2 to 1, so the comparison is not algorithm-only. This supersedes
+the earlier live-execution-pending note; other policy limits remain.

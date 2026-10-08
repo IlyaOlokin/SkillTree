@@ -297,3 +297,30 @@ improved 17→25 but dexterity regressed 51→42; elemental means stayed 14. The
 stage-only objective and persistent growth priorities can harm later progression;
 this is a measured tool/policy limitation, not an established gameplay defect.
 BL-032 remains open. No gameplay source, assets or profile-save contract changed.
+
+Campaign simulator update, 2026-10-08: isolated bots now allocate sockets, retain
+numeric local gems, buy from unlocked shops with production stock/gold/inventory
+checks, and install through InventorySocketService. Gold completion rewards are
+handled explicitly; the old item-only adapter would dereference a null Item for
+these newly authored rewards. The adapter also preserves float skill-point and
+node-cost values instead of the old integer assumptions. Compilation against the
+installed Unity/game assemblies passed; all 15 balanced campaigns completed on
+seeds 101–105 with 53 purchases and 53 socket insertions. Final gold/socket counts
+match the last snapshots for all bots. This does not close BL-032 or verify UI navigation, influence/bridge
+gems or special modifiers. See [runner scope](../Tools/BalanceSimulation/README.md#campaign-shops-and-local-gems-2026-10-08).
+
+Simulator policy finding, 2026-10-08: the v1 heuristic rewarded BarrierCapacity
+without checking barrier charges/mask or MysticNegation, allowing ineffective gem
+purchases. Decision policy v2 projects current-build stat gains and models both
+barrier absorption and the independent capacity/negation synergy. Compilation and
+scoped metric checks passed; live campaigns and performance remain unverified due
+to unavailable Pipeline discovery. This is a bot-policy issue, not a gameplay
+Barrier defect, and does not close BL-032. See [policy v2](../Tools/BalanceSimulation/README.md#counterfactual-decision-policy-v2-2026-10-08).
+
+Simulator policy v2 live follow-up, 2026-10-08: [all 15 requested campaigns](../Reports/BalanceSimulation/20261008-192754-223-campaign/verification.md)
+finished without adapter errors. No BarrierCapacity gem was purchased; all 64
+purchases had positive v2 scores and were inserted. Final snapshots matched final
+gold/socket counts, and no temporary actors remained. This resolves the preceding
+live-execution gap for this cohort, not every possible build/forecast. Mean
+progression increased, but 238 attribute nodes also changed from 2 to 1, so this
+is not a controlled algorithm-only improvement measurement. BL-032 remains open.
