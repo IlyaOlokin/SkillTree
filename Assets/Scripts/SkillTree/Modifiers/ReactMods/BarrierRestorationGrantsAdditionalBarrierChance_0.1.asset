@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: BarrierRestorationGrantsAdditionalBarrierChance_0.1
   m_EditorClassIdentifier: Assembly-CSharp::SkillTree.BarrierRestorationGrantsAdditionalBarrierChance
   <Priorities>k__BackingField: 00000000
+  procIcon: {fileID: 21300000, guid: 260cf2db433348b40928d75ffe00f3c6, type: 3}
   chance: 0.1

@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abffb9b78fb28f94b9728752627b0680, type: 3}
+  m_Name: Shop4Definition
+  m_EditorClassIdentifier: Assembly-CSharp::ShopSystem.ShopDefinition
+  shopId: 4
+  displayName: 
+  description: 
+  entries:
+  - entryId: 16f3986007164829af71e3dfad559b66
+    itemDefinition: {fileID: 11400000, guid: 7b75efd691824ea8a47eef0a5d202506, type: 2}
+    amount: 1
+    price: 250
+    stockLimit: 3
+  - entryId: 6d7eae702e504f318a64eac396f0bf8d
+    itemDefinition: {fileID: 11400000, guid: 6c90e47ca4da42c8b63d8f0b7a312cb7, type: 2}
+    amount: 1
+    price: 250
+    stockLimit: 3
+  - entryId: 58a19a75e78544df90f9391c56431ac3
+    itemDefinition: {fileID: 11400000, guid: 429cc35942c9458f9448f68d829dc89f, type: 2}
+    amount: 1
+    price: 250
+    stockLimit: 3
+  - entryId: 605ffc7d1bf04812a0fbf383fdc6491e
+    itemDefinition: {fileID: 11400000, guid: 70261bb85c214b068a91f6ec777e7551, type: 2}
+    amount: 1
+    price: 250
+    stockLimit: 3
+  - entryId: 33249b0ca25942e5af8e1a6783a6164d
+    itemDefinition: {fileID: 11400000, guid: 7a115a7000b14c3e9094c2585cdcf9c5, type: 2}
+    amount: 1
+    price: 250
+    stockLimit: 3
+  - entryId: 3131188cd13e4a0ebec9ed4fed2d04c7
+    itemDefinition: {fileID: 11400000, guid: d029e82ea7b94684a0175c5e884bd5fd, type: 2}
+    amount: 1
+    price: 250
+    stockLimit: 3
+  - entryId: 2839f452ad1a45ec866f920b5e843e07
+    itemDefinition: {fileID: 11400000, guid: 0a0a7bbe9fcb4a059244e1e7e2c4663c, type: 2}
+    amount: 1
+    price: 250
+    stockLimit: 3
+  - entryId: 978ccd417f684887a1572bf2b41ef544
+    itemDefinition: {fileID: 11400000, guid: 9ef8f06fb85b4a2d88670af386450718, type: 2}
+    amount: 1
+    price: 250
+    stockLimit: 3

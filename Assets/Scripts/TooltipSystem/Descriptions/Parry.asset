@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Parry
   m_EditorClassIdentifier: 
   descriptions:
+  - combat.notification.parry
   - description.parry1
   - description.parry2

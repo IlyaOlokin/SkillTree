@@ -29,5 +29,8 @@ namespace Battle
         OffensiveStance = 24,
         DefensiveStance = 25,
         DamageDebt = 26,
+        Fortification = 27,
+        CriticalCharge = 28,
     }
 }
+

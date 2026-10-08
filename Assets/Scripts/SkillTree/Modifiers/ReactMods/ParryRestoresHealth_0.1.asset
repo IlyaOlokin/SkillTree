@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: ParryRestoresHealth_0.1
   m_EditorClassIdentifier: Assembly-CSharp::SkillTree.ParryRestoresHealth
   <Priorities>k__BackingField: 00000000
+  procIcon: {fileID: 21300000, guid: add0fe7373593804c88e3ade51c07fe0, type: 3}
   maxHealthRestored: 0.1

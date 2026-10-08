@@ -119,6 +119,18 @@ MonoBehaviour:
     m_Key: tutorial.world_map.paragraph3
     m_Metadata:
       m_Items: []
+  - m_Id: 6163721959378944
+    m_Key: tutorial.travelNodes.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6163722005516288
+    m_Key: tutorial.travelNodes.paragraph1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6163722005516289
+    m_Key: tutorial.travelNodes.paragraph2
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

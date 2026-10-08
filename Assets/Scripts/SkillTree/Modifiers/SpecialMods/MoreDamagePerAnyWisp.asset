@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa5407cc84b749e6b00040e52fd7f3ed, type: 3}
+  m_Name: MoreDamagePerAnyWisp
+  m_EditorClassIdentifier: Assembly-CSharp::SkillTree.ModifierContainerPerAnyWisp
+  <Priorities>k__BackingField: 00000000
+  baseModifier: {fileID: 11400000, guid: 2d31730c83e2649479a75a32583d0364, type: 2}

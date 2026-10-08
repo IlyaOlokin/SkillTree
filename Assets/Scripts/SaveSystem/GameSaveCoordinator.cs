@@ -389,7 +389,7 @@ namespace SaveSystem
             MarkPlayerDirty();
         }
 
-        private void HandleSkillPointsChanged(int _)
+        private void HandleSkillPointsChanged(float _)
         {
             MarkPlayerDirty();
         }

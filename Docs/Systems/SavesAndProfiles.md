@@ -29,6 +29,11 @@ separate from character autosave.
 
 ## One character snapshot
 
+As of 2026-10-08, `PlayerSaveData.skillPoints` is a float so half-point travel-node
+costs survive capture and restoration. Existing integer-valued JSON balances are
+accepted by the same field. Infinite-node investment counts remain integers.
+No historical allocation-cost reimbursement or profile rewrite is performed.
+
 `ProfileSnapshotSaveData` contains player progression/gold, location progress/shop
 purchases, tree state, inventory and tutorial progress. Any dirty subsystem causes
 the coordinator to capture the complete current snapshot, rather than updating

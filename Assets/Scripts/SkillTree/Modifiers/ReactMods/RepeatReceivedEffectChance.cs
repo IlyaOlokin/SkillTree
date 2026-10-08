@@ -8,6 +8,7 @@ namespace SkillTree
     [CreateAssetMenu(menuName = "Modifiers/Reactive/Repeat Received Effect Chance", fileName = "New RepeatReceivedEffectChance")]
     public class RepeatReceivedEffectChance : Modifier
     {
+        [SerializeField] private Sprite procIcon;
         [SerializeField, Range(0f, 1f)] private float chance = 0.1f;
 
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
@@ -37,7 +38,8 @@ namespace SkillTree
                     return;
                 }
 
-                effectController.AddRepeatedEffect(effectFactory);
+                if (effectController.AddRepeatedEffect(effectFactory))
+                    unit.NotifyModifierProc(procIcon);
             }
 
             return new DelegateModifierRuntimeBinding(

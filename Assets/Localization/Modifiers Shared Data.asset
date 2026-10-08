@@ -19,6 +19,30 @@ MonoBehaviour:
     m_Key: modifier.container.added.Armor
     m_Metadata:
       m_Items: []
+  - m_Id: 46857000000000010
+    m_Key: modifier.container.added.BlockPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000011
+    m_Key: modifier.container.increased.BlockPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000012
+    m_Key: modifier.container.decreased.BlockPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000013
+    m_Key: modifier.container.more.BlockPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000014
+    m_Key: modifier.container.less.BlockPower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000015
+    m_Key: modifier.container.none.BlockPower
+    m_Metadata:
+      m_Items: []
   - m_Id: 85905772544
     m_Key: modifier.container.increased.Armor
     m_Metadata:
@@ -2437,6 +2461,34 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 46850000000000001
     m_Key: modifier.deferredAttackDamage.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46851000000000001
+    m_Key: modifier.enemyKillRestoresBarrier.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46852000000000001
+    m_Key: modifier.bleedHealsInsteadOfDamage.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46853000000000001
+    m_Key: modifier.barrierRestorationGrantsFortification.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46854000000000001
+    m_Key: modifier.lowestElementalDamagePenetratesResistance.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46855000000000001
+    m_Key: modifier.nonCriticalHitsGrantCriticalCharge.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46856000000000001
+    m_Key: modifier.modifierContainerPerAnyWisp.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46856000000000002
+    m_Key: modifier.modifierContainerPerAnyWisp.unconfigured
     m_Metadata:
       m_Items: []
   m_Metadata:

@@ -7,6 +7,7 @@ namespace SkillTree
     [CreateAssetMenu(menuName = "Modifiers/Reactive/Reduce Target Attack Progress On Hit", fileName = "New ReduceTargetAttackProgressOnHit")]
     public class ReduceTargetAttackProgressOnHit : Modifier
     {
+        [SerializeField] private Sprite procIcon;
         [SerializeField, Range(0f, 1f)] private float triggerChance = 0.25f;
         [SerializeField, Range(0f, 1f)] private float attackProgressReduction = 0.2f;
 
@@ -33,7 +34,10 @@ namespace SkillTree
                     return;
                 }
 
+                float previousProgress = targetAttacker.AttackProgress;
                 targetAttacker.ModifyAttackProgress(-clampedAttackProgressReduction);
+                if (targetAttacker.AttackProgress < previousProgress)
+                    unit.NotifyModifierProc(procIcon);
             }
 
             return new DelegateModifierRuntimeBinding(

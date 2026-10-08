@@ -29,10 +29,10 @@ namespace SkillTree
         public virtual bool IsAllocated { get; private set; }
         public virtual bool IsActive { get; private set; }
         public bool IsApplyingSavedState { get; private set; }
-        [SerializeField] private int nodeCost = 1;
+        [SerializeField] private float nodeCost = 1f;
         public virtual bool IsInfinite => false;
         public int InvestedSkillPoints { get; private set; }
-        private int AllocationCost => IsInfinite ? 1 : nodeCost;
+        private float AllocationCost => IsInfinite ? 1 : nodeCost;
         [SerializeField] private float permanentPower;
         [SerializeField] private bool preventPowerChanges;
         [SerializeField] private bool preventIndependentAllocation;
@@ -210,7 +210,7 @@ namespace SkillTree
                 }
             }
 
-            int refund = IsInfinite ? InvestedSkillPoints : nodeCost;
+            float refund = IsInfinite ? InvestedSkillPoints : nodeCost;
             InvestedSkillPoints = 0;
             _unitLevel.RefundSkillPoints(refund);
             
@@ -522,6 +522,7 @@ namespace SkillTree
         Big = 3,
         Special = 4,
         Socket = 5,
-        Infinite = 6
+        Infinite = 6,
+        Limited = 7
     }
 }

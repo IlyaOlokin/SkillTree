@@ -1,5 +1,6 @@
 using System;
 using Battle;
+using SkillTree;
 using Zenject;
 
 namespace Tutorials
@@ -13,6 +14,7 @@ namespace Tutorials
         public const string ElementalHit = "player.hit.elemental";
         public const string MysticHit = "player.hit.mystic";
         public const string AilmentReceived = "player.ailment.received";
+        public const string TravelNodeAllocated = "tree.travel.allocated";
     }
 
     // New integrations belong here (or in another adapter), not in the presentation/service.
@@ -39,6 +41,7 @@ namespace Tutorials
             spawner.OnWaveClearedNumber += OnWave;
             player.OnGettingHit += OnHit;
             player.effectController.OnEffectAdded += OnEffectAdded;
+            Node.OnAnyNodeAllocatedChanged += OnNodeAllocated;
         }
 
         public void Dispose()
@@ -48,6 +51,7 @@ namespace Tutorials
             spawner.OnWaveClearedNumber -= OnWave;
             player.OnGettingHit -= OnHit;
             player.effectController.OnEffectAdded -= OnEffectAdded;
+            Node.OnAnyNodeAllocatedChanged -= OnNodeAllocated;
         }
 
         public void Tick()
@@ -64,6 +68,11 @@ namespace Tutorials
         }
 
         private void OnPlayerLevel(int value) => tutorials.Report(TutorialEvents.PlayerLevel, value, spawner.SelectedLocationId);
+        private void OnNodeAllocated(Node node)
+        {
+            if (node.IsAllocated && !node.IsApplyingSavedState && node.NodeType == NodeType.Travel)
+                tutorials.Report(TutorialEvents.TravelNodeAllocated, eventLocationId: spawner.SelectedLocationId);
+        }
         private void OnLocationLevel()
         {
             if (spawner.IsBattleActive)

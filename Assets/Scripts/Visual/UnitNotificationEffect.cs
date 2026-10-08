@@ -1,6 +1,8 @@
 using System;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace Visual
@@ -16,6 +18,17 @@ namespace Visual
     [SerializeField] private float moveDistance;
     [SerializeField] private float lerpSpeed;
     [SerializeField] private float posSpreading;
+    [Header("Icon notification")]
+    [SerializeField] private Vector2 iconSize = new(48f, 48f);
+    [SerializeField] private Vector2 iconMoveDirection = new(-1f, 1f);
+    [SerializeField, Min(0f)] private float iconMoveDistance = 1.3f;
+    [SerializeField, Min(0.01f)] private float iconLifeTime = 0.9f;
+    [SerializeField, Min(0.01f)] private float iconGrowDuration = 0.2f;
+    [SerializeField, Min(0.01f)] private float iconDisappearDuration = 0.25f;
+    [SerializeField, Min(0.01f)] private float iconPeakScale = 1.2f;
+    [SerializeField] private Image icon;
+    private bool _isIcon;
+    private Sequence _iconSequence;
     
     [Header("Colors")]
     [SerializeField] private Color dmgColor = Color.white;
@@ -36,6 +49,12 @@ namespace Visual
             Random.Range(-posSpreading, posSpreading));
         AssignCanvasCamera();
 
+        if (_isIcon)
+        {
+            PlayIconAnimation();
+            return;
+        }
+
         Destroy(gameObject, Mathf.Max(0.01f, lifeTime));
         startScale = objectToMove.localScale;
         targetScale = startScale * scaleMultiplier;
@@ -45,6 +64,7 @@ namespace Visual
 
     private void Update()
     {
+        if (_isIcon) return;
         timer += Time.deltaTime;
         if (timer <= effectDuration)
         {
@@ -78,6 +98,61 @@ namespace Visual
         EnsureRuntimeReferences();
         text.color = messageColor;
         text.text = message;
+    }
+
+    /// <summary>Configure a fresh notification instance before its Start callback.</summary>
+    public void ShowIcon(Sprite sprite, Color? tint = null)
+    {
+        if (sprite == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        EnsureRuntimeReferences();
+        _isIcon = true;
+        text.enabled = false;
+        if (criticalEffect != null) criticalEffect.gameObject.SetActive(false);
+
+        if (icon == null)
+        {
+            Debug.LogWarning("Icon notification requires an Image assigned in its prefab.", this);
+            Destroy(gameObject);
+            return;
+        }
+        icon.gameObject.SetActive(true);
+        icon.rectTransform.sizeDelta = iconSize;
+        icon.sprite = sprite;
+        icon.color = tint ?? Color.white;
+    }
+
+    private void PlayIconAnimation()
+    {
+        float duration = Mathf.Max(0.03f, iconLifeTime);
+        float growDuration = Mathf.Clamp(iconGrowDuration, 0.01f, duration * 0.5f);
+        float disappearDuration = Mathf.Clamp(iconDisappearDuration, 0.01f, duration - growDuration);
+        Vector3 peakScale = objectToMove.localScale * Mathf.Max(0.01f, iconPeakScale);
+        Vector2 direction = iconMoveDirection.sqrMagnitude > 0.0001f
+            ? iconMoveDirection.normalized : Vector2.zero;
+        Vector3 destination = objectToMove.position + (Vector3)direction * Mathf.Max(0f, iconMoveDistance);
+        objectToMove.localScale = peakScale * 0.1f;
+
+        _iconSequence = DOTween.Sequence();
+        _iconSequence.Append(objectToMove.DOScale(peakScale, growDuration).SetEase(Ease.OutBack));
+        _iconSequence.Insert(0f, objectToMove.DOMove(destination, duration).SetEase(Ease.OutCubic));
+        _iconSequence.Insert(duration - disappearDuration,
+            objectToMove.DOScale(Vector3.zero, disappearDuration).SetEase(Ease.InBack));
+        _iconSequence.Insert(duration - disappearDuration,
+            icon.DOFade(0f, disappearDuration).SetEase(Ease.InQuad));
+        _iconSequence.OnComplete(() => Destroy(gameObject));
+    }
+
+    private void OnDisable()
+    {
+        _iconSequence?.Kill();
+        _iconSequence = null;
+        // Notifications are disposable; a killed sequence must not leave an orphan.
+        if (_isIcon) Destroy(gameObject);
     }
 
     public void SetWorldCamera(Camera worldCamera)

@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abffb9b78fb28f94b9728752627b0680, type: 3}
+  m_Name: Shop3Definition
+  m_EditorClassIdentifier: Assembly-CSharp::ShopSystem.ShopDefinition
+  shopId: 3
+  displayName: 
+  description: 
+  entries:
+  - entryId: 4c56585a5af543ed95ccba569814edc9
+    itemDefinition: {fileID: 11400000, guid: d6c96796cd414d1dbc7dbc243a59355c, type: 2}
+    amount: 1
+    price: 200
+    stockLimit: 3
+  - entryId: 796076cc995f4614afb9fb749ac7871d
+    itemDefinition: {fileID: 11400000, guid: 6939902e4a2943df88a4f53680ddf294, type: 2}
+    amount: 1
+    price: 200
+    stockLimit: 3
+  - entryId: 9ffba3325d43415f9c7f179f478608ff
+    itemDefinition: {fileID: 11400000, guid: 20bd5b994f404f2985d56ed2aee498ba, type: 2}
+    amount: 1
+    price: 200
+    stockLimit: 3
+  - entryId: 7fd91b51d21e4f80b6fcd4e485cca076
+    itemDefinition: {fileID: 11400000, guid: 80c4a9272d264296910c10599cdec156, type: 2}
+    amount: 1
+    price: 200
+    stockLimit: 3

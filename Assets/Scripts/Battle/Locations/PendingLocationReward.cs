@@ -16,7 +16,10 @@ namespace Battle
         public LocationLevelRewardEntry Reward { get; }
         public string RewardId { get; }
         public InventoryItem Item { get; }
+        public bool IsGold => Reward != null && Reward.IsGold;
+        public int GoldAmount => IsGold ? Reward.Amount : 0;
 
-        public bool IsValid => !string.IsNullOrWhiteSpace(RewardId) && Item != null && !Item.IsEmpty;
+        public bool IsValid => !string.IsNullOrWhiteSpace(RewardId) &&
+                               (IsGold ? GoldAmount > 0 : Item != null && !Item.IsEmpty);
     }
 }

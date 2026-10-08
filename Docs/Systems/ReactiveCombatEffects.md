@@ -106,3 +106,46 @@ Compilation verification is separate from a Unity playtest.
 Verification for this change: MSBuild.exe Assembly-CSharp.csproj /t:Build /p:Configuration=Debug /v:minimal /nologo succeeded. The generated project source path was temporarily updated for the rename and restored afterward. Existing dependency conflicts, deprecated Unity APIs and unrelated analyzer warnings remain. No tests or Unity playtest were run.
 
 Localization: Modifiers / modifier.barrierLossGrantsBarrierSurge.description; Descriptions / description.barrierSurge1, description.barrierSurge2 and effect.BarrierSurge.name. English entries are updated; existing ru/de translations are preserved and require translator updates for these keys. No empty locale entries were added.
+
+## Critical Charge (2026-10-04)
+
+`NonCriticalHitsGrantCriticalCharge` binds/unbinds `Unit.OnNonCrit`, granting one
+`CriticalCharge` per landed non-critical attack per modifier copy. Blocked and
+fully absorbed hits count; evasion returns before this event. The merged buff has
+three charges maximum and a shared four-second combat timer. Every application,
+including at the cap, refreshes that timer. Values are fixed and do not scale with
+node power. Recalculation rebuilds the subscription without clearing earned charges;
+normal effect expiry and combat reset clear the buff.
+
+After the critical roll, `AttackProcessor` calls `CriticalCharge.ApplyCriticalCharge`
+once, regardless of modifier copies. A critical hit gains Added CritDamageBonus of
+0.15 per charge in its own attack snapshot. All charges are removed immediately,
+before damage and reactive callbacks, preventing nested attacks from spending them
+again. Damage calculation refreshes CritDamageBonus using normal stat arithmetic;
+Increased/More modifiers and multi-critical layers retain their existing behavior.
+Misses neither grant nor consume charges. DoT does not enter this attack hook.
+Existing analogues are RelentlessMomentum (merged count and non-crit runtime event
+pattern) and Vengeance (attack-snapshot resource spending).
+
+`EffectVisualType.CriticalCharge = 28` preserves previous serialized enum values.
+The effect exposes charge count and timer progress. Its Descriptions tooltip asset
+is registered as `criticalCharge` in TooltipTerms, as explicitly requested by the
+owner. The fallback uses the same English text when no active tooltip database is
+available. The status sprite and modifier icon require manual Editor assignment;
+node wiring is not included.
+
+Localization added: Modifiers / `modifier.nonCriticalHitsGrantCriticalCharge.description`
+= `Non-critical hits grant a charge of {criticalCharge|Critical Charge}.`
+Descriptions / `effect.criticalCharge.name` = `Critical Charge`; and
+`effect.criticalCharge.description` = `Critical hits consume all charges, gaining +15% Critical Damage Bonus per charge. Lasts 4 seconds. Maximum 3 charges. Gaining a charge refreshes the duration.`
+Russian/German keys are translator TODOs; existing locale tables are unchanged.
+
+Source: `Assets/Scripts/Battle/Effects/CriticalCharge.cs`,
+`Assets/Scripts/Battle/AttackProcessor.cs` and
+`Assets/Scripts/SkillTree/Modifiers/ReactMods/NonCriticalHitsGrantCriticalCharge.cs`.
+Modifier asset is beside its script; tooltip asset is
+`Assets/Scripts/TooltipSystem/Descriptions/CriticalCharge.asset`.
+Verification: installed Visual Studio Roslyn `csc.exe @Temp/CriticalChargeCompile.rsp`
+compiled gameplay sources against Unity/project references with exit 0. Existing
+warnings remain; none named the new classes. Localization IDs and script/tooltip
+GUID references were checked. No tests, player build or gameplay playtest ran.

@@ -35,6 +35,10 @@ MonoBehaviour:
     m_Key: node.infinite.description
     m_Metadata:
       m_Items: []
+  - m_Id: 58750951189778432
+    m_Key: ui.locationReward.gold.title
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

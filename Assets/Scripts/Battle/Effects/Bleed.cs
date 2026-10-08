@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SkillTree;
 using UnityEngine;
 
 namespace Battle
@@ -90,7 +91,9 @@ namespace Battle
         
         private float CalculateTotalDamage(DamageInfo damageInfo, Unit defender, float physicalDamageDealt)
         {
-            float mitigation = Mathf.Min(1f, defender.BaseUnitModifiers.GetStatValue(StatType.BleedMitigation));
+            float mitigation = BleedHealsInsteadOfDamage.IsActive(defender)
+                ? 0f
+                : Mathf.Min(1f, defender.BaseUnitModifiers.GetStatValue(StatType.BleedMitigation));
             float power = BASE_DAMAGE_PERCENTAGE *
                 (1 + damageInfo.BaseUnitModifiers.GetStatValue(StatType.BleedPower));
             return physicalDamageDealt * power * (1f - mitigation);
@@ -166,9 +169,15 @@ namespace Battle
             }
 
             float damageToDeal = Mathf.Min(requestedDamage, _remainingDamage);
+            _remainingDamage -= damageToDeal;
+            if (BleedHealsInsteadOfDamage.IsActive(unit))
+            {
+                unit.health.TakeHeal(damageToDeal);
+                return;
+            }
+
             DamageInstance damage = new DamageInstance();
             damage.Damage[DamageType.Physical] = damageToDeal;
-            _remainingDamage -= damageToDeal;
             unit.ReceiveDoT(damage);
         }
 

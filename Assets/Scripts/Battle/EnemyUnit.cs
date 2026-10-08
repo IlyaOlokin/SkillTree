@@ -57,6 +57,7 @@ namespace Battle
         protected override void Death()
         {
             base.Death();
+            _playerTarget?.UnitObject?.NotifyEnemyKilled(this);
             AwardExperienceAfterCurrentAttack();
         }
 

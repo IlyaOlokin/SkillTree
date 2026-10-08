@@ -80,7 +80,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 247590371332096
-    m_Localized: Block reduces {damage|damage} from a hit
+    m_Localized: Block reduces incoming {damage|damage} by {blockPower|Block Power}.
     m_Metadata:
       m_Items: []
   - m_Id: 247601490432000
@@ -541,10 +541,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000003
-    m_Localized: Chance to parry a successfully blocked hit. With 50% Block Chance
-      and 10% Parry Chance, 5% of incoming hits are parried. Each parry grants +30%
-      attack progress, scaled by {parryPower|Parry Power}. Parrying preserves the
-      normal damage reduction from Block.
+    m_Localized: Chance to parry a successfully blocked hit. Parry doubles the flat damage absorbed by Block Power and grants 30% Attack Progress, scaled by Parry Power. Block reactions still trigger.
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000020
@@ -558,12 +555,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000029
-    m_Localized: Parry chance is based on {block|Block} chance and only applies to
-      blocked hits.
+    m_Localized: Parry is rolled only after a successful {block|Block}. With 50% Block Chance and 10% Parry Chance, 5% of incoming hits are parried.
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000030
-    m_Localized: Parry grants 30% attack progress, increased by Parry Power.
+    m_Localized: Parry doubles the flat damage absorbed by {blockPower|Block Power} for that hit and grants 30% Attack Progress, multiplied by max(0, 1 + Parry Power). Block reactions still trigger; the floating message shows Parry instead of Block.
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000031
@@ -666,6 +662,36 @@ MonoBehaviour:
     m_Localized: 'Deferred attack damage is paid evenly as Health loss. Each debt has its own deadline; new hits do not extend it. Payments bypass defences and cannot create new debt. The icon shows total remaining damage.'
     m_Metadata:
       m_Items: []
+  - m_Id: 46853000000000002
+    m_Localized: 'Fortification'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46853000000000003
+    m_Localized: 'Each stack grants 5% added Physical Damage Mitigation for 6 seconds. Maximum 10 stacks, each expiring independently. At maximum stacks, new restoration does not refresh them. The icon shows stack count; its border tracks the next expiry.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46855000000000002
+    m_Localized: 'Critical Charge'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46855000000000003
+    m_Localized: 'Critical hits consume all charges, gaining +15% Critical Damage Bonus per charge. Lasts 4 seconds. Maximum 3 charges. Gaining a charge refreshes the duration.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000001
+    m_Localized: 'On {block|Block}, subtract Block Power from total incoming {damage|damage}, reducing all damage types proportionally. Damage cannot fall below zero.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000002
+    m_Localized: 'Base Block Power is 10.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46857000000000003
+    m_Localized: 'Block Power'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
+
+

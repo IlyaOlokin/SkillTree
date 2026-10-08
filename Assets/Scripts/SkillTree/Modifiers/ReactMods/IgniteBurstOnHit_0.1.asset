@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: IgniteBurstOnHit_0.1
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 00000000
-  burstPercent: 0.1
+  burstPercent: 0.25

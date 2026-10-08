@@ -57,23 +57,35 @@ namespace Battle
     public sealed class LocationLevelRewardEntry
     {
         [SerializeField] [Min(1)] private int levelNumber = 1;
+        [SerializeField] private LocationRewardKind rewardKind = LocationRewardKind.Item;
         [SerializeField] private ItemDefinition itemDefinition;
         [SerializeField] [Min(1)] private int amount = 1;
 
         public int LevelNumber => Mathf.Max(1, levelNumber);
         public ItemDefinition ItemDefinition => itemDefinition;
         public int Amount => Mathf.Max(1, amount);
+        public bool IsGold => rewardKind == LocationRewardKind.Gold;
+        public bool IsValid => IsGold || (rewardKind == LocationRewardKind.Item && itemDefinition != null);
 
         public string GetRewardId(LocationDefinition location)
         {
             string locationId = location != null ? location.LocationId : "location";
+            if (IsGold)
+                return $"{locationId}:gold_reward:{LevelNumber}:{Amount}";
+
             string itemId = itemDefinition != null ? itemDefinition.SaveDefinitionId : "item";
             return $"{locationId}:level_reward:{LevelNumber}:{itemId}:{Amount}";
         }
 
         public InventoryItem CreateRewardItem()
         {
-            return InventoryItem.FromItemDefinition(itemDefinition, Amount);
+            return IsGold ? null : InventoryItem.FromItemDefinition(itemDefinition, Amount);
         }
+    }
+
+    public enum LocationRewardKind
+    {
+        Item = 0,
+        Gold = 1
     }
 }

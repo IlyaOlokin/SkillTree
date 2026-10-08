@@ -17,10 +17,15 @@ MonoBehaviour:
   description: 
   mapIcon: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
   battleBackground: {fileID: -3521884470877836325, guid: 802cc36259ac0dc42886417f42a230d1, type: 3}
+  kind: 0
   enemyDatabase: {fileID: 11400000, guid: dd08febc84d1929468ec9b9c05de87a2, type: 2}
+  shopDefinition: {fileID: 0}
   levelRewards:
   - levelNumber: 20
     itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
+    amount: 1
+  - levelNumber: 20
+    itemDefinition: {fileID: 11400000, guid: 246f05a48cb3e654f8b0b92e562522f9, type: 2}
     amount: 1
   unlockPrerequisites:
   - {fileID: 11400000, guid: 323997fb73a61a24a94f9130f6a50b4e, type: 2}

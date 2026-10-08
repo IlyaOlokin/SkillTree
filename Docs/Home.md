@@ -47,10 +47,17 @@ The documented path now connects character development to combat:
 
 For development workflows, use [editor tools, checks and builds](Reference/EditorAndBuildTools.md).
 
+<<<<<<< HEAD
 Live balance observations: [2026-10-04 first-location playtest](Reference/BalancePlaytest20261004.md).
 Progression simulations: [adaptive five-build campaigns](../Reports/BalanceSimulation/20261004-135038-237-campaign/verification.md),
 [balanced baseline](../Reports/BalanceSimulation/20261004-124706-435-campaign/verification.md)
 and [historical references](Reference/BalanceCampaign20261004.md).
+=======
+For the current content-design proposal, see [50 Big-node candidates](../Design/BigNodes50.md):
+10 ordinary stat sets, 20 existing modifier combinations and 20 simple new modifier
+proposals. This Russian design artifact is not an approved balance specification or
+implemented scene content.
+>>>>>>> main
 
 These are related systems, so they live in `Systems`. Add future system pages
 there instead of creating a folder for each mechanic.

@@ -26,7 +26,6 @@ public static class StatTypeDisplayRules
         StatType.ChillChance,
         StatType.OverchargeChance,
         StatType.BlockChance,
-        StatType.BlockPower,
         StatType.ParryChance,
         StatType.ParryPower,
         StatType.ElementalResistance,

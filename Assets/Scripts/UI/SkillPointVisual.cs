@@ -28,7 +28,7 @@ public class SkillPointVisual : MonoBehaviour
     private Tween _returnTween;
     private Sequence _changePulseSequence;
 
-    private int _currentCount;
+    private float _currentCount;
 
     private void Start()
     {
@@ -43,10 +43,10 @@ public class SkillPointVisual : MonoBehaviour
             _unitLevel.OnSkillPointsChanged -= UpdateCount;
     }
 
-    private void UpdateCount(int _)
+    private void UpdateCount(float _)
     {
-        int count = _unitLevel != null ? _unitLevel.SkillPoints : 0;
-        skillPointCount.text = count.ToString();
+        float count = _unitLevel != null ? _unitLevel.SkillPoints : 0;
+        skillPointCount.text = count.ToString("0.#");
 
         bool isActive = count > 0;
         bool becameInactive = _currentCount > 0 && count == 0;
@@ -68,7 +68,7 @@ public class SkillPointVisual : MonoBehaviour
         });
     }
 
-    private void UpdateColor(int count)
+    private void UpdateColor(float count)
     {
         _colorTween?.Kill();
         Color target = count > 0 ? activeColor : defaultColor;

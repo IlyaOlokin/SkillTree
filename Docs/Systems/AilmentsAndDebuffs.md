@@ -164,3 +164,16 @@ and effect lifecycle cases with stubs. It is not full ailment integration covera
 - `Assets/Scripts/Battle/Effects/Expose.cs`
 - `Assets/Scripts/Battle/Effects/AilmentAbsorption.cs`
 - `Assets/Scripts/Battle/Effects/EffectController.cs`
+
+## Bleed healing conversion (2026-10-04)
+
+With a collected `BleedHealsInsteadOfDamage` on the recipient, new Bleed pools
+ignore Bleed Mitigation. Ticks and bursts consume the remaining pool as normal
+but call `Health.TakeHeal` instead of `ReceiveDoT`. Healing Received and maximum
+Health apply; over-healing still consumes the pool. The initial pool is a snapshot,
+while conversion is checked at payment time; changes to collected modifiers do
+not recalculate existing pools. Merge and incoming ailment absorption retain
+existing behavior. Copies and node power do not amplify conversion. The existing
+Bleed status icon remains; no separate healing status is added.
+See [modifier implementation and manual setup](StatsAndModifiers.md#bleed-heals-instead-of-damage-2026-10-04)
+for localization, the supplied asset and verification limits.

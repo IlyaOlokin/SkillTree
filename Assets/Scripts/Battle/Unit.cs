@@ -56,10 +56,29 @@ namespace Battle
         
         public event Action OnEvade;
         public event Action OnBlock;
+        public event Action<AttackContext> OnBlockResolved;
+
+        internal void NotifyBlockResolved(AttackContext context)
+        {
+            OnBlockResolved?.Invoke(context);
+        }
         public event Action OnParry;
         public event Action<AttackContext> OnParryResolved;
         public event Action<AttackContext> OnAttackParried;
         public event Action<Unit> OnDeath;
+        public event Action<Unit> OnEnemyKilled;
+        public event Action<Sprite> OnModifierProc;
+
+        public void NotifyModifierProc(Sprite icon)
+        {
+            if (icon != null)
+                OnModifierProc?.Invoke(icon);
+        }
+
+        internal void NotifyEnemyKilled(Unit enemy)
+        {
+            OnEnemyKilled?.Invoke(enemy);
+        }
 
         public MysticHealth MysticHealth => mysticHealth;
         public WeaponType WeaponType => weaponType;

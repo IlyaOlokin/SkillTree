@@ -137,3 +137,75 @@ Repository-relative paths (outside the Obsidian vault):
 - `Assets/Scripts/Inventory/BridgePlacement.cs`
 - `Assets/Scripts/SkillTree/BridgeConnectivity.cs`
 - `Assets/Scripts/SaveSystem/GemDefinitionCatalog.cs`
+
+## Ordinary flat-stat gem content (2026-10-08)
+
+29 additional LocalModifiers definitions live in
+`Assets/Resources/Items/Gems/ModifierGems`, named `Added<Stat>Gem_<value>`.
+Each has one dedicated `GemAdded<Stat>_<value>` BaseModifier asset in the same
+folder, using Added (modifierType 0), a unique saveDefinitionId and maxStack 99.
+Initial values were five times the corresponding Added small-node standard in the
+[authoring guide](../SkillTree/SkillTreeFillingGuide.md). Percentage stats are
+additive fractions, not Increased bonuses. Damage covers all six current terminal
+DamageType values; retired PoisonDamage is excluded.
+
+| Stat | Raw Added value |
+| --- | --- |
+| PhysicalDamage | 10 |
+| FireDamage | 10 |
+| ColdDamage | 10 |
+| LightningDamage | 10 |
+| LightDamage | 10 |
+| DarknessDamage | 10 |
+| Armor | 30 |
+| Evasion | 30 |
+| MaximumHealth | 100 |
+| BarrierCapacity | 60 |
+| BlockChance | 0.15 |
+| BlockPower | 20 |
+| ParryChance | 0.5 |
+| ParryPower | 0.75 |
+| MysticNegation | 0.25 |
+| ElementalResistance | 0.2 |
+| FireResistance | 0.25 |
+| ColdResistance | 0.25 |
+| LightningResistance | 0.25 |
+| HealthRegenerationPerSecond | 5 |
+| MysticCleansePerSecond | 0.05 |
+| AilmentGuard | 0.25 |
+| IgniteMitigation | 0.5 |
+| ChillDurationReduction | 0.5 |
+| OverchargeAvoidanceChance | 0.5 |
+| BleedMitigation | 0.5 |
+| SunderMitigation | 0.5 |
+| DistractMitigation | 0.5 |
+| ExposeMitigation | 0.5 |
+These assets reuse the existing Steel Gem sprite as a placeholder. English item
+names are literal fallback strings; stat descriptions use existing BaseModifier
+localization. No new localization keys or TooltipDescriptionData were introduced.
+Existing gems, loot, shops and scene configuration were preserved. Resources/Items
+is loaded by SaveDefinitionCatalog, so these definitions are discoverable in builds.
+
+BlockPower uses the owner's 2026-10-08 override: 4 per small node, 20 per gem.
+BarrierCount has no valid ordinary small-node standard (0.66 is explicitly barred
+from small nodes); masks, resistance caps and Increased-only regeneration are not
+part of this flat-stat set. No new mitigation standards were invented.
+
+Verification: serialized script references, one-modifier cardinality, stat IDs,
+values and paired GUIDs were checked during content creation. No C# changed; no
+compilation, tests or Unity playtest were run. This is budget matching, not a claim
+of combat balance.
+
+Modifier organization update (2026-10-08): moved all 29 numeric modifier assets
+from the gem folder into Assets/Scripts/SkillTree/Modifiers and removed the Gem
+prefix. Names reflect current serialized values. Only m_Name changed inside the
+assets; all values and metadata GUIDs were preserved, keeping gem references valid.
+Owner changes to Evasion (30) and BlockChance (0.15) are retained. Content is no
+longer uniformly equal to five historical small-node standards. Verified file
+contents and metadata preservation; no compilation or tests were needed.
+
+Shop distribution update (2026-10-08): these 29 gems are now sold across Shop1–Shop4
+at 100 / 150 / 200 / 250 gold, with three purchases per gem and one gem per
+purchase. See [tiered gem shops](EconomyAndLoot.md#tiered-flat-stat-gem-shops-2026-10-08)
+for the stat groups and unlock prerequisites. Older alternate-value gems in the
+same folder are outside this 29-gem distribution and were not changed.

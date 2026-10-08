@@ -55,7 +55,7 @@ namespace SaveSystem
     {
         public int level = 1;
         public double currentExp;
-        public int skillPoints = 1;
+        public float skillPoints = 1f;
         public int gold;
     }
 

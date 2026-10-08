@@ -66,15 +66,22 @@ at this stage; later type mitigation and barrier masking still operate separatel
 
 ## Block and parry
 
-Block chance and power are each clamped to 0..0.9. A successful roll multiplies
-all damage components by `1 - blockPower`. A zero-power block still counts as a
+Block chance is clamped to 0..0.9. BlockPower is a nonnegative flat damage amount,
+displayed as a number rather than a percentage (changed 2026-10-07). For total
+damage `D` immediately before block, a successful roll multiplies every component
+by `max(0, D - BlockPower) / D`; zero total damage remains zero without division.
+Power at or above `D` fully blocks damage. For example, 30 physical + 20 fire with
+10 BlockPower becomes 24 physical + 16 fire. Existing authored BlockPower values
+are now interpreted as flat amounts; no content rebalance or save migration was
+performed. A zero-power block still counts as a
 successful block and can emit events or enable parry. Block cannot cancel ailments
 already attempted earlier in the attack.
 
 Parry is a separate roll conditional on a successful block, using clamped
 `ParryChance`. It adds `0.3 * max(0, 1 + ParryPower)` attack progress to the defender
 after the outer attack finishes, avoiding a nested counterattack overwriting a
-snapshot still in use. Parry itself adds no further damage reduction.
+snapshot still in use. Parry additionally absorbs one more copy of the original
+flat BlockPower from the remaining damage: total absorption is min(D, 2 * BlockPower).
 
 ## Barrier charges
 
@@ -164,3 +171,17 @@ resources have processed an attack. It postpones only HP-bound damage, preservin
 mystic absorption and the direct DoT path. Debt payments bypass all defences but
 still validate health and absorption death thresholds. See the
 [debt contract](CombatAndEffects.md#deferred-attack-hp-damage-2026-10-03).
+
+Parry update (2026-10-08): BlockPower is captured at the successful block before
+OnBlock callbacks. Parry reuses that value even if reactions change stats.
+OnBlock still precedes OnParry. Unit.OnBlockResolved then reports the final context;
+UnitVisual shows Block only for an un-parried block, otherwise only Parry.
+English Parry tooltip updated; existing Russian/German translations are preserved
+and require translation updates for description.parry1 and description.parry2.
+
+Verification: dotnet build Assembly-CSharp.csproj --no-restore -v:q /clp:ErrorsOnly
+passed with zero errors and 18 dependency warnings. Parry tooltip keys, its asset
+GUID and parry/parryChance/block/blockPower term references were source-checked.
+No tests or Unity playtest were run. The English legacy unkeyed localization entry
+46845600000000003 was also corrected; it has no current Shared Data key.
+
