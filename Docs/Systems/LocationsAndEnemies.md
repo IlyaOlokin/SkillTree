@@ -110,6 +110,12 @@ entries with the same values share an ID. Claiming records the ID in the selecte
 location's progress. For delivery and its current failure handling, read
 [economy and loot](EconomyAndLoot.md).
 
+As of 2026-10-08, entries can also select Gold instead of Item. Gold entries use
+Amount as a wallet sum, require no item definition, and use a distinct gold claim
+ID derived from location ID, stage and amount. Existing entries default to Item.
+See [gold completion rewards](EconomyAndLoot.md#gold-completion-rewards-2026-10-08)
+for authoring, display and immediate-credit behavior.
+
 ## Verification when changing this area
 
 - Check first entry, replay of an earlier stage and return to the frontier.

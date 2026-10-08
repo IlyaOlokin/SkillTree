@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abffb9b78fb28f94b9728752627b0680, type: 3}
+  m_Name: Shop2Definition
+  m_EditorClassIdentifier: Assembly-CSharp::ShopSystem.ShopDefinition
+  shopId: 2
+  displayName: 
+  description: 
+  entries:
+  - entryId: fecf022419a84499aca572179ae18add
+    itemDefinition: {fileID: 11400000, guid: 5c678938e57d403dbe3759869af75c2c, type: 2}
+    amount: 1
+    price: 150
+    stockLimit: 3
+  - entryId: 2559cd6aecd44e4fb616ed8e910d0322
+    itemDefinition: {fileID: 11400000, guid: 0a9959dc34a040fa888c90d01dbfdafe, type: 2}
+    amount: 1
+    price: 150
+    stockLimit: 3
+  - entryId: 2340caf1f53c4b59813eb5a4b17d33c3
+    itemDefinition: {fileID: 11400000, guid: 4b32f0466e1d45d18fb03aff83d4e043, type: 2}
+    amount: 1
+    price: 150
+    stockLimit: 3
+  - entryId: b9c2037b318946d8b74cb8fe389b1710
+    itemDefinition: {fileID: 11400000, guid: 667e297837f246ee80fc1b741d584435, type: 2}
+    amount: 1
+    price: 150
+    stockLimit: 3
+  - entryId: 97e6d6de916f4fc8bbb5b8a972c613f8
+    itemDefinition: {fileID: 11400000, guid: 2a9c6347956b41a0b44badb8ef217bc5, type: 2}
+    amount: 1
+    price: 150
+    stockLimit: 3
+  - entryId: 2366dc7590b8494d9a442f38112e667a
+    itemDefinition: {fileID: 11400000, guid: 257e460e2c2c44de8e45ef0bde3a2255, type: 2}
+    amount: 1
+    price: 150
+    stockLimit: 3
+  - entryId: 45d5d087e7b74870a52bf7dea9a33ab5
+    itemDefinition: {fileID: 11400000, guid: 717b7aa046e54da9965f352237d4645c, type: 2}
+    amount: 1
+    price: 150
+    stockLimit: 3
+  - entryId: 7ef19d7bceae4298907eadac1e353e4d
+    itemDefinition: {fileID: 11400000, guid: 327406fa13544f0092ad0a5ea061e17b, type: 2}
+    amount: 1
+    price: 150
+    stockLimit: 3
+  - entryId: abf2fcb599aa46debc0f7ae68fcb8951
+    itemDefinition: {fileID: 11400000, guid: 7a060aa1db0c415fb87519bd39996872, type: 2}
+    amount: 1
+    price: 150
+    stockLimit: 3
+  - entryId: b59c4d6252be4cd29b166ef200f6b197
+    itemDefinition: {fileID: 11400000, guid: f6e39a5623ba4c2e9ba793c16a6ef960, type: 2}
+    amount: 1
+    price: 150
+    stockLimit: 3

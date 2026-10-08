@@ -227,7 +227,7 @@ namespace Visual
             ApplyColors(borderBaseColor, nodeImageBaseColor);
         }
 
-        private void UpdateVisual(int _)
+        private void UpdateVisual(float _)
         {
             if (node != null && !node.IsActive)
                 UpdateVisual(node);

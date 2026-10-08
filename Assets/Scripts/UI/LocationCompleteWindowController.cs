@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Battle;
+using CurrencySystem;
 using DropSystem;
 using InventorySystem;
 using TMPro;
@@ -12,6 +13,7 @@ using Zenject;
 public class LocationCompleteWindowController : MonoBehaviour
 {
     [Inject] private BattleTickSystem _battleTickSystem;
+    [Inject] private PlayerWallet _playerWallet;
     [Inject(Optional = true)] private TooltipUI _tooltipUI;
 
     [Header("Scene references")]
@@ -111,12 +113,24 @@ public class LocationCompleteWindowController : MonoBehaviour
                 if (pendingReward == null || !pendingReward.IsValid)
                     continue;
 
-                playerInventory?.TryAddItem(pendingReward.Item, out _);
-                enemySpawner?.TryClaimReward(pendingReward);
+                if (pendingReward.IsGold)
+                    TryCollectGold(pendingReward);
+                else
+                {
+                    playerInventory?.TryAddItem(pendingReward.Item, out _);
+                    enemySpawner?.TryClaimReward(pendingReward);
+                }
             }
 
             FinishClaiming();
             return;
+        }
+
+        // Count before starting flights: the no-Canvas fallback completes synchronously.
+        for (int i = 0; i < _rewardViews.Count; i++)
+        {
+            if (_rewardViews[i]?.PendingReward?.IsValid == true)
+                _remainingClaimAnimations++;
         }
 
         for (int i = 0; i < _rewardViews.Count; i++)
@@ -126,14 +140,22 @@ public class LocationCompleteWindowController : MonoBehaviour
             if (pendingReward == null || !pendingReward.IsValid)
                 continue;
 
-            _remainingClaimAnimations++;
+            if (pendingReward.IsGold && !TryCollectGold(pendingReward))
+            {
+                _remainingClaimAnimations = Mathf.Max(0, _remainingClaimAnimations - 1);
+                continue;
+            }
+
             rewardView.MarkFlying();
             RectTransform source = rewardView.RectTransform;
             float delay = i * Mathf.Max(0f, claimFlightStagger);
-
-            itemDropSpawner.FlyItemFromRectToInventory(pendingReward.Item, source, delay, () => CompleteClaim(pendingReward));
-
             rewardView.gameObject.SetActive(false);
+
+            if (pendingReward.IsGold)
+                itemDropSpawner.FlyClaimedGoldFromRectToWallet(pendingReward.GoldAmount, source, delay, () => CompleteClaim(pendingReward));
+            else
+                itemDropSpawner.FlyItemFromRectToInventory(pendingReward.Item, source, delay, () => CompleteClaim(pendingReward));
+
         }
 
         if (_remainingClaimAnimations <= 0)
@@ -246,11 +268,21 @@ public class LocationCompleteWindowController : MonoBehaviour
 
     private void CompleteClaim(PendingLocationReward pendingReward)
     {
-        enemySpawner?.TryClaimReward(pendingReward);
+        if (!pendingReward.IsGold)
+            enemySpawner?.TryClaimReward(pendingReward);
         _remainingClaimAnimations = Mathf.Max(0, _remainingClaimAnimations - 1);
 
         if (_remainingClaimAnimations <= 0)
             FinishClaiming();
+    }
+
+    private bool TryCollectGold(PendingLocationReward pendingReward)
+    {
+        if (_playerWallet == null || enemySpawner == null || !enemySpawner.TryClaimReward(pendingReward))
+            return false;
+
+        _playerWallet.AddGold(pendingReward.GoldAmount);
+        return true;
     }
 
     private void FinishClaiming()

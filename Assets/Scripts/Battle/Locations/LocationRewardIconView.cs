@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Battle;
+using DropSystem;
+using LocalizationSupport;
 using TMPro;
 using TooltipSystem;
 using UnityEngine;
@@ -59,18 +61,23 @@ public sealed class LocationRewardIconView : MonoBehaviour, ITooltipDescriptionP
 
         if (iconImage != null)
         {
-            iconImage.enabled = reward?.ItemDefinition?.Icon != null;
-            iconImage.sprite = reward?.ItemDefinition?.Icon;
+            bool isGold = reward != null && reward.IsGold;
+            Sprite sprite = isGold
+                ? FindAnyObjectByType<EnemyItemDropSpawner>(FindObjectsInactive.Include)?.GetGoldIconSprite()
+                : reward?.ItemDefinition?.Icon;
+            Color color = isGold && sprite == null ? new Color(1f, 0.74f, 0.16f, 1f) : _defaultIconColor;
+            iconImage.enabled = isGold || sprite != null;
+            iconImage.sprite = sprite;
             iconImage.raycastTarget = true;
             iconImage.color = isClaimed
-                ? Color.Lerp(_defaultIconColor, Color.black, claimedIconDarkenAmount)
-                : _defaultIconColor;
+                ? Color.Lerp(color, Color.black, claimedIconDarkenAmount)
+                : color;
         }
 
         if (amountText != null)
         {
             int amount = reward?.Amount ?? 0;
-            bool shouldShowAmount = amount > 1;
+            bool shouldShowAmount = amount > 1 || (reward != null && reward.IsGold);
             amountText.gameObject.SetActive(shouldShowAmount);
             amountText.text = shouldShowAmount ? amount.ToString() : string.Empty;
         }
@@ -97,6 +104,9 @@ public sealed class LocationRewardIconView : MonoBehaviour, ITooltipDescriptionP
 
     public string GetTooltipTitle()
     {
+        if (_reward != null && _reward.IsGold)
+            return GameLocalization.GetGameUI("ui.locationReward.gold.title", "Gold");
+
         if (_pendingReward?.Item != null)
             return _pendingReward.Item.DisplayName;
 
@@ -110,6 +120,9 @@ public sealed class LocationRewardIconView : MonoBehaviour, ITooltipDescriptionP
 
     public IReadOnlyList<string> GetTooltipDescriptions()
     {
+        if (_reward != null && _reward.IsGold)
+            return Array.Empty<string>();
+
         if (_pendingReward?.Item != null)
             return _pendingReward.Item.GetTooltipDescriptions();
 
@@ -124,7 +137,7 @@ public sealed class LocationRewardIconView : MonoBehaviour, ITooltipDescriptionP
             return;
 
         ResolveTooltipUI();
-        if (_tooltipUI == null || _reward?.ItemDefinition == null)
+        if (_tooltipUI == null || _reward == null || !_reward.IsValid)
             return;
 
         _tooltipUI.DisplayTooltip(this, this, eventData.position, tooltipCanvasTarget);

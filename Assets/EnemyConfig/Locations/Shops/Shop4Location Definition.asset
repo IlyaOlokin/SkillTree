@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d219f318536ff974580c180788e87719, type: 3}
-  m_Name: ShopLocation Definition
+  m_Name: Shop4Location Definition
   m_EditorClassIdentifier: Assembly-CSharp::Battle.LocationDefinition
-  locationId: shop-1
+  locationId: shop-4
   displayName: 
   description: 
   mapIcon: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   battleBackground: {fileID: 0}
   kind: 1
   enemyDatabase: {fileID: 0}
-  shopDefinition: {fileID: 11400000, guid: 20f9ad1cb12a0174e9c363ef4202adf7, type: 2}
+  shopDefinition: {fileID: 11400000, guid: c196404fecd3cb247807e880a304bf83, type: 2}
   levelRewards: []
-  unlockPrerequisites: []
+  unlockPrerequisites:
+  - {fileID: 11400000, guid: dc047703928242c3a3baf69173f4713f, type: 2}

@@ -15,8 +15,8 @@ MonoBehaviour:
   baseDropChance: 0.2
   powerForMaxChanceBonus: 1500
   maxPowerChanceBonus: 0.1
-  baseGold: 2
-  goldPerPower: 0.35
+  baseGold: 0
+  goldPerPower: 0.024
   levelMultiplierPerLevel: 0.035
   minRandomAmountMultiplier: 0.85
   maxRandomAmountMultiplier: 1.15

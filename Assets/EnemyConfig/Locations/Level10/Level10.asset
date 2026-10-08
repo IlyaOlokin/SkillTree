@@ -14,13 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   locationId: level-10
   displayName: Level 10 - Storm Summit
-  description: Lightning attackers, elemental defenders and overcharge specialists. The final storm boss concludes the ascent.
+  description: Lightning attackers, elemental defenders and overcharge specialists.
+    The final storm boss concludes the ascent.
   mapIcon: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
   battleBackground: {fileID: -3521884470877836325, guid: 802cc36259ac0dc42886417f42a230d1, type: 3}
+  kind: 0
   enemyDatabase: {fileID: 11400000, guid: 098d3c0b41714735b526756cb880c07d, type: 2}
+  shopDefinition: {fileID: 0}
   levelRewards:
   - levelNumber: 60
     itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
+    amount: 1
+  - levelNumber: 60
+    itemDefinition: {fileID: 11400000, guid: 4cae05f83ff29a440a33b69e16874a18, type: 2}
     amount: 1
   unlockPrerequisites:
   - {fileID: 11400000, guid: a3bfa85b93b74a18b907a762159f8b2d, type: 2}

@@ -4,7 +4,7 @@ namespace Battle
 {
     public static class Evasion
     {
-        public const float EqualRatingHitChance = 0.8f;
+        public const float EqualRatingHitChance = 1.25f;
         public const float RatingStability = 5f;
         public const float MinimumHitChance = 0.01f;
         public const float MaximumHitChance = 1f;

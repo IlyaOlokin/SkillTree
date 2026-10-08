@@ -521,7 +521,7 @@ namespace SkillTree
             fogOfWarController.SetDiscoveredNodes(discoveredNodes);
         }
 
-        private void ProcessQueuedAllocations(int _)
+        private void ProcessQueuedAllocations(float _)
         {
             _availabilityDirty = true;
             ProcessQueuedAllocations();

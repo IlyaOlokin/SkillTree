@@ -169,11 +169,22 @@ namespace DropSystem
                 });
         }
 
+        // Completion rewards are credited before their cosmetic flight starts.
+        public void FlyClaimedGoldFromRectToWallet(int amount, RectTransform source, float delay, Action onComplete)
+        {
+            ResolveCanvasRoot();
+            Vector2 startPosition = source != null
+                ? ScreenToCanvasPosition(RectTransformUtility.WorldToScreenPoint(GetCanvasEventCamera(), source.position))
+                : GetGoldTargetPosition();
+            FlyGoldToWallet(amount, startPosition, delay, onComplete, creditOnComplete: false);
+        }
+
         public void FlyGoldToWallet(
             int amount,
             Vector2 startPosition,
             float delay,
-            Action onComplete = null)
+            Action onComplete = null,
+            bool creditOnComplete = true)
         {
             if (amount <= 0)
             {
@@ -184,7 +195,8 @@ namespace DropSystem
             ResolveCanvasRoot();
             if (flyoutRoot == null)
             {
-                playerWallet?.AddGold(amount);
+                if (creditOnComplete)
+                    playerWallet?.AddGold(amount);
                 onComplete?.Invoke();
                 return;
             }
@@ -207,7 +219,8 @@ namespace DropSystem
                 useUnscaledTime,
                 () =>
                 {
-                    playerWallet?.AddGold(amount);
+                    if (creditOnComplete)
+                        playerWallet?.AddGold(amount);
                     _activeFlyouts = Mathf.Max(0, _activeFlyouts - 1);
 
                     if (flyoutIcon != null)
@@ -464,7 +477,7 @@ namespace DropSystem
             return icon;
         }
 
-        private Sprite GetGoldIconSprite()
+        public Sprite GetGoldIconSprite()
         {
             if (goldIconSprite != null)
                 return goldIconSprite;

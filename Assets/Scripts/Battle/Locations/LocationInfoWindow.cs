@@ -314,7 +314,7 @@ public class LocationInfoWindow : MonoBehaviour
         for (int i = 0; i < rewards.Count; i++)
         {
             LocationLevelRewardEntry reward = rewards[i];
-            if (reward == null || reward.ItemDefinition == null)
+            if (reward == null || !reward.IsValid)
                 continue;
 
             LocationRewardIconView rewardView = Instantiate(levelRewardPrefab, levelRewardsContainer);

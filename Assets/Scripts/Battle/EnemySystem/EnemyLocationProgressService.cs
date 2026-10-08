@@ -162,6 +162,9 @@ namespace Battle
             if (pendingReward == null || !pendingReward.IsValid)
                 return false;
 
+            if (_selectedLocation == null || pendingReward.Location != _selectedLocation)
+                return false;
+
             return TryClaimReward(pendingReward.RewardId);
         }
 
@@ -175,7 +178,7 @@ namespace Battle
             for (int i = 0; i < rewards.Count; i++)
             {
                 LocationLevelRewardEntry reward = rewards[i];
-                if (reward == null || reward.LevelNumber != completedLevel || reward.ItemDefinition == null)
+                if (reward == null || reward.LevelNumber != completedLevel || !reward.IsValid)
                     continue;
 
                 string rewardId = reward.GetRewardId(_selectedLocation);

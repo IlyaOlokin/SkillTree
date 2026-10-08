@@ -14,13 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   locationId: level-20
   displayName: Level 20 - Prismatic Throne
-  description: Overcharge guards, burning attackers and chilling specialists protect the throne. Defeat the boss on the final stage.
+  description: Overcharge guards, burning attackers and chilling specialists protect
+    the throne. Defeat the boss on the final stage.
   mapIcon: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
   battleBackground: {fileID: -3521884470877836325, guid: 802cc36259ac0dc42886417f42a230d1, type: 3}
+  kind: 0
   enemyDatabase: {fileID: 11400000, guid: dd1390e284a44f678d129c65b2936d77, type: 2}
+  shopDefinition: {fileID: 0}
   levelRewards:
   - levelNumber: 160
     itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
+    amount: 1
+  - levelNumber: 160
+    itemDefinition: {fileID: 11400000, guid: 246f05a48cb3e654f8b0b92e562522f9, type: 2}
     amount: 1
   unlockPrerequisites:
   - {fileID: 11400000, guid: 6c4cce8b0046429cafcfe1045382509d, type: 2}

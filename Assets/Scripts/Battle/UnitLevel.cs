@@ -11,7 +11,7 @@ namespace Battle
         private int _defaultLevel;
         private double _defaultCurrentExp;
         private double _defaultExpToNextLevel;
-        private int _defaultSkillPoints;
+        private float _defaultSkillPoints;
     
         [Header("Level")]
         [SerializeField] private int level = 1;
@@ -22,16 +22,16 @@ namespace Battle
         [SerializeField] private float expGrowthMultiplier = 1f;
 
         [Header("Skill Points")]
-        [SerializeField] private int skillPoints = 1;
+        [SerializeField] private float skillPoints = 1f;
         
         public int Level => level;
         public double CurrentExp => currentExp;
         public double ExpToNextLevel => expToNextLevel;
-        public int SkillPoints => skillPoints;
+        public float SkillPoints => skillPoints;
 
         public event Action OnExpChanged;
         public event Action<int> OnLevelUp;
-        public event Action<int> OnSkillPointsChanged;
+        public event Action<float> OnSkillPointsChanged;
 
         private void Awake()
         {
@@ -107,7 +107,7 @@ namespace Battle
             return Math.Max(1d, Math.Round(amount, MidpointRounding.AwayFromZero));
         }
         
-        public bool TrySpendSkillPoints(int cost)
+        public bool TrySpendSkillPoints(float cost)
         {
             if (cost <= 0)
                 return false;
@@ -120,7 +120,7 @@ namespace Battle
             return true;
         }
         
-        public void RefundSkillPoints(int amount)
+        public void RefundSkillPoints(float amount)
         {
             if (amount <= 0)
                 return;

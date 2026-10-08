@@ -107,6 +107,25 @@ both an empty selection and a selected item; these are different interaction pat
 
 ## Paths, queues and refunds
 
+### Travel nodes and fractional skill points (2026-10-08)
+
+Nodes in MainScene with an Added +2 Strength, Dexterity or Intelligence modifier
+are classified as Travel, cost 0.5 skill points, and use local scale (0.3, 0.3, 0.3).
+The owner's explicit travel-node rule overrides the ordinary small-node standards
+for these connectors. Modifiers and authored connections are preserved.
+
+`Node.nodeCost`, the UnitLevel point balance, spend/refund amounts and point-change
+events use float. Player save data also stores a float balance; existing whole-number
+JSON balances remain readable. Infinite-node investment counts remain integers and
+each investment still costs one point. Ordinary refunds return the current authored
+node cost; this change does not reimburse historical purchases in existing profiles.
+The UI counter uses `0.#`, displaying at most one decimal place without trailing zeroes.
+Verification: an Editor script updated and saved 238 matching nodes (78 Strength,
+78 Dexterity, 82 Intelligence), then checked type, cost and scale with zero invalid
+nodes. Unity's script compilation completed and the Editor reloaded the assemblies;
+no C# errors were found in the current compilation log. The temporary script was
+removed afterward. No gameplay balance playtest or visual capture was performed.
+
 `ConnectedNodes` is the authored graph. `AllocationNeighbors` additionally exposes
 a valid reciprocal bridge partner. Allocation and dependent-refund logic must use
 the appropriate graph; [gem influence](Gems.md) deliberately uses authored links.

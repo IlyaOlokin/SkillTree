@@ -50,6 +50,7 @@ only clears `Current`; scene teardown does not acknowledge the topic.
 | `player.hit.mystic` | EnemyUnit hit with positive light/darkness remaining after barrier receipt; not based on HP loss |
 | `player.ailment.received` | Player `OnEffectAdded` reports Bleed, Ignite, Chill or Overcharge, including stack updates |
 | `world_map.opened` | LocationFlowController returns to the map after `level-1` is completed; event location is explicitly `level-1` |
+| `tree.travel.allocated` | TutorialEventAdapter observes an allocated Travel node through Node.OnAnyNodeAllocatedChanged; refunds and saved-state application are excluded |
 
 The ailment event does not require an EnemyUnit source. It listens to effect-list
 notifications, not the source-side effect event. A fully barrier-absorbed elemental
@@ -71,6 +72,24 @@ rules for future content.
 | `damage_types` | `location.level >= 3`, event location `level-1` | None |
 | `ailments` | `player.ailment.received >= 0`, event location `level-2` | `damage_types` |
 | `world_map` | `world_map.opened >= 0`, event location `level-1` | None |
+| `travel_nodes` | `tree.travel.allocated >= 0`, any location | None |
+
+Added 2026-10-08: `Definitions/TravelNodes.asset` explains variable skill-point
+costs (most nodes cost 1, Travel nodes cost 0.5) and describes small Travel
+nodes as routes through the tree to distant branches, without listing attribute
+bonuses. The text uses four short paragraphs. English-only localization
+uses `Tutorial` keys `tutorial.travelNodes.title`, `tutorial.travelNodes.paragraph1`
+and `tutorial.travelNodes.paragraph2`. Other locales are left unchanged.
+The existing queue, completed-topic persistence and skip-all rules apply. A newly
+allocated Travel node reports immediately; the window presents it at its next
+eligible LateUpdate, after any current tutorial or blocking modal. Existing Travel
+allocations are not replayed on load.
+
+Verification for this addition: Unity compiled the adapter and temporary setup
+script with no C# errors in the current compilation log. The Editor created the
+definition, registered exactly one catalog entry, checked the event ID and English
+entries, and validated catalog dependencies through TutorialService construction.
+The temporary setup script was removed. In-game presentation was not playtested.
 
 ## Presentation and pause ownership
 

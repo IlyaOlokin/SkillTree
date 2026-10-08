@@ -247,6 +247,10 @@ empty source cell; a dash means a literal dash in the workbook.
 - Attack Recalculate is retained solely as an exact source column. Ignore every
   value, including LifeSteal's question mark, in content-filling decisions.
 
+BlockPower owner override (2026-10-08): Added standard is 4 flat damage absorption
+per small node, replacing the historical spreadsheet value 0.01 after the flat
+BlockPower change. The workbook remains the historical snapshot.
+
 <!-- STAT_TABLE_START -->
 | Excel row | StatType | Added | Added standard | Increased | Increased standard | More | More standard | Attack Recalculate |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -289,7 +293,7 @@ empty source cell; a dash means a literal dash in the workbook.
 | 38 | Armor | Allowed | 6 | Allowed | 0.12 | Allowed | ∅ | No |
 | 39 | Evasion | Allowed | 4 | Allowed | 0.12 | Allowed | ∅ | No |
 | 40 | BlockChance | Basic | 0.01 | Forbidden | ∅ | Forbidden | ∅ | No |
-| 41 | BlockPower | Basic | 0.01 | Forbidden | ∅ | Forbidden | ∅ | No |
+| 41 | BlockPower | Basic | 4 | Forbidden | ∅ | Forbidden | ∅ | No |
 | 42 | ParryChance | Basic | 0.1 | Forbidden | ∅ | Forbidden | ∅ | No |
 | 43 | ParryPower | Basic | 0.15 | Forbidden | ∅ | Forbidden | ∅ | No |
 | 44 | Defence | Forbidden | ∅ | Allowed | 0.04 | Allowed | ∅ | No |
