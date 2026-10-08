@@ -228,3 +228,12 @@ Repository-relative paths, outside this vault:
 - `Assets/Scripts/Battle/Effects/ActiveEffect.cs`
 
 Unit.OnAttackPrepared receives the mutable attack snapshot after DamageInfo.Reset and before evasion in the normal Attacker path. It supports pre-paid attack-local modifiers; completion remains the counter-advance boundary. See [barrier sacrifice attacks](StatsAndModifiers.md#barrier-sacrifice-attacks).
+
+## Parry block power and final notification (2026-10-08)
+
+Block captures its flat BlockPower and absorbs it proportionally across damage
+components, then emits existing OnBlock reactions. A successful Parry absorbs
+the same captured amount again before its callbacks. OnBlockResolved is emitted
+after the parry roll, preserving both gameplay reactions while allowing UnitVisual
+to suppress Block text on parried hits. Parry Attack Progress remains deferred.
+

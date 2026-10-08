@@ -80,7 +80,8 @@ already attempted earlier in the attack.
 Parry is a separate roll conditional on a successful block, using clamped
 `ParryChance`. It adds `0.3 * max(0, 1 + ParryPower)` attack progress to the defender
 after the outer attack finishes, avoiding a nested counterattack overwriting a
-snapshot still in use. Parry itself adds no further damage reduction.
+snapshot still in use. Parry additionally absorbs one more copy of the original
+flat BlockPower from the remaining damage: total absorption is min(D, 2 * BlockPower).
 
 ## Barrier charges
 
@@ -170,3 +171,17 @@ resources have processed an attack. It postpones only HP-bound damage, preservin
 mystic absorption and the direct DoT path. Debt payments bypass all defences but
 still validate health and absorption death thresholds. See the
 [debt contract](CombatAndEffects.md#deferred-attack-hp-damage-2026-10-03).
+
+Parry update (2026-10-08): BlockPower is captured at the successful block before
+OnBlock callbacks. Parry reuses that value even if reactions change stats.
+OnBlock still precedes OnParry. Unit.OnBlockResolved then reports the final context;
+UnitVisual shows Block only for an un-parried block, otherwise only Parry.
+English Parry tooltip updated; existing Russian/German translations are preserved
+and require translation updates for description.parry1 and description.parry2.
+
+Verification: dotnet build Assembly-CSharp.csproj --no-restore -v:q /clp:ErrorsOnly
+passed with zero errors and 18 dependency warnings. Parry tooltip keys, its asset
+GUID and parry/parryChance/block/blockPower term references were source-checked.
+No tests or Unity playtest were run. The English legacy unkeyed localization entry
+46845600000000003 was also corrected; it has no current Shared Data key.
+

@@ -178,3 +178,13 @@ use `{blockPower|Block Power}`. The Descriptions enum label is
 `enum.StatType.BlockPower`. Russian and German tables were left unchanged; the new
 keys remain translator TODOs. Serialized IDs, keys and GUID references were checked;
 no Unity tooltip preview was performed.
+
+## Parry text notification (2026-10-08)
+
+UnitVisual now subscribes to Unit.OnBlockResolved for ordinary Block text. It
+skips that text when AttackContext.IsParried is true; existing OnParry shows Parry.
+Queued modifier proc icons remain independent. Parry tooltip uses Descriptions
+keys combat.notification.parry, description.parry1 and description.parry2; both
+parry and parryChance terms resolve to the existing Parry description asset.
+The linked block and blockPower descriptions are registered in TooltipTerms.
+

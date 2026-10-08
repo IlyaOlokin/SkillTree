@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: EvadeRestoresHealth_0.05
   m_EditorClassIdentifier: Assembly-CSharp::SkillTree.EvadeRestoresHealth
   <Priorities>k__BackingField: 00000000
-  procIcon: {fileID: 21300000, guid: 98fcaa1045edb4f4ebbbed5e48d488e6, type: 3}
+  procIcon: {fileID: 21300000, guid: c42a5f319d0303e4b903d1e90c29974f, type: 3}
   maxHealthRestored: 0.1

@@ -56,6 +56,12 @@ namespace Battle
         
         public event Action OnEvade;
         public event Action OnBlock;
+        public event Action<AttackContext> OnBlockResolved;
+
+        internal void NotifyBlockResolved(AttackContext context)
+        {
+            OnBlockResolved?.Invoke(context);
+        }
         public event Action OnParry;
         public event Action<AttackContext> OnParryResolved;
         public event Action<AttackContext> OnAttackParried;

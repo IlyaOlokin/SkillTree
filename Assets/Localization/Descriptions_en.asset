@@ -541,10 +541,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000003
-    m_Localized: Chance to parry a successfully blocked hit. With 50% Block Chance
-      and 10% Parry Chance, 5% of incoming hits are parried. Each parry grants +30%
-      attack progress, scaled by {parryPower|Parry Power}. Parrying preserves the
-      normal damage reduction from Block.
+    m_Localized: Chance to parry a successfully blocked hit. Parry doubles the flat damage absorbed by Block Power and grants 30% Attack Progress, scaled by Parry Power. Block reactions still trigger.
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000020
@@ -558,12 +555,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000029
-    m_Localized: Parry chance is based on {block|Block} chance and only applies to
-      blocked hits.
+    m_Localized: Parry is rolled only after a successful {block|Block}. With 50% Block Chance and 10% Parry Chance, 5% of incoming hits are parried.
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000030
-    m_Localized: Parry grants 30% attack progress, increased by Parry Power.
+    m_Localized: Parry doubles the flat damage absorbed by {blockPower|Block Power} for that hit and grants 30% Attack Progress, multiplied by max(0, 1 + Parry Power). Block reactions still trigger; the floating message shows Parry instead of Block.
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000031

@@ -109,3 +109,5 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: b0183830a9a54eaea283f02662a572b2, type: 2}
   - id: blockPower
     description: {fileID: 11400000, guid: 0f1611510c104b2a90d4d1898233c0b5, type: 2}
+  - id: parryChance
+    description: {fileID: 11400000, guid: 7d10f1ea9aad41c4a8654127e55f6a94, type: 2}

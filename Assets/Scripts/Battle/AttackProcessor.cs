@@ -78,11 +78,12 @@ namespace Battle
                 Expose.Apply(attackerUnit, damageInfo, defender.UnitObject);
 
                 //Block
-                if (Block.ApplyBlock(damageInfo.DamageInstance, defender.UnitObject))
+                if (Block.ApplyBlock(damageInfo.DamageInstance, defender.UnitObject, out float blockPower))
                 {
                     context.IsBlocked = true;
                     defender.OnHitBlock(damageInfo.DamageInstance);
-                    Parry.Apply(context);
+                    Parry.Apply(context, blockPower);
+                    defender.UnitObject.NotifyBlockResolved(context);
                 }
                 
                 //Damage

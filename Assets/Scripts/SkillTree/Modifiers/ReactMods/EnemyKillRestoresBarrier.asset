@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: EnemyKillRestoresBarrier
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 00000000
-  procIcon: {fileID: 21300000, guid: 7252e482e74feaa4e9ba42ebfb695557, type: 3}
+  procIcon: {fileID: 21300000, guid: 2b64535e5dd5a4443a7da5e521147507, type: 3}

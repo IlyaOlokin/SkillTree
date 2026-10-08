@@ -41,7 +41,7 @@ namespace Visual
             unit.OnGettingHit += DisplayGettingHitEffect;
             unit.OnAttack += DisplayAttackAnimation;
             unit.OnEvade += DisplayEvadeNotification;
-            unit.OnBlock += DisplayBlockNotification;
+            unit.OnBlockResolved += DisplayBlockNotification;
             unit.OnModifierProc += DisplayModifierProcNotification;
             unit.OnParry += DisplayParryNotification;
             unit.OnWeaponTypeChanged += DisplayWeaponTypeChanged;
@@ -61,7 +61,7 @@ namespace Visual
                 unit.OnGettingHit -= DisplayGettingHitEffect;
                 unit.OnAttack -= DisplayAttackAnimation;
                 unit.OnEvade -= DisplayEvadeNotification;
-                unit.OnBlock -= DisplayBlockNotification;
+                unit.OnBlockResolved -= DisplayBlockNotification;
                 unit.OnModifierProc -= DisplayModifierProcNotification;
                 unit.OnParry -= DisplayParryNotification;
                 unit.OnWeaponTypeChanged -= DisplayWeaponTypeChanged;
@@ -134,8 +134,9 @@ namespace Visual
             notification.ShowIcon(request.icon, request.tint);
         }
 
-        private void DisplayBlockNotification()
+        private void DisplayBlockNotification(AttackContext context)
         {
+            if (context.IsParried) return;
             var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
             newEffect.WriteMessage(GameLocalization.Get("combat.notification.block", "Block"));
         }
