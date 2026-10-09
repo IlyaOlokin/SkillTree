@@ -31,9 +31,8 @@ SkillTree.ModifierContainer Container(SkillTree.Modifier m) {
         return (SkillTree.ModifierContainer)Field(m, typeof(SkillTree.ModifierPerPlayerLevel), "modifierContainer");
     return null;
 }
-bool Numeric(SkillTree.Node n) => n != null && !n.IsInfinite && n.RuntimePower == 0f &&
-    n.Modifiers != null && n.Modifiers.All(m => Container(m) != null && !Container(m).statType.ToString().Contains("Wisp"));
-var eligible = originals.Where(Numeric).ToArray();
+bool KnownNode(SkillTree.Node n) => n != null;
+var eligible = originals.Where(KnownNode).ToArray();
 var progressType = typeof(Battle.EnemySpawner).Assembly.GetType("Battle.EnemyLocationProgressService", true);
 object ProgressCall(object progress, string name, params object[] args) =>
     progressType.GetMethods().Single(m => m.Name == name && m.GetParameters().Length == args.Length &&
@@ -60,7 +59,7 @@ if (checkpoint == null) {
     var states = new System.Collections.Generic.List<System.Collections.Generic.Dictionary<string,object>>();
     foreach (var strategy in strategies) {
         string starter = (string)strategy["starterId"], style = (string)strategy["style"];
-        if (!byId.ContainsKey(starter) || !Numeric(byId[starter]) || !new[] { "damage", "defence", "balanced" }.Contains(style))
+        if (!byId.ContainsKey(starter) || !KnownNode(byId[starter]) || !new[] { "damage", "defence", "balanced" }.Contains(style))
             throw new System.InvalidOperationException("Invalid starter/style in " + strategy["name"]);
         for (int run = 0; run < runs; run++) states.Add(new System.Collections.Generic.Dictionary<string,object> {
             { "strategy", strategy }, { "seed", unchecked(seed + run) }, { "status", "running" }, { "reason", "" },
@@ -70,6 +69,7 @@ if (checkpoint == null) {
             { "unlocked", new System.Collections.Generic.List<string>() }, { "powers", new System.Collections.Generic.Dictionary<string,float>() },
             { "inventory", new System.Collections.Generic.List<InventorySystem.InventoryItem>() },
             { "socketGems", new System.Collections.Generic.Dictionary<string,Gems.GemInstance>() },
+            { "investments", new System.Collections.Generic.Dictionary<string,int>() },
             { "shopPurchases", new System.Collections.Generic.List<SaveSystem.ShopPurchaseSaveData>() },
             { "shopLog", new System.Collections.Generic.List<object>() },
             { "waveLog", new System.Collections.Generic.List<object>() }, { "allocationLog", new System.Collections.Generic.List<object>() },
@@ -115,6 +115,10 @@ try {
         var unlocked = (System.Collections.Generic.List<string>)state["unlocked"];
         var powers = (System.Collections.Generic.Dictionary<string,float>)state["powers"];
         var allocations = (System.Collections.Generic.List<object>)state["allocationLog"];
+        var investments = isProbe ? new System.Collections.Generic.Dictionary<string,int>((System.Collections.Generic.Dictionary<string,int>)state["investments"]) :
+            (System.Collections.Generic.Dictionary<string,int>)state["investments"];
+        float NodeCost(SkillTree.Node n) => n.IsInfinite ? 1f : System.Convert.ToSingle(Field(n, typeof(SkillTree.Node), "nodeCost"));
+        float Spent(string id) => NodeCost(byId[id]) * (byId[id].IsInfinite && investments.ContainsKey(id) ? investments[id] : 1);
         var rewards = (System.Collections.Generic.List<object>)state["rewardLog"];
         int locationIndex = (int)state["locationIndex"];
         var location = locations[campaignRoute[locationIndex]];
@@ -155,7 +159,7 @@ try {
             UnityEngine.JsonUtility.FromJsonOverwrite(UnityEngine.JsonUtility.ToJson(sourcePlayer.UnitLevel), level);
             var startData = (SaveSystem.PlayerSaveData)state["player"];
             level.ApplySaveData(isProbe ? new SaveSystem.PlayerSaveData { level = startData.level, currentExp = startData.currentExp,
-                skillPoints = System.Convert.ToSingle(search["budget"]) - allocated.Sum(id => System.Convert.ToSingle(Field(byId[id], typeof(SkillTree.Node), "nodeCost"))) } : startData);
+                skillPoints = System.Convert.ToSingle(search["budget"]) - allocated.Sum(Spent) } : startData);
             var tree = playerRoot.AddComponent<SkillTree.MainSkillTree>();
             var inventory = playerRoot.AddComponent<InventorySystem.PlayerInventory>();
             var sourceInventory = UnityEngine.Object.FindAnyObjectByType<InventorySystem.PlayerInventory>(UnityEngine.FindObjectsInactive.Include);
@@ -165,8 +169,7 @@ try {
             var copies = new System.Collections.Generic.Dictionary<SkillTree.Node,SkillTree.Node>();
             SkillTree.Node Copy(SkillTree.Node original) {
                 if (copies.TryGetValue(original, out var existing)) return existing;
-                SkillTree.Node copy = original is SkillTree.RootNode ? playerRoot.AddComponent<SkillTree.RootNode>() :
-                    original is SkillTree.SocketNode ? (SkillTree.Node)playerRoot.AddComponent<SkillTree.SocketNode>() : playerRoot.AddComponent<SkillTree.Node>();
+                SkillTree.Node copy = (SkillTree.Node)playerRoot.AddComponent(original.GetType());
                 UnityEngine.JsonUtility.FromJsonOverwrite(UnityEngine.JsonUtility.ToJson(original), copy);
                 if (copy is SkillTree.SocketNode socket) {
                     var savedGems = (System.Collections.Generic.Dictionary<string,Gems.GemInstance>)state["socketGems"];
@@ -185,14 +188,14 @@ try {
                 var members = (System.Collections.Generic.List<SkillTree.Node>)Field(original, typeof(SkillTree.LimitedZone), "nodes");
                 var copy = playerRoot.AddComponent<SkillTree.LimitedZone>();
                 UnityEngine.JsonUtility.FromJsonOverwrite(UnityEngine.JsonUtility.ToJson(original), copy);
-                FieldSet(copy, typeof(SkillTree.LimitedZone), "nodes", members.Where(Numeric).Select(Copy).ToList());
+                FieldSet(copy, typeof(SkillTree.LimitedZone), "nodes", members.Where(KnownNode).Select(Copy).ToList());
                 FieldSet(copy, typeof(SkillTree.LimitedZone), "_unitLevel", level);
                 limitCopies.Add(copy);
             }
             var bonusCopies = new System.Collections.Generic.Dictionary<SkillTree.BonusZone,SkillTree.BonusZone>();
             foreach (var original in originalBonuses) {
                 var container = (SkillTree.ModifierContainer)Field(original, typeof(SkillTree.BonusZone), "modContainer");
-                if (container == null || container.statType.ToString().Contains("Wisp")) continue;
+                if (container == null) continue;
                 var copy = playerRoot.AddComponent<SkillTree.BonusZone>();
                 FieldSet(copy, typeof(SkillTree.BonusZone), "modContainer", new SkillTree.ModifierContainer(container.modifierType, container.statType, container.value));
                 bonusCopies.Add(original, copy);
@@ -212,7 +215,7 @@ try {
                 typeof(SkillTree.LimitedZone).GetMethod("Awake", privateFlags).Invoke(zone, null);
                 typeof(SkillTree.LimitedZone).GetMethod("BeginSaveDataRestoreInternal", privateFlags).Invoke(zone, null);
             }
-            foreach (string id in allocated) copies[byId[id]].SetAllocatedFromSave(true);
+            foreach (string id in allocated) copies[byId[id]].SetAllocatedFromSave(true, false, investments.ContainsKey(id) ? investments[id] : 1);
             foreach (var zone in limitCopies) typeof(SkillTree.LimitedZone).GetMethod("EndSaveDataRestoreInternal", privateFlags).Invoke(zone, null);
             RefreshTree();
             Battle.Unit Actor(UnityEngine.GameObject root, Battle.Unit source, bool isPlayer) {
@@ -315,7 +318,8 @@ try {
             double[] NodeGain(SkillTree.Node[] path) {
                 string key = string.Join("/", path.Select(n => n.SaveId));
                 if (!projectionCache.TryGetValue(key, out var gain)) {
-                    gain = ProjectGain(path.SelectMany(n => n.Modifiers.Select(m => new SkillTree.CollectedModifier(m, SkillTree.ModifierPowerContext.FromNode(Copy(n))))), path);
+                    gain = ProjectGain(path.SelectMany(n => n.Modifiers.Where(m => !n.IsInfinite || SkillTree.InfiniteNode.Supports(m)).Select(m =>
+                        new SkillTree.CollectedModifier(m, n.IsInfinite ? SkillTree.ModifierPowerContext.None : SkillTree.ModifierPowerContext.FromNode(Copy(n))))), path);
                     projectionCache[key] = gain;
                 }
                 return gain;
@@ -372,35 +376,58 @@ try {
                 uint hash = unchecked((uint)((int)state["seed"] + variant * 7919));
                 foreach (char character in node.SaveId) hash = unchecked(hash * 16777619u ^ character);
                 double diversity = variant == 0 ? 1 : 0.75 + (hash % 1000) / 2000d;
-                return diversity * score / System.Math.Max(1, System.Convert.ToSingle(Field(node, typeof(SkillTree.Node), "nodeCost")));
+                return diversity * score / System.Math.Max(1, NodeCost(node));
             }
             double Score(SkillTree.Node node) => System.Math.Max(0, GainScore(NodeGain(new[] { node }))) /
-                System.Math.Max(0.01, System.Convert.ToSingle(Field(node, typeof(SkillTree.Node), "nodeCost")));
+                System.Math.Max(0.01, NodeCost(node));
             bool growing = false;
+            double attackReference = 1, defenceReference = 1;
+            bool MajorNode(SkillTree.Node n) => !n.IsInfinite && !(n is SkillTree.RootNode) && !(n is SkillTree.SocketNode) &&
+                (n.name.IndexOf("BigNode", System.StringComparison.OrdinalIgnoreCase) >= 0 || n.name.IndexOf("SpecialNode", System.StringComparison.OrdinalIgnoreCase) >= 0 || n.Modifiers.Any(m => Container(m) == null));
+            double MajorValue(SkillTree.Node n) {
+                int offence = 0, defence = 0;
+                foreach (var modifier in n.Modifiers.Where(m => m != null)) {
+                    string text = (Container(modifier)?.statType.ToString() ?? modifier.GetType().Name) + " " + modifier.name;
+                    if (new[] { "Health", "Armor", "Evasion", "Resistance", "Barrier", "Block", "Parry", "Mitigation", "Guard", "Cleanse", "Healing", "Defence", "DamageTaken", "Scar" }.Any(text.Contains)) defence++;
+                    if (new[] { "Damage", "Attack", "Crit", "Accuracy", "Ignite", "Bleed", "Chill", "Overcharge", "Sunder", "Distract", "Expose", "Wisp" }.Any(text.Contains) && !text.Contains("DamageTaken")) offence++;
+                }
+                double share = offence + defence == 0 ? 0.5 : offence / (double)(offence + defence);
+                return 3.25 * (share * attackReference + (1 - share) * defenceReference);
+            }
+            void CalibrateMajorValues(SkillTree.Node[] frontier) {
+                var samples = frontier.Concat(frontier.SelectMany(n => n.ConnectedNodes)).Where(n => n != null && !MajorNode(n) &&
+                    !(n is SkillTree.RootNode) && !(n is SkillTree.SocketNode) && !n.IsInfinite && n.Modifiers.All(m => Container(m) != null)).Distinct()
+                    .OrderByDescending(HeuristicScore).Take(12).Select(n => NodeGain(new[] { n })).ToArray();
+                double Median(double[] values) => values.Length == 0 ? 1 : values.OrderBy(v => v).ElementAt(values.Length / 2);
+                attackReference = Median(samples.Select(g => 100 * System.Math.Max(0, g[0]) * (style == "damage" ? 0.8 : style == "defence" ? 0.2 : 0.5)).Where(v => v > 0.000001).ToArray());
+                defenceReference = Median(samples.Select(g => 100 * System.Math.Max(0, g[1]) * (style == "defence" ? 0.8 : style == "damage" ? 0.2 : 0.5)).Where(v => v > 0.000001).ToArray());
+            }
             bool probeCombatStarted = false;
             int currentWave = 0;
             // A bounded three-node lookahead can pay for prerequisites and travel nodes.
             double HeuristicRouteScore(SkillTree.Node node) {
-                double future = node.ConnectedNodes.Where(n => Numeric(n) && !allocated.Contains(n.SaveId) && !(n is SkillTree.RootNode))
-                    .Select(n => HeuristicScore(n) + 0.35 * n.ConnectedNodes.Where(x => Numeric(x) && x != node && !allocated.Contains(x.SaveId) && !(x is SkillTree.RootNode))
+                double future = node.ConnectedNodes.Where(n => KnownNode(n) && !allocated.Contains(n.SaveId) && !(n is SkillTree.RootNode))
+                    .Select(n => HeuristicScore(n) + 0.35 * n.ConnectedNodes.Where(x => KnownNode(x) && x != node && !allocated.Contains(x.SaveId) && !(x is SkillTree.RootNode))
                         .Select(HeuristicScore).DefaultIfEmpty(0).Max()).DefaultIfEmpty(0).Max();
                 return HeuristicScore(node) + (strategy.ContainsKey("lookahead") && (bool)strategy["lookahead"] ? 0.5 * future : 0);
             }
             double RouteScore(SkillTree.Node node) {
                 double PathScore(SkillTree.Node[] path) {
-                    double cost = path.Sum(n => System.Convert.ToSingle(Field(n, typeof(SkillTree.Node), "nodeCost")));
+                    double cost = path.Sum(NodeCost);
                     double value = System.Math.Max(0, GainScore(NodeGain(path)));
+                    // Owner's requested directional estimate for major/special mechanics.
+                    value = System.Math.Max(value, path.Where(MajorNode).Sum(MajorValue));
                     // Empty sockets gain value only from a currently obtainable, useful gem.
                     if (path.Any(n => n is SkillTree.SocketNode)) value += availableGems.Select(GemScore).DefaultIfEmpty(0).Max();
                     return value / System.Math.Max(0.01, cost);
                 }
                 double best = PathScore(new[] { node });
                 if (strategy.ContainsKey("lookahead") && (bool)strategy["lookahead"]) {
-                    var next = node.ConnectedNodes.Where(n => Numeric(n) && !(n is SkillTree.RootNode) && !allocated.Contains(n.SaveId) && !Copy(n).IsLocked)
+                    var next = node.ConnectedNodes.Where(n => KnownNode(n) && !(n is SkillTree.RootNode) && !allocated.Contains(n.SaveId) && !Copy(n).IsLocked)
                         .OrderByDescending(HeuristicScore).Take(2);
                     foreach (var second in next) {
                         best = System.Math.Max(best, 0.8 * PathScore(new[] { node, second }));
-                        foreach (var third in second.ConnectedNodes.Where(n => n != node && Numeric(n) && !(n is SkillTree.RootNode) && !allocated.Contains(n.SaveId) && !Copy(n).IsLocked)
+                        foreach (var third in second.ConnectedNodes.Where(n => n != node && KnownNode(n) && !(n is SkillTree.RootNode) && !allocated.Contains(n.SaveId) && !Copy(n).IsLocked)
                             .OrderByDescending(HeuristicScore).Take(1))
                             best = System.Math.Max(best, 0.6 * PathScore(new[] { node, second, third }));
                     }
@@ -412,15 +439,16 @@ try {
                 if (growing) return; growing = true;
                 try {
                     for (int safety = 0; safety < 1000 && level.SkillPoints > 0; safety++) {
-                        var frontier = eligible.Where(n => !(n is SkillTree.RootNode) && !allocated.Contains(n.SaveId) &&
+                        var frontier = eligible.Where(n => !(n is SkillTree.RootNode) && (!allocated.Contains(n.SaveId) || n.IsInfinite) &&
                             n.ConnectedNodes.Any(next => next != null && copies.ContainsKey(next) && copies[next].IsActive)).ToArray();
                         foreach (var original in frontier) Copy(original);
                         RefreshTree();
                         var candidates = frontier.Where(n => copies[n].CanBeAllocated() && copies[n].HasEnoughSkillPoints()).ToArray();
-                        if (attribute.Length > 0) candidates = candidates.Where(n => n.SaveId == starterId || !n.ConnectedNodes.Any(x => x is SkillTree.RootNode)).ToArray();
                         if (allocated.Count == 0) candidates = candidates.Where(n => n.SaveId == starterId).ToArray();
                         RefreshDecision();
+                        CalibrateMajorValues(candidates);
                         var ranked = candidates.OrderByDescending(HeuristicRouteScore).ThenBy(n => n.SaveId, System.StringComparer.Ordinal).Take(8)
+                            .Concat(candidates.Where(MajorNode)).Distinct()
                             .Select(n => new { node = n, score = RouteScore(n) }).OrderByDescending(n => n.score).ThenBy(n => n.node.SaveId, System.StringComparer.Ordinal).ToArray();
                         var choice = ranked.FirstOrDefault();
                         var next = choice?.node;
@@ -430,11 +458,14 @@ try {
                         var estimatedGain = NodeGain(new[] { next });
                         float before = level.SkillPoints;
                         if (!copies[next].Allocate()) throw new System.InvalidOperationException("Allocation predicate changed unexpectedly.");
-                        allocated.Add(next.SaveId); RefreshTree(); player.RequestModRecalculation();
+                        if (!allocated.Contains(next.SaveId)) allocated.Add(next.SaveId);
+                        investments[next.SaveId] = copies[next].InvestedSkillPoints;
+                        RefreshTree(); player.RequestModRecalculation();
                         if (!isProbe) allocations.Add(new { revision = (int)state["revision"], location = location.LocationId, stage, wave = currentWave, level = level.Level, nodeId = next.SaveId,
                             modifiers = next.Modifiers.Select(m => m.name).ToArray(), pointsSpent = before - level.SkillPoints, pointsRemaining = level.SkillPoints,
                             decisionScore = choice.score, estimatedOffenceGain = System.Math.Exp(estimatedGain[0]) - 1,
-                            estimatedDefenceGain = System.Math.Exp(estimatedGain[1]) - 1, decisionPolicy = "counterfactual-v2" });
+                            estimatedDefenceGain = System.Math.Exp(estimatedGain[1]) - 1, decisionPolicy = "counterfactual-v3-directional",
+                            directionalMajorValue = MajorNode(next) ? MajorValue(next) : 0, majorNodeFactor = MajorNode(next) ? 3.25 : 0 });
                     }
                 } finally { growing = false; }
             }
@@ -546,7 +577,8 @@ try {
             bool stageWon = true, wasBoss = false;
             int completedWaves = 0, probeKills = 0;
             double damagedFraction = 0, stageSeconds = 0;
-            string proposalSignature = string.Join("|", allocated.OrderBy(id => id, System.StringComparer.Ordinal));
+            string proposalSignature = string.Join("|", allocated.OrderBy(id => id, System.StringComparer.Ordinal)
+                .Select(id => id + ":" + (investments.ContainsKey(id) ? investments[id] : 1)));
             bool duplicateProposal = isProbe && probeIndex > 0 && !((System.Collections.Generic.HashSet<string>)search["seen"]).Add(proposalSignature);
             for (currentWave = 1; currentWave <= waveQuota; currentWave++) {
                 if (duplicateProposal) { stageWon = false; break; }
@@ -622,6 +654,7 @@ try {
                 }
                 if (improved) {
                     search["bestFitness"] = fitness; search["bestNodes"] = new System.Collections.Generic.List<string>(allocated);
+                    search["bestInvestments"] = new System.Collections.Generic.Dictionary<string,int>(investments);
                     search["bestFree"] = level.SkillPoints; search["bestFocus"] = focus; search["bestVariant"] = variant;
                 }
                 player.ResetCombatState(); Snapshot("after-probe");
@@ -637,7 +670,12 @@ try {
                 search["next"] = probeIndex + 1;
                 if (stageWon || probeIndex >= Number(campaignConfig, "adaptiveCandidates", 4)) {
                     var bestNodes = (System.Collections.Generic.List<string>)search["bestNodes"];
-                    bool changedBuild = !new System.Collections.Generic.HashSet<string>(baseNodes).SetEquals(bestNodes);
+                    var bestInvestments = (System.Collections.Generic.Dictionary<string,int>)search["bestInvestments"];
+                    bool changedBuild = !new System.Collections.Generic.HashSet<string>(baseNodes).SetEquals(bestNodes) ||
+                        bestNodes.Any(id => byId[id].IsInfinite && bestInvestments.ContainsKey(id) &&
+                            (!((System.Collections.Generic.Dictionary<string,int>)state["investments"]).ContainsKey(id) ||
+                            bestInvestments[id] != ((System.Collections.Generic.Dictionary<string,int>)state["investments"])[id]));
+                    state["investments"] = bestInvestments;
                     state["allocated"] = bestNodes; state["focus"] = search["bestFocus"]; state["variant"] = search["bestVariant"];
                     startData.skillPoints = System.Convert.ToSingle(search["bestFree"]);
                     if (changedBuild) {
@@ -703,8 +741,9 @@ try {
                 state["search"] = new System.Collections.Generic.Dictionary<string,object> {
                     { "next", 0 }, { "round", (int)state["searchRounds"] }, { "seedAttempt", (int)state["attempt"] - 1 },
                     { "baseNodes", new System.Collections.Generic.List<string>(allocated) },
-                    { "budget", level.SkillPoints + allocated.Sum(id => System.Convert.ToSingle(Field(byId[id], typeof(SkillTree.Node), "nodeCost"))) },
+                    { "budget", level.SkillPoints + allocated.Sum(Spent) },
                     { "bestNodes", new System.Collections.Generic.List<string>(allocated) }, { "bestFree", level.SkillPoints },
+                    { "bestInvestments", new System.Collections.Generic.Dictionary<string,int>(investments) },
                     { "bestFocus", state["focus"] }, { "bestVariant", state["variant"] }, { "bestFitness", -1d }, { "baselineFitness", 0d },
                     { "seen", new System.Collections.Generic.HashSet<string>(System.StringComparer.Ordinal) }
                 };
@@ -734,6 +773,7 @@ var results = exportCampaign ? campaignStates.Skip(exportIndex).Take(1).Select(s
     completedLocations = (System.Collections.Generic.List<string>)state["completedLocations"],
     player = (SaveSystem.PlayerSaveData)state["player"], allocatedNodeIds = (System.Collections.Generic.List<string>)state["allocated"],
     unlockedNodeIds = (System.Collections.Generic.List<string>)state["unlocked"], deaths = (int)state["deaths"], waves = (int)state["waves"],
+    nodeInvestments = state["investments"],
     kills = (int)state["kills"], gold = (int)state["gold"], simulatedSeconds = (double)state["simulatedSeconds"],
     inventory = ((System.Collections.Generic.List<InventorySystem.InventoryItem>)state["inventory"]).Select(i => new { item = i.ItemDefinition.name, amount = i.StackCount }).ToArray(),
     waveLog = (System.Collections.Generic.List<object>)state["waveLog"], allocationLog = (System.Collections.Generic.List<object>)state["allocationLog"], rewardLog = (System.Collections.Generic.List<object>)state["rewardLog"],
@@ -748,10 +788,10 @@ var response = new { schemaVersion = 2, mode = "progression-campaign", finished,
     stagesThisCommand, computeSeconds = (double)checkpoint["computeSeconds"], elapsedSeconds = watch.Elapsed.TotalSeconds,
     sceneDirtyBefore = dirtyBefore, sceneDirtyAfter = UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty, campaigns = results,
     treeCatalog = exportCatalog ? originals.Select(n => new {
-        id = n.SaveId, name = n.name, type = n.GetType().Name, supported = Numeric(n), root = n is SkillTree.RootNode,
+        id = n.SaveId, name = n.name, type = n.GetType().Name, supported = KnownNode(n), root = n is SkillTree.RootNode,
         x = sourcePlayer.SkillTree.transform.InverseTransformPoint(n.transform.position).x,
         y = sourcePlayer.SkillTree.transform.InverseTransformPoint(n.transform.position).y,
-        cost = n is SkillTree.RootNode ? 0 : System.Convert.ToSingle(Field(n, typeof(SkillTree.Node), "nodeCost")),
+        cost = n is SkillTree.RootNode ? 0 : n.IsInfinite ? 1 : System.Convert.ToSingle(Field(n, typeof(SkillTree.Node), "nodeCost")),
         connectedIds = n.ConnectedNodes.Where(x => x != null).Select(x => x.SaveId).ToArray(),
         modifiers = n.Modifiers.Select(m => new { name = m == null ? "missing" : m.name, type = m == null ? "missing" : m.GetType().Name,
             serialized = m == null ? null : UnityEngine.JsonUtility.ToJson(m),

@@ -324,3 +324,23 @@ gold/socket counts, and no temporary actors remained. This resolves the precedin
 live-execution gap for this cohort, not every possible build/forecast. Mean
 progression increased, but 238 attribute nodes also changed from 2 to 1, so this
 is not a controlled algorithm-only improvement measurement. BL-032 remains open.
+
+Bot node coverage, 2026-10-09: the owner's STR heat-map example was traced to a
+BigNode whose +24% Armor is paired with GainAttackProgressOnHit_0.05. V2 excluded
+the whole node because one modifier was nonnumeric. The owner requested no node
+exclusion and a general 3.25-small-node directional estimate for major/special
+nodes. V3 removes the type/modifier filter, preserves subtype/infinite investment,
+and admits all frontier major nodes to detailed evaluation without per-node IDs
+or a special-case modifier allowlist. Compilation passed; live v3 coverage remains
+unverified. Historical viewer exclusions are now visibly marked. See
+[policy v3](../Tools/BalanceSimulation/README.md#all-node-directional-policy-v3-2026-10-09).
+
+All-node v3 live follow-up, 2026-10-09: [15 balanced campaigns](../Reports/BalanceSimulation/20261009-161427-810-campaign/verification.md)
+completed without adapter errors. All 2,812 catalog nodes were admitted; 458
+major/special nodes were allocated, and the owner's screenshot node was selected
+by 2/5 STR bots. Mean cleared stages were STR 95, DEX 93, INT/lightning 93
+(previous v2 means 51 / 95 / 15). All 137 positive-score gem purchases were
+inserted. Final gold/socket/investment data and temporary-object cleanup matched.
+This supersedes the live-v3-pending note for this cohort. Repeated infinite
+investment did not occur; adaptive respec and individual special-modifier behavior
+remain unverified. This does not close BL-032 or imply every strategy improved.

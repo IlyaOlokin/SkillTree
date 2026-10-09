@@ -27,7 +27,7 @@ if (report.campaigns?.length) {
   }
   function inspectHeatNode(id) {
     const node = byId.get(id), counts = heatNodes.get(id) || {allocated: 0, active: 0, seeds: []};
-    $('heatNode').textContent = `${node.name} · ${id} · выбран ${counts.allocated}/${cohort.length} (${format(100 * counts.allocated / cohort.length)}%) · активен ${counts.active}/${cohort.length} · seeds: ${counts.seeds.join(', ') || '—'} · ${node.modifiers.map(m => m.name).join(', ') || node.type}`;
+    $('heatNode').textContent = `${node.name} · ${id} · ${node.supported ? "поддерживается" : "ИСКЛЮЧЁН из политики этого прогона"} · выбран ${counts.allocated}/${cohort.length} (${format(100 * counts.allocated / cohort.length)}%) · активен ${counts.active}/${cohort.length} · seeds: ${counts.seeds.join(', ') || '—'} · ${node.modifiers.map(m => m.name).join(', ') || node.type}`;
   }
   function drawHeat(fit) {
     heat.replaceChildren();
@@ -45,9 +45,9 @@ if (report.campaigns?.length) {
     }
     for (const node of nodes) {
       const counts = heatNodes.get(node.id), frequency = (counts?.[metric] || 0) / cohort.length;
-      const circle = svgElement('circle', {cx: node.x, cy: -node.y, r: node.root ? 0.25 : 0.18, fill: heatColor(frequency), stroke: '#101722', 'stroke-width': 0.03, cursor: 'pointer'});
+      const circle = svgElement('circle', {cx: node.x, cy: -node.y, r: node.root ? 0.25 : 0.18, fill: heatColor(frequency), stroke: node.supported ? '#101722' : '#ee7777', 'stroke-width': node.supported ? 0.03 : 0.06, cursor: 'pointer'});
       const title = svgElement('title', {});
-      title.textContent = `${node.name}: ${counts?.[metric] || 0}/${cohort.length} (${format(frequency * 100)}%)`;
+      title.textContent = `${node.name}: ${counts?.[metric] || 0}/${cohort.length} (${format(frequency * 100)}%)${node.supported ? '' : ' · исключён из политики этого прогона'}`;
       circle.append(title); circle.onclick = () => inspectHeatNode(node.id); heat.append(circle);
       if (frequency > 0 && !node.root) {
         const label = svgElement('text', {x: node.x, y: -node.y + 0.045, 'text-anchor': 'middle', fill: frequency > 0.5 ? '#101722' : '#fff', 'font-size': 0.105, 'font-weight': 700, 'pointer-events': 'none'});

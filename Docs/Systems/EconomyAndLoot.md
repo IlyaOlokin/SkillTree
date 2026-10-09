@@ -86,7 +86,16 @@ moments; saving or leaving during a flight needs explicit verification.
 existing assets) and `Gold` (1). For Gold, `amount` is the wallet sum and no
 `itemDefinition` is required. Add an entry to the location's `levelRewards`, select
 Gold, set the absolute `levelNumber` (usually the final boss stage), and set Amount.
-No location reward amounts were assigned as part of this feature.
+No location reward amounts were assigned as part of the initial feature.
+
+On 2026-10-09, Gold was added on the existing final reward stage only to battle
+locations that had exactly one reward entry. Amounts by location number are:
+1: 10, 3: 75, 5: 100, 6: 130, 7: 150, 9: 175, 11: 200, 13: 225,
+14: 250, 15: 275, 17: 300, 18: 325, 19: 350. The later eligible locations
+use a flat increment of 25 gold. Locations 2, 4, 8, 10, 12, 16 and 20 already
+had multiple entries and were preserved, including Level2's existing 1-gold entry.
+Serialized reward counts, final-stage placement and amounts were checked; the
+intended location checker remains absent. No Unity playtest or build was run.
 
 Both the location information window and the completion window show Gold using
 the drop spawner's coin sprite (including its generated fallback). The quantity

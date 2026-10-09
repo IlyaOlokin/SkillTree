@@ -290,3 +290,51 @@ changed from 2 to 1 between cohorts. The preceding
 This policy does not learn across campaigns or save model parameters. Persistent
 learning would require a separate training loop, progression/cost-based rewards,
 and evaluation on seeds excluded from training.
+
+## All-node directional policy v3 (2026-10-09)
+
+The owner explicitly removed the simulator's numeric-only node restriction. All
+non-null authored nodes now enter the catalog/frontier regardless of modifier type,
+wisp stats or authored runtime power. Copies preserve their concrete Node subtype.
+Production allocation/activation predicates, costs, locks and zone rules still apply;
+these are gameplay rules, not simulator exclusions. Only the first allocation is
+fixed by the requested strategy starter; later adjacent-root nodes are no longer
+filtered by the simulator. Numeric-only shop gem coverage is unchanged.
+
+Large/special nodes use a general directional estimate requested by the owner:
+3.25 times a representative small-node value. Attack/defence direction comes from
+numeric stat identities and modifier type/asset naming; mixed nodes blend the two.
+There are no target node IDs or individual modifier allowlists. Large-node prefab
+names and nonordinary modifiers identify this general category. Reference values
+are medians of positive projected attack/defence gains from nearby ordinary small
+nodes, with a conservative fallback when no such sample exists. Real projected
+numeric gains can exceed the heuristic. Point cost and remaining path cost still
+matter. All frontier large/special nodes join the detailed shortlist, so the old
+numeric prefilter cannot discard them. This is a tuning heuristic, not a claim that
+every special mechanic is equally strong or its prerequisites are fully understood.
+
+Infinite nodes retain actual subtype and invested-point counts, permit repeated
+production allocations and project one incremental point. Checkpoints, snapshots
+and adaptive budgets retain invested counts; proposal signatures include them.
+Full modifier lists flow to production stat calculation, combat phases and runtime
+bindings. Removing selection exclusions does not by itself verify every modifier's
+scene/service dependencies or prove every mechanic is faithfully represented.
+
+The triggering STR v2 report contains a BigNode with +24% Armor and
+GainAttackProgressOnHit_0.05, marked supported=false. That historical exclusion,
+not an observed comparison between two legal choices, explains its zero uptake.
+Its archive remains unchanged. Rebuilt heat maps give excluded historical nodes
+a red outline and explain the status on hover/click; new v3 catalogs admit all
+nodes. No individual handling of GainAttackProgressOnHit is retained.
+
+Verification: external campaign adapter compiled against installed Unity/game
+assemblies with zero errors; viewer JavaScript syntax passed. The existing v2
+viewer was regenerated without rerunning simulations. After Pipeline restart,
+[15 v3 balanced campaigns](../../Reports/BalanceSimulation/20261009-161427-810-campaign/verification.md)
+finished with all 2,812 nodes admitted, 458 major/special allocations and 137 gem
+purchases/insertions. Mean cleared stages were STR 95, DEX 93 and INT/lightning 93.
+Final gold/socket/investment data, viewer payload and actor cleanup matched. The
+example node was selected by 2/5 STR bots under the general rule. Repeated infinite
+investment did not occur; adaptive respec and exhaustive special-modifier behavior
+remain unverified. No new test suite or player build was run. The preceding v2
+cohort remains historical and must not be presented as v3 evidence.

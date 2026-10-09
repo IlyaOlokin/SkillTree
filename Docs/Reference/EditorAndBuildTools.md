@@ -217,3 +217,17 @@ scores; no BarrierCapacity gem was purchased. Final snapshot gold/socket counts
 and temporary actor cleanup were checked. The catalog also records 238 attribute
 nodes changed from 2 to 1, so the comparison is not algorithm-only. This supersedes
 the earlier live-execution-pending note; other policy limits remain.
+
+All-node policy v3, 2026-10-09: the owner removed numeric-only node coverage and
+requested a general directional major-node estimate of 3.25 small nodes. Concrete
+node subtype and infinite investment are preserved; no individual node ID or
+modifier allowlist controls eligibility. See [v3 scope and verification](../../Tools/BalanceSimulation/README.md#all-node-directional-policy-v3-2026-10-09).
+Compilation and JavaScript syntax passed; live v3 simulation is not yet verified.
+
+Live all-node v3 follow-up, 2026-10-09: [15 balanced campaigns](../../Reports/BalanceSimulation/20261009-161427-810-campaign/verification.md)
+finished after Pipeline restart. Catalog coverage admitted all 2,812 nodes, with
+458 major/special allocations and 137 gem purchases/insertions. Mean cleared
+stages were 95 / 93 / 93 (STR / DEX / INT-lightning). Final snapshots, invested
+counts, archive/viewer bytes and actor cleanup were checked. No repeated infinite
+investment appeared; adaptive respec and exhaustive special-modifier coverage
+remain unverified. This supersedes the preceding live-v3-pending note.

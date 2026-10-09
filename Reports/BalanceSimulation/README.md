@@ -79,3 +79,10 @@ and MaximumHealth means matched independent calculations, and strategy/heat-map
 mode switching completed without script errors. Embedded viewer data matches the
 archive. Browser visual interaction was not checked: the in-app browser blocks
 local file URLs. No additional simulations or Unity build were run for this view.
+
+The [2026-10-09 all-node v3 cohort](20261009-161427-810-campaign/verification.md)
+contains 15 balanced bots and admits all 2,812 nodes. Allocation logs expose the
+3.25-small-node heuristic factor separately from numeric forecasts. Special
+mechanics are labelled instead of displaying a misleading zero scalar contribution;
+infinite scalar contribution display uses invested points. Historic node exclusions
+retain their archived flags and are shown with a red outline.
