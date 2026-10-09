@@ -1,0 +1,886 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.4/staging' branch; Version is '6000.4.6f1 (0b051c2e5d54) revision 722204'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-Gerund" at "2026-10-09T16:07:15.7307297Z"
+OS: 'Windows 11  (10.0.26200) Education' Language: 'en' Physical Memory: 31888 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-10-09T16:07:15Z
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Unity.exe
+-batchmode
+-nographics
+-projectPath
+C:\UnityProjects\SkillTree\Reports\BalanceSimulation\20261009-175543-107-play-parity\isolated-project
+-logFile
+C:\UnityProjects\SkillTree\Reports\BalanceSimulation\20261009-175543-107-play-parity\native-editor-final.log
+Successfully changed project path to: C:\UnityProjects\SkillTree\Reports\BalanceSimulation\20261009-175543-107-play-parity\isolated-project
+C:/UnityProjects/SkillTree/Reports/BalanceSimulation/20261009-175543-107-play-parity/isolated-project
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+Player connection [41164]  Target information:
+
+Player connection [41164]  * "[IP] 192.168.1.190 [Port] 55505 [Flags] 2 [Guid] 3293936221 [EditorId] 3293936221 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-R2NK926) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [41164] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [41164] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Package Manager] Connected to IPC stream "Upm-28348" after 0.0 seconds.
+[Licensing::Module] Licensing is not yet initialized.
+[Licensing::Client] Error: HandshakeResponse reported an error:
+	ResponseCode: 505
+	ResponseStatus: Unsupported protocol version '1.18.1'.
+[Licensing::Module] Error: Failed to handshake to channel: "LicenseClient-Gerund"
+[Licensing::IpcConnector] LicenseClient-Gerund channel disconnected successfully.
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-Gerund-6000.4.6" at "2026-10-09T16:07:16.8557649Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 11884, path: "C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.1+9fbee8e
+  Session Id:              ab853908a97c47b9a78c36555f68b79f
+  Correlation Id:          daea8481334bcc1e8672508e19771895
+  External correlation Id: 4415437663344238361
+  Machine Id:              b7nh2sPCHVx4KigKeB8GwGcdye0=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-Gerund-6000.4.6" (connect: 0.00s, validation: 0.00s, handshake: 0.01s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-Gerund-6000.4.6-notifications" at "2026-10-09T16:07:16.8625726Z"
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: 10170606256489-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.00
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Licensing Background thread has ended after 1.14s
+[Licensing::Module] Licensing is initialized (took 0.62s).
+[Licensing::Client] Successfully resolved entitlement details
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Initialize engine version: 6000.4.6f1 (0b051c2e5d54)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/UnityProjects/SkillTree/Reports/BalanceSimulation/20261009-175543-107-play-parity/isolated-project/Assets
+Forcing GfxDevice: Null
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56348
+CodeReloadManager initialized
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.003087 seconds.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Package Manager log level set to [2]
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.379 seconds
+Domain Reload Profiling: 871ms
+	BeginReloadAssembly (159ms)
+		CreateAndSetChildDomain (10ms)
+	RebuildCommonClasses (37ms)
+	RebuildNativeTypeToScriptingClass (12ms)
+	initialDomainReloadingComplete (66ms)
+	LoadAllAssembliesAndSetupDomain (216ms)
+		LoadAssemblies (145ms)
+		AnalyzeDomain (204ms)
+			TypeCache.Refresh (203ms)
+				TypeCache.ScanAssembly (189ms)
+	FinalizeReload (381ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (43ms)
+			BeforeProcessingInitializeOnLoad (74ms)
+			ProcessInitializeOnLoadAttributes (91ms)
+			ProcessInitializeOnLoadMethodAttributes (103ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 81 packages:
+  Local packages:
+    ayellowpaper.serialized-dictionary@file:C:\UnityProjects\SkillTree\Library\PackageCache\ayellowpaper.serialized-dictionary@f3ddbf09e20f (location: C:\UnityProjects\SkillTree\Library\PackageCache\ayellowpaper.serialized-dictionary@f3ddbf09e20f)
+    com.unity.2d.animation@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.animation@a6f2f1d22eb5 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.animation@a6f2f1d22eb5)
+    com.unity.2d.aseprite@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.aseprite@151b68d46c40 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.aseprite@151b68d46c40)
+    com.unity.2d.common@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.common@edfe77495b67 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.common@edfe77495b67)
+    com.unity.2d.pixel-perfect@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.pixel-perfect@09d99455b901 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.pixel-perfect@09d99455b901)
+    com.unity.2d.psdimporter@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.psdimporter@11a0e04e0561 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.psdimporter@11a0e04e0561)
+    com.unity.2d.sprite@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.sprite@929df5adbb1f (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.sprite@929df5adbb1f)
+    com.unity.2d.spriteshape@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.spriteshape@da3647ffbbd7 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.spriteshape@da3647ffbbd7)
+    com.unity.2d.tilemap.extras@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.tilemap.extras@66df903b3633 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.tilemap.extras@66df903b3633)
+    com.unity.2d.tilemap@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.tilemap@c457c5249013 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.tilemap@c457c5249013)
+    com.unity.2d.tooling@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.tooling@9d6aff712598 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.2d.tooling@9d6aff712598)
+    com.unity.addressables@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927)
+    com.unity.ai.assistant@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ai.assistant@667f49aff9c0 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ai.assistant@667f49aff9c0)
+    com.unity.ai.inference@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ai.inference@9a123aee5df7 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ai.inference@9a123aee5df7)
+    com.unity.burst@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.burst@6bb9aca3ef38 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.burst@6bb9aca3ef38)
+    com.unity.cloud.gltfast@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.cloud.gltfast@0847aee0f6da (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.cloud.gltfast@0847aee0f6da)
+    com.unity.collections@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.collections@65f499a3cc26 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.collections@65f499a3cc26)
+    com.unity.dt.app-ui@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.dt.app-ui@8ac7e730dd5d (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.dt.app-ui@8ac7e730dd5d)
+    com.unity.ext.nunit@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ext.nunit@d8c07649098d (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ext.nunit@d8c07649098d)
+    com.unity.feature.2d@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.feature.2d@11724ae7e5b5 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.feature.2d@11724ae7e5b5)
+    com.unity.ide.rider@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ide.rider@4504839d03f7 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ide.rider@4504839d03f7)
+    com.unity.ide.visualstudio@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ide.visualstudio@dc1ddd4f09b6 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ide.visualstudio@dc1ddd4f09b6)
+    com.unity.inputsystem@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.inputsystem@21a28c3a6c83 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.inputsystem@21a28c3a6c83)
+    com.unity.localization@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b)
+    com.unity.mathematics@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.mathematics@19a9377c4ffa (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.mathematics@19a9377c4ffa)
+    com.unity.modules.accessibility@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.accessibility (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.accessibility)
+    com.unity.modules.adaptiveperformance@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.adaptiveperformance (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.adaptiveperformance)
+    com.unity.modules.ai@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.ai (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.ai)
+    com.unity.modules.androidjni@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.androidjni (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.androidjni)
+    com.unity.modules.animation@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.animation (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.animation)
+    com.unity.modules.assetbundle@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.assetbundle (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.assetbundle)
+    com.unity.modules.audio@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.audio (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.audio)
+    com.unity.modules.cloth@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.cloth (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.cloth)
+    com.unity.modules.director@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.director (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.director)
+    com.unity.modules.hierarchycore@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.hierarchycore (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.hierarchycore)
+    com.unity.modules.imageconversion@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.imageconversion (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.imageconversion)
+    com.unity.modules.imgui@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.imgui (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.jsonserialize (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.modules.particlesystem@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.particlesystem (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.particlesystem)
+    com.unity.modules.physics@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.physics (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.physics2d@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.physics2d (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.physics2d)
+    com.unity.modules.screencapture@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.screencapture (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.screencapture)
+    com.unity.modules.subsystems@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.subsystems (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.subsystems)
+    com.unity.modules.terrain@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.terrain (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.terrainphysics@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.terrainphysics (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.terrainphysics)
+    com.unity.modules.tilemap@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.tilemap (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.tilemap)
+    com.unity.modules.ui@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.ui (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.uielements@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.uielements (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.modules.umbra@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.umbra (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.umbra)
+    com.unity.modules.unityanalytics@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unityanalytics (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unityanalytics)
+    com.unity.modules.unitywebrequest@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequest (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequest)
+    com.unity.modules.unitywebrequestassetbundle@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle)
+    com.unity.modules.unitywebrequestaudio@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequestaudio (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequestaudio)
+    com.unity.modules.unitywebrequesttexture@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequesttexture (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequesttexture)
+    com.unity.modules.unitywebrequestwww@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequestwww (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequestwww)
+    com.unity.modules.vectorgraphics@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.vectorgraphics (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.vectorgraphics)
+    com.unity.modules.vehicles@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.vehicles (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.vehicles)
+    com.unity.modules.video@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.video (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.video)
+    com.unity.modules.vr@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.vr (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.vr)
+    com.unity.modules.wind@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.wind (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.wind)
+    com.unity.modules.xr@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.xr (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.xr)
+    com.unity.multiplayer.center@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.multiplayer.center@f01f4ba8d00a (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.multiplayer.center@f01f4ba8d00a)
+    com.unity.nuget.mono-cecil@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.nuget.mono-cecil@ecb9724e46ff (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.nuget.mono-cecil@ecb9724e46ff)
+    com.unity.nuget.newtonsoft-json@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.nuget.newtonsoft-json@4dfd81071c64 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.nuget.newtonsoft-json@4dfd81071c64)
+    com.unity.pipeline@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.pipeline@ab05e9cd7f74 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.pipeline@ab05e9cd7f74)
+    com.unity.profiling.core@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.profiling.core@8a49f7027d06 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.profiling.core@8a49f7027d06)
+    com.unity.project-auditor-rules@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.project-auditor-rules@1fa74fdf90ed (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.project-auditor-rules@1fa74fdf90ed)
+    com.unity.render-pipelines.core@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.render-pipelines.core@630143bbfe2b (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.render-pipelines.core@630143bbfe2b)
+    com.unity.render-pipelines.universal-config@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.render-pipelines.universal-config@0db4263b9e6b (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.render-pipelines.universal-config@0db4263b9e6b)
+    com.unity.render-pipelines.universal@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.render-pipelines.universal@0d0659f1368d (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.render-pipelines.universal@0d0659f1368d)
+    com.unity.scriptablebuildpipeline@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2)
+    com.unity.searcher@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.searcher@d45a78918735 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.searcher@d45a78918735)
+    com.unity.settings-manager@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.settings-manager@0b8638c5ce86 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.settings-manager@0b8638c5ce86)
+    com.unity.shadergraph@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.shadergraph@04a6ef07359e (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.shadergraph@04a6ef07359e)
+    com.unity.splines@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.splines@9b00833aca09 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.splines@9b00833aca09)
+    com.unity.test-framework.performance@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.test-framework.performance@aa81a99c4a75 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.test-framework.performance@aa81a99c4a75)
+    com.unity.test-framework@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.test-framework@76560ee600cb (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.test-framework@76560ee600cb)
+    com.unity.timeline@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.timeline@8cd8509afae5 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.timeline@8cd8509afae5)
+    com.unity.ugui@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ugui@473409526770 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ugui@473409526770)
+    com.unity.visualeffectgraph@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.visualeffectgraph@e00a147af410 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.visualeffectgraph@e00a147af410)
+    com.unity.visualscripting@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.visualscripting@8bed5ad90189 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.visualscripting@8bed5ad90189)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.02 seconds
+[Package Manager] Done resolving packages in 1.16 seconds
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Lock file was modified
+[Package Manager] Registered 18 packages:
+  Local packages:
+    com.unity.ugui@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ugui@473409526770 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ugui@473409526770)
+    com.unity.localization@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b)
+    com.unity.splines@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.splines@9b00833aca09 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.splines@9b00833aca09)
+    com.unity.mathematics@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.mathematics@19a9377c4ffa (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.mathematics@19a9377c4ffa)
+    com.unity.addressables@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927)
+    com.unity.modules.ui@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.ui (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.imgui@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.imgui (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.nuget.newtonsoft-json@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.nuget.newtonsoft-json@4dfd81071c64 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.nuget.newtonsoft-json@4dfd81071c64)
+    com.unity.settings-manager@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.settings-manager@0b8638c5ce86 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.settings-manager@0b8638c5ce86)
+    com.unity.scriptablebuildpipeline@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2)
+    com.unity.modules.assetbundle@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.assetbundle (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.assetbundle)
+    com.unity.modules.imageconversion@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.imageconversion (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.imageconversion)
+    com.unity.modules.jsonserialize@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.jsonserialize (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.modules.unitywebrequest@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequest (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequest)
+    com.unity.modules.unitywebrequestassetbundle@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle)
+    com.unity.profiling.core@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.profiling.core@8a49f7027d06 (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.profiling.core@8a49f7027d06)
+    com.unity.test-framework@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.test-framework@76560ee600cb (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.test-framework@76560ee600cb)
+    com.unity.ext.nunit@file:C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ext.nunit@d8c07649098d (location: C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ext.nunit@d8c07649098d)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.00 seconds
+[API Updater] Processing imported assemblies took 152 ms (1/1 assembly(ies)).
+[Licensing::Client] Successfully resolved entitlement details
+Filename: C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Data\NetCoreRuntime\dotnet.exe
+Arguments: "C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Tools/BuildPipeline/Compilation/ApiUpdater/AssemblyUpdater.dll" update -a "Assets/Plugins/Assembly-CSharp-firstpass.dll" --output "C:/Users/seldp/AppData/Local/Temp/tmpdbd0f22.tmp" --api-version 6000.4.6f1  -s "C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Data\NetStandard\ref\2.1.0;C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Data\NetStandard\compat\2.1.0\shims\netstandard;C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Data\NetStandard\compat\2.1.0\shims\netfx;+C:/UnityProjects/SkillTree/Reports/BalanceSimulation/20261009-175543-107-play-parity/isolated-project/Assets;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ugui@473409526770;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.splines@9b00833aca09;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.mathematics@19a9377c4ffa;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.ui;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.imgui;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.nuget.newtonsoft-json@4dfd81071c64;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.settings-manager@0b8638c5ce86;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.assetbundle;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.imageconversion;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.jsonserialize;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequest;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.profiling.core@8a49f7027d06;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.test-framework@76560ee600cb;+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.ext.nunit@d8c07649098d;Library/ScriptAssemblies;+C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Data\Managed\UnityEngine" "C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Managed/UnityEngine/UnityEngine.AudioModule.dll" "C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll" "C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Managed/UnityEngine/UnityEngine.PhysicsModule.dll" "C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Managed/UnityEngine/UnityEngine.Physics2DModule.dll" "C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Managed/UnityEngine/UnityEngine.UIModule.dll" "C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Managed/UnityEngine/UnityEditor.CoreModule.dll"
+[API Updater] Assemblies not requiring updates:
+[API Updater] Assets/Plugins/Assembly-CSharp-firstpass.dll
+[API Updater] Update finished with success in 674 ms (0/1 assembly(ies) updated).
+Assembly Updater Post Process Assets time: 0.829463s
+[ScriptCompilation] Requested script compilation because: Assembly Definition File(s) changed
+[ScriptCompilation] Requested script compilation because: AssetDatabase observed changes in script compilation related files
+Starting: C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aEDbg.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: C:/UnityProjects/SkillTree/Reports/BalanceSimulation/20261009-175543-107-play-parity/isolated-project
+DisplayProgressbar: Compiling Scripts
+Starting: C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Data\netcorerun\netcorerun.exe "C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Data\Tools\BuildPipeline\ScriptCompilationBuildProgram.exe" "Library/Bee/1900b0aEDbg.dag.json" "Library/Bee/1900b0aEDbg-inputdata.json" "Library\Bee\buildprogram0.traceevents"
+WorkingDir: C:/UnityProjects/SkillTree/Reports/BalanceSimulation/20261009-175543-107-play-parity/isolated-project
+ExitCode: 4 Duration: 0s493ms
+[1028/2006  0s] CopyFiles Library/ScriptAssemblies/Unity.Pipeline.CodeGen.dll
+[1029/2006  0s] CopyFiles Library/ScriptAssemblies/Unity.Pipeline.CodeGen.pdb
+[1035/2006  0s] CopyFiles Library/ScriptAssemblies/UnityEngine.TestRunner.dll
+[1036/2006  0s] CopyFiles Library/ScriptAssemblies/UnityEngine.TestRunner.pdb
+[1040/2006  0s] CopyFiles Library/ScriptAssemblies/UnityEditor.TestRunner.dll
+[1041/2006  0s] CopyFiles Library/ScriptAssemblies/UnityEditor.TestRunner.pdb
+[1301/2006  0s] CopyFiles Library/ScriptAssemblies/Unity.Collections.CodeGen.dll
+[1302/2006  0s] CopyFiles Library/ScriptAssemblies/Unity.Burst.CodeGen.dll
+[1303/2006  0s] CopyFiles Library/ScriptAssemblies/Unity.Collections.CodeGen.pdb
+[1304/2006  0s] CopyFiles Library/ScriptAssemblies/Unity.Burst.CodeGen.pdb
+Rebuilding DAG because FileSignature timestamp changed: Library/Bee/1900b0aEDbg-inputdata.json
+[1391/2006  0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/ScriptablePacker.dll (+2 others) [CacheHit 4bf9db13c306da2550a7b44bd7016aa500000000000000000000000000000006]
+[1392/2006  0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/ScriptablePacker.dll (+2 others)
+[1394/2006  0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+[1392/2006  0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.VisualStudio.Editor.dll (+2 others) [CacheHit f88760fd17f341eb9e8f27e873d828fc00000000000000000000000000000006]
+[1395/2006  0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.VisualStudio.Editor.dll (+2 others)
+[1394/2006  0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Rider.Editor.dll (+2 others) [CacheHit 44d50670889140dca23b41b17fdff27d00000000000000000000000000000006]
+[1397/2006  0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Rider.Editor.dll (+2 others)
+*** Tundra requires additional run (0.46 seconds), 11 items updated, 1387 evaluated
+ExitCode: 0 Duration: 0s437ms
+Starting: C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aEDbg.dag" --continue-on-failure --dagfilejson="Library\Bee\1900b0aEDbg.dag.json" --profile="Library/Bee/backend2.traceevents" ScriptAssemblies
+WorkingDir: C:/UnityProjects/SkillTree/Reports/BalanceSimulation/20261009-175543-107-play-parity/isolated-project
+ExitCode: 0 Duration: 6s55ms
+Finished compiling graph: 381 nodes, 4800 flattened edges (4444 ToBuild, 54 ToUse), maximum node priority 223
+[           0s] Delete 1802 artifact files that are no longer in use. (like Library\Bee\artifacts\rsp)
+[158/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.dll.mvfrm.rsp
+[159/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ResourceManager.dll.mvfrm.rsp
+[160/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.rsp
+[165/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.TestRunner.dll.mvfrm.rsp
+[166/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Profiling.Core.dll.mvfrm.rsp
+[167/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.rsp
+[168/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ResourceManager.rsp
+[171/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEngineBridge.004.dll.mvfrm.rsp
+[174/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ScriptableBuildPipeline.rsp
+[177/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.dll.mvfrm.rsp
+[178/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Mathematics.dll.mvfrm.rsp
+[179/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ScriptableBuildPipeline.Editor.dll.mvfrm.rsp
+[180/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TextMeshPro.dll.mvfrm.rsp
+[182/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.rsp
+[184/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ScriptableBuildPipeline.dll.mvfrm.rsp
+[185/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.TestRunner.rsp
+[188/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEngineBridge.004.rsp
+[192/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Mathematics.rsp
+[194/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ScriptableBuildPipeline.Editor.rsp
+[199/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEngineBridge.013.dll.mvfrm.rsp
+[200/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TextMeshPro.rsp
+[201/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEngineBridge.013.rsp
+[202/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.Editor.dll.mvfrm.rsp
+[203/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Settings.Editor.dll.mvfrm.rsp
+[204/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Splines.dll.mvfrm.rsp
+[205/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Localization.dll.mvfrm.rsp
+[208/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEditorBridge.013.dll.mvfrm.rsp
+[209/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.Editor.rsp
+[213/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Splines.rsp
+[218/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Settings.Editor.rsp
+[222/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/BalanceParityNative.dll.mvfrm.rsp
+[225/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEditorBridge.013.rsp
+[229/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/BalanceParityNative.rsp
+[232/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Localization.rsp
+[235/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.dll.mvfrm.rsp
+[236/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.Analytics.dll.mvfrm.rsp
+[237/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Mathematics.Editor.dll.mvfrm.rsp
+[239/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Splines.Editor.dll.mvfrm.rsp
+[240/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TextMeshPro.Editor.dll.mvfrm.rsp
+[241/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.AutoGroupGenerator.Editor.dll.mvfrm.rsp
+[242/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/BalanceParityBootstrap.dll.mvfrm.rsp
+[243/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/BalanceParityBootstrap.rsp
+[244/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TextMeshPro.Editor.rsp
+[245/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Mathematics.Editor.rsp
+[246/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Localization.Editor.rsp
+[247/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.AutoGroupGenerator.Editor.rsp
+[248/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.Analytics.rsp
+[249/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Splines.Editor.rsp
+[250/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.TestRunner.rsp
+[251/378    0s] WriteText Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Profiling.Core.rsp
+[252/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.TestRunner.dll.mvfrm
+[253/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.dll.mvfrm
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.dll (+2 others) [CacheMiss 622f0f6d219d3f2df97df392f37a1c4300000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.TestRunner.dll (+2 others) [CacheMiss c4d0306627b9c0d68f93031b9f3a90cb00000000000000000000000000000006]
+[254/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.TestRunner.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.TestRunner.dll (+2 others) [CacheWrite c4d0306627b9c0d68f93031b9f3a90cb00000000000000000000000000000006]
+[257/378    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.TestRunner.pdb
+[258/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.dll (+2 others)
+[259/378    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.TestRunner.dll
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.TestRunner.dll (+2 others) [CacheMiss b0430256c6c57e9cbb535844f230b8fa00000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.dll (+2 others) [CacheWrite 622f0f6d219d3f2df97df392f37a1c4300000000000000000000000000000006]
+[260/378    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.UI.pdb
+[261/378    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.UI.dll
+[262/378    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UI.ref.dll_1A140323D56DB509.mvfrm
+[263/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.TestRunner.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.TestRunner.dll (+2 others) [CacheWrite b0430256c6c57e9cbb535844f230b8fa00000000000000000000000000000006]
+[265/378    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.TestRunner.pdb
+[266/378    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.TestRunner.dll
+[267/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.dll.mvfrm
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.dll (+2 others) [CacheMiss 5229d1b5cd5de266fe420b791b1785ca00000000000000000000000000000006]
+[268/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.dll (+2 others) [CacheWrite 5229d1b5cd5de266fe420b791b1785ca00000000000000000000000000000006]
+[270/378    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.UI.pdb
+[271/378    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.UI.dll
+[272/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/BalanceParityNative.dll.mvfrm
+[273/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEngineBridge.004.dll.mvfrm
+[274/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Profiling.Core.dll.mvfrm
+[275/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEngineBridge.013.dll.mvfrm
+[276/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEditorBridge.013.dll.mvfrm
+[277/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ScriptableBuildPipeline.dll.mvfrm
+[278/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/BalanceParityBootstrap.dll.mvfrm
+[279/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Settings.Editor.dll.mvfrm
+[280/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Mathematics.dll.mvfrm
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEngineBridge.013.dll (+2 others) [CacheMiss 9e914972e1ac9b59868475b8153c19f800000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEngineBridge.004.dll (+2 others) [CacheMiss e9691eea8d5acd34f27f68214596f4ea00000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Profiling.Core.dll (+2 others) [CacheMiss eaa7e4bb6cef9330303418b04489d53f00000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEditorBridge.013.dll (+2 others) [CacheMiss 57c74b84aa6425e9ce6e278868cfce7700000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ScriptableBuildPipeline.dll (+2 others) [CacheMiss 6a38a9e29f53d5435783e9e42114684f00000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Settings.Editor.dll (+2 others) [CacheMiss 1245af3bcb4e2473d36f343302770dc700000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Mathematics.dll (+2 others) [CacheMiss 8877bd09e40dfe91daa2423b7c13211f00000000000000000000000000000006]
+[281/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/BalanceParityNative.dll (+2 others)
+[282/378    0s] CopyFiles Library/ScriptAssemblies/BalanceParityNative.pdb
+[283/378    0s] CopyFiles Library/ScriptAssemblies/BalanceParityNative.dll
+[284/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Profiling.Core.dll (+2 others)
+[285/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEngineBridge.013.dll (+2 others)
+[286/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEngineBridge.004.dll (+2 others)
+[287/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ScriptableBuildPipeline.dll (+2 others)
+[288/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEditorBridge.013.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEngineBridge.013.dll (+2 others) [CacheWrite 9e914972e1ac9b59868475b8153c19f800000000000000000000000000000006]
+[289/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Settings.Editor.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Profiling.Core.dll (+2 others) [CacheWrite eaa7e4bb6cef9330303418b04489d53f00000000000000000000000000000006]
+[291/378    0s] CopyFiles Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.013.dll
+[292/378    0s] CopyFiles Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.013.pdb
+[294/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Profiling.Core.dll
+[295/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Profiling.Core.pdb
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEditorBridge.013.dll (+2 others) [CacheWrite 57c74b84aa6425e9ce6e278868cfce7700000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ScriptableBuildPipeline.dll (+2 others) [CacheWrite 6a38a9e29f53d5435783e9e42114684f00000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEngineBridge.004.dll (+2 others) [CacheWrite e9691eea8d5acd34f27f68214596f4ea00000000000000000000000000000006]
+[298/378    0s] CopyFiles Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.dll
+[300/378    0s] CopyFiles Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.pdb
+[301/378    0s] CopyFiles Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.004.dll
+[302/378    0s] CopyFiles Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.004.pdb
+[303/378    0s] CopyFiles Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.013.dll
+[304/378    0s] CopyFiles Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.013.pdb
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Settings.Editor.dll (+2 others) [CacheWrite 1245af3bcb4e2473d36f343302770dc700000000000000000000000000000006]
+[306/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Settings.Editor.pdb
+[307/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Settings.Editor.dll
+[308/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ResourceManager.dll.mvfrm
+[309/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/BalanceParityBootstrap.dll (+2 others)
+[310/378    0s] CopyFiles Library/ScriptAssemblies/BalanceParityBootstrap.pdb
+[311/378    0s] CopyFiles Library/ScriptAssemblies/BalanceParityBootstrap.dll
+[312/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TextMeshPro.dll.mvfrm
+[313/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ScriptableBuildPipeline.Editor.dll.mvfrm
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ResourceManager.dll (+2 others) [CacheMiss e136c02fc7089a6606fbe2fd831789ae00000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TextMeshPro.dll (+2 others) [CacheMiss bbff539dc1509ed10052f6f5ee0771cd00000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ScriptableBuildPipeline.Editor.dll (+2 others) [CacheMiss 62719dc95910deacd9a65e740e0a876100000000000000000000000000000006]
+[314/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ResourceManager.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ResourceManager.dll (+2 others) [CacheWrite e136c02fc7089a6606fbe2fd831789ae00000000000000000000000000000006]
+[315/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ScriptableBuildPipeline.Editor.dll (+2 others)
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Interfaces\IAssetRepresentationData.cs(6,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Interfaces\IBuildCache.cs(7,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Interfaces\IBuildContent.cs(7,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Interfaces\IBuildSpriteData.cs(6,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Interfaces\IWriteData.cs(5,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Shared\BuildContent.cs(8,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Shared\BuildExtendedAssetData.cs(6,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Shared\BuildSpriteData.cs(6,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Shared\BuildWriteData.cs(7,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Tasks\CalculateCustomDependencyData.cs(10,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Tasks\CreateMonoScriptBundle.cs(10,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Tasks\GenerateBundleMaps.cs(9,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Tasks\GenerateBundlePacking.cs(11,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Tasks\GenerateSubAssetPathMaps.cs(10,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Tasks\PreviewSceneDependencyData.cs(9,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Tasks\UpdateBundleObjectLayout.cs(11,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Utilities\ExtensionMethods.cs(9,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Utilities\ValidationMethods.cs(7,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+[317/378    0s] CopyFiles Library/ScriptAssemblies/Unity.ResourceManager.dll
+[318/378    0s] CopyFiles Library/ScriptAssemblies/Unity.ResourceManager.pdb
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.ScriptableBuildPipeline.Editor.dll (+2 others) [CacheWrite 62719dc95910deacd9a65e740e0a876100000000000000000000000000000006]
+[320/378    0s] CopyFiles Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.Editor.pdb
+[321/378    0s] CopyFiles Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.Editor.dll
+[322/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TextMeshPro.dll (+2 others)
+[323/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.dll.mvfrm
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TextMeshPro.dll (+2 others) [CacheWrite bbff539dc1509ed10052f6f5ee0771cd00000000000000000000000000000006]
+[325/378    0s] CopyFiles Library/ScriptAssemblies/Unity.TextMeshPro.pdb
+[326/378    0s] CopyFiles Library/ScriptAssemblies/Unity.TextMeshPro.dll
+[327/378    1s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Mathematics.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.dll (+2 others) [CacheMiss 46f0ed7bc85cf7bceda7429c54b02d7500000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Mathematics.dll (+2 others) [CacheWrite 8877bd09e40dfe91daa2423b7c13211f00000000000000000000000000000006]
+[329/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Mathematics.pdb
+[330/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Mathematics.dll
+[331/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.Analytics.dll.mvfrm
+[332/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TextMeshPro.Editor.dll.mvfrm
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.Analytics.dll (+2 others) [CacheMiss a5e6fead6643a72208bd305f762e881d00000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TextMeshPro.Editor.dll (+2 others) [CacheMiss 7bb34e61c88fc32b6d5af5555287043f00000000000000000000000000000006]
+[333/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Splines.dll.mvfrm
+[334/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Mathematics.Editor.dll.mvfrm
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Splines.dll (+2 others) [CacheMiss 5d26d6a7a3d54e04021041f83c9dffa000000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Mathematics.Editor.dll (+2 others) [CacheMiss bab52fddcd8d9fc0ae29f8af8eed520c00000000000000000000000000000006]
+[335/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.dll (+2 others) [CacheWrite 46f0ed7bc85cf7bceda7429c54b02d7500000000000000000000000000000006]
+[337/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Addressables.pdb
+[338/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Addressables.dll
+[339/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.Analytics.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.Analytics.dll (+2 others) [CacheWrite a5e6fead6643a72208bd305f762e881d00000000000000000000000000000006]
+[340/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Localization.dll.mvfrm
+[341/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.Editor.dll.mvfrm
+[342/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TextMeshPro.Editor.dll (+2 others)
+[343/378    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.UI.Analytics.pdb
+[344/378    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.UI.Analytics.dll
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.Editor.dll (+2 others) [CacheMiss 01b9ebbc54ad2a92d5313c8d8ff1ebc100000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Localization.dll (+2 others) [CacheMiss 6063d7152a20465c717e00bf94229e9e00000000000000000000000000000006]
+[345/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Mathematics.Editor.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TextMeshPro.Editor.dll (+2 others) [CacheWrite 7bb34e61c88fc32b6d5af5555287043f00000000000000000000000000000006]
+[346/378    0s] CopyFiles Library/ScriptAssemblies/Unity.TextMeshPro.Editor.pdb
+[347/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Splines.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Mathematics.Editor.dll (+2 others) [CacheWrite bab52fddcd8d9fc0ae29f8af8eed520c00000000000000000000000000000006]
+[348/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Mathematics.Editor.dll
+[349/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Mathematics.Editor.pdb
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Splines.dll (+2 others) [CacheWrite 5d26d6a7a3d54e04021041f83c9dffa000000000000000000000000000000006]
+[350/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Splines.pdb
+[351/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Splines.dll
+[352/378    0s] CopyFiles Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll
+[353/378    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.Splines.ref.dll_CD3BC4E940113B11.mvfrm
+[354/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Splines.Editor.dll.mvfrm
+[355/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Localization.dll (+2 others)
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b\Runtime\Utilities\InstanceIdHelper.cs(12,20): warning CS0618: 'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b\Runtime\Utilities\InstanceIdHelper.cs(23,20): warning CS0618: 'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Splines.Editor.dll (+2 others) [CacheMiss bb670195c1a6ed6f37772e68c31e9e4800000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Localization.dll (+2 others) [CacheWrite 6063d7152a20465c717e00bf94229e9e00000000000000000000000000000006]
+[356/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Localization.pdb
+[357/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Localization.dll
+[358/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.Editor.dll (+2 others)
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927\Editor\BuildReportVisualizer\ContentView\ContentView.cs(429,21): warning CS0618: 'VisualElement.transform' is obsolete: 'When writing the value, use VisualElement.style.translate, VisualElement.style.rotate or VisualElement.style.scale instead. When reading the value, use VisualElement.resolvedStyle.translate, scale and rotate'
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927\Editor\BuildReportVisualizer\ContentView\ContentView.cs(429,21): warning CS0618: 'ITransform.rotation' is obsolete: 'When reading the value, use VisualElement.resolvedStyle.rotate. When writing the value, use VisualElement.style.rotate instead.'
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927\Editor\BuildReportVisualizer\ContentView\ContentView.cs(628,47): warning CS0618: 'VisualElement.transform' is obsolete: 'When writing the value, use VisualElement.style.translate, VisualElement.style.rotate or VisualElement.style.scale instead. When reading the value, use VisualElement.resolvedStyle.translate, scale and rotate'
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927\Editor\BuildReportVisualizer\ContentView\ContentView.cs(628,47): warning CS0618: 'ITransform.rotation' is obsolete: 'When reading the value, use VisualElement.resolvedStyle.rotate. When writing the value, use VisualElement.style.rotate instead.'
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927\Editor\BuildReportVisualizer\ContentView\ContentView.cs(629,25): warning CS0618: 'VisualElement.transform' is obsolete: 'When writing the value, use VisualElement.style.translate, VisualElement.style.rotate or VisualElement.style.scale instead. When reading the value, use VisualElement.resolvedStyle.translate, scale and rotate'
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927\Editor\BuildReportVisualizer\ContentView\ContentView.cs(629,25): warning CS0618: 'ITransform.rotation' is obsolete: 'When reading the value, use VisualElement.resolvedStyle.rotate. When writing the value, use VisualElement.style.rotate instead.'
+[359/378    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.Localization.ref.dll_5A2405797D6BAB80.mvfrm
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.Editor.dll (+2 others) [CacheWrite 01b9ebbc54ad2a92d5313c8d8ff1ebc100000000000000000000000000000006]
+[361/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Addressables.Editor.pdb
+[362/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Splines.Editor.dll (+2 others)
+[363/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.AutoGroupGenerator.Editor.dll.mvfrm
+[364/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Localization.Editor.dll.mvfrm
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Splines.Editor.dll (+2 others) [CacheWrite bb670195c1a6ed6f37772e68c31e9e4800000000000000000000000000000006]
+[365/378    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.DocExampleCode.Editor.Tests.dll.mvfrm
+[366/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Splines.Editor.pdb
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.AutoGroupGenerator.Editor.dll (+2 others) [CacheMiss 1c89532c78e9f7592940a6744ccca29100000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.DocExampleCode.Editor.Tests.dll (+2 others) [CacheMiss acd648e195f87b423482e1db782febee00000000000000000000000000000006]
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Localization.Editor.dll (+2 others) [CacheMiss 353029393cd920e6b0bf1185c7c51bd300000000000000000000000000000006]
+[367/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Addressables.Editor.dll
+[368/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Splines.Editor.dll
+[369/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.AutoGroupGenerator.Editor.dll (+2 others)
+[370/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.DocExampleCode.Editor.Tests.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.AutoGroupGenerator.Editor.dll (+2 others) [CacheWrite 1c89532c78e9f7592940a6744ccca29100000000000000000000000000000006]
+[371/378    0s] CopyFiles Library/ScriptAssemblies/Unity.AutoGroupGenerator.Editor.pdb
+[372/378    0s] CopyFiles Library/ScriptAssemblies/Unity.AutoGroupGenerator.Editor.dll
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Addressables.DocExampleCode.Editor.Tests.dll (+2 others) [CacheWrite acd648e195f87b423482e1db782febee00000000000000000000000000000006]
+[373/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Addressables.DocExampleCode.Editor.Tests.pdb
+[374/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Addressables.DocExampleCode.Editor.Tests.dll
+[375/378    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Localization.Editor.dll (+2 others)
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b\Editor\Extension Methods\LazyLoadExtendedExtensionMethods.cs(12,20): warning CS0618: 'EntityId.implicit operator int(EntityId)' is obsolete: 'EntityId will not be representable by an int in the future. This casting operator will be removed in a future version.'
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b\Editor\Property Variants\ScenePropertyTracker.cs(41,54): warning CS0618: 'ChangeGameObjectStructureEventArgs.instanceId' is obsolete: 'instanceId is deprecated. Use entityId instead.'
+
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b\Editor\Property Variants\ScenePropertyTracker.cs(41,54): warning CS0618: 'EntityId.implicit operator EntityId(int)' is obsolete: 'EntityId will not be representable by an int in the future. This casting operator will be removed in a future version.'
+[           0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Localization.Editor.dll (+2 others) [CacheWrite 353029393cd920e6b0bf1185c7c51bd300000000000000000000000000000006]
+[376/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Localization.Editor.pdb
+[377/378    0s] CopyFiles Library/ScriptAssemblies/Unity.Localization.Editor.dll
+*** Tundra build success (6.03 seconds), 160 items updated, 378 evaluated
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Interfaces\IAssetRepresentationData.cs(6,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Interfaces\IBuildCache.cs(7,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Interfaces\IBuildContent.cs(7,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Interfaces\IBuildSpriteData.cs(6,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Interfaces\IWriteData.cs(5,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Shared\BuildContent.cs(8,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Shared\BuildExtendedAssetData.cs(6,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Shared\BuildSpriteData.cs(6,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Shared\BuildWriteData.cs(7,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Tasks\CalculateCustomDependencyData.cs(10,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Tasks\CreateMonoScriptBundle.cs(10,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Tasks\GenerateBundleMaps.cs(9,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Tasks\GenerateBundlePacking.cs(11,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Tasks\GenerateSubAssetPathMaps.cs(10,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Tasks\PreviewSceneDependencyData.cs(9,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Tasks\UpdateBundleObjectLayout.cs(11,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Utilities\ExtensionMethods.cs(9,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.scriptablebuildpipeline@36e3b5898ee2\Editor\Utilities\ValidationMethods.cs(7,7): warning CS0105: The using directive for 'UnityEngine' appeared previously in this namespace
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b\Runtime\Utilities\InstanceIdHelper.cs(12,20): warning CS0618: 'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b\Runtime\Utilities\InstanceIdHelper.cs(23,20): warning CS0618: 'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927\Editor\BuildReportVisualizer\ContentView\ContentView.cs(429,21): warning CS0618: 'VisualElement.transform' is obsolete: 'When writing the value, use VisualElement.style.translate, VisualElement.style.rotate or VisualElement.style.scale instead. When reading the value, use VisualElement.resolvedStyle.translate, scale and rotate'
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927\Editor\BuildReportVisualizer\ContentView\ContentView.cs(429,21): warning CS0618: 'ITransform.rotation' is obsolete: 'When reading the value, use VisualElement.resolvedStyle.rotate. When writing the value, use VisualElement.style.rotate instead.'
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927\Editor\BuildReportVisualizer\ContentView\ContentView.cs(628,47): warning CS0618: 'VisualElement.transform' is obsolete: 'When writing the value, use VisualElement.style.translate, VisualElement.style.rotate or VisualElement.style.scale instead. When reading the value, use VisualElement.resolvedStyle.translate, scale and rotate'
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927\Editor\BuildReportVisualizer\ContentView\ContentView.cs(628,47): warning CS0618: 'ITransform.rotation' is obsolete: 'When reading the value, use VisualElement.resolvedStyle.rotate. When writing the value, use VisualElement.style.rotate instead.'
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927\Editor\BuildReportVisualizer\ContentView\ContentView.cs(629,25): warning CS0618: 'VisualElement.transform' is obsolete: 'When writing the value, use VisualElement.style.translate, VisualElement.style.rotate or VisualElement.style.scale instead. When reading the value, use VisualElement.resolvedStyle.translate, scale and rotate'
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.addressables@8460f1c9c927\Editor\BuildReportVisualizer\ContentView\ContentView.cs(629,25): warning CS0618: 'ITransform.rotation' is obsolete: 'When reading the value, use VisualElement.resolvedStyle.rotate. When writing the value, use VisualElement.style.rotate instead.'
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b\Editor\Extension Methods\LazyLoadExtendedExtensionMethods.cs(12,20): warning CS0618: 'EntityId.implicit operator int(EntityId)' is obsolete: 'EntityId will not be representable by an int in the future. This casting operator will be removed in a future version.'
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b\Editor\Property Variants\ScenePropertyTracker.cs(41,54): warning CS0618: 'ChangeGameObjectStructureEventArgs.instanceId' is obsolete: 'instanceId is deprecated. Use entityId instead.'
+C:\UnityProjects\SkillTree\Library\PackageCache\com.unity.localization@2baf2a27280b\Editor\Property Variants\ScenePropertyTracker.cs(41,54): warning CS0618: 'EntityId.implicit operator EntityId(int)' is obsolete: 'EntityId will not be representable by an int in the future. This casting operator will be removed in a future version.'
+AssetDatabase: script compilation time: 7.571392s
+Begin MonoManager ReloadAssembly
+Assembly Assembly-CSharp-Editor-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor-firstpass.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp-Editor.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp.dll at Library/ScriptAssemblies/Assembly-CSharp.dll not valid. Loading of assembly skipped.
+Assembly TestNewCustomAssembly.dll at Library/ScriptAssemblies/TestNewCustomAssembly.dll not valid. Loading of assembly skipped.
+Assembly Unity.Addressables.Editor.Tests.dll at Library/ScriptAssemblies/Unity.Addressables.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Addressables.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.Addressables.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Localization.DocCodeSamples.dll at Library/ScriptAssemblies/Unity.Localization.DocCodeSamples.dll not valid. Loading of assembly skipped.
+Assembly Unity.Mathematics.Tests.dll at Library/ScriptAssemblies/Unity.Mathematics.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ResourceManager.Tests.dll at Library/ScriptAssemblies/Unity.ResourceManager.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ScriptableBuildPipeline.Editor.Tests.dll at Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ScriptableBuildPipeline.Tests.dll at Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ScriptableBuildPipelineTests.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.ScriptableBuildPipelineTests.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Settings.Tests.dll at Library/ScriptAssemblies/Unity.Settings.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.TextMeshPro.Editor.Tests.dll at Library/ScriptAssemblies/Unity.TextMeshPro.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.TextMeshPro.Tests.dll at Library/ScriptAssemblies/Unity.TextMeshPro.Tests.dll not valid. Loading of assembly skipped.
+Assembly UnityEditor.UI.Common.Tests.dll at Library/ScriptAssemblies/UnityEditor.UI.Common.Tests.dll not valid. Loading of assembly skipped.
+Assembly UnityEditor.UI.EditorTests.dll at Library/ScriptAssemblies/UnityEditor.UI.EditorTests.dll not valid. Loading of assembly skipped.
+Assembly UnityEngine.UI.Tests.dll at Library/ScriptAssemblies/UnityEngine.UI.Tests.dll not valid. Loading of assembly skipped.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.604 seconds
+Domain Reload Profiling: 3878ms
+	BeginReloadAssembly (369ms)
+		DisableScriptedObjects (40ms)
+		CreateAndSetChildDomain (171ms)
+	RebuildCommonClasses (44ms)
+	RebuildNativeTypeToScriptingClass (16ms)
+	initialDomainReloadingComplete (2406ms)
+	LoadAllAssembliesAndSetupDomain (437ms)
+		LoadAssemblies (421ms)
+		AnalyzeDomain (118ms)
+			TypeCache.Refresh (94ms)
+				TypeCache.ScanAssembly (81ms)
+			BuildScriptInfoCaches (16ms)
+			ResolveRequiredComponents (6ms)
+	FinalizeReload (605ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (30ms)
+			BeforeProcessingInitializeOnLoad (187ms)
+			ProcessInitializeOnLoadAttributes (131ms)
+			ProcessInitializeOnLoadMethodAttributes (53ms)
+			AfterProcessingInitializeOnLoad (7ms)
+		AwakeInstancesAfterBackupRestoration (20ms)
+No restricted APIs configured; Validation skipped.
+Checking 1 assemblies for restricted APIs found 0 usage(s) in 4 ms
+Loading style catalogs (6)
+	StyleSheets/Extensions/base/common.uss
+	UIPackageResources/StyleSheets/Default/Variables/Public/common.uss
+	StyleSheets/Northstar/common.uss
+	StyleSheets/Extensions/fonts/inter.uss
+	StyleSheets/Extensions/base/dark.uss
+	UIPackageResources/StyleSheets/Default/Northstar/Palette/dark.uss
+(Values over 0.050ms)
+Asset Pipeline Refresh (id=38e70c8669730e24dbb2bd570b506e4c): Total: 15.402 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1487 ms
+		Asset DB Callback time: managed=323 ms, native=1869 ms
+		Scripting: domain reloads=1, domain reload time=3278 ms, compile time=8403 ms, other=40 ms
+		Project Asset Count: scripts=439, non-scripts=437
+		Asset File Changes: new=1, changed=1, moved=0, deleted=18678
+		Scan Filter Count: 0
+	InvokePackagesCallback: 1213.137ms
+	ApplyChangesToAssetFolders: 1.782ms
+	Scan: 524.404ms
+	OnSourceAssetsModified: 58.464ms
+	CategorizeScriptCompilationAssets: 54.904ms
+	ProcessAssetsWithTransientArtifactChanges: 44.821ms
+	CategorizeAssets: 11.126ms
+	CompileScripts: 8402.702ms
+	ImportOutOfDateAssets: 610.700ms (609.284ms without children)
+		UnloadImportedAssets: 1.133ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.134ms
+		OnDemandSchedulerStart: 0.146ms
+	PostProcessAllAssets: 951.947ms
+		AssemblyValidation.PostprocessAllAssets 66.731ms
+		LocalizationDatabase.AssetDatabasePostprocessCallback 12.365ms
+		VCAutoAddAssetPostprocess 0.790ms
+		XRBuildSystem.XRAssetImported 0.113ms
+		VersionControlSettings.HiddenFilePostprocess 0.099ms
+		MonoPostProcessAllAssets: 311.056ms
+			StyleCatalogPostProcessor.OnPostprocessAllAssets 132.816ms
+			AssetChangedListener.OnPostprocessAllAssets 55.115ms
+			AssetPostprocessor.OnPostprocessAllAssets 52.210ms
+			LocalizationAssetPostProcessor.OnPostprocessAllAssets 18.743ms
+			RetainedModeAssetPostprocessor.OnPostprocessAllAssets 5.921ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 5.419ms
+			BuilderAssetPostprocessor.OnPostprocessAllAssets 3.714ms
+			SyncVS.PostprocessSyncProject 1.735ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 0.963ms
+			AddressablesAssetPostProcessor.OnPostprocessAllAssets 0.829ms
+			TextAssetPostProcessor.OnPostprocessAllAssets 0.599ms
+			ArtifactBrowserPostProcessor.OnPostprocessAllAssets 0.597ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.412ms
+			TMPro_TexturePostProcessor.OnPostprocessAllAssets 0.392ms
+			AssetPathToTypes.OnPostprocessAllAssets 0.366ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.341ms
+			AssetEvents.OnPostprocessAllAssets 0.273ms
+			AudioMixerPostprocessor.OnPostprocessAllAssets 0.213ms
+			SpeedTreePostProcessor.OnPostprocessAllAssets 0.177ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.149ms
+			ConfigAssetsTracker.OnPostprocessAllAssets 0.120ms
+			AudioContainerPostProcessor.OnPostprocessAllAssets 0.103ms
+			ScenarioDriftAssetsTracker.OnPostprocessAllAssets 0.101ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.088ms
+	PostAssetChangesProfiler: 3.455ms
+	UnloadStreamsBegin: 3.922ms
+	PersistCurrentRevisions: 10.503ms
+	GenerateScriptTypeHashes: 1.265ms
+	GenerateScriptTypeSerializationHashes: 2.194ms
+	Untracked: 3494.500ms
+
+Application.AssetDatabase Initial Refresh End
+Scanning for USB devices : 7.571ms
+Initializing Unity extensions:
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-BalanceParity-b27cbb0269b44907b69b279fe70c23af
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 2148 unused Assets / (1.6 MB). Loaded Objects now: 3080.
+Memory consumption went from 128.7 MB to 127.2 MB.
+Total: 6.850900 ms (FindLiveObjects: 0.350600 ms CreateObjectMapping: 0.120900 ms MarkObjects: 5.326400 ms  DeleteObjects: 1.049300 ms)
+
+Microsoft Media Foundation video decoding to texture disabled: graphics device is Null, only Direct3D 11 and Direct3D 12 (only on desktop) are supported for hardware-accelerated video decoding.
+[Project] Loading completed in 18.703 seconds
+	Project init time: 				17.906 seconds
+		Template init time: 		0.000 seconds
+		Package Manager init time: 		0.618 seconds
+		Asset Database init time: 		0.190 seconds
+		Global illumination init time: 	0.002 seconds
+		Assemblies load time: 			0.920 seconds
+		Unity extensions init time: 	0.003 seconds
+		Asset Database refresh time: 	15.403 seconds
+	Scene opening time: 			0.327 seconds
+##utp:{"type":"ProjectInfo","version":2,"phase":"Immediate","time":1791562053986,"processId":28348,"projectLoad":18.7028991,"projectInit":17.9057992,"templateInit":0.0,"packageManagerInit":0.6182866,"assetDatabaseInit":0.1895316,"globalIlluminationInit":0.0017779,"assembliesLoad":0.920478,"unityExtensionsInit":0.0031674,"assetDatabaseRefresh":15.402558,"sceneOpening":0.3265747}
+##utp:{"type":"EditorInfo","version":2,"phase":"Immediate","time":1791562053986,"processId":28348,"editorVersion":"6000.4.6f1 (0b051c2e5d54)","branch":"6000.4/staging","buildType":"Release","platform":"Windows"}
+[MODES] ModeService[default].LoadModes
+[Licensing::Client] Successfully resolved entitlement details
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 0 unused Assets / (59.5 KB). Loaded Objects now: 3095.
+Memory consumption went from 126.2 MB to 126.1 MB.
+Total: 6.675000 ms (FindLiveObjects: 0.130800 ms CreateObjectMapping: 0.052500 ms MarkObjects: 6.480600 ms  DeleteObjects: 0.010200 ms)
+
+Start Indexing on Editor startup
+[Indexing] Starting Initial Indexing for Assets
+Reloading assemblies for play mode.
+Reloading assemblies after forced synchronous recompile.
+Assembly Assembly-CSharp-Editor-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor-firstpass.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp-Editor.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp.dll at Library/ScriptAssemblies/Assembly-CSharp.dll not valid. Loading of assembly skipped.
+Assembly TestNewCustomAssembly.dll at Library/ScriptAssemblies/TestNewCustomAssembly.dll not valid. Loading of assembly skipped.
+Assembly Unity.Addressables.Editor.Tests.dll at Library/ScriptAssemblies/Unity.Addressables.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Addressables.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.Addressables.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Localization.DocCodeSamples.dll at Library/ScriptAssemblies/Unity.Localization.DocCodeSamples.dll not valid. Loading of assembly skipped.
+Assembly Unity.Mathematics.Tests.dll at Library/ScriptAssemblies/Unity.Mathematics.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ResourceManager.Tests.dll at Library/ScriptAssemblies/Unity.ResourceManager.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ScriptableBuildPipeline.Editor.Tests.dll at Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ScriptableBuildPipeline.Tests.dll at Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ScriptableBuildPipelineTests.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.ScriptableBuildPipelineTests.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Settings.Tests.dll at Library/ScriptAssemblies/Unity.Settings.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.TextMeshPro.Editor.Tests.dll at Library/ScriptAssemblies/Unity.TextMeshPro.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.TextMeshPro.Tests.dll at Library/ScriptAssemblies/Unity.TextMeshPro.Tests.dll not valid. Loading of assembly skipped.
+Assembly UnityEditor.UI.Common.Tests.dll at Library/ScriptAssemblies/UnityEditor.UI.Common.Tests.dll not valid. Loading of assembly skipped.
+Assembly UnityEditor.UI.EditorTests.dll at Library/ScriptAssemblies/UnityEditor.UI.EditorTests.dll not valid. Loading of assembly skipped.
+Assembly UnityEngine.UI.Tests.dll at Library/ScriptAssemblies/UnityEngine.UI.Tests.dll not valid. Loading of assembly skipped.
+Begin MonoManager ReloadAssembly
+Assembly Assembly-CSharp-Editor-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor-firstpass.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp-Editor.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp.dll at Library/ScriptAssemblies/Assembly-CSharp.dll not valid. Loading of assembly skipped.
+Assembly TestNewCustomAssembly.dll at Library/ScriptAssemblies/TestNewCustomAssembly.dll not valid. Loading of assembly skipped.
+Assembly Unity.Addressables.Editor.Tests.dll at Library/ScriptAssemblies/Unity.Addressables.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Addressables.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.Addressables.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Localization.DocCodeSamples.dll at Library/ScriptAssemblies/Unity.Localization.DocCodeSamples.dll not valid. Loading of assembly skipped.
+Assembly Unity.Mathematics.Tests.dll at Library/ScriptAssemblies/Unity.Mathematics.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ResourceManager.Tests.dll at Library/ScriptAssemblies/Unity.ResourceManager.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ScriptableBuildPipeline.Editor.Tests.dll at Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ScriptableBuildPipeline.Tests.dll at Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ScriptableBuildPipelineTests.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.ScriptableBuildPipelineTests.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Settings.Tests.dll at Library/ScriptAssemblies/Unity.Settings.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.TextMeshPro.Editor.Tests.dll at Library/ScriptAssemblies/Unity.TextMeshPro.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.TextMeshPro.Tests.dll at Library/ScriptAssemblies/Unity.TextMeshPro.Tests.dll not valid. Loading of assembly skipped.
+Assembly UnityEditor.UI.Common.Tests.dll at Library/ScriptAssemblies/UnityEditor.UI.Common.Tests.dll not valid. Loading of assembly skipped.
+Assembly UnityEditor.UI.EditorTests.dll at Library/ScriptAssemblies/UnityEditor.UI.EditorTests.dll not valid. Loading of assembly skipped.
+Assembly UnityEngine.UI.Tests.dll at Library/ScriptAssemblies/UnityEngine.UI.Tests.dll not valid. Loading of assembly skipped.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.599 seconds
+Domain Reload Profiling: 1063ms
+	BeginReloadAssembly (237ms)
+		DisableScriptedObjects (35ms)
+		CreateAndSetChildDomain (65ms)
+	RebuildCommonClasses (41ms)
+	RebuildNativeTypeToScriptingClass (15ms)
+	initialDomainReloadingComplete (57ms)
+	LoadAllAssembliesAndSetupDomain (114ms)
+		LoadAssemblies (122ms)
+		AnalyzeDomain (88ms)
+			TypeCache.Refresh (4ms)
+			BuildScriptInfoCaches (76ms)
+			ResolveRequiredComponents (6ms)
+	FinalizeReload (600ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (25ms)
+			BeforeProcessingInitializeOnLoad (142ms)
+			ProcessInitializeOnLoadAttributes (95ms)
+			ProcessInitializeOnLoadMethodAttributes (60ms)
+			AfterProcessingInitializeOnLoad (7ms)
+		AwakeInstancesAfterBackupRestoration (30ms)
+(Values over 0.050ms)
+Asset Pipeline Refresh (id=70832979a94ae124f985846dfb5fbd8e): Total: 1.194 seconds - Initiated by StopAssetImportingV2(ForceSynchronousImport | ForceDomainReload)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=655 ms
+		Asset DB Callback time: managed=21 ms, native=3 ms
+		Scripting: domain reloads=1, domain reload time=512 ms, compile time=1 ms, other=0 ms
+		Project Asset Count: scripts=439, non-scripts=437
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokePackagesCallback: 14.008ms
+	ApplyChangesToAssetFolders: 0.121ms
+	ProcessAssetsWithTransientArtifactChanges: 1.243ms
+	CategorizeAssets: 9.638ms
+	CompileScripts: 1.354ms
+	ImportOutOfDateAssets: 603.495ms (603.110ms without children)
+		UnloadImportedAssets: 0.057ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.152ms
+		OnDemandSchedulerStart: 0.159ms
+	PostProcessAllAssets: 21.272ms
+		MonoPostProcessAllAssets: 21.265ms
+			StyleCatalogPostProcessor.OnPostprocessAllAssets 132.816ms
+			AssetChangedListener.OnPostprocessAllAssets 55.115ms
+			AssetPostprocessor.OnPostprocessAllAssets 52.210ms
+			LocalizationAssetPostProcessor.OnPostprocessAllAssets 18.743ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 9.130ms
+			RetainedModeAssetPostprocessor.OnPostprocessAllAssets 5.921ms
+			BuilderAssetPostprocessor.OnPostprocessAllAssets 3.714ms
+			SyncVS.PostprocessSyncProject 2.099ms
+			AddressablesAssetPostProcessor.OnPostprocessAllAssets 0.829ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 0.743ms
+			TextAssetPostProcessor.OnPostprocessAllAssets 0.599ms
+			ArtifactBrowserPostProcessor.OnPostprocessAllAssets 0.597ms
+			TMPro_TexturePostProcessor.OnPostprocessAllAssets 0.392ms
+			AssetPathToTypes.OnPostprocessAllAssets 0.366ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.342ms
+			AssetEvents.OnPostprocessAllAssets 0.273ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.242ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.220ms
+			AudioMixerPostprocessor.OnPostprocessAllAssets 0.213ms
+			SpeedTreePostProcessor.OnPostprocessAllAssets 0.177ms
+			ConfigAssetsTracker.OnPostprocessAllAssets 0.120ms
+			AudioContainerPostProcessor.OnPostprocessAllAssets 0.103ms
+			ScenarioDriftAssetsTracker.OnPostprocessAllAssets 0.101ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.096ms
+	GenerateScriptTypeHashes: 1.266ms
+	GenerateScriptTypeSerializationHashes: 2.150ms
+	Untracked: 531.103ms
+
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            1.566 ms
+	Integration:            23.728 ms
+	Integration of assets:  0.003 ms
+	Thread Wait Time:       0.012 ms
+	Total Operation Time:   25.308 ms
+Created GICache directory at C:/Users/seldp/AppData/LocalLow/Unity/Caches/GiCache. Took: 0.029s, timestamps: [18.706 - 18.735]
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[Licensing::Client] Successfully resolved entitlement details
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input Polling Thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-Gerund-6000.4.6-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-Gerund-6000.4.6 channel disconnected successfully.
+AcceleratorClientConnectionCallback - disconnected - :0
+Cleanup mono
+CodeReloadManager destroyed
+Checking for leaked weakptr:
+  Found no leaked weakptrs.
+[Package Manager] Server process was shutdown
+##utp:{"type":"MemoryLeaks","version":2,"phase":"Immediate","time":1791562056439,"processId":28348,"allocatedMemory":14343795,"memoryLabels":[{"Default":2552155},{"Permanent":15276},{"NewDelete":65539},{"Thread":4230384},{"Manager":32397},{"VertexData":8},{"Geometry":816},{"Texture":24},{"Shader":835635},{"Material":22064},{"GfxDevice":55321},{"Animation":392},{"Audio":2632},{"FreeType":8},{"FontEngine":736},{"Physics":2090},{"Physics2D":16},{"Serialization":1016},{"Input":9880},{"JobScheduler":33024},{"TextLib":216},{"Mono":32},{"ScriptingNativeRuntime":155052},{"BaseObject":1620368},{"Resource":1184},{"Renderer":3008},{"Transform":4685},{"File":1088},{"WebCam":616},{"Culling":32},{"Terrain":11394},{"Wind":24},{"STL":40},{"String":21935},{"StaticString":6718},{"Utility":2672774},{"Curl":2498},{"PoolAlloc":2072},{"AI":80},{"TypeTree":13637},{"ScriptManager":448},{"RuntimeInitializeOnLoadManager":64},{"SpriteAtlas":120},{"GI":7792},{"Director":8320},{"CloudService":9104},{"WebRequest":848},{"VR":48050},{"SceneManager":504},{"Video":64},{"LazyScriptCache":32},{"Camera":17},{"Secure":2113},{"SerializationCache":1576},{"APIUpdating":10320},{"Subsystems":336},{"VirtualTexturing":57888},{"StaticSafetyDebugInfo":278528},{"Analytics":464},{"Hierarchy":608},{"CoreStats":13032},{"Identifiers":12960},{"Gui":128},{"EditorUtility":145346},{"VersionControl":4},{"Undo":931},{"AssetDatabase":1313257},{"EditorGi":328},{"UnityConnect":37777},{"Upm":1912},{"UpmDiagnostics":8},{"AssetCompliance":64},{"DrivenProperties":72},{"LocalIPC":212},{"ProfilerEditor":9746},{"CoreBusinessMetrics":2876},{"Windowing":456},{"Licensing":664},{"AssetReference":32},{"IPCStream":32}]}

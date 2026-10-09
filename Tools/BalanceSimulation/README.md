@@ -3,12 +3,22 @@
 [Project documentation](../../Docs/Home.md) · [Report storage](../../Reports/BalanceSimulation/README.md)
 
 The simulator lives outside `Assets`. Unity CLI compiles its external C# adapters
-on demand in the open Editor. Production combat runs at its normal 1/60-second
-step in a tight loop, using disposable preview-scene actors. The adapters read
+on demand in the open Editor. Campaign combat uses the scene's tick duration and
+production BattleTickSystem.RunTick on registered disposable preview-scene actors.
+The fixed-battle adapter retains its older manual tick loop. The adapters read
 scene/definition inputs, restore Random state and do not use profile saves.
 They do not become part of the game or its player build.
 
 ## Entry points
+
+Simulator-contract/repeatability check (three strategies, two short identical runs):
+`./Tools/BalanceSimulation/VerifySimulator.ps1`.
+Independent representative Play/Edit parity: `./Tools/BalanceSimulation/VerifyPlayMode.ps1`.
+This starts a hidden, disposable Unity project using local cached packages and
+copies of production DLLs; the original project stays in Edit Mode. Cold import
+can take several minutes. Native output is compared with complete Edit Mode traces
+using strict event counts and a small serialization tolerance for floats.
+See [stage-one evidence and remaining coverage](../../Docs/Reference/BalanceAgentStage1.md).
 
 Use PowerShell 7. Open MainScene in **Edit Mode**, with Unity Pipeline connected.
 The `unity` executable must be on PATH, or pass `-UnityCli` with its absolute path.
@@ -338,3 +348,11 @@ example node was selected by 2/5 STR bots under the general rule. Repeated infin
 investment did not occur; adaptive respec and exhaustive special-modifier behavior
 remain unverified. No new test suite or player build was run. The preceding v2
 cohort remains historical and must not be presented as v3 evidence.
+## Standalone experiments and learning
+
+Launch [LaunchLab.cmd](LaunchLab.cmd) to configure and run experiments without Codex.
+The local app provides stop/resume, versioned batch learning, frozen evaluation,
+model memory and paired balance comparisons. See [Balance Lab](../../Docs/Reference/BalanceLab.md)
+for setup, learning semantics and coverage. Game source/content remains outside
+the tool's edit scope.
+

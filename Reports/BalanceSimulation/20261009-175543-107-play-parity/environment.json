@@ -1,0 +1,17 @@
+{
+  "unity": "6000.4.6f1",
+  "nativeEditorExitCode": 0,
+  "assemblies": [
+    {
+      "assembly": "Assembly-CSharp.dll",
+      "sourceSha256": "8C653985068A01BE887C94E8CAEF0491F7A92EE034661CB82B7B2FF397F1A71E",
+      "nativeSha256": "8C653985068A01BE887C94E8CAEF0491F7A92EE034661CB82B7B2FF397F1A71E"
+    },
+    {
+      "assembly": "Assembly-CSharp-firstpass.dll",
+      "sourceSha256": "BD939FB890098FAEFB1B0FA087267F192834CC80A8086C869791B594BD775149",
+      "nativeSha256": "BD939FB890098FAEFB1B0FA087267F192834CC80A8086C869791B594BD775149"
+    }
+  ],
+  "sourceGameplayFilesEdited": false
+}

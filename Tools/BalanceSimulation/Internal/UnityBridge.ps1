@@ -14,13 +14,19 @@ function ConvertTo-CSharpLiteral($Value) {
         return 'new object[] {' + (@($Value | ForEach-Object { ConvertTo-CSharpLiteral $_ }) -join ',') + '}'
     }
     if ($Value -is [int] -or $Value -is [long]) { return $Value.ToString([Globalization.CultureInfo]::InvariantCulture) }
+    if ($Value -is [double] -or $Value -is [single] -or $Value -is [decimal]) {
+        $number = [double]$Value
+        if ([double]::IsNaN($number) -or [double]::IsInfinity($number)) { throw 'Non-finite configuration number.' }
+        return $number.ToString('R', [Globalization.CultureInfo]::InvariantCulture) + 'd'
+    }
     throw "Unsupported configuration value: $Value"
 }
 $taskEffectSource = Get-Content (Join-Path $taskToolsRoot 'Runtime/EditorEffectOwnership.cs') -Raw
 $taskExportSource = Get-Content (Join-Path $taskToolsRoot 'Runtime/EditorExports.cs') -Raw
 $taskDecisionSource = if ($taskAdapterKind -eq 'campaign') { Get-Content (Join-Path $taskToolsRoot 'Runtime/DecisionPolicy.cs') -Raw } else { '' }
+$taskLearningSource = if ($taskAdapterKind -eq 'campaign') { Get-Content (Join-Path $taskToolsRoot 'Runtime/LearningPolicy.cs') -Raw } else { '' }
 $taskAdapterBody = 'var requestExistingModifiers = new System.Collections.Generic.HashSet<SkillTree.Modifier>(UnityEngine.Resources.FindObjectsOfTypeAll<SkillTree.Modifier>());' +
-    [Environment]::NewLine + $taskEffectSource + [Environment]::NewLine + $taskExportSource + [Environment]::NewLine + $taskDecisionSource +
+    [Environment]::NewLine + $taskEffectSource + [Environment]::NewLine + $taskExportSource + [Environment]::NewLine + $taskDecisionSource + [Environment]::NewLine + $taskLearningSource +
     [Environment]::NewLine + 'try {' + [Environment]::NewLine + $taskSource + [Environment]::NewLine +
     '} catch (System.Exception exception) { return new { adapterError = exception.ToString() }; } finally {' +
     ' DisposeEditorEffects(); System.AppDomain.CurrentDomain.SetData("balanceSimulation.config", null);' +

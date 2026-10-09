@@ -4,7 +4,8 @@ param(
     [int]$Seed = 101,
     [ValidateRange(250, 2000)][int]$ComputeBudgetMs = 1500,
     [string]$UnityCli = 'unity',
-    [string]$Output = ''
+    [string]$Output = '',
+    [string]$StopFile = ''
 )
 $ErrorActionPreference = 'Stop'
 $taskToolsRoot = $PSScriptRoot
@@ -36,6 +37,7 @@ try {
     $null = Invoke-BalanceExport @{ checkpointKey = $taskCheckpointKey; operation = 'catalog'; config = $taskConfig;
         runs = $RunsPerStrategy; seed = $Seed } (Join-Path $taskWork 'catalog.json')
     do {
+        if ($StopFile -and (Test-Path -LiteralPath $StopFile)) { throw 'BALANCE_RUN_CANCELLED: completed campaigns remain in the work directory.' }
         $taskCalls++
         if ($taskCalls -gt 10000) { throw 'Campaign command limit reached.' }
         $taskChunk = Invoke-BalanceChunk @{ checkpointKey = $taskCheckpointKey; operation = 'advance'; config = $taskConfig;

@@ -91,6 +91,8 @@ there instead of creating a folder for each mechanic.
 
 [Balance report directory and viewer](../Reports/BalanceSimulation/README.md) contains dated
 compressed simulation outputs, offline bot stats/tree inspection and saved-run recovery.
+The [standalone Balance Lab](Reference/BalanceLab.md) configures experiments without
+Codex, trains versioned policies and compares frozen evaluations on paired seeds.
 
 ## Documentation conventions
 

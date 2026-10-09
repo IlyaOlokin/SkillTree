@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "locationIds": [
+    "level-1",
+    "level-2"
+  ],
+  "maxAttemptsPerStage": 1,
+  "maxWaveSeconds": 60,
+  "strategies": [
+    {
+      "name": "strength-balanced",
+      "starterId": "8f571679d10f49299ae5a2f28c450ded",
+      "attribute": "Strength",
+      "damageFamily": "Physical",
+      "style": "balanced",
+      "lookahead": true
+    },
+    {
+      "name": "dexterity-balanced",
+      "starterId": "b2c819833f9b4ce5b68e1b4f072a3c81",
+      "attribute": "Dexterity",
+      "damageFamily": "Physical",
+      "style": "balanced",
+      "lookahead": true
+    },
+    {
+      "name": "intelligence-lightning-balanced",
+      "starterId": "4da909485ee14e01aec7a6a21a44d92c",
+      "attribute": "Intelligence",
+      "damageFamily": "Lightning",
+      "style": "balanced",
+      "lookahead": true
+    }
+  ]
+}

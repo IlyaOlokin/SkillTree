@@ -1,0 +1,22 @@
+[
+  {
+    "name": "pain-scar-consume-expire",
+    "frames": 10,
+    "matched": true
+  },
+  {
+    "name": "repeat-effect-no-recursion",
+    "frames": 10,
+    "matched": true
+  },
+  {
+    "name": "barrier-loss-and-hit-binding",
+    "frames": 10,
+    "matched": true
+  },
+  {
+    "name": "ignite-pool-and-expiry",
+    "frames": 720,
+    "matched": true
+  }
+]

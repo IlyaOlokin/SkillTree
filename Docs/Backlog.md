@@ -344,3 +344,33 @@ inserted. Final gold/socket/investment data and temporary-object cleanup matched
 This supersedes the live-v3-pending note for this cohort. Repeated infinite
 investment did not occur; adaptive respec and individual special-modifier behavior
 remain unverified. This does not close BL-032 or imply every strategy improved.
+
+Balance-agent stage-one checkpoint, 2026-10-09: the external campaign adapter
+was found to run unregistered actors, causing immediate modifier rebuilds, and
+to omit EnemyUnit's injected player target, preventing player kill notifications.
+Both bindings were corrected outside Assets. Live diagnostics confirmed deferred
+Mods processing and exactly one kill event; two short three-strategy datasets
+matched exactly. Actor cleanup and unchanged scene were checked. This is a bounded
+contract/repeatability checkpoint; independent complex-mechanic Play Mode parity
+and remaining coverage are still open. See [evidence and limits](Reference/BalanceAgentStage1.md).
+
+Stage-one representative Play/Edit parity, 2026-10-09: an isolated native Play
+Mode project using byte-identical gameplay DLLs matched 750 simulator snapshots
+across Pain/Scar, received-effect repetition/unbinding, barrier loss/Surge/hit
+progress and Ignite pool/expiry/DoT gating. Complete traces and semantic transitions
+were checked, not just successful process exit. Main gameplay files and scene were
+unchanged; the temporary project was cleaned after preserving evidence. This closes
+the representative native-lifecycle gap for these scenarios, not all mechanics or
+BL-032. See [evidence](../Reports/BalanceSimulation/20261009-175543-107-play-parity/verification.md)
+and [remaining stage-one scope](Reference/BalanceAgentStage1.md).
+
+Standalone/learning follow-up, 2026-10-09: [Balance Lab](Reference/BalanceLab.md)
+now starts without Codex and persists settings, jobs, model versions and paired
+comparisons. A live three-strategy batch updated 13 feature weights and recorded
+65 context/action memory entries. Two frozen evaluation cohorts on new seeds
+matched their full gameplay records; stop/resume preserved the completed episode.
+A subsequent two-batch run used each newly learned model in the next batch and
+published input/output model provenance. These checks establish tool operation,
+not better agent strength. Influence/bridge choices, broad mechanic fidelity,
+long-run learning quality and BL-032 remain open. See the
+[scoped check record](../Reports/BalanceSimulation/Lab/verification-20261009.md).

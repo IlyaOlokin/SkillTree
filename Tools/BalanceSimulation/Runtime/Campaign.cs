@@ -17,6 +17,9 @@ var sourcePlayer = UnityEngine.Object.FindAnyObjectByType<Battle.PlayerUnit>(Uni
 var sourceSpawner = UnityEngine.Object.FindAnyObjectByType<Battle.EnemySpawner>(UnityEngine.FindObjectsInactive.Include);
 var sourcePool = UnityEngine.Object.FindAnyObjectByType<Battle.EnemyPool>(UnityEngine.FindObjectsInactive.Include);
 if (sourcePlayer == null || sourceSpawner == null || sourcePool == null) throw new System.InvalidOperationException("Open MainScene in Edit Mode.");
+if (request.ContainsKey("config") && ((System.Collections.Generic.Dictionary<string,object>)request["config"]).ContainsKey("controlledRun") &&
+    (bool)((System.Collections.Generic.Dictionary<string,object>)request["config"])["controlledRun"] && sourcePlayer.gameObject.scene.isDirty)
+    throw new System.InvalidOperationException("Save MainScene before a controlled experiment; unsaved scene inputs are not reproducible.");
 var catalog = (Battle.LocationCatalog)Field(sourceSpawner, typeof(Battle.EnemySpawner), "locationCatalog");
 var locations = catalog.Locations.Where(l => l != null).ToDictionary(l => l.LocationId);
 var sourceEnemy = (Battle.Unit)Field(sourcePool, typeof(Battle.EnemyPool), "enemyPrefab");
@@ -42,6 +45,10 @@ int ProgressInt(object progress, string name) => (int)progressType.GetProperty(n
 var checkpoint = (System.Collections.Generic.Dictionary<string,object>)System.AppDomain.CurrentDomain.GetData(checkpointKey);
 if (checkpoint == null) {
     var config = (System.Collections.Generic.Dictionary<string,object>)request["config"];
+    var agentSettings = config.ContainsKey("agent") ? (System.Collections.Generic.Dictionary<string,object>)config["agent"] : null;
+    var actorModel = agentSettings == null ? null : ReadAgentModel((string)agentSettings["modelPath"]);
+    if (agentSettings != null && config.ContainsKey("adaptive") && (bool)config["adaptive"])
+        throw new System.InvalidOperationException("Learning/frozen actor runs cannot use experimental adaptive respec.");
     if (Number(config, "schemaVersion", 0) != 1) throw new System.InvalidOperationException("Campaign preset schemaVersion must be 1.");
     var route = ((object[])config["locationIds"]).Cast<string>().ToArray();
     if (route.Length < 2 || route.Distinct().Count() != route.Length || route.Any(id => !locations.ContainsKey(id) || !locations[id].IsBattle))
@@ -80,18 +87,28 @@ if (checkpoint == null) {
             { "trialWaves", 0 }, { "trialSeconds", 0d },
             { "replaySeedAttempt", null }, { "pendingConfirmation", null },
             { "highestCompletedStage", 0 }, { "simulatedSeconds", 0d }
+            , { "agentLog", new System.Collections.Generic.List<object>() }, { "agentRewards", new System.Collections.Generic.List<object>() },
+            { "agentRandom", new System.Random(unchecked(seed + run + strategy["name"].ToString().Aggregate(17, (h, c) => unchecked(h * 31 + c)))) }
         });
     }
-    checkpoint = new System.Collections.Generic.Dictionary<string,object> { { "config", config }, { "states", states }, { "cursor", 0 }, { "computeSeconds", 0d } };
+    checkpoint = new System.Collections.Generic.Dictionary<string,object> { { "config", config }, { "states", states }, { "cursor", 0 }, { "computeSeconds", 0d }, { "actorModel", actorModel } };
     System.AppDomain.CurrentDomain.SetData(checkpointKey, checkpoint);
 }
 var campaignConfig = (System.Collections.Generic.Dictionary<string,object>)checkpoint["config"];
 var campaignStates = (System.Collections.Generic.List<System.Collections.Generic.Dictionary<string,object>>)checkpoint["states"];
 var campaignRoute = ((object[])campaignConfig["locationIds"]).Cast<string>().ToArray();
+var agentConfig = campaignConfig.ContainsKey("agent") ? (System.Collections.Generic.Dictionary<string,object>)campaignConfig["agent"] : null;
+var learnedModel = (System.Collections.Generic.Dictionary<string,object>)checkpoint["actorModel"];
+var learnedWeights = learnedModel == null ? null : AgentWeights(learnedModel);
+var learnedOffsets = learnedModel == null ? null : AgentOffsets(learnedModel);
+double AgentSetting(string name, double fallback) => agentConfig != null && agentConfig.ContainsKey(name) ? System.Convert.ToDouble(agentConfig[name]) : fallback;
 var savedRandom = UnityEngine.Random.state;
 bool dirtyBefore = UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty;
 var watch = System.Diagnostics.Stopwatch.StartNew();
-const float step = 1f / 60f;
+var sourceTick = UnityEngine.Object.FindObjectsByType<Battle.BattleTickSystem>(UnityEngine.FindObjectsInactive.Include)
+    .Where(t => t.gameObject.scene == sourcePlayer.gameObject.scene).ToArray();
+if (sourceTick.Length != 1) throw new System.InvalidOperationException("MainScene must have exactly one BattleTickSystem for controlled simulation.");
+float step = sourceTick[0].TickDuration;
 int stagesThisCommand = 0;
 bool exportCampaign = (string)request["operation"] == "export";
 bool exportCatalog = (string)request["operation"] == "catalog";
@@ -143,6 +160,7 @@ try {
         void DisposeRoot(UnityEngine.GameObject root) {
             if (root == null) return;
             foreach (var actor in root.GetComponents<Battle.Unit>()) {
+                typeof(Battle.Unit).GetMethod("UnregisterFromBattleTickSystem", privateFlags).Invoke(actor, null);
                 actor.effectController.ClearAllEffects();
                 typeof(Battle.Unit).GetMethod("UnbindModifierRuntimes", privateFlags).Invoke(actor, null);
             }
@@ -154,6 +172,9 @@ try {
             UnityEngine.Object.DestroyImmediate(root);
         }
         try {
+            var tickRoot = NewRoot("BalanceSimulationCampaignTick");
+            var simulatedTick = tickRoot.AddComponent<Battle.BattleTickSystem>(); simulatedTick.TickDuration = step;
+            var runTick = (System.Action<float>)typeof(Battle.BattleTickSystem).GetMethod("RunTick", privateFlags).CreateDelegate(typeof(System.Action<float>), simulatedTick);
             var playerRoot = NewRoot("BalanceSimulationCampaignPlayer");
             var level = playerRoot.AddComponent<Battle.UnitLevel>();
             UnityEngine.JsonUtility.FromJsonOverwrite(UnityEngine.JsonUtility.ToJson(sourcePlayer.UnitLevel), level);
@@ -218,7 +239,7 @@ try {
             foreach (string id in allocated) copies[byId[id]].SetAllocatedFromSave(true, false, investments.ContainsKey(id) ? investments[id] : 1);
             foreach (var zone in limitCopies) typeof(SkillTree.LimitedZone).GetMethod("EndSaveDataRestoreInternal", privateFlags).Invoke(zone, null);
             RefreshTree();
-            Battle.Unit Actor(UnityEngine.GameObject root, Battle.Unit source, bool isPlayer) {
+            Battle.Unit Actor(UnityEngine.GameObject root, Battle.Unit source, bool isPlayer, bool combatActor = true) {
                 var health = root.AddComponent<Battle.Health>(); var barrier = root.AddComponent<Battle.Barrier>();
                 var mystic = root.AddComponent<Battle.MysticHealth>(); var effects = root.AddComponent<Battle.EffectController>();
                 OwnEditorEffects(effects);
@@ -242,13 +263,19 @@ try {
                 root.SetActive(true);
                 // Enemy prefab innate data may be null; Initialize installs generated modifiers before recalculation.
                 if (isPlayer) actor.RequestModRecalculation();
+                if (combatActor) {
+                    FieldSet(actor, typeof(Battle.Unit), "_battleTickSystem", simulatedTick);
+                    typeof(Battle.Unit).GetMethod("RegisterToBattleTickSystem", privateFlags).Invoke(actor, null);
+                    if (!(bool)Field(actor, typeof(Battle.Unit), "_isRegisteredInBattleTickSystem"))
+                        throw new System.InvalidOperationException("Combat actor did not register with the production tick driver.");
+                }
                 return actor;
             }
             var player = (Battle.PlayerUnit)Actor(playerRoot, sourcePlayer, true);
             string style = (string)strategy["style"], starterId = (string)strategy["starterId"];
             string damageFamily = strategy.ContainsKey("damageFamily") ? (string)strategy["damageFamily"] : "Physical";
             string attribute = strategy.ContainsKey("attribute") ? (string)strategy["attribute"] : "";
-            var decisionPlayer = (Battle.PlayerUnit)Actor(NewRoot("BalanceSimulationCampaignDecision"), sourcePlayer, true);
+            var decisionPlayer = (Battle.PlayerUnit)Actor(NewRoot("BalanceSimulationCampaignDecision"), sourcePlayer, true, false);
             var resetDecision = typeof(Battle.Unit).GetMethod("ResetUnit", privateFlags);
             var statTypes = System.Enum.GetValues(typeof(StatType)).Cast<StatType>().Where(s => s != StatType.Empty).ToArray();
             System.Collections.Generic.Dictionary<StatType,float> ReadStats(Battle.Unit unit) => statTypes.ToDictionary(s => s, s => unit.BaseUnitModifiers.GetStatValue(s));
@@ -262,7 +289,7 @@ try {
                 var samplePackages = new Battle.WaveFactory(new Battle.EnemyFactory(database), database).CreateWave(sampleContext).Take(poolSize).ToArray();
                 foreach (var package in samplePackages) {
                     definitionsToDispose.Add(package.Modifiers);
-                    var sampleEnemy = (Battle.EnemyUnit)Actor(NewRoot("BalanceSimulationCampaignDecisionEnemy"), sourceEnemy, false);
+                    var sampleEnemy = (Battle.EnemyUnit)Actor(NewRoot("BalanceSimulationCampaignDecisionEnemy"), sourceEnemy, false, false);
                     sampleEnemy.Initialize(new Battle.EnemySpawnData(package.Definition, package.Rarity, package.Power, 0,
                         package.Modifiers, package.Affixes, package.BaseEvasion, false));
                     sampleEnemy.CombatTick(0f, Battle.CombatTickPhase.Mods);
@@ -404,6 +431,36 @@ try {
             }
             bool probeCombatStarted = false;
             int currentWave = 0;
+            int ChooseActor(string kind, string[] ids, string[] labels, System.Collections.Generic.IEnumerable<SkillTree.Modifier>[] modifiers,
+                double[] priors, double[] costs, bool[] majors, bool[] sockets, bool[] infinites) {
+                var damageNames = new[] { StatType.PhysicalDamage, StatType.FireDamage, StatType.ColdDamage, StatType.LightningDamage, StatType.LightDamage, StatType.DarknessDamage };
+                int dominant = Enumerable.Range(0, damageNames.Length).OrderByDescending(i => opponentStats[damageNames[i]]).First();
+                bool barrier = decisionBase[StatType.BarrierCount] >= 1;
+                string context = attribute + "/" + dominant + "/" + (barrier ? "barrier" : "none") + "/" + (decisionBase[StatType.HealthRegenerationPerSecond] > 0 ? "regen" : "none") + "/" + (stage / 20);
+                var features = Enumerable.Range(0, ids.Length).Select(i => {
+                    string text = string.Join(" ", modifiers[i].Where(m => m != null).Select(m => (Container(m)?.statType.ToString() ?? m.GetType().Name) + " " + m.name));
+                    bool offence = new[] { "Damage", "Attack", "Crit", "Accuracy", "Ignite", "Bleed", "Chill", "Overcharge", "Sunder", "Expose" }.Any(text.Contains);
+                    bool defence = new[] { "Health", "Armor", "Evasion", "Resistance", "Barrier", "Block", "Parry", "Mitigation", "Guard", "Cleanse", "Healing" }.Any(text.Contains);
+                    double attack = offence ? 1 : 0, guard = defence ? 1 : 0;
+                    return new[] { 1d, System.Math.Tanh(System.Math.Log(1 + System.Math.Max(0, priors[i])) / 3), majors[i] ? 1d : 0,
+                        sockets[i] ? 1d : 0, infinites[i] ? 1d : 0, -System.Math.Min(1, costs[i] / (kind == "node" ? 2 : 250)), attack, guard,
+                        guard * (dominant == 0 ? 1 : 0), guard * (dominant >= 1 && dominant <= 3 ? 1 : 0), guard * (dominant >= 4 ? 1 : 0),
+                        text.Contains("Barrier") ? (barrier ? 1d : -1d) : 0, text.Contains("Regeneration") ? 1d : 0,
+                        attribute.Length > 0 && text.Contains(attribute) ? 1d : 0,
+                        attack * System.Math.Min(1, System.Math.Max(0, decisionBase[StatType.CritChance])),
+                        guard * System.Math.Tanh(System.Math.Max(0, decisionBase[StatType.Armor]) / System.Math.Max(1, opponentStats[StatType.PhysicalDamage])) };
+                }).ToArray();
+                var keys = ids.Select(id => context + "/" + id).ToArray();
+                var logits = Enumerable.Range(0, ids.Length).Select(i => AgentLogit(priors[i], features[i], learnedWeights, keys[i], learnedOffsets)).ToArray();
+                bool training = agentConfig.ContainsKey("training") && (bool)agentConfig["training"];
+                double temperature = AgentSetting("temperature", 1), exploration = training ? AgentSetting("exploration", 0.1) : 0;
+                int selected = AgentSelect(logits, (System.Random)state["agentRandom"], training, temperature, exploration, out var softmax, out var probabilities);
+                ((System.Collections.Generic.List<object>)state["agentLog"]).Add(new { kind, location = location.LocationId, stage, wave = currentWave,
+                    context, selected, temperature, exploration, modelId = learnedModel["id"].ToString(),
+                    choices = Enumerable.Range(0, ids.Length).Select(i => new { id = ids[i], label = labels[i], key = keys[i], x = features[i],
+                        prior = priors[i], probability = probabilities[i], softmax = softmax[i] }).ToArray() });
+                return selected;
+            }
             // A bounded three-node lookahead can pay for prerequisites and travel nodes.
             double HeuristicRouteScore(SkillTree.Node node) {
                 double future = node.ConnectedNodes.Where(n => KnownNode(n) && !allocated.Contains(n.SaveId) && !(n is SkillTree.RootNode))
@@ -447,14 +504,29 @@ try {
                         if (allocated.Count == 0) candidates = candidates.Where(n => n.SaveId == starterId).ToArray();
                         RefreshDecision();
                         CalibrateMajorValues(candidates);
-                        var ranked = candidates.OrderByDescending(HeuristicRouteScore).ThenBy(n => n.SaveId, System.StringComparer.Ordinal).Take(8)
-                            .Concat(candidates.Where(MajorNode)).Distinct()
+                        var ranked = candidates.OrderByDescending(HeuristicRouteScore).ThenBy(n => n.SaveId, System.StringComparer.Ordinal).Take(agentConfig == null ? 8 : 0)
+                            .Concat(agentConfig == null ? candidates.Where(MajorNode) : Enumerable.Empty<SkillTree.Node>()).Distinct()
                             .Select(n => new { node = n, score = RouteScore(n) }).OrderByDescending(n => n.score).ThenBy(n => n.node.SaveId, System.StringComparer.Ordinal).ToArray();
                         var choice = ranked.FirstOrDefault();
                         var next = choice?.node;
+                        if (agentConfig != null) {
+                            bool canWait = allocated.Count > 0;
+                            int count = candidates.Length + (canWait ? 1 : 0);
+                            if (count == 0) break;
+                            var priors = candidates.Select(n => System.Math.Max(0, HeuristicRouteScore(n) + (MajorNode(n) ? MajorValue(n) / System.Math.Max(0.01, NodeCost(n)) : 0))).Concat(canWait ? new[] { 0d } : new double[0]).ToArray();
+                            int selected = ChooseActor("node", candidates.Select(n => "node:" + n.SaveId).Concat(canWait ? new[] { "wait" } : new string[0]).ToArray(),
+                                candidates.Select(n => n.name).Concat(canWait ? new[] { "Keep skill points" } : new string[0]).ToArray(),
+                                candidates.Select(n => (System.Collections.Generic.IEnumerable<SkillTree.Modifier>)n.Modifiers).Concat(canWait ? new[] { Enumerable.Empty<SkillTree.Modifier>() } : new System.Collections.Generic.IEnumerable<SkillTree.Modifier>[0]).ToArray(),
+                                priors, candidates.Select(n => (double)NodeCost(n)).Concat(canWait ? new[] { 0d } : new double[0]).ToArray(),
+                                candidates.Select(MajorNode).Concat(canWait ? new[] { false } : new bool[0]).ToArray(),
+                                candidates.Select(n => n is SkillTree.SocketNode).Concat(canWait ? new[] { false } : new bool[0]).ToArray(),
+                                candidates.Select(n => n.IsInfinite).Concat(canWait ? new[] { false } : new bool[0]).ToArray());
+                            if (selected == candidates.Length) break;
+                            next = candidates[selected]; choice = new { node = next, score = priors[selected] };
+                        }
                         if (next == null) break;
                         // Keep points for a useful reachable route instead of buying a dead stat.
-                        if (choice.score <= 0.000001 && allocated.Count > 0) break;
+                        if (agentConfig == null && choice.score <= 0.000001 && allocated.Count > 0) break;
                         var estimatedGain = NodeGain(new[] { next });
                         float before = level.SkillPoints;
                         if (!copies[next].Allocate()) throw new System.InvalidOperationException("Allocation predicate changed unexpectedly.");
@@ -471,7 +543,7 @@ try {
             }
             level.OnSkillPointsChanged += unused => Grow();
             level.OnLevelUp += unused => Grow();
-            Grow(); player.RequestModRecalculation(); player.ResetCombatState();
+            Grow(); player.RequestModRecalculation(); player.CombatTick(0f, Battle.CombatTickPhase.Mods); player.ResetCombatState();
             if (!allocated.Contains(starterId)) throw new System.InvalidOperationException("Starter could not be allocated from authored initial points.");
             var useService = new InventorySystem.InventoryItemUseService(inventory, player);
             void UseSimpleItems() {
@@ -515,14 +587,36 @@ try {
                 foreach (var socket in copies.Values.OfType<SkillTree.SocketNode>().Where(s => s.IsActive && !s.HasGem).OrderBy(s => s.SaveId)) {
                     RefreshDecision();
                     int bestSlot = Enumerable.Range(0, inventory.SlotCount)
-                        .Where(i => SupportedGem(inventory.PeekItem(i)?.Gem?.Definition) && GemScore(inventory.PeekItem(i).Gem.Definition) > 0.000001)
+                        .Where(i => SupportedGem(inventory.PeekItem(i)?.Gem?.Definition) && (agentConfig != null || GemScore(inventory.PeekItem(i).Gem.Definition) > 0.000001))
                         .OrderByDescending(i => GemScore(inventory.PeekItem(i).Gem.Definition)).ThenBy(i => i).DefaultIfEmpty(-1).First();
+                    if (agentConfig != null && bestSlot >= 0) {
+                        var slots = Enumerable.Range(0, inventory.SlotCount).Where(i => SupportedGem(inventory.PeekItem(i)?.Gem?.Definition)).ToArray();
+                        var gems = slots.Select(i => inventory.PeekItem(i).Gem.Definition).ToArray();
+                        int selected = ChooseActor("inventory-gem", gems.Select(g => "gem:" + g.SaveDefinitionId).Concat(new[] { "wait-gem" }).ToArray(),
+                            gems.Select(g => g.name).Concat(new[] { "Keep socket empty" }).ToArray(),
+                            gems.Select(g => (System.Collections.Generic.IEnumerable<SkillTree.Modifier>)g.ModifierTemplates).Concat(new[] { Enumerable.Empty<SkillTree.Modifier>() }).ToArray(),
+                            gems.Select(GemScore).Concat(new[] { 0d }).ToArray(), new double[gems.Length + 1], new bool[gems.Length + 1],
+                            Enumerable.Repeat(true, gems.Length + 1).ToArray(), new bool[gems.Length + 1]);
+                        if (selected == gems.Length) continue;
+                        bestSlot = slots[selected];
+                    }
                     if (bestSlot < 0) {
                         var offers = locations.Values.Where(l => l.IsShop && l.ShopDefinition != null && (bool)ProgressCall(progress, "IsLocationUnlocked", l))
                             .SelectMany(l => l.ShopDefinition.Entries.Select(e => new { location = l, entry = e, gem = e.ItemDefinition as Gems.GemDefinition }))
-                            .Where(o => SupportedGem(o.gem) && GemScore(o.gem) > 0.000001 && o.entry.Price <= wallet.Gold && shopService.GetRemainingStock(o.location.ShopDefinition, o.entry) != 0)
+                            .Where(o => SupportedGem(o.gem) && (agentConfig != null || GemScore(o.gem) > 0.000001) && o.entry.Price <= wallet.Gold && shopService.GetRemainingStock(o.location.ShopDefinition, o.entry) != 0)
                             .OrderByDescending(o => GemScore(o.gem) / System.Math.Max(1, o.entry.Price))
-                            .ThenBy(o => o.location.LocationId, System.StringComparer.Ordinal).ThenBy(o => o.entry.EntryId, System.StringComparer.Ordinal);
+                            .ThenBy(o => o.location.LocationId, System.StringComparer.Ordinal).ThenBy(o => o.entry.EntryId, System.StringComparer.Ordinal).ToArray();
+                        if (agentConfig != null) {
+                            offers = offers.Where(o => (bool)typeof(ShopSystem.ShopService).GetMethod("CanAddToInventory", privateFlags).Invoke(shopService, new object[] { o.entry.CreateItem() })).ToArray();
+                            if (offers.Length == 0) continue;
+                            int selected = ChooseActor("shop-gem", offers.Select(o => "gem:" + o.gem.SaveDefinitionId).Concat(new[] { "wait-gem" }).ToArray(),
+                                offers.Select(o => o.gem.name).Concat(new[] { "Save gold" }).ToArray(),
+                                offers.Select(o => (System.Collections.Generic.IEnumerable<SkillTree.Modifier>)o.gem.ModifierTemplates).Concat(new[] { Enumerable.Empty<SkillTree.Modifier>() }).ToArray(),
+                                offers.Select(o => GemScore(o.gem) / System.Math.Max(1, o.entry.Price)).Concat(new[] { 0d }).ToArray(),
+                                offers.Select(o => (double)o.entry.Price).Concat(new[] { 0d }).ToArray(), new bool[offers.Length + 1], Enumerable.Repeat(true, offers.Length + 1).ToArray(), new bool[offers.Length + 1]);
+                            if (selected == offers.Length) continue;
+                            offers = offers.Skip(selected).Take(1).ToArray();
+                        }
                         foreach (var offer in offers) {
                             if (!(bool)ProgressCall(progress, "TrySelectLocation", offer.location.LocationId)) continue;
                             log.Add(new { action = "visit", location = offer.location.LocationId, stage, gold = wallet.Gold });
@@ -548,7 +642,7 @@ try {
                 state["socketGems"] = copies.Values.OfType<SkillTree.SocketNode>().Where(s => s.HasGem).ToDictionary(s => s.SaveId, s => s.SavedSocketedGem);
                 RefreshTree(); player.RequestModRecalculation();
             }
-            EquipAndShop(); player.ResetCombatState();
+            EquipAndShop(); player.CombatTick(0f, Battle.CombatTickPhase.Mods); player.ResetCombatState();
             void Snapshot(string boundary) {
                 // Only at existing reset boundaries. No combat effects contaminate the build stats.
                 player.RequestModRecalculation(); player.CombatTick(0f, Battle.CombatTickPhase.Mods);
@@ -570,6 +664,34 @@ try {
                 });
             }
             Snapshot(isProbe ? "before-probe" : "before-stage");
+            if ((string)request["operation"] == "verify-contract") {
+                float before = player.BaseUnitModifiers.GetStatValue(StatType.MaximumHealth);
+                var diagnosticModifier = UnityEngine.ScriptableObject.CreateInstance<SkillTree.BaseModifier>();
+                diagnosticModifier.modifierContainer = new SkillTree.ModifierContainer(ModifierType.Added, StatType.MaximumHealth, 17);
+                definitionsToDispose.Add(diagnosticModifier);
+                player.AddOuterModifier(diagnosticModifier);
+                bool deferred = player.BaseUnitModifiers.GetStatValue(StatType.MaximumHealth) == before &&
+                    (bool)Field(player, typeof(Battle.Unit), "_modsChangedPending");
+                runTick(0f);
+                bool appliedInMods = player.BaseUnitModifiers.GetStatValue(StatType.MaximumHealth) > before &&
+                    !(bool)Field(player, typeof(Battle.Unit), "_modsChangedPending");
+                player.RemoveOuterModifier(diagnosticModifier); runTick(0f);
+                var diagnosticPackages = new Battle.WaveFactory(new Battle.EnemyFactory(database), database).CreateWave(new Battle.WaveContext(stage, 1, waveQuota));
+                foreach (var package in diagnosticPackages) definitionsToDispose.Add(package.Modifiers);
+                var diagnosticPackage = diagnosticPackages.First();
+                var diagnosticEnemy = (Battle.EnemyUnit)Actor(NewRoot("BalanceSimulationCampaignDiagnosticEnemy"), sourceEnemy, false);
+                FieldSet(diagnosticEnemy, typeof(Battle.EnemyUnit), "_playerTarget", player);
+                diagnosticEnemy.Initialize(new Battle.EnemySpawnData(diagnosticPackage.Definition, diagnosticPackage.Rarity, diagnosticPackage.Power, 0,
+                    diagnosticPackage.Modifiers, diagnosticPackage.Affixes, diagnosticPackage.BaseEvasion, false));
+                diagnosticEnemy.CombatTick(0f, Battle.CombatTickPhase.Mods); diagnosticEnemy.ResetCombatState();
+                int killNotifications = 0; player.OnEnemyKilled += unused => killNotifications++;
+                var lethal = new Battle.DamageInstance(); lethal.Damage[Battle.DamageType.Physical] = diagnosticEnemy.health.MaxHealth + 1;
+                diagnosticEnemy.health.TakeDamage(lethal, false);
+                if (!deferred || !appliedInMods || killNotifications != 1)
+                    throw new System.InvalidOperationException("Simulator contract diagnostic failed.");
+                return new { deferredModifiers = deferred, appliedInProductionModsPhase = appliedInMods, killNotifications,
+                    tickDuration = step, gameplayCodeModified = false };
+            }
             probeCombatStarted = true;
             var resolverRoot = NewRoot("BalanceSimulationCampaignTargets"); resolverRoot.SetActive(true);
             var resolver = resolverRoot.AddComponent<Battle.AttackResolver>(); player.attacker.SetTarget(resolver);
@@ -594,8 +716,10 @@ try {
                 var enemies = packages.Take(poolSize).Select(package => {
                     var root = NewRoot("BalanceSimulationCampaignEnemy");
                     var enemy = (Battle.EnemyUnit)Actor(root, sourceEnemy, false);
+                    FieldSet(enemy, typeof(Battle.EnemyUnit), "_playerTarget", player);
                     enemy.Initialize(new Battle.EnemySpawnData(package.Definition, package.Rarity, package.Power, isProbe ? 0 : package.ExperienceReward,
                         package.Modifiers, package.Affixes, package.BaseEvasion, false));
+                    enemy.CombatTick(0f, Battle.CombatTickPhase.Mods); enemy.ResetCombatState();
                     enemy.attacker.SetTarget(player);
                     enemy.OnDeath += unused => {
                         if (isProbe) { probeKills++; return; }
@@ -614,10 +738,9 @@ try {
                 System.Action<Battle.DamageInfo,float> countLoss = (unused, amount) => attackHpLoss += amount;
                 System.Action changed = () => minimumHp = UnityEngine.Mathf.Min(minimumHp, player.health.CurrentHealth);
                 player.OnAttack += countAttack; player.OnHealthDamageTaken += countLoss; player.health.OnHealthChanged += changed;
-                var actors = new Battle.Unit[] { player }.Concat(enemies).ToArray(); int ticks = 0;
-                for (; ticks < Number(campaignConfig, "maxWaveSeconds", 180) * 60 && player.gameObject.activeSelf && enemies.Any(e => e.gameObject.activeSelf); ticks++)
-                    for (int phase = 0; phase < 4; phase++) foreach (var actor in actors)
-                        if (actor.isActiveAndEnabled) actor.CombatTick(step, (Battle.CombatTickPhase)phase);
+                int ticks = 0;
+                for (; ticks < System.Math.Ceiling(Number(campaignConfig, "maxWaveSeconds", 180) / step) && player.gameObject.activeSelf && enemies.Any(e => e.gameObject.activeSelf); ticks++)
+                    runTick(step);
                 player.OnAttack -= countAttack; player.OnHealthDamageTaken -= countLoss; player.health.OnHealthChanged -= changed;
                 bool dead = !player.gameObject.activeSelf;
                 bool won = !dead && enemies.All(e => !e.gameObject.activeSelf);
@@ -641,10 +764,11 @@ try {
                 if (currentWave < waveQuota) {
                     int delayTicks = (int)System.Math.Ceiling(database.RespawnDelay / step);
                     for (int delay = 0; delay < delayTicks && player.gameObject.activeSelf; delay++)
-                        for (int phase = 0; phase < 4; phase++) player.CombatTick(step, (Battle.CombatTickPhase)phase);
+                        runTick(step);
                     if (!player.gameObject.activeSelf) { stageWon = false; if (!isProbe) { state["deaths"] = (int)state["deaths"] + 1; state["reason"] = "Death during respawn delay"; } break; }
                 }
             }
+            int combatDecisionCount = ((System.Collections.Generic.List<object>)state["agentLog"]).Count;
             if (isProbe) {
                 if (level.Level != startData.level || level.CurrentExp != startData.currentExp) throw new System.InvalidOperationException("Probe changed progression.");
                 double fitness = completedWaves + System.Math.Max(0, System.Math.Min(1, damagedFraction));
@@ -693,9 +817,11 @@ try {
                     state["pendingConfirmation"] = search["round"];
                 }
             } else {
+            bool newCompletion = false;
             if (stageWon) {
                 object[] completedArgs = { 0 };
                 bool firstCompletion = (bool)ProgressCall(progress, "RegisterCompletedLevel", completedArgs);
+                newCompletion = firstCompletion;
                 player.ResetCombatState(); ProgressCall(progress, "UnlockNextLevel");
                 state["highestCompletedStage"] = System.Math.Max((int)state["highestCompletedStage"], stage);
                 if (wasBoss && firstCompletion) {
@@ -722,7 +848,12 @@ try {
                     state["status"] = "stopped"; state["reason"] = "Stage retry limit: " + location.LocationId + "/" + stage;
                 }
             }
-            EquipAndShop();
+            if (agentConfig != null) ((System.Collections.Generic.List<object>)state["agentRewards"]).Add(new {
+                cursor = combatDecisionCount, location = location.LocationId, stage, won = stageWon, newCompletion,
+                amount = (newCompletion ? AgentSetting("levelReward", 1) : 0) +
+                    (newCompletion && stage >= database.MaxWaveLevel ? AgentSetting("locationReward", 5) : 0) -
+                    (!stageWon ? AgentSetting("failurePenalty", 0.1) : 0) });
+            if (agentConfig == null || (string)state["status"] == "running") EquipAndShop();
             state["player"] = level.CaptureSaveData(); state["progress"] = ProgressCall(progress, "CaptureSaveData");
             state["inventory"] = inventory.Slots.Where(s => s.Item != null && !s.Item.IsEmpty).Select(s => s.Item.CreateCopy()).ToList();
             player.ResetCombatState(); Snapshot(stageWon ? "after-win" : "after-failure");
@@ -774,6 +905,7 @@ var results = exportCampaign ? campaignStates.Skip(exportIndex).Take(1).Select(s
     player = (SaveSystem.PlayerSaveData)state["player"], allocatedNodeIds = (System.Collections.Generic.List<string>)state["allocated"],
     unlockedNodeIds = (System.Collections.Generic.List<string>)state["unlocked"], deaths = (int)state["deaths"], waves = (int)state["waves"],
     nodeInvestments = state["investments"],
+    agentLog = state["agentLog"], agentRewards = state["agentRewards"],
     kills = (int)state["kills"], gold = (int)state["gold"], simulatedSeconds = (double)state["simulatedSeconds"],
     inventory = ((System.Collections.Generic.List<InventorySystem.InventoryItem>)state["inventory"]).Select(i => new { item = i.ItemDefinition.name, amount = i.StackCount }).ToArray(),
     waveLog = (System.Collections.Generic.List<object>)state["waveLog"], allocationLog = (System.Collections.Generic.List<object>)state["allocationLog"], rewardLog = (System.Collections.Generic.List<object>)state["rewardLog"],
@@ -787,6 +919,7 @@ var results = exportCampaign ? campaignStates.Skip(exportIndex).Take(1).Select(s
 var response = new { schemaVersion = 2, mode = "progression-campaign", finished, completedRuns = (int)checkpoint["cursor"], totalRuns = campaignStates.Count,
     stagesThisCommand, computeSeconds = (double)checkpoint["computeSeconds"], elapsedSeconds = watch.Elapsed.TotalSeconds,
     sceneDirtyBefore = dirtyBefore, sceneDirtyAfter = UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty, campaigns = results,
+    simulationContract = new { version = "production-tick-v1", tickDuration = step, killTargetBound = true, manualCombatPhaseLoop = false },
     treeCatalog = exportCatalog ? originals.Select(n => new {
         id = n.SaveId, name = n.name, type = n.GetType().Name, supported = KnownNode(n), root = n is SkillTree.RootNode,
         x = sourcePlayer.SkillTree.transform.InverseTransformPoint(n.transform.position).x,

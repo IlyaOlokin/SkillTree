@@ -10,7 +10,8 @@ param(
     [switch]$IsPartial,
     [double]$ComputeSeconds = -1,
     [double]$WallSeconds = -1,
-    [string]$TimingNote = ''
+    [string]$TimingNote = '',
+    [object]$Experiment = $null
 )
 $ErrorActionPreference = 'Stop'
 $taskToolsRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
@@ -70,6 +71,7 @@ $taskResult = [pscustomobject]@{
     advanceCommands = $(if ($AdvanceCommands -ge 0) { $AdvanceCommands } else { $null }); commands = $(if ($Commands -ge 0) { $Commands } else { $null })
     isPartial = [bool]$IsPartial; expectedCampaigns = @($Preset.strategies).Count * $RunsPerStrategy
     timingNote = $TimingNote
+    experiment = $Experiment
     computeSeconds = $(if ($ComputeSeconds -ge 0) { $ComputeSeconds } else { $null }); wallSecondsIncludingCommands = $(if ($WallSeconds -ge 0) { $WallSeconds } else { $null })
     simulatedCombatSeconds = $taskSimulatedSeconds
     trialSimulatedCombatSeconds = $taskTrialSeconds; totalSimulatedCombatSeconds = $taskSimulatedSeconds + $taskTrialSeconds

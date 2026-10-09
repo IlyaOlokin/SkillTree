@@ -1,5 +1,15 @@
 # Editor tools, checks and builds
 
+The [standalone Balance Lab](BalanceLab.md) launches from
+`Tools/BalanceSimulation/LaunchLab.cmd` without Codex. It provides settings,
+stop/resume, persisted batch learning, frozen model evaluation and paired balance
+comparisons. See its workflow and bounded verification before interpreting results.
+
+The balance agent's [stage-one simulator contract](BalanceAgentStage1.md) records
+the corrected campaign tick/kill wiring, two identical bounded runs and explicit
+remaining fidelity limits. `Tools/BalanceSimulation/VerifySimulator.ps1` repeats
+the live contract diagnostic and reproducibility check without gameplay edits.
+
 Campaign tooling update, 2026-10-08: the external campaign adapter now models
 numeric local gems, socket allocation, production shop purchases/stock and gold
 completion rewards. The three-attribute `balanced-shops.json` preset selects
@@ -231,3 +241,11 @@ stages were 95 / 93 / 93 (STR / DEX / INT-lightning). Final snapshots, invested
 counts, archive/viewer bytes and actor cleanup were checked. No repeated infinite
 investment appeared; adaptive respec and exhaustive special-modifier coverage
 remain unverified. This supersedes the preceding live-v3-pending note.
+
+Representative parity verifier, 2026-10-09: `VerifyPlayMode.ps1` compiles an external
+fixture, captures Edit Mode traces, and runs native Awake/Start/Update/destruction
+in a disposable Unity project with local packages and gameplay DLL copies.
+`ComparePlayTraces.ps1` requires full arrays, exact event counts, bounded float
+serialization error and actual expected transitions. [Four scenarios matched](../../Reports/BalanceSimulation/20261009-175543-107-play-parity/verification.md)
+across 750 ticks; no gameplay files were edited. Cold isolated-project import may
+take several minutes. See the [stage-one scope](BalanceAgentStage1.md).

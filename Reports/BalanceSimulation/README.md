@@ -8,6 +8,11 @@ contains `report.html`, `report.md`, `report.json.gz` and a small `report.label.
 used by the index. Generated runs are ignored by Git; copy the folder to share it.
 The index is rebuilt when a report is published or regenerated.
 
+`Lab/` additionally stores standalone jobs, immutable learned model versions,
+paired comparisons and the saved form settings. See the
+[Balance Lab workflow](../../Docs/Reference/BalanceLab.md). Its job viewer contains
+the last sampled batch, while a training job's manifest retains all epochs.
+
 Open `index.html` in a normal browser, then choose a run. HTML embeds the same
 compressed dataset as the gzip archive, so it works offline without Unity, a server
 or network access. The viewer uses native [DecompressionStream](https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream)

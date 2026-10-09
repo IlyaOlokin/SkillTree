@@ -1,0 +1,6 @@
+# Local experiment data persists on disk; share a complete folder explicitly.
+/jobs/
+/models/
+/comparisons/
+/last-settings.json
+/worker.lock
