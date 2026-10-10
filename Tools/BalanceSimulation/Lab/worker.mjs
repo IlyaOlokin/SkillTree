@@ -3,6 +3,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import {toolsRoot,project,store,jobsRoot,jobFile,modelFile,read,atomic,report,episodeReport,settings,preset,fingerprint,digest,runtime,execute,alive,bootstrap,saveModel,validateModel,aggregate} from './core.mjs';
 import {train} from './trainer.mjs';
+import {publishEpoch} from './reports.mjs';
 
 export function createJob(input){const config=settings(input),id=new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,17)+'-'+crypto.randomUUID().slice(0,8);const job={schema:1,id,createdAt:new Date().toISOString(),status:'queued',config,epochs:[],completed:0,total:config.strategies.length*config.runsPerStrategy*(config.mode==='train'?config.epochs:1),error:null};atomic(jobFile(id),job);return job;}
 const lock=path.join(store,'worker.lock');
@@ -25,7 +26,7 @@ export async function runJob(id){
   for(let epoch=0;epoch<epochCount;epoch++){
    if(cancelled()){update({status:'cancelled'});return;}
    if(!job.epochs[epoch]){job.epochs[epoch]={index:epoch,inputModel:model?.id||null,episodes:[],outputModel:null};update();}
-   const batch=job.epochs[epoch];if(batch.outputModel){model=validateModel(read(modelFile(batch.outputModel)));continue;}
+   const batch=job.epochs[epoch];if(batch.outputModel){model=validateModel(read(modelFile(batch.outputModel)));if(!batch.viewer||!fs.existsSync(path.join(root,batch.viewer))){batch.viewer=await publishEpoch(job,epoch,{pwsh,output});update();}continue;}
    if(batch.inputModel!==model?.id&&!(batch.inputModel===null&&model===null))throw Error('Нарушена последовательность версий модели');
    let ordinal=0;
    for(const strategy of job.config.strategies)for(let run=0;run<job.config.runsPerStrategy;run++,ordinal++){
@@ -50,13 +51,13 @@ export async function runJob(id){
     update({status:'learning'});const result=train(model,bots,job.config);result.model.trainingEnvironment=environment;result.model.trainingSettings={gamma:job.config.gamma,levelReward:job.config.levelReward,locationReward:job.config.locationReward,failurePenalty:job.config.failurePenalty};
     model=saveModel(result.model);batch.outputModel=model.id;batch.learning=result.statistics;update({latestModel:model.id});
    }
+   update({status:'publishing',lastMessage:`Отчёт партии ${epoch+1}`});
+   batch.viewer=await publishEpoch(job,epoch,{pwsh,output});update();
   }
   const rows=job.epochs.flatMap(e=>e.episodes.map(p=>episodeReport(job,p).campaigns[0]));
   job.summary=aggregate(rows);job.modelId=model?.id||null;update({status:'publishing',current:null,lastMessage:'Подготовка отчёта'});
-  const assembled=job.epochs.at(-1).episodes.map(p=>episodeReport(job,p));
-  atomic(path.join(root,'aggregate-input.json'),{campaigns:assembled.flatMap(d=>d.campaigns),treeCatalog:assembled[0].treeCatalog,preset:{...preset(),strategies:preset().strategies.filter(s=>job.config.strategies.includes(s.name)),locationIds:preset().locationIds.slice(0,job.config.locations),maxAttemptsPerStage:job.config.maxAttemptsPerStage,maxWaveSeconds:job.config.maxWaveSeconds}});
-  await execute(pwsh,['-NoProfile','-File',path.join(toolsRoot,'Lab/PublishJob.ps1'),'-JobDirectory',root],output);
-  update({status:'completed',viewer:'report.html',lastMessage:'Отчёт готов'});
+  job.viewer=await publishEpoch(job,job.epochs.length-1,{final:true,pwsh,output});
+  update({status:'completed',lastMessage:'Отчёт готов'});
  }catch(error){update({status:'failed',error:error.message,lastMessage:'Эксперимент остановлен; завершённые кампании сохранены'});fs.appendFileSync(log,'\nERROR: '+error.stack+'\n');}
  finally{if(fs.existsSync(lock)&&read(lock).pid===process.pid)fs.unlinkSync(lock);}
 }

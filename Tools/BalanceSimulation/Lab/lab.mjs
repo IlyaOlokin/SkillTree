@@ -7,10 +7,12 @@ import {fileURLToPath} from 'node:url';
 import {project,store,jobsRoot,modelsRoot,jobFile,modelFile,read,atomic,safeId,inside,alive,preset,settings,runtime,execute,validateModel,episodeReport} from './core.mjs';
 import {createJob,runJob} from './worker.mjs';
 import {compareJobs} from './compare.mjs';
+import {rebuildJobReports} from './reports.mjs';
 
 const here=path.dirname(fileURLToPath(import.meta.url));
 if(process.argv[2]==='worker'){await runJob(safeId(process.argv[3]));process.exit(0);}
 if(process.argv[2]==='run'){const job=createJob(read(process.argv[3]));console.log('Job: '+job.id);await runJob(job.id);console.log(read(jobFile(job.id)).status);process.exit(read(jobFile(job.id)).status==='completed'?0:1);}
+if(process.argv[2]==='rebuild-reports'){await rebuildJobReports(safeId(process.argv[3]));process.exit(0);}
 const token=crypto.randomBytes(32).toString('hex'),port=Number(process.env.BALANCE_LAB_PORT||8877);
 function launch(id){
  const job=read(jobFile(id));if(job.status==='completed')throw Error('Завершённый эксперимент неизменяем; создай новый');
@@ -23,7 +25,9 @@ function launch(id){
  job.pid=child.pid;atomic(jobFile(id),job);return job;
 }
 function listJobs(){return fs.readdirSync(jobsRoot).flatMap(id=>{try{const job=read(jobFile(id));if(['preflight','sampling','evaluating','learning','publishing','queued'].includes(job.status)&&job.pid&&!alive(job.pid)){job.status='interrupted';job.error='Процесс прерван. Завершённые кампании сохранены; возобновление повторит незавершённую.';atomic(jobFile(id),job);}return[job];}catch{return[];}}).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));}
-function models(){return fs.readdirSync(modelsRoot).filter(f=>f.endsWith('.json')).map(file=>{const model=validateModel(read(path.join(modelsRoot,file)));return{id:model.id,parent:model.parent,episodes:model.episodes,updates:model.updates,contexts:Object.keys(model.memory||{}).length};});}
+function models(){return fs.readdirSync(modelsRoot).filter(f=>f.endsWith('.json')).map(file=>{const model=validateModel(read(path.join(modelsRoot,file)));return{id:model.id,parent:model.parent,episodes:model.episodes,updates:model.updates,contexts:Object.keys(model.memory||{}).length,createdAt:fs.statSync(path.join(modelsRoot,file)).mtime.toISOString()};}).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));}
+const featureNames=['Общий сдвиг (одинаков для всех действий)','Исходная полезность','Большая нода','Сокет','Бесконечная нода','Стоимость со знаком минус','Атака','Защита','Защита против физического урона','Защита против стихий','Защита против мистического урона','Барьер: наличие / отсутствие','Регенерация','Выбранный атрибут','Атака × шанс крита','Защита × броня против врага'];
+function modelReports(id){const played=[],created=[];for(const j of listJobs())for(const e of j.epochs){const viewer=e.viewer||(e.index===j.epochs.length-1?j.viewer:null);if(!viewer)continue;const item={jobId:j.id,epoch:e.index+1,mode:j.config.mode,viewer,inputModel:e.inputModel,outputModel:e.outputModel};if(e.inputModel===id)played.push(item);if(e.outputModel===id)created.push(item);}return {played,created};}
 function memoryLabels(model){
  const labels=new Map(),job=listJobs().find(j=>j.modelId===model.id||j.config.modelId===model.id||j.epochs.some(e=>e.inputModel===model.id||e.outputModel===model.id));
  const episode=job?.epochs.flatMap(e=>e.episodes).find(e=>e?.report);if(!episode)return labels;
@@ -48,7 +52,7 @@ const server=http.createServer(async(req,res)=>{
   if(!url.pathname.startsWith('/api/'))return send(res,404,{error:'Не найдено'});
   if(req.headers['x-lab-token']!==token)return send(res,403,{error:'Недействительный ключ локального приложения'});
   if(req.method==='GET'&&url.pathname==='/api/state'){const saved=path.join(store,'last-settings.json');return send(res,200,{jobs:listJobs(),models:models(),strategies:preset().strategies,defaults:fs.existsSync(saved)?settings(read(saved)):settings({}),coverage:'Проверены базовый контракт, повторяемость и четыре Play/Edit сценария. Все ноды допускаются, но исчерпывающая проверка механик ещё не выполнена. Гемы: числовые LocalModifiers.'});}
-  if(req.method==='GET'&&url.pathname.startsWith('/api/model/')){const model=validateModel(read(modelFile(safeId(url.pathname.split('/').at(-1)))));const labels=memoryLabels(model);const memory=Object.entries(model.memory||{}).sort((a,b)=>b[1].count-a[1].count).slice(0,100).map(([key,value])=>({key,context:key.slice(0,key.lastIndexOf('/')),action:labels.get(key.slice(key.lastIndexOf('/')+1))||key.slice(key.lastIndexOf('/')+1),...value,offset:model.offsets[key]||0}));return send(res,200,{id:model.id,episodes:model.episodes,updates:model.updates,weights:model.weights,memory});}
+  if(req.method==='GET'&&url.pathname.startsWith('/api/model/')){const model=validateModel(read(modelFile(safeId(url.pathname.split('/').at(-1)))));const labels=memoryLabels(model);const memory=Object.entries(model.memory||{}).sort((a,b)=>b[1].count-a[1].count).slice(0,100).map(([key,value])=>({key,context:key.slice(0,key.lastIndexOf('/')),action:labels.get(key.slice(key.lastIndexOf('/')+1))||key.slice(key.lastIndexOf('/')+1),...value,offset:model.offsets[key]||0}));const parent=model.parent?validateModel(read(modelFile(model.parent))):null;return send(res,200,{id:model.id,parent:model.parent,algorithm:model.algorithm,episodes:model.episodes,updates:model.updates,weights:model.weights,weightRows:model.weights.map((value,i)=>({feature:featureNames[i],value,delta:parent?value-parent.weights[i]:null})),reports:modelReports(model.id),memory});}
   if(req.method!=='POST')return send(res,405,{error:'Недопустимый метод'});
   if(req.headers.origin&&req.headers.origin!==`http://127.0.0.1:${port}`)return send(res,403,{error:'Внешний сайт не может запускать эксперименты'});
   const input=await body(req);

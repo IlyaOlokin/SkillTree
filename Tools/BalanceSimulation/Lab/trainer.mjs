@@ -25,7 +25,9 @@ export function train(parent,bots,config){
    }
    count++;decisions++;
   }
-  if(count){for(let i=0;i<FEATURES;i++)gradient[i]+=episodeGradient[i]/count;for(const [key,g]of Object.entries(episodeOffsets))offsets[key]=(offsets[key]||0)+g/count;used++;}
+  // Episodic REINFORCE sums decision gradients, then averages episodes below.
+  // Dividing again by decision count suppressed learning in long campaigns.
+  if(count){for(let i=0;i<FEATURES;i++)gradient[i]+=episodeGradient[i];for(const [key,g]of Object.entries(episodeOffsets))offsets[key]=(offsets[key]||0)+g;used++;}
   const seedKey=bot.strategy+'/'+bot.seed;if(!model.trainingSeeds.includes(seedKey))model.trainingSeeds.push(seedKey);
  }
  if(!used)throw Error('Нет решений с альтернативами и будущими наградами');
@@ -35,6 +37,7 @@ export function train(parent,bots,config){
  for(const [key,g]of Object.entries(offsets))model.offsets[key]=Math.max(-8,Math.min(8,(model.offsets[key]||0)+g*scale));
  for(const [key,values]of Object.entries(baselineSamples)){const old=model.baselines[key]||{count:0,mean:0};model.baselines[key]={count:old.count+values.length,mean:(old.mean*old.count+values.reduce((a,b)=>a+b,0))/(old.count+values.length)};}
  for(const [key,values]of Object.entries(memorySamples)){const old=model.memory[key]||{count:0,meanReturn:0};model.memory[key]={count:old.count+values.length,meanReturn:(old.meanReturn*old.count+values.reduce((a,b)=>a+b,0))/(old.count+values.length)};}
- model.episodes+=bots.length;model.updates++;
- validateModel(model);return {model,statistics:{episodes:bots.length,decisions,gradientNorm:norm,rewardMean:mean(bots.map(b=>b.agentRewards.reduce((s,e)=>s+e.amount,0)))}};
+ model.algorithm='residual-linear-reinforce-v2-episodic';model.episodes+=bots.length;model.updates++;
+ const weightDeltas=model.weights.map((v,i)=>v-parent.weights[i]),offsetDeltas=Object.keys(model.offsets).map(k=>model.offsets[k]-(parent.offsets[k]||0));
+ validateModel(model);return {model,statistics:{episodes:bots.length,decisions,gradientNorm:norm,gradientClipped:norm>1,updateNorm:Math.min(norm,1)*config.learningRate,weightMaxDelta:Math.max(0,...weightDeltas.map(Math.abs)),weightsChanged:weightDeltas.filter(v=>Math.abs(v)>1e-12).length,offsetMaxDelta:Math.max(0,...offsetDeltas.map(Math.abs)),offsetsChanged:offsetDeltas.filter(v=>Math.abs(v)>1e-12).length,rewardMean:mean(bots.map(b=>b.agentRewards.reduce((s,e)=>s+e.amount,0)))}};
 }

@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-10",
+  "job": "20261010154627728-8588f21a",
+  "completed": 225,
+  "epochs": 15,
+  "finalModel": "ef39b9a6e57c7e1ed24c9105ccf9d3d8",
+  "actualOverall": {
+    "weightMaxDelta": 0.0009720569567910596,
+    "weightL2Delta": 0.0016175354851661113,
+    "weightsChanged": 13,
+    "offsetMaxDelta": 0.0003319995498597993,
+    "offsetsChanged": 2762
+  },
+  "firstBatchOld": {
+    "weightMaxDelta": 0.00026623520507112824,
+    "weightL2Delta": 0.00044732146567486237,
+    "weightsChanged": 13,
+    "offsetMaxDelta": 0.00012561375210395199,
+    "offsetsChanged": 439
+  },
+  "firstBatchProspectiveV2": {
+    "weightMaxDelta": 0.009687141723746743,
+    "weightL2Delta": 0.01481868267069585,
+    "weightsChanged": 13,
+    "offsetMaxDelta": 0.0032355234791954924,
+    "offsetsChanged": 439
+  },
+  "v2Update": {
+    "episodes": 15,
+    "decisions": 816,
+    "gradientNorm": 1.7516017841140232,
+    "gradientClipped": true,
+    "updateNorm": 0.02,
+    "weightMaxDelta": 0.009687141723746743,
+    "weightsChanged": 13,
+    "offsetMaxDelta": 0.0032355234791954924,
+    "offsetsChanged": 439,
+    "rewardMean": 28.09333333333333
+  },
+  "v2MaxDeltaRatio": 36.38565275827701,
+  "modelFilesStillValid": true,
+  "reportsBackfilled": [
+    "epoch-1/report.html",
+    "epoch-2/report.html",
+    "epoch-3/report.html",
+    "epoch-4/report.html",
+    "epoch-5/report.html",
+    "epoch-6/report.html",
+    "epoch-7/report.html",
+    "epoch-8/report.html",
+    "epoch-9/report.html",
+    "epoch-10/report.html",
+    "epoch-11/report.html",
+    "epoch-12/report.html",
+    "epoch-13/report.html",
+    "epoch-14/report.html",
+    "epoch-15/report.html"
+  ]
+}

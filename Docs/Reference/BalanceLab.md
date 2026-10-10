@@ -58,6 +58,15 @@ batch only**, played by its input model. Its `experiment.sampledModel` and
 `experiment.outputModel` distinguish the sampled model from the version learned
 after that batch. Evaluate that output version separately before judging improvement.
 
+The job's **Партии, изменения весов и отчёты** disclosure lists each published
+epoch, its sampled/learned model versions and actual parameter deltas. Unchanged
+job lists are not rebuilt during polling. When job data changes, the disclosure's
+open state and table scroll position are restored by job ID, together with page
+scroll position. The model inspector shows precise weights and parent deltas,
+links to batches played by that model, and separately labels the batch that
+created it. A newly learned output has no played-result report until it is used
+in a later batch or a frozen evaluation.
+
 ## Learning and contextual memory
 
 The first learning implementation is a residual linear actor trained with
@@ -75,6 +84,15 @@ to the decisions made before combat, excluding spending after its outcome.
 Future reward events are discounted by gamma. A strategy/stage-bucket baseline,
 bounded advantage and clipped batch gradient limit updates. Feature weights
 and context/action offsets are saved after each batch.
+
+From 2026-10-10, trainer v2 sums decision gradients within each episode and
+averages across usable episodes, clipping the combined gradient norm to one
+before applying the learning rate. The earlier additional division by decision
+count produced very small steps in long campaigns. Existing models remain
+loadable and unchanged; new updates record `residual-linear-reinforce-v2-episodic`.
+An offline replay of a saved batch verified the new step calculation, not better
+live gameplay. The [225-campaign inspection](../../Reports/BalanceSimulation/Lab/verification-20261010.json)
+records actual historical deltas and the prospective replay separately.
 
 The memory table also records how often an action was selected in a context
 and its average subsequent return. These are observational statistics, not a

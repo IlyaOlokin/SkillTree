@@ -374,3 +374,16 @@ published input/output model provenance. These checks establish tool operation,
 not better agent strength. Influence/bridge choices, broad mechanic fidelity,
 long-run learning quality and BL-032 remain open. See the
 [scoped check record](../Reports/BalanceSimulation/Lab/verification-20261009.md).
+
+Balance Lab follow-up, 2026-10-10: the completed 225-campaign job had 15 valid
+updates, but a maximum accumulated feature-weight delta of only 0.00097206.
+Trainer v2 removes per-decision averaging before the episode average and keeps
+gradient-norm clipping. Its saved-batch replay is prospective, not evidence of
+better gameplay. All 15 epoch reports were rebuilt from saved data, with precise
+weight deltas and sampled/output model labels added to the UI. Polling previously
+rebuilt every job card and closed expanded history every 2.5 seconds; unchanged
+lists now stay intact, and updated lists restore open/table/page scroll state.
+UI-script syntax was checked; browser interaction remains unverified after the
+browser tool stopped because it could not identify the URL confidently. See
+[workflow](Reference/BalanceLab.md) and
+[record](../Reports/BalanceSimulation/Lab/verification-20261010.json).
