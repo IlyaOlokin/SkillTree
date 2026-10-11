@@ -119,6 +119,16 @@ namespace Visual
         public Color CoreColor => coreColor;
         public Color FillColor => fillColor;
 
+        public UnitShapeGeometry GetGeometry()
+        {
+            CacheComponents();
+            Material current = meshRenderer.sharedMaterial;
+            float radius = current != null && current.HasProperty("_ShapeRadius") ? current.GetFloat("_ShapeRadius") : 0.48f;
+            float width = current != null && current.HasProperty("_MainLineWidth") ? current.GetFloat("_MainLineWidth") : 0.028f;
+            return new UnitShapeGeometry(shapeType, visualSize, radius, triangleSize, rotation, mirrorX, mirrorY,
+                width, transform, meshRenderer.sortingLayerID, meshRenderer.sortingOrder);
+        }
+
         private void Reset()
         {
             EnsureWispMotionSettings();

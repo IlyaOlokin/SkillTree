@@ -55,6 +55,12 @@ connects those rewards and enemy gold to inventory, wallet and shop purchase his
 Unit geometry and painterly shader controls are described in
 [Unit shape rendering](Reference/UnitShapeRendering.md).
 
+The proposed [ailment visual integration](Reference/AilmentVisualPlan.md) covers
+shape-aware application/presence effects, per-instance Bleed sources and source-inspected integration points; it is not implemented behavior.
+
+The later [implementation record](Reference/AilmentVisualRendering.md) describes
+the shader/particle layer now connected to the shared Unit prefab.
+
 | Location | Purpose |
 | --- | --- |
 | `Assets/EnemyConfig` | Enemy and location content, affixes and balance configuration |

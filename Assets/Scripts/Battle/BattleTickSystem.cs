@@ -40,6 +40,7 @@ namespace Battle
             set => tickDuration = Mathf.Max(MinimumTickDuration, value);
         }
         public float TickRate => 1f / TickDuration;
+        public double SimulationTime { get; private set; }
         public float SpeedMultiplier
         {
             get => speedMultiplier;
@@ -164,6 +165,7 @@ namespace Battle
         private void RunTick(float deltaTime)
         {
             _isTicking = true;
+            SimulationTime += deltaTime;
 
             ExecutePhase(deltaTime, CombatTickPhase.Mods);
             ExecutePhase(deltaTime, CombatTickPhase.Resources);

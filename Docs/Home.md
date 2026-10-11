@@ -64,6 +64,11 @@ there instead of creating a folder for each mechanic.
 
 ## Follow a task
 
+Current visual planning: [ailment VFX integration](Reference/AilmentVisualPlan.md),
+with owner-selected concepts and circle/square/triangle storyboards.
+The [implementation record](Reference/AilmentVisualRendering.md) lists current
+ownership, authoring controls and verification limits.
+
 | Task | Start here | Then follow |
 | --- | --- | --- |
 | Change allocation, refunds or node state | [Skill tree](Systems/SkillTree.md) | [Gems](Systems/Gems.md) if bridges or sockets are involved |

@@ -387,3 +387,39 @@ UI-script syntax was checked; browser interaction remains unverified after the
 browser tool stopped because it could not identify the URL confidently. See
 [workflow](Reference/BalanceLab.md) and
 [record](../Reports/BalanceSimulation/Lab/verification-20261010.json).
+
+BL-032 evidence update, 2026-10-11: the new ailment visual layer compiled in
+Unity and ShaderUtil reported no messages for the base shape and two new shaders
+after fixing a reserved identifier. An isolated render covered five effects on
+circle/square/triangle, with a close-up used to correct Bleed particle silhouette
+and contrast. Shared Unit prefab material wiring was applied through Unity APIs.
+Combat event playback, overlap with weapon/barrier/wisp visuals, target-device
+performance and pause/pool behavior were not playtested; BL-032 remains open.
+See [implementation and limits](Reference/AilmentVisualRendering.md).
+
+Visibility follow-up for BL-032, 2026-10-11: C# recompiled and the three shader
+diagnostic lists remained empty after stronger/growing application effects,
+perimeter-moving Overcharge and grouped Bleed drops from wound marks. An isolated
+six-moment sequence covered all five effects on three shapes. This is rendered
+phase evidence, not combat-event playback or target-platform performance evidence;
+the remaining BL-032 scope stays open.
+
+Shape refinement for BL-032, 2026-10-11: a v3 isolated sequence and Bleed close-up
+were rendered and inspected for smaller top-down Ignite, two local Chill bursts without a ring,
+contracting Overcharge arcs and blood-blotch sources. This remains scoped render
+evidence; normal combat overlap and target-device performance are still unverified.
+The C# import completed and current ShaderUtil lists for the three affected
+shaders were empty. The unrelated MainScene working changes were preserved.
+
+Overcharge path follow-up, 2026-10-11: v4 preview frames were inspected after
+making the zigzag spatially fixed and moving only its leading reveal/trailing
+fade. Current shader diagnostics were empty; actual combat overlap and device
+performance remain outside this bounded check.
+
+Removal follow-up for BL-032, 2026-10-11: the retiring visual state uses a
+0.3-second default and enforced 0.35-second maximum. A direct render sequence
+covered fade/shrink, center-out thaw and tagged particle retirement across all
+three shapes; the 350 ms frame contained only the base units. Actual combat
+callback playback remains source-reviewed rather than playtested.
+The subsequent Overcharge removal revision holds its leading edge and contracts
+the tail toward it, replacing uniform line dimming while preserving the deadline.

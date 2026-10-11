@@ -11,6 +11,7 @@ namespace Visual
     public class UnitVisual : MonoBehaviour
     {
         [Inject] private TooltipUI _tooltipUI;
+        [Inject] private BattleTickSystem _ailmentClock;
         private const double IconNotificationInterval = 0.2;
         private double _nextIconNotificationTime = double.NegativeInfinity;
         private readonly Queue<(Sprite icon, Color? tint)> _iconNotifications = new();
@@ -18,6 +19,7 @@ namespace Visual
         [SerializeField] private UnitNotificationEffect unitNotificationEffect;
         [SerializeField] private UnitVisualEffectsController effectsController;
         [SerializeField] private UnitVisualHitEffectController hitEffectController;
+        [SerializeField] private UnitVisualAilmentController ailmentController = new UnitVisualAilmentController();
         [SerializeField] private UnitVisualAttackAnimationController attackAnimationController = new UnitVisualAttackAnimationController();
         [SerializeField] private UnitVisualIdleBreathingController idleBreathingController = new UnitVisualIdleBreathingController();
         [SerializeField] private Transform visualScaleRoot;
@@ -32,6 +34,8 @@ namespace Visual
             attackAnimationController?.Initialize(transform, gameObject);
             idleBreathingController?.Initialize(transform, gameObject);
             effectsController?.Initialize(_tooltipUI);
+            ailmentController ??= new UnitVisualAilmentController();
+            ailmentController.Initialize(unit, GetComponentInChildren<UnitShapeView>(true), _ailmentClock);
             hitEffectController?.Initialize(
                 transform,
                 attackAnimationController != null ? attackAnimationController.CombatDirection : Vector2.right);
@@ -52,6 +56,7 @@ namespace Visual
         private void OnEnable()
         {
             idleBreathingController?.Play();
+            ailmentController?.Enable();
         }
 
         private void OnDestroy()
@@ -73,6 +78,7 @@ namespace Visual
             }
 
             effectsController?.ClearAllEffectIcons();
+            ailmentController?.Dispose();
             hitEffectController?.Dispose();
             attackAnimationController?.Dispose();
             idleBreathingController?.Dispose();
@@ -80,6 +86,7 @@ namespace Visual
 
         private void OnDisable()
         {
+            ailmentController?.Disable();
             attackAnimationController?.Dispose();
             idleBreathingController?.Dispose();
         }
@@ -88,6 +95,11 @@ namespace Visual
         {
             effectsController?.UpdateEffectIcons(unit);
             TryDisplayQueuedIcon();
+        }
+
+        private void LateUpdate()
+        {
+            ailmentController?.LateUpdate();
         }
 
         private void DisplayHealthChangedNotification(float deltaHealth)

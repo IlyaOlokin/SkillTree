@@ -8,6 +8,12 @@ an exhaustive catalog of buffs, reactive tree modifiers or mini-game effects.
 No Unity playtest was run. Runtime support does not override the
 [skill-tree authoring restrictions](../SkillTree/SkillTreeFillingGuide.md).
 
+Presentation update, 2026-10-11: the shared Unit visual now renders application
+and presence for Ignite, Chill, Freeze, Overcharge and per-instance Bleed sources.
+See [ailment rendering](../Reference/AilmentVisualRendering.md) for geometry,
+event ownership, authoring controls and scoped render/compilation evidence.
+This does not change the gameplay rules below.
+
 ## Shared application boundary
 
 The attack processor tries effects after armor, resistance, mystic negation and

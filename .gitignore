@@ -10,6 +10,9 @@
 /[Ll]ogs/
 /[Mm]emoryCaptures/
 
+# Local concepts, previews and generated reports
+/output/
+
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
 

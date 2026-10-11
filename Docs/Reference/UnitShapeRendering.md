@@ -8,6 +8,11 @@ Source-reviewed **2026-09-29**. Source:
 
 ## Painterly color
 
+For the proposed ailment application/presence layer, see the
+[ailment visual integration plan](AilmentVisualPlan.md). It reuses this style and
+shape math. The subsequent [implementation record](AilmentVisualRendering.md)
+describes the new layer and its verification limits.
+
 `SkillTree/Unit Shape SDF` uses stepped glow/core energy and broad, angular
 procedural patches. The patch pattern uses sheared, warped triangular cells in
 shape-local coordinates; it follows the shape's rotation and mirroring without
