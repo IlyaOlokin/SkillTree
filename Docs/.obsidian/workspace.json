@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Backlog.md",
+                "file": "Reference/PerformanceCapture20261001.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Backlog"
+              "title": "PerformanceCapture20261001"
             }
           }
         ]
@@ -190,10 +190,12 @@
   },
   "active": "b6211a4a7bbe5413",
   "lastOpenFiles": [
+    "Reference/BalancePlaytest20261004.md",
+    "Reference/BalanceCampaign20261004.md",
+    "Backlog.md",
     "Reference/PerformanceCaptureNoAllocationEffect.md",
     "ProjectMap.md",
     "Reference/PerformanceCapture20261001.md",
-    "Backlog.md",
     "Home.md",
     "Reference/ProceduralMagicRootUI.md",
     "BridgeGem.md",
@@ -214,8 +216,6 @@
     "Systems/MenusAndScreenFlow.md",
     "Systems/Tutorials.md",
     "Systems/StatsAndModifiers.md",
-    "Systems/SavesAndProfiles.md",
-    "Systems/InventoryAndItems.md",
     "Systems"
   ]
 }

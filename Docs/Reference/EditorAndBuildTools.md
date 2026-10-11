@@ -1,5 +1,22 @@
 # Editor tools, checks and builds
 
+The [standalone Balance Lab](BalanceLab.md) launches from
+`Tools/BalanceSimulation/LaunchLab.cmd` without Codex. It provides settings,
+stop/resume, persisted batch learning, frozen model evaluation and paired balance
+comparisons. See its workflow and bounded verification before interpreting results.
+
+The balance agent's [stage-one simulator contract](BalanceAgentStage1.md) records
+the corrected campaign tick/kill wiring, two identical bounded runs and explicit
+remaining fidelity limits. `Tools/BalanceSimulation/VerifySimulator.ps1` repeats
+the live contract diagnostic and reproducibility check without gameplay edits.
+
+Campaign tooling update, 2026-10-08: the external campaign adapter now models
+numeric local gems, socket allocation, production shop purchases/stock and gold
+completion rewards. The three-attribute `balanced-shops.json` preset selects
+strength, dexterity and intelligence/lightning; five runs per strategy means
+15 campaigns. See [campaign shops and local gems](../../Tools/BalanceSimulation/README.md#campaign-shops-and-local-gems-2026-10-08)
+for policy and coverage. Earlier campaign records exclude these additions.
+
 [Home](../Home.md) · [Project map](../ProjectMap.md)
 
 Status: **source-reviewed entry-point map, 2026-09-28**. Build script/workflows and
@@ -91,6 +108,47 @@ player build, scene rebuild or gameplay playtest was run.
 
 ## Existing automated checks
 
+### Isolated balance runner (2026-10-04)
+
+The [isolated balance simulator](../../Tools/BalanceSimulation/README.md) lives outside
+Assets. `Run.ps1` uses `Runtime/FixedBattle.cs` for independent numeric builds;
+`RunCampaign.ps1` uses `Runtime/Campaign.cs` for actual XP, allocation, boss rewards,
+simple items and location progression. Production combat advances at 1/60 second
+with disposable preview-scene actors. It requires MainScene in Edit Mode, restores
+Random state and does not use the profile-save path.
+
+`Internal/UnityBridge.ps1` caches each adapter delegate by source hash in the Editor
+AppDomain. Later calls compile a small dispatcher; source changes/domain reloads
+invalidate the cache. `Runtime/EditorEffectOwnership.cs` owns transient effect
+modifiers for immediate Edit Mode cleanup. Large payloads are atomically written
+through `Runtime/EditorExports.cs`, avoiding large CLI response serialization.
+
+[Reports/BalanceSimulation](../../Reports/BalanceSimulation/README.md) is the only
+result home. Finished runs contain gzip JSON, a portable offline HTML stats/tree
+viewer and Markdown summaries. `report.json.work` contains unfinished metadata,
+graph and one export per completed campaign; full publication deletes it.
+`Recover.ps1` validates/assembles saved campaigns offline, with explicit partial
+opt-in. It cannot resume a partly played bot. `RebuildReport.ps1` regenerates viewers
+and migrates legacy raw JSON after round-trip equality validation.
+
+The default three-build preset prioritizes strength/physical, dexterity/physical
+and intelligence/lightning damage, with two-edge lookahead and earned-point
+spending. Policies are greedy and exclude shops, gems, infinite nodes and special
+node mechanics. Fixed battles exclude XP/rewards. See the runner's scope rather
+than interpreting these comparisons as optimal builds or complete balance coverage.
+
+Pipeline's five-second operation/response limit still applies. Chunk budgets stop
+at full stage boundaries; an unusually expensive single stage can still exceed it.
+The 2026-10-04 reorganization compiled both external adapters and ran three fixed
+fights plus three bounded two-location campaigns. Archive equality and JavaScript
+syntax were checked; no game/player build or new test suite was run. Viewer
+appearance/live interaction remain unverified due to blocked local-file browsing.
+The retained 30-bot report was used for a same-data compression comparison, then
+restored to uncompressed JSON/HTML at the owner's request; it was not replayed.
+The owner subsequently removed previous run folders. `Presets/balanced-push.json`
+defines five balanced policies (strength, dexterity, intelligence/fire/lightning/cold)
+with equal offensive/defensive category weights; these are policy comparisons.
+
 | Command from repository root | Scope |
 | --- | --- |
 | `dotnet run --project Tests/CombatRegression` | Selected production combat files with Unity/game stubs; arithmetic, callbacks and ownership cases |
@@ -142,3 +200,52 @@ deployment or assert runner credentials/tool availability.
 - `Assets/Editor/MenuConnectionRendererEditor.cs`
 - `Assets/Editor/CodexTwoClusters.cs`
 - `Assets/Editor/CI/BuildScript.cs`
+
+## Adaptive balance-tool follow-up, 2026-10-04
+
+The isolated campaign adapter now performs controlled post-defeat tree search with
+frozen level/XP/points and identical per-round wave seeds. It records proposals,
+score deltas, commits and normal-stage confirmation; it retains winning layouts and
+growth priorities. This is experimental respec support outside Assets, not a change
+to production allocation/refund/save behavior. Probe XP/gold/rewards/progress are
+suppressed, and trial wave/time totals are separate in reports. The bounded pilot
+compiled through Unity CLI: two substituted nodes improved the frozen stage-7
+result from failure to victory, then normal progression confirmed it. Full adaptive
+campaign execution is recorded in the report directory when completed.
+
+Decision-policy v2, 2026-10-08: candidate stats now use an isolated production
+recalculation and representative current-stage opponents. Nodes use a bounded
+three-node path search; gems require positive projected utility, with caps and
+mechanic prerequisites. See [decision scope and verification](../../Tools/BalanceSimulation/README.md#counterfactual-decision-policy-v2-2026-10-08).
+Compilation and scoped metric checks passed; live v2 campaigns are not verified.
+The earlier 15-campaign report records v1 and was not rerun or overwritten.
+
+Live v2 follow-up, 2026-10-08: [15 balanced campaigns](../../Reports/BalanceSimulation/20261008-192754-223-campaign/verification.md)
+completed after Pipeline restart, with mean cleared stages 51 / 95 / 15 for
+strength / dexterity / intelligence-lightning. All 64 purchases had positive v2
+scores; no BarrierCapacity gem was purchased. Final snapshot gold/socket counts
+and temporary actor cleanup were checked. The catalog also records 238 attribute
+nodes changed from 2 to 1, so the comparison is not algorithm-only. This supersedes
+the earlier live-execution-pending note; other policy limits remain.
+
+All-node policy v3, 2026-10-09: the owner removed numeric-only node coverage and
+requested a general directional major-node estimate of 3.25 small nodes. Concrete
+node subtype and infinite investment are preserved; no individual node ID or
+modifier allowlist controls eligibility. See [v3 scope and verification](../../Tools/BalanceSimulation/README.md#all-node-directional-policy-v3-2026-10-09).
+Compilation and JavaScript syntax passed; live v3 simulation is not yet verified.
+
+Live all-node v3 follow-up, 2026-10-09: [15 balanced campaigns](../../Reports/BalanceSimulation/20261009-161427-810-campaign/verification.md)
+finished after Pipeline restart. Catalog coverage admitted all 2,812 nodes, with
+458 major/special allocations and 137 gem purchases/insertions. Mean cleared
+stages were 95 / 93 / 93 (STR / DEX / INT-lightning). Final snapshots, invested
+counts, archive/viewer bytes and actor cleanup were checked. No repeated infinite
+investment appeared; adaptive respec and exhaustive special-modifier coverage
+remain unverified. This supersedes the preceding live-v3-pending note.
+
+Representative parity verifier, 2026-10-09: `VerifyPlayMode.ps1` compiles an external
+fixture, captures Edit Mode traces, and runs native Awake/Start/Update/destruction
+in a disposable Unity project with local packages and gameplay DLL copies.
+`ComparePlayTraces.ps1` requires full arrays, exact event counts, bounded float
+serialization error and actual expected transitions. [Four scenarios matched](../../Reports/BalanceSimulation/20261009-175543-107-play-parity/verification.md)
+across 750 ticks; no gameplay files were edited. Cold isolated-project import may
+take several minutes. See the [stage-one scope](BalanceAgentStage1.md).

@@ -69,6 +69,27 @@ Evidence types:
 
 ## Tooling and remaining verification
 
+BL-032 evidence update, 2026-10-04: a [live first-location balance playtest](Reference/BalancePlaytest20261004.md)
+completed nine one-point starting-node comparisons and one Fire/barrier route
+through the first boss. Background-focus stalls limited early wall-time data.
+This adds bounded gameplay evidence; later locations, other boss builds, gems
+and the broader integration/target-platform coverage remain unverified. BL-032
+remains open.
+
+Additional 2026-10-04 evidence: [120 isolated progression campaigns](Reference/BalanceCampaign20261004.md)
+executed 5,010 waves with real XP, numeric-node allocation and simple boss reward
+use. Seven locations were reached; stage 40 was attempted. This narrows the numeric
+policy simulation gap, but does not verify later-location Play Mode/UI integration,
+gems, special builds or target-platform behavior. BL-032 remains open.
+
+Reporting/progression follow-up, 2026-10-04: 30 historical damage-build campaigns (raw artifacts subsequently deleted by the owner)
+recorded 3,299 waves across four reached locations. Reports now include numeric
+stat snapshots, active/allocated trees, Power and chronology. The five-second
+export failure was addressed with direct on-disk per-campaign exports; the final
+dataset was recovered from 29 saved records plus one rerun. Full-run speed metrics
+and visual HTML interaction checks are unavailable for this run. This does not
+close BL-032 or establish optimal-build balance.
+
 | ID | Priority / evidence | Finding and possible impact | Next step and closure criterion | Reference |
 | --- | --- | --- | --- | --- |
 | BL-028 | P2 / Verification gap | Required `Tools/Locations/check_locations.py` was absent during the documentation survey. The documented content checks cannot currently be relied on. | Locate or restore the intended checker, confirm its rules against the owner guide, then run it for location-content work. Do not invent a substitute and label historical checks passed. | [Location validation](Locations/LocationCreationGuide.md), [tooling](Reference/EditorAndBuildTools.md#content-tools) |
@@ -250,3 +271,119 @@ Level7's missing visual GUID references are explicitly intentional in the owner
 guide. Freeze runtime support does not authorize new Freeze content, and historical
 balance notes do not authorize rebalancing. Documentation corrections already made
 (such as moved source paths) are not open gameplay defects.
+
+
+Simulator maintenance, 2026-10-04: the external adapters/report pipeline were
+reorganized and exercised with three fixed fights plus three bounded two-location
+campaigns. Cached dispatch, direct atomic exports and full-publication work cleanup
+were exercised. The retained 30-bot dataset was used for a same-data compression comparison
+with JSON equality validation, preserving snapshots and graph data. Its original
+uncompressed storage was restored at the owner's request. This adds narrow tooling evidence;
+heavy-stage Pipeline timeouts, partial-bot resumption and visual viewer interaction
+remain outside verified coverage. BL-032 remains open.
+
+Balanced-campaign evidence, 2026-10-04: [50 five-policy runs](../Reports/BalanceSimulation/20261004-124706-435-campaign/verification.md)
+recorded 8,071 waves, 6,268 snapshots and 12 reached locations. Archive/viewer payload
+and final snapshot consistency were checked; temporary actors/modifiers were absent
+after execution. Cold seeds 106/110 had no remaining supported numeric frontier
+within the selected starter route and retained 3/7 points. This narrows numeric
+policy coverage but does not close BL-032 or validate full cold/special/gem gameplay.
+
+Adaptive policy evidence, 2026-10-04: [25 five-policy campaigns](../Reports/BalanceSimulation/20261004-135038-237-campaign/verification.md)
+ran 3,535 normal and 2,683 probe waves. Frozen trial budgets/XP/seeds and progression
+log isolation were checked; 156 changed layouts were committed, with 41 normal-stage
+wins following changed-layout commits. On seeds 101–105, mean strength progression
+improved 17→25 but dexterity regressed 51→42; elemental means stayed 14. The current
+stage-only objective and persistent growth priorities can harm later progression;
+this is a measured tool/policy limitation, not an established gameplay defect.
+BL-032 remains open. No gameplay source, assets or profile-save contract changed.
+
+Campaign simulator update, 2026-10-08: isolated bots now allocate sockets, retain
+numeric local gems, buy from unlocked shops with production stock/gold/inventory
+checks, and install through InventorySocketService. Gold completion rewards are
+handled explicitly; the old item-only adapter would dereference a null Item for
+these newly authored rewards. The adapter also preserves float skill-point and
+node-cost values instead of the old integer assumptions. Compilation against the
+installed Unity/game assemblies passed; all 15 balanced campaigns completed on
+seeds 101–105 with 53 purchases and 53 socket insertions. Final gold/socket counts
+match the last snapshots for all bots. This does not close BL-032 or verify UI navigation, influence/bridge
+gems or special modifiers. See [runner scope](../Tools/BalanceSimulation/README.md#campaign-shops-and-local-gems-2026-10-08).
+
+Simulator policy finding, 2026-10-08: the v1 heuristic rewarded BarrierCapacity
+without checking barrier charges/mask or MysticNegation, allowing ineffective gem
+purchases. Decision policy v2 projects current-build stat gains and models both
+barrier absorption and the independent capacity/negation synergy. Compilation and
+scoped metric checks passed; live campaigns and performance remain unverified due
+to unavailable Pipeline discovery. This is a bot-policy issue, not a gameplay
+Barrier defect, and does not close BL-032. See [policy v2](../Tools/BalanceSimulation/README.md#counterfactual-decision-policy-v2-2026-10-08).
+
+Simulator policy v2 live follow-up, 2026-10-08: [all 15 requested campaigns](../Reports/BalanceSimulation/20261008-192754-223-campaign/verification.md)
+finished without adapter errors. No BarrierCapacity gem was purchased; all 64
+purchases had positive v2 scores and were inserted. Final snapshots matched final
+gold/socket counts, and no temporary actors remained. This resolves the preceding
+live-execution gap for this cohort, not every possible build/forecast. Mean
+progression increased, but 238 attribute nodes also changed from 2 to 1, so this
+is not a controlled algorithm-only improvement measurement. BL-032 remains open.
+
+Bot node coverage, 2026-10-09: the owner's STR heat-map example was traced to a
+BigNode whose +24% Armor is paired with GainAttackProgressOnHit_0.05. V2 excluded
+the whole node because one modifier was nonnumeric. The owner requested no node
+exclusion and a general 3.25-small-node directional estimate for major/special
+nodes. V3 removes the type/modifier filter, preserves subtype/infinite investment,
+and admits all frontier major nodes to detailed evaluation without per-node IDs
+or a special-case modifier allowlist. Compilation passed; live v3 coverage remains
+unverified. Historical viewer exclusions are now visibly marked. See
+[policy v3](../Tools/BalanceSimulation/README.md#all-node-directional-policy-v3-2026-10-09).
+
+All-node v3 live follow-up, 2026-10-09: [15 balanced campaigns](../Reports/BalanceSimulation/20261009-161427-810-campaign/verification.md)
+completed without adapter errors. All 2,812 catalog nodes were admitted; 458
+major/special nodes were allocated, and the owner's screenshot node was selected
+by 2/5 STR bots. Mean cleared stages were STR 95, DEX 93, INT/lightning 93
+(previous v2 means 51 / 95 / 15). All 137 positive-score gem purchases were
+inserted. Final gold/socket/investment data and temporary-object cleanup matched.
+This supersedes the live-v3-pending note for this cohort. Repeated infinite
+investment did not occur; adaptive respec and individual special-modifier behavior
+remain unverified. This does not close BL-032 or imply every strategy improved.
+
+Balance-agent stage-one checkpoint, 2026-10-09: the external campaign adapter
+was found to run unregistered actors, causing immediate modifier rebuilds, and
+to omit EnemyUnit's injected player target, preventing player kill notifications.
+Both bindings were corrected outside Assets. Live diagnostics confirmed deferred
+Mods processing and exactly one kill event; two short three-strategy datasets
+matched exactly. Actor cleanup and unchanged scene were checked. This is a bounded
+contract/repeatability checkpoint; independent complex-mechanic Play Mode parity
+and remaining coverage are still open. See [evidence and limits](Reference/BalanceAgentStage1.md).
+
+Stage-one representative Play/Edit parity, 2026-10-09: an isolated native Play
+Mode project using byte-identical gameplay DLLs matched 750 simulator snapshots
+across Pain/Scar, received-effect repetition/unbinding, barrier loss/Surge/hit
+progress and Ignite pool/expiry/DoT gating. Complete traces and semantic transitions
+were checked, not just successful process exit. Main gameplay files and scene were
+unchanged; the temporary project was cleaned after preserving evidence. This closes
+the representative native-lifecycle gap for these scenarios, not all mechanics or
+BL-032. See [evidence](../Reports/BalanceSimulation/20261009-175543-107-play-parity/verification.md)
+and [remaining stage-one scope](Reference/BalanceAgentStage1.md).
+
+Standalone/learning follow-up, 2026-10-09: [Balance Lab](Reference/BalanceLab.md)
+now starts without Codex and persists settings, jobs, model versions and paired
+comparisons. A live three-strategy batch updated 13 feature weights and recorded
+65 context/action memory entries. Two frozen evaluation cohorts on new seeds
+matched their full gameplay records; stop/resume preserved the completed episode.
+A subsequent two-batch run used each newly learned model in the next batch and
+published input/output model provenance. These checks establish tool operation,
+not better agent strength. Influence/bridge choices, broad mechanic fidelity,
+long-run learning quality and BL-032 remain open. See the
+[scoped check record](../Reports/BalanceSimulation/Lab/verification-20261009.md).
+
+Balance Lab follow-up, 2026-10-10: the completed 225-campaign job had 15 valid
+updates, but a maximum accumulated feature-weight delta of only 0.00097206.
+Trainer v2 removes per-decision averaging before the episode average and keeps
+gradient-norm clipping. Its saved-batch replay is prospective, not evidence of
+better gameplay. All 15 epoch reports were rebuilt from saved data, with precise
+weight deltas and sampled/output model labels added to the UI. Polling previously
+rebuilt every job card and closed expanded history every 2.5 seconds; unchanged
+lists now stay intact, and updated lists restore open/table/page scroll state.
+UI-script syntax was checked; browser interaction remains unverified after the
+browser tool stopped because it could not identify the URL confidently. See
+[workflow](Reference/BalanceLab.md) and
+[record](../Reports/BalanceSimulation/Lab/verification-20261010.json).

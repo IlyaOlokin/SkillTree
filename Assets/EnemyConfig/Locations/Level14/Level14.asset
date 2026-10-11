@@ -22,5 +22,9 @@ MonoBehaviour:
   - levelNumber: 100
     itemDefinition: {fileID: 11400000, guid: 9254fd65068bf744e9a5fe80de500cc1, type: 2}
     amount: 1
+  - levelNumber: 100
+    rewardKind: 1
+    itemDefinition: {fileID: 0}
+    amount: 250
   unlockPrerequisites:
   - {fileID: 11400000, guid: 953a26cef65e479c872ece7b47dc8ef2, type: 2}

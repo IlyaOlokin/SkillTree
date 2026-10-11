@@ -1,0 +1,139 @@
+{
+  "date": "2026-10-09",
+  "training": {
+    "id": "20261009164332096-a2194dce",
+    "status": "completed",
+    "model": "71ba13117239d82f068184f29c678927",
+    "weightsChanged": 13,
+    "memoryEntries": 65
+  },
+  "repeat": {
+    "id": "cf9c097d12543e365131b383",
+    "left": "20261009164618998-4c0ec484",
+    "right": "20261009164833788-0300768a",
+    "type": "repeatability",
+    "groups": [
+      {
+        "strategy": "strength-balanced",
+        "runs": 1,
+        "leftMean": 10,
+        "rightMean": 10,
+        "pairedDelta": 0,
+        "medianDelta": 0,
+        "improved": 0,
+        "worse": 0,
+        "unchanged": 1,
+        "bootstrap95": null,
+        "insufficientSample": true,
+        "exactGameplayMatches": 1,
+        "pairs": [
+          {
+            "seed": 51001,
+            "before": 10,
+            "after": 10,
+            "delta": 0
+          }
+        ]
+      },
+      {
+        "strategy": "dexterity-balanced",
+        "runs": 1,
+        "leftMean": 6,
+        "rightMean": 6,
+        "pairedDelta": 0,
+        "medianDelta": 0,
+        "improved": 0,
+        "worse": 0,
+        "unchanged": 1,
+        "bootstrap95": null,
+        "insufficientSample": true,
+        "exactGameplayMatches": 1,
+        "pairs": [
+          {
+            "seed": 51001,
+            "before": 6,
+            "after": 6,
+            "delta": 0
+          }
+        ]
+      },
+      {
+        "strategy": "intelligence-lightning-balanced",
+        "runs": 1,
+        "leftMean": 10,
+        "rightMean": 10,
+        "pairedDelta": 0,
+        "medianDelta": 0,
+        "improved": 0,
+        "worse": 0,
+        "unchanged": 1,
+        "bootstrap95": null,
+        "insufficientSample": true,
+        "exactGameplayMatches": 1,
+        "pairs": [
+          {
+            "seed": 51001,
+            "before": 10,
+            "after": 10,
+            "delta": 0
+          }
+        ]
+      }
+    ],
+    "warning": "Парный bootstrap — ориентировочная неопределённость. Малый набор seeds не доказывает улучшение; тест на зависимых повторных запусках не заменяет новые seeds."
+  },
+  "resume": {
+    "id": "20261009165118826-e6ffe55c",
+    "status": "completed",
+    "completed": 2,
+    "firstEpisodePreserved": true
+  },
+  "twoBatch": {
+    "id": "20261009185800566-29ffcdfb",
+    "status": "completed",
+    "output": "619696a1a6eac439288d0a9650f50afc",
+    "epochs": [
+      {
+        "seed": 71001,
+        "input": "71ba13117239d82f068184f29c678927",
+        "output": "49adcf692de8590f7b8043bfc3eec2fb",
+        "stats": {
+          "episodes": 1,
+          "decisions": 25,
+          "gradientNorm": 0.07013881688420696,
+          "rewardMean": 20
+        },
+        "sha256": "04d55d9d5e3275f9d174d9a31be8089200457e0c4c403506c8eed88b8b196b22"
+      },
+      {
+        "seed": 71002,
+        "input": "49adcf692de8590f7b8043bfc3eec2fb",
+        "output": "619696a1a6eac439288d0a9650f50afc",
+        "stats": {
+          "episodes": 1,
+          "decisions": 23,
+          "gradientNorm": 0.07461950232754891,
+          "rewardMean": 20
+        },
+        "sha256": "9bc75b9a52a0f5eef521cfa5617ef70e92f739e47773791405ac5005aeeabeb9"
+      }
+    ],
+    "nextUsesPrevious": true
+  },
+  "modelUnchanged": true,
+  "provenance": {
+    "jobId": "20261009185800566-29ffcdfb",
+    "mode": "train",
+    "environment": {
+      "content": "af59d4cf706282772283b90c95b6d76ee930f037d85addf8a89b95260cef711a",
+      "engine": "b71c5e2aee950ee9d25e0160d626897aaedadabab7ba3ca54cc1d983ec551bdb",
+      "files": 5416,
+      "unity": "m_EditorVersion: 6000.4.6f1\nm_EditorVersionWithRevision: 6000.4.6f1 (0b051c2e5d54)"
+    },
+    "scenarioHash": "f50bba0e4615379fdf49e59b4bc733d0375807e134fa0d833db05726f8dbcbf6",
+    "policy": "learned",
+    "sampledModel": "49adcf692de8590f7b8043bfc3eec2fb",
+    "outputModel": "619696a1a6eac439288d0a9650f50afc",
+    "epoch": 2
+  }
+}
