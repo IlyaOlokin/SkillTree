@@ -249,3 +249,69 @@ in a disposable Unity project with local packages and gameplay DLL copies.
 serialization error and actual expected transitions. [Four scenarios matched](../../Reports/BalanceSimulation/20261009-175543-107-play-parity/verification.md)
 across 750 ticks; no gameplay files were edited. Cold isolated-project import may
 take several minutes. See the [stage-one scope](BalanceAgentStage1.md).
+
+## Pipeline connection investigation, 2026-10-12
+
+Read-only checks initially found Unity 6000.4.6f1, PID 10412, Pipeline
+0.7.0-exp.1 and a ready server on port 7801. Later, CLI discovery returned
+`STATUS_NO_INSTANCES` in the sandbox and `STATUS_PIPELINE_LOAD_PENDING`
+outside it, although an outside-sandbox HTTP probe still received 401 and
+Windows reported port 7801 listening under the same Unity PID. The unauthenticated
+401 confirms a live HTTP server; it does not establish that CLI authentication works.
+
+Two distinct problems were observed:
+
+- The sandbox rejected direct loopback access with a socket-permission error.
+  CLI absence messages alone therefore cannot establish that Unity is closed.
+- `Library/Pipeline/.unity-pipeline-port` was absent both inside and outside
+  the sandbox while the listener remained alive. Installed package source
+  (`Runtime/Models/InstanceDescriptor.cs`) uses this file for discovery and
+  stores the authorization token there. The reason it disappeared was not
+  established; no token was printed or manually recreated.
+
+The Editor log also contains repeated HTTP server starts and assembly reloads.
+`Editor/EditorPipelineStartup.cs` recreates the server through `InitializeOnLoad`
+after domain reload. Such transitions can temporarily interrupt commands, but
+they do not explain every observed discovery failure. Safe Mode was not detected.
+No package upgrade, server restart, scene change, build or test was performed.
+For follow-up, restore the descriptor through the package's server lifecycle,
+then check discovery separately from loopback access. Do not disable the sandbox
+or treat an available package update as a verified fix.
+
+### Connection recovery changes, 2026-10-12
+
+Pipeline was upgraded from 0.7.0-exp.1 to 0.8.0-exp.1 using
+`unity pipeline upgrade --project-path C:/UnityProjects/SkillTree`.
+The upgrade is maintenance, not evidence that the missing-file cause is fixed.
+No project C# usage of the moved `CliCommand`/`CliArg` namespace was found.
+Version 0.8 uses Project Settings > Pipeline > Editor; old settings assets are
+not migrated by the package. No old settings asset was changed by this task.
+
+`Assets/Editor/PipelineDiscoveryRecovery.cs` checks every five seconds in the
+Editor update loop. If the discovery file is absent and Pipeline's server is
+running, it invokes the server's own heartbeat writer, preserving token ownership
+and file permissions. It never starts a manually stopped server. Reflection hooks
+were source-checked against 0.8 (`PipelineServerStartup.Server`, `IsRunning`,
+`UpdateHeartBeat`); future upgrades require review. Recovery needs an updating
+Editor and cannot run while a domain reload or an Editor stall prevents updates.
+
+Project AGENTS.md now requires live Unity CLI calls outside the restricted shell,
+with an explicit project target. This addresses the observed socket/process access
+restriction without disabling the sandbox. Commands that time out after mutation
+must be checked for completion rather than automatically repeated.
+
+Live verification after import: `unity status` and `unity command editor_status`
+reported ready, not compiling, and no domain reload, using PID 10412/port 7800.
+A single live `eval` verified that the recovery class compiled, moved the
+descriptor to a temporary backup, invoked the recovery check, and returned
+`descriptorRestored: true`. A finally block removed the backup after successful
+recovery or would have restored the original on failure. No token contents were
+printed. A subsequent editor_status call verified discovery/authentication again.
+No test suite or player build was run. The source of the original descriptor
+removal remains unknown; this change repairs that failure mode rather than
+claiming to identify the deleting process.
+
+The retained legacy settings asset had automatic port selection, AutoStart and
+watchdog enabled with a five-second interval, and request logging/browser access
+and source telemetry storage disabled. It remains untouched; 0.8 ignores it and
+uses its new settings configuration.

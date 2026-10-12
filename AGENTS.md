@@ -1,5 +1,18 @@
 # Unity Project Development Guide for AI Agents
 
+## Unity Pipeline connection reliability
+
+Run Unity CLI commands that discover or contact the live Editor outside the
+restricted agent shell (`sandbox_permissions: require_escalated`). On this
+machine the sandbox blocks loopback sockets and process inspection, producing
+misleading no-instance results. Do not disable the sandbox or broaden descriptor
+permissions. Always target `C:/UnityProjects/SkillTree` explicitly for commands.
+After compilation/domain reload, wait for readiness before sending mutations;
+never blindly retry a mutation whose acknowledgement timed out.
+`Assets/Editor/PipelineDiscoveryRecovery.cs` restores a missing discovery file
+through the running server's own heartbeat writer. It does not start a stopped
+server. Recheck its reflection hooks after Pipeline upgrades.
+
 ## Tests and verification scope
 
 Do not write tests unless the user explicitly asks for them. Do not perform

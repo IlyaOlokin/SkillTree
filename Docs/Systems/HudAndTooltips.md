@@ -35,6 +35,61 @@ layout. Their existence does not establish that every optional view is active.
 
 ## Tooltip ownership and nesting
 
+### Player stats defence layout (2026-10-12)
+
+MainScene's authored PlayerStatsWindow contains a two-column, two-row defence grid,
+including Block Power and its existing tooltip description. The earlier isolated
+Edit Mode render verified this authored layout only.
+
+The full PlayerStatsWindow layout is now authored and saved in MainScene. Runtime
+code does not create, reparent or resize UI objects. Edit the RectTransforms, layout
+groups, text components, separator Images and ContentSizeFitter directly in the
+scene hierarchy. The Content layout retains its 20-unit right inset.
+
+Attributes, Health & Barrier, Defences, Attack and Mystic remain always visible
+without dropdown headers, preserving their authored columns/grids. Resistances
+follow Mystic; separate maximum-resistance rows are omitted. Existing resistance
+suffixes show uncapped resistance above the cap, not the cap itself. Health & Barrier
+includes MysticNegation. The Parry pair is visible when ParryChance <= 0, as explicitly
+requested by the owner; recalculation changes visibility and rebuilds layout only
+when that condition changes.
+
+Ailments, Debuffs and Others have three serialized PlayerStatsSection entries.
+Their header Buttons have persistent ToggleSection(index) callbacks. Each entry
+exposes its title, localization key/fallback, triangle text, body and Expanded state.
+Right/down triangles identify collapsed/expanded state. Ailments retain their authored
+internal groups; Debuffs use nine separate rows. Others contains five simple
+subsections: Recovery & Pain, Sacred Health, Damage Reduction, Resistance Penetration
+and Wisps. Its five title references/keys are stored in subsectionHeadings. Bodies
+retain the 14-unit inset and subsection rows an additional 10-unit inset.
+
+Preview All Sections on PlayerStatsWindow expands all three dropdowns in Edit Mode.
+Turn it off to preview individual Expanded flags in the same Inspector. This preview
+updates through a deferred OnValidate callback without entering Play Mode. Awake
+applies the configured Expanded states for gameplay (all three default to collapsed).
+The runtime preserves toggles across disable/re-enable for that instance; no profile
+save field is added. Normal Buttons invoke their persistent callbacks in Play Mode;
+Edit Mode preview is controlled through the Inspector.
+
+All 67 statTexts entries and their label/value references are saved in the scene.
+The existing stat/locale subscriptions update values and headings. Existing tooltip
+components remain attached; no new tooltip assets are created. Missing numeric
+values display zero. Damage Reduction displays the six final physical/fire/cold/
+lightning/light/darkness values: general/elemental/mystic modifiers merge before
+calculation, and poison/aggregate rows are deliberately omitted. Earlier excluded
+numeric aggregates, masks and generic ailment stats remain excluded.
+
+Headings use Descriptions keys ui.playerStats.section.<id>. English entries were
+added; newly introduced keys remain Russian/German translator TODOs. Existing
+translations and unused older heading keys are preserved.
+
+Verification: the scene was authored/saved through Unity CLI in Edit Mode. Scoped
+C# compilation passed; Unity reports no current Console errors. Top/bottom isolated
+renders of the saved layout were inspected, including right scrollbar clearance.
+Direct section toggling expanded/collapsed the saved body; all three persistent
+button callbacks and eight heading references were configured. Actual pointer-click
+playback, combat updates and locale switching were not playtested.
+
 `TooltipTermDatabase.ActiveDatabase` is cleared by `SubsystemRegistration` before
 scene startup, including when Domain Reload is disabled (2026-10-03). `TooltipUI.Awake`
 registers its configured database. This prevents a previous Play Mode session's

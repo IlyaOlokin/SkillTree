@@ -26,6 +26,17 @@ public class PlayerStatsWindow : MonoBehaviour
     [SerializeField] private TMP_Text MysticValueText;
     [SerializeField] private MysticColorsConfig mysticColorsConfig;
     private bool _isSubscribed;
+    [Header("Scene Layout")]
+    [SerializeField] private List<PlayerStatsSection> sections = new();
+    [SerializeField] private List<PlayerStatsHeading> subsectionHeadings = new();
+    [SerializeField] private bool previewAllSections = true;
+    [SerializeField] private GameObject _parryGroup;
+    [SerializeField] private RectTransform _layoutContent;
+
+    private void Awake()
+    {
+        ApplySectionVisibility(false);
+    }
     
     private void Start()
     {
@@ -47,6 +58,9 @@ public class PlayerStatsWindow : MonoBehaviour
     private void OnDestroy()
     {
         Unsubscribe();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.delayCall -= RefreshEditorPreview;
+#endif
     }
 
     private void Subscribe()
@@ -130,12 +144,21 @@ public class PlayerStatsWindow : MonoBehaviour
 
         UpdateDamageTexts();
         UpdateMysticTexts();
+        if (_parryGroup != null)
+        {
+            bool showParry = _player.BaseUnitModifiers.GetStatValue(StatType.ParryChance) <= 0f;
+            if (_parryGroup.activeSelf != showParry)
+            {
+                _parryGroup.SetActive(showParry);
+                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(_layoutContent);
+            }
+        }
+        RefreshSectionTitles();
         
 
         foreach (var statText in statTexts)
         {
-            if (!_player.BaseUnitModifiers.TryGetStatValue(statText.stat, out float rawValue))
-                continue;
+            _player.BaseUnitModifiers.TryGetStatValue(statText.stat, out float rawValue);
             
             bool isPercent = StatTypeDisplayRules.IsPercentStat(statText.stat);
             float displayValue = StatTypeDisplayRules.GetDisplayValue(statText.stat, rawValue, _player.BaseUnitModifiers.GetStatValue);
@@ -313,6 +336,61 @@ public class PlayerStatsWindow : MonoBehaviour
         RefreshTexts();
     }
 
+    public void ToggleSection(int index)
+    {
+        if (index < 0 || index >= sections.Count)
+            return;
+        var section = sections[index];
+        section.expanded = !section.expanded;
+        ApplySectionVisibility(false);
+        var scroll = _layoutContent != null
+            ? _layoutContent.GetComponentInParent<UnityEngine.UI.ScrollRect>() : null;
+        if (scroll != null)
+            scroll.StopMovement();
+    }
+
+    private void ApplySectionVisibility(bool previewAll)
+    {
+        foreach (var section in sections)
+        {
+            bool expanded = previewAll || section.expanded;
+            if (section.body != null)
+                section.body.SetActive(expanded);
+            if (section.arrowText != null)
+                section.arrowText.text = expanded ? "▼" : "▶";
+        }
+        if (_layoutContent != null)
+            UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(_layoutContent);
+    }
+
+    private void RefreshSectionTitles()
+    {
+        foreach (var section in sections)
+            if (section.titleText != null)
+                section.titleText.text = GameLocalization.Get(section.localizationKey, section.fallback);
+        foreach (var heading in subsectionHeadings)
+            if (heading.titleText != null)
+                heading.titleText.text = GameLocalization.Get(heading.localizationKey, heading.fallback);
+    }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        UnityEditor.EditorApplication.delayCall -= RefreshEditorPreview;
+        UnityEditor.EditorApplication.delayCall += RefreshEditorPreview;
+    }
+
+    private void RefreshEditorPreview()
+    {
+        UnityEditor.EditorApplication.delayCall -= RefreshEditorPreview;
+        if (this == null || UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+            return;
+        ApplySectionVisibility(previewAllSections);
+        UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
+        UnityEditor.SceneView.RepaintAll();
+    }
+#endif
+
     private void HandleBattleActivityChanged(bool _)
     {
         UpdateTexts();
@@ -327,4 +405,20 @@ public class StatText
     public StatType stat;
     public string overrideText;
     public bool needToOverrideText;
+}
+
+[Serializable]
+public class PlayerStatsHeading
+{
+    public string localizationKey;
+    public string fallback;
+    public TMP_Text titleText;
+}
+
+[Serializable]
+public class PlayerStatsSection : PlayerStatsHeading
+{
+    public GameObject body;
+    public TMP_Text arrowText;
+    public bool expanded;
 }

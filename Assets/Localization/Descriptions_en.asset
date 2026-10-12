@@ -698,6 +698,78 @@ MonoBehaviour:
     m_Localized: 'Each stack grants 10% increased {blockPower|Block Power}. Maximum 10 stacks. Blocking a hit removes all stacks. No time limit.'
     m_Metadata:
       m_Items: []
+  - m_Id: 46872000000000001
+    m_Localized: 'Attributes'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000002
+    m_Localized: 'Health & Barrier'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000003
+    m_Localized: 'Defences'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000004
+    m_Localized: 'Damage Reduction'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000005
+    m_Localized: 'Resistances'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000006
+    m_Localized: 'Attack'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000007
+    m_Localized: 'Resistance Penetration'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000008
+    m_Localized: 'Mystic'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000009
+    m_Localized: 'Ailments'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000010
+    m_Localized: 'Debuffs'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000011
+    m_Localized: 'Wisps'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000012
+    m_Localized: 'Healing Received'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000013
+    m_Localized: 'Profaned Health'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000014
+    m_Localized: 'Hallowed Health'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000016
+    m_Localized: 'Pain Received'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000021
+    m_Localized: 'Others'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000022
+    m_Localized: 'Recovery & Pain'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46872000000000023
+    m_Localized: 'Sacred Health'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
