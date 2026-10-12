@@ -237,3 +237,10 @@ the same captured amount again before its callbacks. OnBlockResolved is emitted
 after the parry roll, preserving both gameplay reactions while allowing UnitVisual
 to suppress Block text on parried hits. Parry Attack Progress remains deferred.
 
+
+## Pain conversion on attack receipt (2026-10-12)
+
+After OnGettingHit, positive actual attack HP loss is converted using the cached
+PainReceived stat, with existing low-life doubling, before OnHealthDamageTaken.
+No DamageTakenAsPain runtime bindings are used. DoT remains outside this path.
+See [Pain stat](ReactiveCombatEffects.md#pain-received-stat-2026-10-12).

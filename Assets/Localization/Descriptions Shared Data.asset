@@ -651,6 +651,14 @@ MonoBehaviour:
     m_Key: effect.criticalCharge.description
     m_Metadata:
       m_Items: []
+  - m_Id: 46860000000000002
+    m_Key: effect.blockPowerMomentum.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46860000000000003
+    m_Key: effect.blockPowerMomentum.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

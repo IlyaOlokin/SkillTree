@@ -13,4 +13,7 @@ MonoBehaviour:
   m_Name: BleedPowerForBleedStacks_0.02
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 03000000
-  AddedValue: 0.02
+  modifierContainer:
+    modifierType: 0
+    statType: 15
+    value: 0.02

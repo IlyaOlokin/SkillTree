@@ -117,4 +117,6 @@ public enum StatType
     AshWisp = 86,
     FrostWisp = 87,
     StormWisp = 88,
+
+    PainReceived = 94,
 }

@@ -81,6 +81,7 @@ namespace Battle
                 if (Block.ApplyBlock(damageInfo.DamageInstance, defender.UnitObject, out float blockPower))
                 {
                     context.IsBlocked = true;
+                    damageInfo.IsBlocked = true;
                     defender.OnHitBlock(damageInfo.DamageInstance);
                     Parry.Apply(context, blockPower);
                     defender.UnitObject.NotifyBlockResolved(context);

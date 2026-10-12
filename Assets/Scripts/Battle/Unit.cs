@@ -146,6 +146,11 @@ namespace Battle
             OnGettingHit?.Invoke(damageInfo);
             if (healthLost > 0f)
             {
+                float painAmount = Pain.CalculateGainFromHealthLost(
+                    this, healthLost, BaseUnitModifiers.GetStatValue(StatType.PainReceived));
+                if (painAmount > 0f && effectController != null)
+                    effectController.AddEffect(() => new Pain(painAmount));
+
                 OnHealthDamageTaken?.Invoke(damageInfo, healthLost);
             }
             return receivedDamage;

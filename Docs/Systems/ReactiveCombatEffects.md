@@ -12,8 +12,7 @@ Pain accumulates a nonnegative amount. On an attack that passes evasion, it adds
 Increased Damage equal to amount / attacker's maximum HP to the attack snapshot,
 then queues consumption. Consumption raises PainConsumed and marks it used.
 Its gain helper multiplies positive health lost by a nonnegative conversion factor
-and doubles that result while the owner is on low life. The applying modifier
-still determines when and with what factor that helper is used.
+and doubles that result while the owner is on low life. Unit.ReceiveDamage uses the cached PainReceived stat after actual attack HP loss; DoT grants no Pain.
 
 Vengeance accumulates nonnegative stacks. Its attack bonus is one More Damage
 contribution of `0.05 * stacks` plus Added AilmentChance of `0.1 * stacks`, followed
@@ -35,6 +34,7 @@ three modifiers. Changing maximum HP does not recalculate the stored fraction he
 | BarrierSurge | Independent timed instances adding Increased BarrierRegenerationSpeed and Increased ElementalDamage; shared icon can show count and closest expiry |
 | EvasiveMomentum | Independent timed instances with More Evasion loss and More CritChance gain; MaxStacks constant is three, but this effect class alone does not enforce insertion count |
 | RelentlessMomentum | Merged count capped at ten; each stack adds 0.05 Increased AttackSpeed and 0.05 Increased Damage |
+| BlockPowerMomentum | Unblocked received attacks grant merged stacks, capped at ten; each adds fixed 0.1 Increased BlockPower. The next successful block uses the bonus then removes every stack. No timer; cleared on combat reset. See [implementation and setup](StatsAndModifiers.md#unblocked-hits-build-block-power-momentum-2026-10-12) |
 | BleedPhysicalDamageBuff | Independent timed instances adding nonnegative flat PhysicalDamage |
 | Mini-game stat buffs | Replace same-type strength and refresh duration; see [mini-games](BattleMiniGames.md) |
 
@@ -149,3 +149,49 @@ Verification: installed Visual Studio Roslyn `csc.exe @Temp/CriticalChargeCompil
 compiled gameplay sources against Unity/project references with exit 0. Existing
 warnings remain; none named the new classes. Localization IDs and script/tooltip
 GUID references were checked. No tests, player build or gameplay playtest ran.
+
+## Pain received stat (2026-10-12)
+
+`PainReceived` replaces PainReceivedMultiplier at the same stable ID 94.
+It is the fraction of actual attack HP loss converted to Pain, using ordinary
+Added/Increased/More arithmetic. Two Added 0.05 contributions and Increased 0.2
+produce 0.12: losing 100 HP grants 12 Pain, or 24 while on low life. Negative
+final conversion is floored at zero. No stat yields zero gain; the owner will
+remove the old innate Added 1 manually (it now means 100% conversion).
+
+Unit.ReceiveDamage grants Pain after OnGettingHit and before OnHealthDamageTaken,
+only for positive actual HP loss. Pain.CalculateGainFromHealthLost preserves the
+existing low-life doubling. No reactive producer bindings remain. Pain.OnApply
+and OnStack receive already computed amounts and never multiply them again;
+stored Pain is unaffected by stat changes. DoT still bypasses this receipt path.
+Pain consumption continues to notify Scar producers with the full stored amount.
+
+DamageTakenAsPain.cs and its metadata were removed. All five definitions migrated
+to BaseModifier / Added / PainReceived under
+`Assets/Scripts/SkillTree/Modifiers/BaseModifiers/AddedPainReceived_*.asset`,
+retaining their GUIDs and authored values so every node reference still resolves.
+Suffixes are 0.02, 0.04, 0.05, 0.1 and 0.12; the last historically stores 0.1,
+which was preserved rather than retuned. IncreasedPainReceived_0.2 is unchanged.
+The existing parity fixture now constructs an ordinary Added PainReceived modifier;
+it was not run. Node links, icons and positions were not changed.
+
+Shared/English Modifiers entries have prefix `modifier.container.` and suffix
+`.PainReceived`:
+- added: `[[0]] {pain|Pain} gained` (percent formatting produces +X%)
+- increased: `[[0]]% increased {pain|Pain} gained`
+- decreased: `[[0]]% decreased {pain|Pain} gained`
+- more: `[[0]]% more {pain|Pain} gained`
+- less: `[[0]]% less {pain|Pain} gained`
+- none: `You cannot gain {pain|Pain}`
+
+IDs were retained while renaming the keys. English fallbacks match these texts.
+ru/de translations remain TODOs; no empty entries or new effect-name keys added.
+Existing pain glossary term and status presentation are reused. Old translated
+DamageTakenAsPain localization entries remain unused to preserve translations.
+
+Verification: dotnet build Assembly-CSharp.csproj --no-restore -v:minimal -m:1
+-p:BuildProjectReferences=false with CustomBeforeMicrosoftCommonTargets set to
+Temp/MorePainCompile.targets passed with zero errors and five existing dependency/
+TutorialEventAdapter warnings. The target excludes deleted sources still present
+in the generated project. Asset GUID/value/reference checks and scoped whitespace
+checks were performed. No tests, player build or runtime playtest performed.

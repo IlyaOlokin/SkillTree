@@ -345,6 +345,23 @@ namespace SkillTree
 
         private string GetFallbackTemplate()
         {
+            if (statType == StatType.PainReceived)
+            {
+                return modifierType switch
+                {
+                    ModifierType.Added => "[[0]] {pain|Pain} gained",
+                    ModifierType.Increased => value < 0f
+                        ? "[[0]]% decreased {pain|Pain} gained"
+                        : "[[0]]% increased {pain|Pain} gained",
+                    ModifierType.More => IsNoStatModifier()
+                        ? "You cannot gain {pain|Pain}"
+                        : value < 0f
+                            ? "[[0]]% less {pain|Pain} gained"
+                            : "[[0]]% more {pain|Pain} gained",
+                    _ => string.Empty
+                };
+            }
+
             string formattedStatName = StatTypeTooltipFormatter.Format(statType);
 
             return modifierType switch

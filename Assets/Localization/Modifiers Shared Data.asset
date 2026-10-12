@@ -2491,6 +2491,46 @@ MonoBehaviour:
     m_Key: modifier.modifierContainerPerAnyWisp.unconfigured
     m_Metadata:
       m_Items: []
+  - m_Id: 46858000000000001
+    m_Key: modifier.modifierContainerPerTargetBleed.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46858000000000002
+    m_Key: modifier.modifierContainerPerTargetBleed.unconfigured
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46859000000000001
+    m_Key: modifier.bleedGrantsFortificationChance.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46860000000000001
+    m_Key: modifier.unblockedHitGrantsBlockPower.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46861000000000001
+    m_Key: modifier.container.increased.PainReceived
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46861000000000002
+    m_Key: modifier.container.decreased.PainReceived
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46861000000000003
+    m_Key: modifier.container.more.PainReceived
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46861000000000004
+    m_Key: modifier.container.less.PainReceived
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46861000000000005
+    m_Key: modifier.container.none.PainReceived
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46861000000000006
+    m_Key: modifier.container.added.PainReceived
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -2502,3 +2542,4 @@ MonoBehaviour:
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
       data:
         m_CustomEpoch: 1791037062100
+

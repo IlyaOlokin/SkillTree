@@ -63,6 +63,7 @@ public static class StatTypeDisplayRules
         StatType.MysticNegation,
         StatType.ProfanedHealthPercent,
         StatType.HallowedHealthPercent,
+        StatType.PainReceived,
         StatType.HealingReceived
     };
 

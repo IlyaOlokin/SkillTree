@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83c82a776e8709b4088681561f2f07cf, type: 3}
-  m_Name: DamageTakenAsPain_0.05
+  m_Script: {fileID: 11500000, guid: 4ae2ce54539276c4fa2012760a983831, type: 3}
+  m_Name: AddedPainReceived_0.1
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 00000000
-  healthLostAsPain: 0.05
+  modifierContainer:
+    modifierType: 0
+    statType: 94
+    value: 0.1

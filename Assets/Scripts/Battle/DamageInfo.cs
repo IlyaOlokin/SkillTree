@@ -15,6 +15,7 @@ namespace Battle
         public AttackEffectPayload AttackEffectPayload { get; } = new AttackEffectPayload();
         public DamageInstance DamageInstance { get; } = new DamageInstance();
         [HideInInspector] public bool IsCritical { get; set; }
+        [HideInInspector] public bool IsBlocked { get; set; }
         [HideInInspector] public bool AllowsMultiCrit { get; set; }
         [HideInInspector] public bool DealsDoubleDamageToBarrier { get; set; }
         [HideInInspector] public int MaxBarriersLostPerAttack { get; set; } = int.MaxValue;
@@ -36,6 +37,7 @@ namespace Battle
             AttackEffectPayload.Reset();
             DamageInstance.ResetValues();
             IsCritical = false;
+            IsBlocked = false;
             AllowsMultiCrit = false;
             DealsDoubleDamageToBarrier = false;
             MaxBarriersLostPerAttack = int.MaxValue;

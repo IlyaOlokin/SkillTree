@@ -52,7 +52,7 @@ namespace BalanceParity
             opponent = Actor("BalanceParityOpponent", 40, 0, 0);
             owner.attacker.SetTarget(opponent); opponent.attacker.SetTarget(owner);
             if (name == "pain-scar-consume-expire" || name == "barrier-loss-and-hit-binding" || name == "ignite-pool-and-expiry") {
-                var producer = Definition<DamageTakenAsPain>(); Set(producer, typeof(DamageTakenAsPain), "healthLostAsPain", 0.5f);
+                var producer = Definition<BaseModifier>(); producer.modifierContainer = new ModifierContainer(ModifierType.Added, StatType.PainReceived, 0.5f);
                 owner.AddOuterModifier(producer);
             }
             if (name == "pain-scar-consume-expire") {

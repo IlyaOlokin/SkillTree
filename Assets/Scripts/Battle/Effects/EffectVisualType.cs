@@ -31,6 +31,7 @@ namespace Battle
         DamageDebt = 26,
         Fortification = 27,
         CriticalCharge = 28,
+        BlockPowerMomentum = 29,
     }
 }
 

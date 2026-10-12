@@ -2527,6 +2527,46 @@ MonoBehaviour:
     m_Localized: 'You have no {blockPower|Block Power}'
     m_Metadata:
       m_Items: []
+  - m_Id: 46858000000000001
+    m_Localized: 'For this attack, gain ''[[0]]'' per {bleed|Bleed} on the target'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46858000000000002
+    m_Localized: 'Requires a stat modifier'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46859000000000001
+    m_Localized: 'When you apply {bleed|Bleed}, you have a [[0]]% chance to gain 1 stack of {fortification|Fortification}.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46860000000000001
+    m_Localized: 'When you receive an unblocked hit, gain 1 stack of Block Power Momentum. Each stack grants 10% increased {blockPower|Block Power}. Maximum 10 stacks. Blocking a hit removes all stacks.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46861000000000001
+    m_Localized: '[[0]]% increased {pain|Pain} gained'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46861000000000002
+    m_Localized: '[[0]]% decreased {pain|Pain} gained'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46861000000000003
+    m_Localized: '[[0]]% more {pain|Pain} gained'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46861000000000004
+    m_Localized: '[[0]]% less {pain|Pain} gained'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46861000000000005
+    m_Localized: 'You cannot gain {pain|Pain}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46861000000000006
+    m_Localized: '[[0]] {pain|Pain} gained'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

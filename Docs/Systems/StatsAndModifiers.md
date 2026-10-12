@@ -1,5 +1,155 @@
 # Stats and Modifiers
 
+## Unblocked hits build Block Power Momentum (2026-10-12)
+
+`UnblockedHitGrantsBlockPower` uses the `HitTakenGrantsVengeance` per-owner
+delegate binding pattern and the `RelentlessMomentum` merged outer-modifier
+pattern. Each copy grants one stack when the owner receives an unblocked attack,
+including attacks fully absorbed by Barrier or mystic absorption. Evasion and DoT
+do not emit the receipt event. `DamageInfo.IsBlocked` is reset with the attack
+payload and set before block callbacks, so a partially damaging blocked hit does
+not grant a new stack after consuming the old buff.
+
+`BlockPowerMomentum` grants fixed 0.1 Increased BlockPower per stack, capped in
+the effect at ten total stacks across all copies. Neither strength nor cap scales
+with node power. There is no timer. Its own OnBlock subscription removes all
+stacks after Block captures/applies the boosted flat power; Parry uses that captured
+power too. A zero-power successful block also consumes the buff. Effect removal
+unsubscribes the block listener, detaches the outer modifier and releases the owned
+runtime ScriptableObject. Combat reset/ordinary effect clearing remove all stacks;
+modifier rebinding preserves earned stacks. Removing the producer stops new gains
+but earned stacks remain until a block or combat reset. Self-buff insertion has no
+repeat factory or source attribution. Stat changes use the existing deferred Mods
+phase contract. Multiple attacks in one Actions phase may precede recalculation.
+
+Code:
+- `Assets/Scripts/SkillTree/Modifiers/ReactMods/UnblockedHitGrantsBlockPower.cs`
+- `Assets/Scripts/Battle/Effects/BlockPowerMomentum.cs`
+- `Assets/Scripts/Battle/DamageInfo.cs`, `AttackProcessor.cs` and
+  `Effects/EffectVisualType.cs` (new appended ID 29).
+
+Definition: `Assets/Scripts/SkillTree/Modifiers/ReactMods/UnblockedHitGrantsBlockPower.asset`.
+All settings are fixed in code; no Inspector tuning fields are needed.
+`Assets/Scripts/Visual/EffectIconsConfig.asset` maps the status icon to the owner's
+requested `Assets/Sprites/Icons/BlockPowerIcon.png` sliced sprite. The icon shows
+the stack count, including one. The tooltip uses code fallback/English localization
+without requiring a new glossary asset. The existing `blockPower` link resolves
+through TooltipTerms to the existing BlockPower description.
+
+Added shared/English localization entries (existing ru/de translations preserved;
+these three keys remain translator TODOs, no empty locale entries added):
+
+| Table | Key | English text |
+| --- | --- | --- |
+| Modifiers | `modifier.unblockedHitGrantsBlockPower.description` | When you receive an unblocked hit, gain 1 stack of Block Power Momentum. Each stack grants 10% increased {blockPower\|Block Power}. Maximum 10 stacks. Blocking a hit removes all stacks. |
+| Descriptions | `effect.blockPowerMomentum.name` | Block Power Momentum |
+| Descriptions | `effect.blockPowerMomentum.description` | Each stack grants 10% increased {blockPower\|Block Power}. Maximum 10 stacks. Blocking a hit removes all stacks. No time limit. |
+
+Manual Unity Editor steps: assign the supplied modifier asset to the intended node;
+use BlockPowerIcon for that node's NodeVisual.nodeImage. If a separately linked
+Block Power Momentum glossary term is desired, create its TooltipDescriptionData
+and register its ID/reference in TooltipTerms together. No such new link is emitted
+by this modifier. Node and tooltip configuration were not changed.
+
+Icon Generation Prompt (optional alternative; existing BlockPowerIcon was reused):
+"A sturdy angular steel shield accumulating layered icy-blue energy along its
+rim, releasing a bright blue-white impact burst as it blocks an incoming strike.
+Centered shield with a clear silhouette, three-quarter view, dark charcoal and
+brown textured background, silver metal and cool blue palette, strong highlights,
+faceted painterly fantasy game icon matching BlockPowerIcon, readable at small
+skill-tree sizes. No text, letters, numbers, logos, or watermark."
+
+Verification: `dotnet build Assembly-CSharp.csproj --no-restore -v:minimal -m:1
+-p:CustomBeforeMicrosoftCommonTargets=C:\UnityProjects\SkillTree\Temp\BlockPowerMomentumCompile.targets`
+completed with zero errors and 19 existing dependency-resolution/TutorialEventAdapter
+warnings. The temporary target includes both new sources and the existing untracked
+BleedGrantsFortificationChance source without changing generated project files.
+Script GUID/asset reference, localization ID pairing, existing blockPower term,
+icon sliced-sprite fileID and scoped diff whitespace were checked. No tests, player
+build or runtime playtest requested or performed. Status-icon appearance in live
+combat remains unverified.
+
+## Bleed applications can grant Fortification (2026-10-12)
+
+`BleedGrantsFortificationChance` uses `DelegateModifierRuntimeBinding` and the
+accepted source-side `Unit.OnEffectApplied` event, following
+`RepeatAppliedOverchargeChance`. It filters for `Bleed` and rolls independently
+per modifier copy. Chance is `clamp01(powerContext.Scale(chance))`; the authored
+asset has base chance 0.2. A success grants the owner exactly one existing
+`FortificationEffect`, using the producer-side cap pattern from
+`BarrierRestorationGrantsFortification`. No stack is added or refreshed at ten
+active stacks. Each stack grants 5% added Physical Damage Mitigation for six
+seconds and expires independently. Power scales chance, not stack strength,
+duration or stack count. Binding removal unsubscribes the handler.
+
+Rejected/absorbed effects and unattributed applications do not trigger this
+modifier. `AddRepeatedEffect` is deliberately silent and does not trigger it.
+Bleed ticks do not count as applications. Normal attack applications occur before
+block, so a blocked attack can grant a stack if its Bleed was accepted. Redirected
+Bleed still credits its source. The granted self-buff has no source attribution
+and cannot feed back into source-side effect reactions.
+
+Code: `Assets/Scripts/SkillTree/Modifiers/ReactMods/BleedGrantsFortificationChance.cs`.
+Asset: `Assets/Scripts/SkillTree/Modifiers/ReactMods/BleedGrantsFortificationChance_0.2.asset`.
+Added shared/English key in table `Modifiers`:
+`modifier.bleedGrantsFortificationChance.description` =
+`When you apply {bleed|Bleed}, you have a [[0]]% chance to gain 1 stack of {fortification|Fortification}.`
+Russian/German translations remain translator TODOs; neither table was changed.
+No new effect display-name entry is needed: existing `Descriptions` key
+`effect.fortification.name` and `EffectVisualType.Fortification` are reused.
+Existing registered `bleed` and `fortification` terms resolve to their description
+assets; no tooltip assets or database entries were changed. The modifier description
+has an English fallback. Existing Fortification status presentation is reused;
+node assignment and modifier icon mapping remain manual Unity Editor work.
+
+Verification: `dotnet build Assembly-CSharp.csproj --no-restore -v:minimal -m:1
+-p:CustomBeforeMicrosoftCommonTargets=C:\UnityProjects\SkillTree\Temp\BleedFortificationCompile.targets`
+passed with zero errors and 19 existing dependency-resolution/TutorialEventAdapter
+warnings. The temporary target explicitly includes the new source in gameplay
+compilation without editing the generated project file. Script GUID/asset reference,
+chance, localization ID pairing and existing term references were checked.
+Scoped `git diff --check` passed. No tests, player build or runtime playtest ran.
+
+## Attack modifier container per target Bleed (2026-10-12)
+
+`BleedPowerForBleedStacks` now exposes an inline `ModifierContainer`, following
+the container scaling/description pattern of `ModifierContainerPerWisp` while
+retaining the existing class and script GUID. It always runs in `OnAttack`, after
+evasion and OnHit callbacks, before critical calculation and new ailment application.
+It counts the target's existing Bleed instances and adds one contribution to the
+current attack snapshot: container value times source power multiplier times count.
+More is one scaled factor, not one independent factor per Bleed. Copies add their
+own contributions; the owner and shared container are not mutated. There is no
+persistent buff, duration, runtime binding, new event or status icon. Missing
+configuration/target or zero Bleeds adds nothing.
+
+Asset: `Assets/Scripts/SkillTree/Modifiers/SpecialMods/BleedPowerForBleedStacks_0.02.asset`.
+Its new container preserves Added BleedPower = 0.02 and existing asset identity.
+New assets use the same default. The Editor creation menu is
+`Modifiers/Special/Modifier Container Per Target Bleed`.
+Only stats consumed by the attack snapshot affect that attack (damage groups,
+critical/ailment stats and other supported attack stats). Choosing AttackSpeed,
+Maximum Health or attributes here does not grant persistent stats or rerun
+attribute conversion. Configure the container accordingly.
+
+Added shared and English entries in the `Modifiers` table:
+- `modifier.modifierContainerPerTargetBleed.description`: `For this attack, gain '[[0]]' per {bleed|Bleed} on the target`
+- `modifier.modifierContainerPerTargetBleed.unconfigured`: `Requires a stat modifier`
+
+Russian/German translations are translator TODOs; existing translations are
+preserved. No effect display-name key is needed. The existing `bleed` glossary
+term is reused; no tooltip asset or database configuration was changed. Configure
+containers, node assignments and icon mapping manually in Unity. Icon prompt
+uses the inspected `Assets/Sprites/Icons/BleedIcon.png` style: painterly glowing
+crimson wounds and drops on a dark burgundy background.
+
+Verification: `dotnet build Assembly-CSharp.csproj --no-restore -v:diag -m:1`
+passed with zero errors and 19 warnings in dependency resolution and existing
+`TutorialEventAdapter` code. The initial default parallel build returned failure
+without diagnostics; serial compilation completed. Scoped `git diff --check`
+passed. Script GUID, enum values and shared/English localization IDs were checked.
+No tests, player build or Unity runtime playtest were performed.
+
 ## Enemy kills restore Barrier (2026-10-04)
 
 `EnemyKillRestoresBarrier` follows `BlockRestoresBarrier` and binds to the owner's
@@ -598,3 +748,16 @@ modifier users need no new node, tooltip or status-icon configuration.
 Verification: dotnet build Assembly-CSharp.csproj --no-restore -v:q /clp:ErrorsOnly
 passed with zero errors and 13 dependency warnings. All six saved procIcon references
 and script GUIDs were checked against their metadata. No tests or Unity playtest run.
+
+## Pain received conversion (2026-10-12)
+
+`PainReceived` (ID 94, renamed from PainReceivedMultiplier) is a percent stat
+using ordinary Added/Increased/More arithmetic. Added 0.05 means 5% of actual
+attack HP loss converted to Pain. Two such contributions with Increased 0.2 yield
+0.12. No default base is injected. The owner will remove the previous innate
+Added 1 manually; leaving it configured means 100% base conversion.
+DamageTakenAsPain definitions were migrated to ordinary Added BaseModifiers with
+preserved GUIDs, so node references now supply this stat. Unit.ReceiveDamage
+calculates gain once after positive HP loss, retaining low-life doubling and DoT
+exclusion. Pain stacking does not scale again. See
+[reactive effects](ReactiveCombatEffects.md#pain-received-stat-2026-10-12).

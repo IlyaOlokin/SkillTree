@@ -333,10 +333,10 @@ MonoBehaviour:
     surfaceMaterial: {fileID: 2100000, guid: b71ca87b794311243a9e77c1bb95414a, type: 2}
     particleMaterial: {fileID: 2100000, guid: 5c614223a36651842aa91d7615e7cc33, type: 2}
     settings:
-      igniteColor: {r: 4, g: 1.05, b: 0.045, a: 1}
+      igniteColor: {r: 2.9960787, g: 0.78647065, b: 0.033705886, a: 1}
       chillColor: {r: 0.32, g: 1.65, b: 2.5, a: 1}
       freezeColor: {r: 0.36, g: 0.8, b: 1.2, a: 1}
-      overchargeColor: {r: 3.5, g: 2.9, b: 0.08, a: 1}
+      overchargeColor: {r: 2.608238, g: 2.1611114, b: 0.059616864, a: 1}
       bleedColor: {r: 0.88, g: 0.025, b: 0.08, a: 1}
       igniteApplication: 0.85
       chillApplication: 0.8
