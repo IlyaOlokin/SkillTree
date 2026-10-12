@@ -282,6 +282,15 @@ Never change power merely to evade the content budget in the filling guide.
 The tree collects modifiers from active nodes, active local-modifier gems and
 bonus zones. Modifier implementations and `StatCalculator` determine actual
 stat behavior; a tooltip or asset name is not a substitute for checking them.
+
+BonusZone membership is its serialized `nodes` list, not a polygon containment
+query. The current count uses `Node.IsActive`, despite the `AllocatedNodesCount`
+name. Editing the SpriteShape visual boundary does not update that list.
+The [animated zone visual implementation](../Reference/BonusZoneVisualPlan.md)
+preserves this separation. MainScene's BonusZone now uses a transparent cyan
+procedural fill and a generated glowing contour driven by the same closed linear
+SpriteShape spline. Appearance controls and verification limits are recorded there.
+
 Follow [stats and modifiers](StatsAndModifiers.md) for calculation phases and
 [combat and effects](CombatAndEffects.md) for the attack snapshot and event order.
 

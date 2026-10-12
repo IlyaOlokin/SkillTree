@@ -55,6 +55,11 @@ connects those rewards and enemy gold to inventory, wallet and shop purchase his
 Unit geometry and painterly shader controls are described in
 [Unit shape rendering](Reference/UnitShapeRendering.md).
 
+The [BonusZone animated visual implementation](Reference/BonusZoneVisualPlan.md)
+keeps SpriteShape authoring and derives a moving fill and glowing spark contour from
+one spline. It is applied in MainScene and records the separate manually configured
+node membership, supported outline constraints and a Play Mode screenshot.
+
 The proposed [ailment visual integration](Reference/AilmentVisualPlan.md) covers
 shape-aware application/presence effects, per-instance Bleed sources and source-inspected integration points; it is not implemented behavior.
 

@@ -423,3 +423,12 @@ three shapes; the 350 ms frame contained only the base units. Actual combat
 callback playback remains source-reviewed rather than playtested.
 The subsequent Overcharge removal revision holds its leading edge and contracts
 the tail toward it, replacing uniform line dimming while preserving the deadline.
+
+BL-032 evidence update, 2026-10-12: the BonusZone aura compiled and was applied
+to the existing nine-point linear SpriteShape in MainScene. A composited Play Mode
+Game View capture verified transparent cyan fill, glowing contour and readable
+nodes/links. See the [implementation record and screenshot](Reference/BonusZoneVisualPlan.md#implementation-record).
+This closes only the scoped appearance/wiring check for that zone; arbitrary
+outline edits, far zoom and target-device performance remain unverified. One
+Pipeline framing timeout during Play Mode initialization was resolved by retrying
+after the scene was ready; it was a tooling error, not an observed aura failure.
