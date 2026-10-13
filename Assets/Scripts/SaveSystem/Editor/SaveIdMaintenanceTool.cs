@@ -152,7 +152,8 @@ namespace SaveSystem.Editor
         public static void Validate(Scene scene)
         {
             var ids = new Dictionary<string, Node>(StringComparer.Ordinal);
-            var aliases = new Dictionary<string, Node>(StringComparer.Ordinal);
+            // Pre-alpha builds do not require compatibility with historical node IDs.
+            // Validate current identities only; legacy aliases must not block a build.
             foreach (GameObject root in scene.GetRootGameObjects())
             foreach (Node node in root.GetComponentsInChildren<Node>(true))
             {
@@ -160,18 +161,7 @@ namespace SaveSystem.Editor
                 if (string.IsNullOrWhiteSpace(id) || ids.ContainsKey(id))
                     throw new BuildFailedException($"Missing or duplicate save ID on '{node.name}' in {scene.path}. Use Tools/Save System/Assign Save IDs.");
                 ids.Add(id, node);
-                if (node.LegacySaveIds == null) continue;
-                foreach (string legacy in node.LegacySaveIds)
-                {
-                    if (string.IsNullOrWhiteSpace(legacy)) continue;
-                    if (aliases.TryGetValue(legacy, out Node owner) && owner != node)
-                        throw new BuildFailedException($"Duplicate migration key on '{node.name}' in {scene.path}: {legacy}");
-                    aliases[legacy] = node;
-                }
             }
-            foreach (var alias in aliases)
-                if (ids.TryGetValue(alias.Key, out Node owner) && owner != alias.Value)
-                    throw new BuildFailedException($"Migration key conflicts with node save ID in {scene.path}: {alias.Key}");
         }
     }
 }

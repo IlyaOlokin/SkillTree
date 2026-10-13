@@ -161,6 +161,11 @@ and is distinct from deleting a profile or clearing global settings.
 ## IDs and version changes
 
 - Tree state uses stable node IDs and legacy aliases; see [tree persistence](SkillTree.md).
+  As of 2026-10-13, pre-alpha builds validate only current node IDs for presence
+  and uniqueness. Duplicate legacy aliases or aliases matching another node's
+  current ID do not block builds; historical save compatibility is not required
+  at this stage. Existing runtime migration code and serialized aliases remain,
+  so loading an old save with ambiguous aliases can still fail.
 - Item records use definition IDs; gem records additionally carry instance identity.
 - Definition catalogs load built-in `Resources/Items` definitions and scan loaded
   definitions. An arbitrary asset existing in the project is not enough to make it
