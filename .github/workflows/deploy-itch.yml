@@ -10,91 +10,85 @@ on:
         description: "Game version"
         required: true
         default: "0.1.0"
+      itch_game:
+        description: "Existing itch.io project URL slug (blank uses ITCH_GAME variable)"
+        required: false
+        default: ""
+      windows_channel:
+        description: "Windows channel (windows-recovery bypasses the old channel)"
+        required: true
+        default: "windows"
+      webgl_channel:
+        description: "WebGL channel (webgl-recovery bypasses the old channel)"
+        required: true
+        default: "webgl"
 
 permissions:
   contents: read
   actions: read
 
+concurrency:
+  group: itch-deploy
+  cancel-in-progress: false
+
 env:
   ITCH_USER: ${{ vars.ITCH_USER }}
-  ITCH_GAME: ${{ vars.ITCH_GAME }}
+  ITCH_GAME: ${{ inputs.itch_game || vars.ITCH_GAME }}
   BUTLER_PATH: C:\Tools\butler\butler.exe
 
 jobs:
   deploy:
-    name: Deploy existing artifacts
+    name: Deploy ${{ matrix.platform }}
     runs-on: [self-hosted, Windows, unity6]
-
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: Windows
+            artifact: StandaloneWindows64
+          - platform: WebGL
+            artifact: WebGL
+    env:
+      CHANNEL: ${{ matrix.platform == 'Windows' && inputs.windows_channel || inputs.webgl_channel }}
+      BUILD_VERSION: ${{ inputs.version }}
+      DEPLOY_PATH: BuildsToDeploy/${{ github.run_id }}/${{ github.run_attempt }}/${{ matrix.platform }}
+      BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
     steps:
-      - name: Download Windows artifact
+      - name: Validate deployment settings
+        shell: powershell
+        run: |
+          if (!(Test-Path -LiteralPath $env:BUTLER_PATH)) { throw "Butler executable not found" }
+          foreach ($setting in @('ITCH_USER', 'ITCH_GAME', 'BUTLER_API_KEY', 'BUILD_VERSION')) {
+            if ([string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($setting))) {
+              throw "Required setting $setting is empty"
+            }
+          }
+          if ($env:CHANNEL -notmatch '^[a-z0-9][a-z0-9-]*$') { throw "Invalid channel name" }
+          & $env:BUTLER_PATH -V
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: ${{ github.event.inputs.version }}-StandaloneWindows64
-          run-id: ${{ github.event.inputs.build_run_id }}
+          name: ${{ inputs.version }}-${{ matrix.artifact }}
+          run-id: ${{ inputs.build_run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path: BuildsToDeploy/Windows
+          path: ${{ env.DEPLOY_PATH }}
 
-      - name: Download WebGL artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ github.event.inputs.version }}-WebGL
-          run-id: ${{ github.event.inputs.build_run_id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path: BuildsToDeploy/WebGL
-
-      - name: Validate Butler
+      - name: Push build
         shell: powershell
         run: |
-          if (!(Test-Path "${{ env.BUTLER_PATH }}")) {
-            Write-Error "Butler not found at ${{ env.BUTLER_PATH }}"
-            exit 1
-          }
+          $target = "$($env:ITCH_USER)/$($env:ITCH_GAME):$($env:CHANNEL)"
+          & $env:BUTLER_PATH push $env:DEPLOY_PATH $target --userversion $env:BUILD_VERSION
+          $pushExitCode = $LASTEXITCODE
+          if ($pushExitCode -ne 0) { exit $pushExitCode }
+          Write-Host "::warning::Upload accepted; itch.io processing is not verified. Check the channel before treating this build as published."
+          "Uploaded $env:BUILD_VERSION to $target. Publication still requires itch.io processing and upload visibility settings." | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
 
-          & "${{ env.BUTLER_PATH }}" -V
-
-      - name: Validate itch variables
+      - name: Diagnose channel status
+        if: always()
         shell: powershell
         run: |
-          if ("${{ env.ITCH_USER }}" -eq "") {
-            Write-Error "ITCH_USER variable is empty"
-            exit 1
-          }
-
-          if ("${{ env.ITCH_GAME }}" -eq "") {
-            Write-Error "ITCH_GAME variable is empty"
-            exit 1
-          }
-
-          if ("${{ secrets.BUTLER_API_KEY }}" -eq "") {
-            Write-Error "BUTLER_API_KEY secret is empty"
-            exit 1
-          }
-
-      - name: Show downloaded artifacts
-        shell: powershell
-        run: |
-          Write-Host "Windows build:"
-          Get-ChildItem "BuildsToDeploy\Windows" -Recurse
-
-          Write-Host "WebGL build:"
-          Get-ChildItem "BuildsToDeploy\WebGL" -Recurse
-
-      - name: Push Windows build
-        shell: powershell
-        env:
-          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
-        run: |
-          & "${{ env.BUTLER_PATH }}" push `
-            "BuildsToDeploy\Windows" `
-            "${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:windows" `
-            --userversion "${{ github.event.inputs.version }}"
-
-      - name: Push WebGL build
-        shell: powershell
-        env:
-          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
-        run: |
-          & "${{ env.BUTLER_PATH }}" push `
-            "BuildsToDeploy\WebGL" `
-            "${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:webgl" `
-            --userversion "${{ github.event.inputs.version }}"
+          if (!(Test-Path -LiteralPath $env:BUTLER_PATH) -or [string]::IsNullOrWhiteSpace($env:BUTLER_API_KEY)) { exit 0 }
+          & $env:BUTLER_PATH status "$($env:ITCH_USER)/$($env:ITCH_GAME):$($env:CHANNEL)"
+          exit $LASTEXITCODE
