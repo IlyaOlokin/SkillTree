@@ -1,5 +1,132 @@
 # Stats and Modifiers
 
+## Fortification limits as stats (2026-10-13)
+
+`StatType.MinimumFortificationStacks = 95` and
+`StatType.MaximumFortificationStacks = 96` replace the two dedicated modifier
+classes. Existing serialized enum IDs remain unchanged. `Unit.ResetUnit` supplies
+Added MaximumFortificationStacks = 30 before innate and collected modifiers;
+MinimumFortificationStacks starts at zero. Ordinary `BaseModifier` / containers
+can contribute Added, Increased or More and use normal node-power scaling.
+The usual Added × (1 + Increased) × product(More factors) formula applies to the
+whole maximum, including its base 30. For example Added +5 and -4 give 31; 20%
+Increased without Added bonuses gives 36.
+
+Both final stat values are floored after all arithmetic (in `StatCalculator` and
+cached-value setters), never per contribution. Two contributions of 2.7 produce
+5, not 4. `FortificationController` clamps the effective maximum to a nonnegative
+integer and the effective minimum to 0–maximum. New stats display as counts with
+zero decimal places; modifier descriptions may show fractional contributions
+because those combine before flooring. They are not implicitly part of Defence
+or attack-snapshot stat groups.
+
+The plain C# `FortificationController` is constructed/disposed by `Unit`, without
+new prefab components or Inspector wiring. It observes OnStatsRecalculated and
+OnEffectsChanged, trims stacks above the maximum, fills missing minimum stacks
+and reestablishes the minimum after combat reset/ordinary effect clearing.
+Reentrant notifications during its own changes are guarded. `FortificationEffect`
+uses generic `BaseEffect.CanApply` / `CanRemove` hooks to enforce upper/lower
+bounds in every effect insertion/removal path. ClearAllEffects bypasses removal
+restrictions; controller destruction clears change listeners before teardown.
+`EffectController` contains no Fortification-specific formulas or registrations.
+Barrier/Evade/Bleed producers read `unit.Fortification.Maximum`. Reduction remains
+1% per stack and is capped at 100%; positive damage consumes up to five stacks
+above the minimum. Existing status visuals/name/glossary are reused. Stat-name tooltip links map to the existing registered fortification term through StatTypeTooltipFormatter.
+
+Removed `SpecialMods/MinimumFortificationStacks.cs` and
+`SpecialMods/MaximumFortificationStacks.cs` with their script metas. Their old
+assets, including MaximumFortificationStacks_1/_3, and assignments are intentionally
+left for the owner's manual replacement with BaseModifier; they will have missing
+scripts until replaced. No replacement BaseModifier assets or node changes were
+made. Old modifier-description localization keys are retained for migration.
+
+New shared/English localization entries (ru/de translator TODOs; no empty entries):
+
+| Table | Key | English text |
+| --- | --- | --- |
+| Descriptions | enum.StatType.MinimumFortificationStacks | Minimum Fortification Stacks |
+| Descriptions | enum.StatType.MaximumFortificationStacks | Maximum Fortification Stacks |
+| Modifiers | modifier.container.added.MinimumFortificationStacks | [[0]] to minimum {fortification\|Fortification} stacks. |
+| Modifiers | modifier.container.increased.MinimumFortificationStacks | [[0]]% increased minimum {fortification\|Fortification} stacks. |
+| Modifiers | modifier.container.decreased.MinimumFortificationStacks | [[0]]% decreased minimum {fortification\|Fortification} stacks. |
+| Modifiers | modifier.container.more.MinimumFortificationStacks | [[0]]% more minimum {fortification\|Fortification} stacks. |
+| Modifiers | modifier.container.less.MinimumFortificationStacks | [[0]]% less minimum {fortification\|Fortification} stacks. |
+| Modifiers | modifier.container.none.MinimumFortificationStacks | Your minimum number of {fortification\|Fortification} stacks is 0. |
+| Modifiers | modifier.container.added.MaximumFortificationStacks | [[0]] to maximum {fortification\|Fortification} stacks. |
+| Modifiers | modifier.container.increased.MaximumFortificationStacks | [[0]]% increased maximum {fortification\|Fortification} stacks. |
+| Modifiers | modifier.container.decreased.MaximumFortificationStacks | [[0]]% decreased maximum {fortification\|Fortification} stacks. |
+| Modifiers | modifier.container.more.MaximumFortificationStacks | [[0]]% more maximum {fortification\|Fortification} stacks. |
+| Modifiers | modifier.container.less.MaximumFortificationStacks | [[0]]% less maximum {fortification\|Fortification} stacks. |
+| Modifiers | modifier.container.none.MaximumFortificationStacks | Your maximum number of {fortification\|Fortification} stacks is 0. |
+
+Manual Unity Editor Steps: replace old definitions/assignments with BaseModifier
+assets, Modifier Type Added, desired Stat Type MinimumFortificationStacks or
+MaximumFortificationStacks, and signed Value. Keep the ordinary PreAttribute
+priority. Do not manually add another base maximum of 30. Configure node icons
+manually. The registered fortification glossary remains valid; its static text
+states the base maximum 30 and does not dynamically show a particular owner's
+modified limits. A tooltip asset/configuration change remains manual.
+
+Icon Generation Prompt (proposed style, minimum): Create a square painterly
+fantasy RPG icon of a steel shield anchored by interlocking luminous cyan plates.
+Bold centered silhouette, silver and deep blue palette, cold rim lighting, dark
+smoky background, strong contrast readable at small sizes. No text, letters,
+numbers, logos or watermarks.
+
+Icon Generation Prompt (proposed style, maximum): Create a square painterly
+fantasy RPG icon of a steel shield encircled by adjustable cyan armor segments,
+with one segment sliding into place. Bold centered silhouette, silver and deep
+blue palette, cold rim lighting, dark smoky background, strong contrast readable
+at small sizes. No text, letters, numbers, logos or watermarks.
+
+Verification: Unity CLI recompile/recompile_status targeting
+C:/UnityProjects/SkillTree completed without compilation errors. Source review
+covered final flooring, signed Added stacking, default initialization, cap/floor
+hooks and lifecycle cleanup. New localization entries were authored through the
+live Editor. No tests, player build or runtime playtest were performed.
+
+## Fortification on Evade (2026-10-13)
+
+`EvadeToMitigationCharges` retains its class, script GUID and existing definition
+`Assets/Scripts/SkillTree/Modifiers/ReactMods/EvadeToMitigationCharges.asset` so
+node references remain valid. Its Inspector now exposes `stacksPerEvade` (default
+1, nonnegative integer), replacing the obsolete BaseModifier reference. Each
+owner `OnEvade` grants that many Fortification stacks, limited by the shared thirty
+active-stack cap. The amount is fixed rather than scaled by node power. Multiple
+copies grant in subscription order and share the cap. Zero grants nothing.
+
+The existing per-owner delegate binding unsubscribes on removal/recalculation;
+earned Fortification remains under its own lifecycle. The grant pattern follows
+`BarrierRestorationGrantsFortification`: direct independent effects, without a
+repeat factory or source-side effect attribution. Fortification supplies its
+existing status icon, display name and glossary description.
+
+Updated English table `Modifiers`, key
+`modifier.evadeToMitigationCharges.description`:
+`On Evade: gain [[0]] stacks of {fortification|Fortification}.`
+The existing registered Fortification term is reused. No new glossary asset,
+description-name key or empty ru/de entries were added; ru/de translation is TODO.
+The Editor creation menu is `Modifiers/Reactive/Evade Grants Fortification`.
+
+Removed unused `NextHitDamageMitigation.cs`/`.meta`, its icon-config entry and
+`BaseModifiers/DamageMitigation_0.1.asset`/`.meta` after checking references.
+EffectVisualType ID 5 is retired; remaining serialized IDs are unchanged. The
+icon sprite itself was retained. Manual Unity Editor Steps: adjust Stacks Per
+Evade on the existing definition if a different grant amount is desired.
+
+Icon Generation Prompt (proposed style; existing mappings retained):
+Create a square painterly dark-fantasy RPG skill icon showing a silver shield
+forming from luminous cyan armor plates as a blurred incoming blade passes beside
+it. Centered bold shield silhouette, clear sense of an avoided strike becoming
+protection, cold azure glow, dramatic rim lighting, dark smoky background, strong
+contrast readable at small sizes. No text, letters, numbers, logos or watermark.
+
+Verification: Unity CLI recompile/recompile_status targeting
+`C:/UnityProjects/SkillTree` reported up_to_date with no compilation errors after
+the Editor compiled the changes. Scoped diff whitespace checks passed. Serialized stacksPerEvade=1,
+preserved script GUID, English localization and obsolete-reference removal were
+checked. No tests, player build or runtime playtest requested or performed.
+
 ## Unblocked hits build Block Power Momentum (2026-10-12)
 
 `UnblockedHitGrantsBlockPower` uses the `HitTakenGrantsVengeance` per-owner
@@ -41,9 +168,9 @@ these three keys remain translator TODOs, no empty locale entries added):
 
 | Table | Key | English text |
 | --- | --- | --- |
-| Modifiers | `modifier.unblockedHitGrantsBlockPower.description` | When you receive an unblocked hit, gain 1 stack of Block Power Momentum. Each stack grants 10% increased {blockPower\|Block Power}. Maximum 10 stacks. Blocking a hit removes all stacks. |
+| Modifiers | `modifier.unblockedHitGrantsBlockPower.description` | When you receive an unblocked hit, gain 1 stack of Block Power Momentum. Each stack grants 10% increased {blockPower\|Block Power}. Maximum 30 stacks. Blocking a hit removes all stacks. |
 | Descriptions | `effect.blockPowerMomentum.name` | Block Power Momentum |
-| Descriptions | `effect.blockPowerMomentum.description` | Each stack grants 10% increased {blockPower\|Block Power}. Maximum 10 stacks. Blocking a hit removes all stacks. No time limit. |
+| Descriptions | `effect.blockPowerMomentum.description` | Each stack grants 10% increased {blockPower\|Block Power}. Maximum 30 stacks. Blocking a hit removes all stacks. No time limit. |
 
 Manual Unity Editor steps: assign the supplied modifier asset to the intended node;
 use BlockPowerIcon for that node's NodeVisual.nodeImage. If a separately linked
@@ -77,9 +204,9 @@ accepted source-side `Unit.OnEffectApplied` event, following
 per modifier copy. Chance is `clamp01(powerContext.Scale(chance))`; the authored
 asset has base chance 0.2. A success grants the owner exactly one existing
 `FortificationEffect`, using the producer-side cap pattern from
-`BarrierRestorationGrantsFortification`. No stack is added or refreshed at ten
-active stacks. Each stack grants 5% added Physical Damage Mitigation for six
-seconds and expires independently. Power scales chance, not stack strength,
+`BarrierRestorationGrantsFortification`. No stack is added or refreshed at thirty
+active stacks. Each stack reduces all incoming damage by 1%, has no time limit and is consumed
+five at a time on positive damage receipt. Power scales chance, not stack strength,
 duration or stack count. Binding removal unsubscribes the handler.
 
 Rejected/absorbed effects and unattributed applications do not trigger this
@@ -566,54 +693,76 @@ the installed Unity/project references with exit code 0. Existing field-assignme
 warnings remain. Script GUID/asset reference and shared/English key ID were
 inspected. No tests, player build, gameplay or visual playtest were run.
 
-## Fortification from restored Barrier (2026-10-04)
+## Fortification from restored Barrier (updated 2026-10-13)
 
-BarrierRestorationGrantsFortification follows the barrier restoration delegate
-binding and BarrierSurge independent timed-effect patterns. Each actual restored
-charge, including bonus restoration, adds one FortificationEffect for six seconds.
-RestoreFull/combat reset is not a restoration trigger. At ten active stacks on the
-owner, new restoration is ignored without refreshing or replacing a stack.
-Multiple modifier copies share the cap and add in subscription order. The first
-accepted copies fill the available slots. No repeat factory is supplied, so generic
-received-effect repetition cannot exceed the cap.
+`BarrierRestorationGrantsFortification` retains its restoration delegate binding.
+Each actual restored charge, including bonus restoration, adds the configured
+`stacksPerRestoration` independent Fortification stacks (default 1, nonnegative
+integer). The grant count does not scale with node power. RestoreFull/combat reset
+is not a restoration trigger.
+Restoration, Evade and Bleed producers share the thirty-stack cap.
 
-Each stack owns an Added PhysicalDamageMitigation BaseModifier. FortificationEffect hardcodes its value to 0.05; node power does not scale it. Duration and cap stay fixed. Expiry removes its
-external modifier and the controller releases the runtime ScriptableObject.
-Unbinding stops future grants but leaves granted stacks until expiry; combat reset
-clears them. Ordinary modifier recalculation scheduling remains unchanged.
-Without power or other mitigation modifiers, ten stacks contribute 0.50 mitigation.
-Per-type mitigation retains its existing clamp; this is not a new uncapped layer.
+Fortification no longer owns a timed PhysicalDamageMitigation modifier. Following
+existing direct damage processing in `Unit.ReceiveDamage`, its helper reads live
+active effects and reduces every incoming damage component by 1% per stack, then
+removes up to five stacks. Thirty stacks reduce this receipt by 30%; the next receipt
+uses twenty-five stacks and 25%, even within the same Actions phase. This is a separate
+multiplicative reduction after ordinary mitigation and block, before Barrier and
+mystic absorption. Zero-damage/fully blocked attacks and evasion consume nothing;
+positive damage absorbed by Barrier consumes up to five stacks. `ReceiveDoT` applies the
+same rule per positive DoT receipt. Deferred damage-debt payments bypass this
+helper because they directly call Health and must not be mitigated twice.
 
-EffectVisualType.Fortification = 27 groups stacks into one icon. Text always shows
-stack count, including one; inherited timer progress tracks the closest expiry.
-Icon mapping uses the existing default sprite until manual setup.
+Stacks have no time limit. Removing a producer leaves earned stacks; ordinary
+combat reset/effect clearing removes them. Node power does not scale stack
+strength or cap. EffectVisualType.Fortification = 27 and grouped stack text remain;
+there is no expiry timer and no new status-icon configuration.
 
-Definition:
-Assets/Scripts/SkillTree/Modifiers/ReactMods/BarrierRestorationGrantsFortification.asset
-The producer has no numeric settings. Node assignment and icon mapping remain manual Unity Editor steps. The requested fortification glossary entry is configured in TooltipTerms.asset, with Descriptions/Fortification.asset referencing the localized effect name and description.
+Existing definition (unchanged):
+`Assets/Scripts/SkillTree/Modifiers/ReactMods/BarrierRestorationGrantsFortification.asset`.
+Existing glossary registration points to `Descriptions/Fortification.asset` and
+uses Descriptions keys. On 2026-10-13 the tooltip asset was split into three
+separate `descriptions` entries so the UI creates separate paragraph blocks:
+`effect.fortification.reduction` = `Each stack reduces incoming damage by 1%.`,
+`effect.fortification.limit` = `Maximum 30 stacks.`, and
+`effect.fortification.consumption` =
+`Taking damage removes 5 stacks after applying their damage reduction.`
+The shared/English entries were saved through Unity API; ru/de are translator
+TODOs. TooltipTerms' existing fortification registration was maintained and its
+lookup was verified against the same tooltip asset. The full description key
+remains available for code fallback. This asset-only change required no compilation.
 
-English localization and shared IDs added:
-- Modifiers, modifier.barrierRestorationGrantsFortification.description:
-  Each restored {barrier|Barrier} grants 1 stack of {fortification|Fortification}.
-- Descriptions, effect.fortification.name: Fortification
-- Descriptions, effect.fortification.description:
-  Each stack grants 5% added Physical Damage Mitigation for 6 seconds. Maximum 10 stacks, each expiring independently. At maximum stacks, new restoration does not refresh them. The icon shows stack count; its border tracks the next expiry.
+Updated English `Descriptions` / `effect.fortification.description` (blank lines
+separate semantic parts):
 
-All three keys remain translator TODOs for ru/de; no translations or empty entries
-were added. Explicit English fallbacks work without tooltip database configuration.
+> Each stack reduces incoming damage by 1%.
+>
+> Maximum 30 stacks.
+>
+> Taking damage removes 5 stacks after applying their damage reduction.
 
-Icon generation prompt (proposed style; no icon reference inspected):
-Create a square dark-fantasy RPG skill icon showing a luminous blue barrier shard
-fusing into a solid steel shield, with layered armor plates forming around its
-center. One bold shield silhouette, cold azure energy and silver steel, restrained
-warm highlights, dramatic rim lighting, dark smoky background, painterly detail
-and strong contrast readable at small skill-tree and status-icon sizes. No text,
-letters, numbers, logos, borders, or watermarks.
+`effect.fortification.name` remains `Fortification`. The restoration producer's
+existing definition now serializes `stacksPerRestoration: 1`. English `Modifiers` /
+`modifier.barrierRestorationGrantsFortification.description` is
+`Each restored {barrier|Barrier} grants [[0]] stacks of {fortification|Fortification}.`
+ru/de description translation remains a translator TODO;
+no existing translations were overwritten and no empty entries were added.
 
-Verification: Visual Studio Roslyn csc.exe @Temp/FortificationCompile.rsp compiled
-gameplay sources against installed Unity/project DLL references with exit code 0, zero errors and existing field-assignment warnings. Script GUID/asset linkage and English/shared localization IDs were inspected. No tests, player
-build, gameplay or visual playtest were run. Runtime behavior and sprite setup
-remain to be checked in Unity.
+Icon Generation Prompt (proposed style, existing icon unchanged):
+Create a square dark-fantasy RPG icon showing a steel shield built from layered
+armor plates, one outer plate breaking away under an incoming impact while the
+remaining shield holds firm. Centered bold silhouette, silver steel and cold
+azure protective glow, dramatic rim lighting, dark smoky background, painterly
+detail and strong contrast readable at small sizes. No text, letters, numbers,
+logos or watermark.
+
+Manual Unity Editor Steps: set Stacks Per Restoration on the existing definition
+to the desired count. Existing node links, glossary term and icon mappings remain usable.
+Verification: `unity command recompile` and `recompile_status` targeting
+`C:/UnityProjects/SkillTree` completed with no compilation errors on 2026-10-13.
+The English table was saved through Unity API with the revised three-paragraph
+description. Scoped source/diff and existing glossary registration were inspected.
+No tests, player build or runtime playtest were performed.
 
 ## Lowest elemental damage penetration (2026-10-04)
 

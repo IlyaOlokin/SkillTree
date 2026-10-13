@@ -69,6 +69,12 @@ namespace Battle
                 return false;
             }
 
+            if (!newEffect.CanApply(_owner))
+            {
+                newEffect.ReleaseRuntimeModifiers();
+                return false;
+            }
+
             var existing = Effects
                 .Find(e => e.Effect.GetType() == newEffect.GetType());
 
@@ -203,6 +209,8 @@ namespace Battle
                 return;
             }
 
+            if (!_isClearing && !activeEffect.Effect.CanRemove(_owner)) return;
+
             Effects.RemoveAt(index);
             try
             {
@@ -234,6 +242,7 @@ namespace Battle
 
         private void OnDestroy()
         {
+            OnEffectsChanged = null;
             ClearAllEffects();
         }
     }

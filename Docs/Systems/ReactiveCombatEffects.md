@@ -55,10 +55,10 @@ copy its charged container to an attack snapshot. It discharges on OnAttackCompl
 not OnHit; that event also occurs for evaded attacks. Do not reuse the ordinary
 next-hit consumption assumption for this class.
 
-NextHitDamageMitigation installs an outer modifier and schedules pending stat
-recalculation after the current attack. OnGettingHit marks it used and removes
-its own active entry immediately; removal also schedules recalculation. This
-receipt callback is distinct from positive HP loss and may occur with full absorption.
+EvadeToMitigationCharges now grants configurable Fortification stacks on OnEvade,
+using the restoration producer pattern and the shared thirty-stack cap. The old
+NextHitDamageMitigation effect and its dedicated mitigation asset were removed
+on 2026-10-13. See [current modifier behavior](StatsAndModifiers.md#fortification-on-evade-2026-10-13).
 
 CyclicAilmentChanceIndicatorEffect tracks an Ignite/Chill/Overcharge chance cycle
 and subscribes to OnAttackCompleted. Its source presence is checked on effect ticks.
@@ -86,7 +86,7 @@ Source files are under `Assets/Scripts/Battle/Effects`:
 - `Assets/Scripts/Battle/Effects/BleedPhysicalDamageBuff.cs`
 - `Assets/Scripts/Battle/Effects/NextAttackModifierEffect.cs`
 - `Assets/Scripts/Battle/Effects/TimedNextAttackModifierEffect.cs`
-- `Assets/Scripts/Battle/Effects/NextHitDamageMitigation.cs`
+- `Assets/Scripts/Battle/Effects/FortificationEffect.cs`
 - `Assets/Scripts/Battle/Effects/CyclicAilmentChanceIndicatorEffect.cs`
 
 ## Barrier Surge on barrier loss (2026-10-03)

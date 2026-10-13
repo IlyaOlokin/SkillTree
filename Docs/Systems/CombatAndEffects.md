@@ -128,11 +128,14 @@ uses `1 + CritDamageBonus × CriticalLayerCount`. Normal crits have zero or one
 layer. When multi-crit is enabled, positive chance supplies whole guaranteed
 layers plus a roll for the fractional remainder.
 
-`Unit.ReceiveDamage` processes barrier damage first, converts mystic damage into
+`Unit.ReceiveDamage` applies Fortification's live-stack damage reduction first
+(1% per stack, consuming up to five stacks on positive incoming damage), then processes
+barrier damage, converts mystic damage into
 absorption, then applies health damage. It measures actual health lost for
 `OnHealthDamageTaken`. These stages mutate the received damage object.
 
-`ReceiveDoT` directly calls health damage with `displayDamage = false`; it does not run
+`ReceiveDoT` applies the same Fortification reduction/five-stack consumption, then
+calls health damage with `displayDamage = false`; it does not run
 the normal attack pipeline, barrier receipt or hit callbacks. Inspect the specific
 effect and `Health` implementation before extending DoT mitigation behavior.
 See [resource formulas](DefencesAndResources.md) and

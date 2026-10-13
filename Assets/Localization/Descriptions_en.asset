@@ -257,7 +257,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5085118307897344
-    m_Localized: Each stack grants [[0]]% increased Barrier Regeneration Speed and [[1]]% increased {elemental|Elemental} Damage for [[2]] seconds.
+    m_Localized: Each stack grants [[0]]% increased Barrier Regeneration Speed and
+      [[1]]% increased {elemental|Elemental} Damage for [[2]] seconds.
     m_Metadata:
       m_Items: []
   - m_Id: 5086869182353408
@@ -541,7 +542,9 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000003
-    m_Localized: Chance to parry a successfully blocked hit. Parry doubles the flat damage absorbed by Block Power and grants 30% Attack Progress, scaled by Parry Power. Block reactions still trigger.
+    m_Localized: Chance to parry a successfully blocked hit. Parry doubles the flat
+      damage absorbed by Block Power and grants 30% Attack Progress, scaled by Parry
+      Power. Block reactions still trigger.
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000020
@@ -555,11 +558,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000029
-    m_Localized: Parry is rolled only after a successful {block|Block}. With 50% Block Chance and 10% Parry Chance, 5% of incoming hits are parried.
+    m_Localized: Parry is rolled only after a successful {block|Block}. With 50%
+      Block Chance and 10% Parry Chance, 5% of incoming hits are parried.
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000030
-    m_Localized: Parry doubles the flat damage absorbed by {blockPower|Block Power} for that hit and grants 30% Attack Progress, multiplied by max(0, 1 + Parry Power). Block reactions still trigger; the floating message shows Parry instead of Block.
+    m_Localized: Parry doubles the flat damage absorbed by {blockPower|Block Power}
+      for that hit and grants 30% Attack Progress, multiplied by max(0, 1 + Parry
+      Power). Block reactions still trigger; the floating message shows Parry instead
+      of Block.
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000031
@@ -579,203 +586,237 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000001
-    m_Localized: 'Damage Mitigation'
+    m_Localized: Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000002
-    m_Localized: 'Elemental Damage Mitigation'
+    m_Localized: Elemental Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000003
-    m_Localized: 'Mystic Damage Mitigation'
+    m_Localized: Mystic Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000004
-    m_Localized: 'Physical Damage Mitigation'
+    m_Localized: Physical Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000005
-    m_Localized: 'Fire Damage Mitigation'
+    m_Localized: Fire Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000006
-    m_Localized: 'Cold Damage Mitigation'
+    m_Localized: Cold Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000007
-    m_Localized: 'Lightning Damage Mitigation'
+    m_Localized: Lightning Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000008
-    m_Localized: 'Light Damage Mitigation'
+    m_Localized: Light Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000009
-    m_Localized: 'Darkness Damage Mitigation'
+    m_Localized: Darkness Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000010
-    m_Localized: 'Poison Damage Mitigation'
+    m_Localized: Poison Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46847000000000000
-    m_Localized: 'Steel Wisp'
+    m_Localized: Steel Wisp
     m_Metadata:
       m_Items: []
   - m_Id: 46847000000000002
-    m_Localized: 'Ash Wisp'
+    m_Localized: Ash Wisp
     m_Metadata:
       m_Items: []
   - m_Id: 46847000000000004
-    m_Localized: 'Frost Wisp'
+    m_Localized: Frost Wisp
     m_Metadata:
       m_Items: []
   - m_Id: 46847000000000006
-    m_Localized: 'Storm Wisp'
+    m_Localized: Storm Wisp
     m_Metadata:
       m_Items: []
   - m_Id: 46848000000000001
-    m_Localized: 'Barrier Surge'
+    m_Localized: Barrier Surge
     m_Metadata:
       m_Items: []
   - m_Id: 46849000000000002
-    m_Localized: 'Offence'
+    m_Localized: Offence
     m_Metadata:
       m_Items: []
   - m_Id: 46849000000000003
-    m_Localized: 'Defence'
+    m_Localized: Defence
     m_Metadata:
       m_Items: []
   - m_Id: 46849000000000004
-    m_Localized: '[[0]]% increased Damage. Completed attacks: [[1]]/[[2]], including misses. At [[2]], switch to Defence.'
+    m_Localized: '[[0]]% increased Damage. Completed attacks: [[1]]/[[2]], including
+      misses. At [[2]], switch to Defence.'
     m_Metadata:
       m_Items: []
   - m_Id: 46849000000000005
-    m_Localized: '[[0]]% increased Armor and Evasion. Incoming attacks: [[1]]/[[2]]. Evades do not count; blocked and fully absorbed attacks count. At [[2]], return to Offence.'
+    m_Localized: '[[0]]% increased Armor and Evasion. Incoming attacks: [[1]]/[[2]].
+      Evades do not count; blocked and fully absorbed attacks count. At [[2]], return
+      to Offence.'
     m_Metadata:
       m_Items: []
   - m_Id: 46850000000000002
-    m_Localized: 'Damage Debt'
+    m_Localized: Damage Debt
     m_Metadata:
       m_Items: []
   - m_Id: 46850000000000003
-    m_Localized: 'Deferred attack damage is paid evenly as Health loss. Each debt has its own deadline; new hits do not extend it. Payments bypass defences and cannot create new debt. The icon shows total remaining damage.'
+    m_Localized: Deferred attack damage is paid evenly as Health loss. Each debt
+      has its own deadline; new hits do not extend it. Payments bypass defences and
+      cannot create new debt. The icon shows total remaining damage.
     m_Metadata:
       m_Items: []
   - m_Id: 46853000000000002
-    m_Localized: 'Fortification'
+    m_Localized: Fortification
     m_Metadata:
       m_Items: []
   - m_Id: 46853000000000003
-    m_Localized: 'Each stack grants 5% added Physical Damage Mitigation for 6 seconds. Maximum 10 stacks, each expiring independently. At maximum stacks, new restoration does not refresh them. The icon shows stack count; its border tracks the next expiry.'
+    m_Localized: 'Each stack reduces incoming damage by 1%.
+
+
+      Maximum 30 stacks.
+
+
+      Taking
+      damage removes 5 stacks after applying their damage reduction.'
     m_Metadata:
       m_Items: []
   - m_Id: 46855000000000002
-    m_Localized: 'Critical Charge'
+    m_Localized: Critical Charge
     m_Metadata:
       m_Items: []
   - m_Id: 46855000000000003
-    m_Localized: 'Critical hits consume all charges, gaining +15% Critical Damage Bonus per charge. Lasts 4 seconds. Maximum 3 charges. Gaining a charge refreshes the duration.'
+    m_Localized: Critical hits consume all charges, gaining +15% Critical Damage
+      Bonus per charge. Lasts 4 seconds. Maximum 3 charges. Gaining a charge refreshes
+      the duration.
     m_Metadata:
       m_Items: []
   - m_Id: 46857000000000001
-    m_Localized: 'On {block|Block}, subtract Block Power from total incoming {damage|damage}, reducing all damage types proportionally. Damage cannot fall below zero.'
+    m_Localized: On {block|Block}, subtract Block Power from total incoming {damage|damage},
+      reducing all damage types proportionally. Damage cannot fall below zero.
     m_Metadata:
       m_Items: []
   - m_Id: 46857000000000002
-    m_Localized: 'Base Block Power is 10.'
+    m_Localized: Base Block Power is 10.
     m_Metadata:
       m_Items: []
   - m_Id: 46857000000000003
-    m_Localized: 'Block Power'
+    m_Localized: Block Power
     m_Metadata:
       m_Items: []
   - m_Id: 46860000000000002
-    m_Localized: 'Block Power Momentum'
+    m_Localized: Block Power Momentum
     m_Metadata:
       m_Items: []
   - m_Id: 46860000000000003
-    m_Localized: 'Each stack grants 10% increased {blockPower|Block Power}. Maximum 10 stacks. Blocking a hit removes all stacks. No time limit.'
+    m_Localized: Each stack grants 10% increased {blockPower|Block Power}. Maximum
+      10 stacks. Blocking a hit removes all stacks. No time limit.
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000001
-    m_Localized: 'Attributes'
+    m_Localized: Attributes
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000002
-    m_Localized: 'Health & Barrier'
+    m_Localized: Health & Barrier
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000003
-    m_Localized: 'Defences'
+    m_Localized: Defences
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000004
-    m_Localized: 'Damage Reduction'
+    m_Localized: Damage Reduction
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000005
-    m_Localized: 'Resistances'
+    m_Localized: Resistances
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000006
-    m_Localized: 'Attack'
+    m_Localized: Attack
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000007
-    m_Localized: 'Resistance Penetration'
+    m_Localized: Resistance Penetration
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000008
-    m_Localized: 'Mystic'
+    m_Localized: Mystic
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000009
-    m_Localized: 'Ailments'
+    m_Localized: Ailments
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000010
-    m_Localized: 'Debuffs'
+    m_Localized: Debuffs
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000011
-    m_Localized: 'Wisps'
+    m_Localized: Wisps
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000012
-    m_Localized: 'Healing Received'
+    m_Localized: Healing Received
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000013
-    m_Localized: 'Profaned Health'
+    m_Localized: Profaned Health
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000014
-    m_Localized: 'Hallowed Health'
+    m_Localized: Hallowed Health
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000016
-    m_Localized: 'Pain Received'
+    m_Localized: Pain Received
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000021
-    m_Localized: 'Others'
+    m_Localized: Others
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000022
-    m_Localized: 'Recovery & Pain'
+    m_Localized: Recovery & Pain
     m_Metadata:
       m_Items: []
   - m_Id: 46872000000000023
-    m_Localized: 'Sacred Health'
+    m_Localized: Sacred Health
     m_Metadata:
       m_Items: []
   - m_Id: 46873000000000001
-    m_Localized: 'Show all stats'
+    m_Localized: Show all stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65615572848742400
+    m_Localized: Each stack reduces incoming damage by 1%.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65615572878102528
+    m_Localized: Maximum 30 stacks.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65615572878102529
+    m_Localized: Taking damage removes 5 stacks after applying their damage reduction.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65630384962015232
+    m_Localized: Minimum Fortification Stacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65630384974598144
+    m_Localized: Maximum Fortification Stacks
     m_Metadata:
       m_Items: []
   references:
     version: 2
     RefIds: []
-
-

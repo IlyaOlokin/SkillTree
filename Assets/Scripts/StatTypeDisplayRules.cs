@@ -97,7 +97,7 @@ public static class StatTypeDisplayRules
 
     public static int GetDecimalPlaces(StatType statType)
     {
-        if (WispStats.IsWisp(statType)) return 0;
+        if (WispStats.IsWisp(statType) || FortificationController.IsStackStat(statType)) return 0;
         return statType == StatType.AttackSpeed ? 2 : 1;
     }
 

@@ -177,7 +177,7 @@ public static class StatCalculator
         }
         
         
-        return WispStats.Normalize(statType, result);
+        return FortificationController.NormalizeStat(statType, WispStats.Normalize(statType, result));
     }
 
     private static void CacheStatValues(Unit unit)

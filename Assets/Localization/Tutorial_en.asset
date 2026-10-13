@@ -166,6 +166,44 @@ MonoBehaviour:
       to explore new parts of the tree and find more options for your build.'
     m_Metadata:
       m_Items: []
+  - m_Id: 8029132485169152
+    m_Localized: Locations, Stages and Waves
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8029132506140672
+    m_Localized: Each location has several stages. Each stage consists of a series
+      of enemy waves.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8029132506140673
+    m_Localized: Clear every wave in the current stage to unlock the next one. Defeat
+      all enemies in a wave to move on to the next wave.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8029132506140674
+    m_Localized: Your hero is fully restored only when you move to another stage,
+      so your build needs to last through the whole series of waves.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8060882976378880
+    m_Localized: Mini-Games
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8060883001544704
+    m_Localized: A mini-game has appeared on the battlefield! Mini-games appear periodically
+      during battle. Click their icons to take part.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8060883001544705
+    m_Localized: Successfully complete a mini-game to give your hero a bonus. Different
+      mini-games grant different bonuses.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8060883001544706
+    m_Localized: You can unlock more mini-games in the skill tree. Explore its branches
+      to find new ways to support your hero in battle.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

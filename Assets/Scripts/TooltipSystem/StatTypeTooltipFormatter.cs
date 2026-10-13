@@ -17,6 +17,7 @@ namespace TooltipSystem
 
         private static string GetTooltipId(StatType statType)
         {
+            if (Battle.FortificationController.IsStackStat(statType)) return "fortification";
             string statName = statType.ToString();
             if (string.IsNullOrEmpty(statName))
             {

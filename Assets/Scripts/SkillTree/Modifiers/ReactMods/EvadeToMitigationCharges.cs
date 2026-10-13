@@ -4,16 +4,24 @@ using UnityEngine;
 
 namespace SkillTree
 {
-    [CreateAssetMenu(menuName = "Modifiers/Special/EvadeToMitigationCharges", fileName = "New Evade To Mitigation Charges")]
+    [CreateAssetMenu(menuName = "Modifiers/Reactive/Evade Grants Fortification", fileName = "New Evade Grants Fortification")]
     public class EvadeToMitigationCharges : Modifier
     {
-        [SerializeField] private BaseModifier modifier;
+        [SerializeField, Min(0)] private int stacksPerEvade = 1;
         
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
         {
+            if (unit == null || unit.effectController == null) return null;
+            EffectController controller = unit.effectController;
             void HandleEvade()
             {
-                unit.effectController.AddEffect(() => new NextHitDamageMitigation(unit, modifier));
+                int count = 0;
+                foreach (var active in controller.Effects)
+                    if (active.Effect is FortificationEffect) count++;
+                int stacksToGrant = Mathf.Min(Mathf.Max(0, stacksPerEvade),
+                    Mathf.Max(0, unit.Fortification.Maximum - count));
+                for (int i = 0; i < stacksToGrant; i++)
+                    controller.AddEffect(new FortificationEffect());
             }
 
             return new DelegateModifierRuntimeBinding(
@@ -25,8 +33,8 @@ namespace SkillTree
         {
             return GameLocalization.FormatModifier(
                 "modifier.evadeToMitigationCharges.description",
-                "Each Evade grants a charge: [[0]]% added Damage Mitigation per charge. All charges are removed after taking a hit.",
-                (modifier != null && modifier.modifierContainer != null ? modifier.modifierContainer.value : 0f) * 100f);
+                "On Evade: gain [[0]] stacks of {fortification|Fortification}.",
+                Mathf.Max(0, stacksPerEvade));
         }
     }
 }

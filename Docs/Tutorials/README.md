@@ -43,8 +43,11 @@ another producer. Mystic-node-specific integrations are outside the reviewed set
   required references are checked at Start; invalid setup logs an error and
   disables the component. Optional heading/close/toggle labels receive localized text.
 - The panel stretches to full height and is anchored left or right per topic.
-  `panelWidthPixels` defaults to 480 physical pixels; runtime divides by the root
-  Canvas scale factor. Preserve the project's intentional fixed-pixel design.
+  `panelWidthPixels` defaults to 480 reference UI units. `Reference Screen Height`
+  defaults to 1440; the entire dedicated tutorial Canvas scales from screen height,
+  with a further reduction when needed to fit `Max Screen Width Fraction` (0.3125
+  by default). Fonts and spacing scale together. Keep unrelated UI on other Canvases;
+  TutorialWindow owns this CanvasScaler's scale at runtime and during preview.
 - Assign `textScroll` for long text so showing a topic resets its scroll to the top.
   Keep the close button and skip-all control outside the scrolling body.
 - Add death, location-completion, mini-game and other competing modal roots to

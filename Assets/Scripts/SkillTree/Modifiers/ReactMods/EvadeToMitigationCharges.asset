@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: EvadeToMitigationCharges
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 00000000
-  modifier: {fileID: 11400000, guid: 49f50ec39f1ffc249a6b1b6e3c07d349, type: 2}
+  stacksPerEvade: 3

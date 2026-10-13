@@ -119,4 +119,6 @@ public enum StatType
     StormWisp = 88,
 
     PainReceived = 94,
+    MinimumFortificationStacks = 95,
+    MaximumFortificationStacks = 96,
 }

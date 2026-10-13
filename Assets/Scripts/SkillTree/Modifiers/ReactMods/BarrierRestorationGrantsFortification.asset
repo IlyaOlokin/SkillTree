@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: BarrierRestorationGrantsFortification
   m_EditorClassIdentifier: 
   <Priorities>k__BackingField: 00000000
-
+  stacksPerRestoration: 5

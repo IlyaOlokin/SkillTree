@@ -1,5 +1,6 @@
 using System;
 using Battle;
+using Battle.MiniGames;
 using SkillTree;
 using Zenject;
 
@@ -15,6 +16,7 @@ namespace Tutorials
         public const string MysticHit = "player.hit.mystic";
         public const string AilmentReceived = "player.ailment.received";
         public const string TravelNodeAllocated = "tree.travel.allocated";
+        public const string MiniGameSpawned = "minigame.spawned";
     }
 
     // New integrations belong here (or in another adapter), not in the presentation/service.
@@ -25,6 +27,7 @@ namespace Tutorials
         private readonly UnitLevel level;
         private readonly EnemySpawner spawner;
         private bool observedBattle;
+        private BattleMiniGameController miniGames;
 
         public TutorialEventAdapter(TutorialService tutorials, PlayerUnit player, UnitLevel level, EnemySpawner spawner)
         {
@@ -42,6 +45,7 @@ namespace Tutorials
             player.OnGettingHit += OnHit;
             player.effectController.OnEffectAdded += OnEffectAdded;
             Node.OnAnyNodeAllocatedChanged += OnNodeAllocated;
+            ObserveMiniGameController();
         }
 
         public void Dispose()
@@ -52,10 +56,12 @@ namespace Tutorials
             player.OnGettingHit -= OnHit;
             player.effectController.OnEffectAdded -= OnEffectAdded;
             Node.OnAnyNodeAllocatedChanged -= OnNodeAllocated;
+            if (miniGames != null) miniGames.EventSpawned -= OnMiniGameSpawned;
         }
 
         public void Tick()
         {
+            ObserveMiniGameController();
             // Catch an already active battle after initialization/save loading, too.
             if (!tutorials.IsReady || !spawner.IsBattleActive)
             {
@@ -68,6 +74,18 @@ namespace Tutorials
         }
 
         private void OnPlayerLevel(int value) => tutorials.Report(TutorialEvents.PlayerLevel, value, spawner.SelectedLocationId);
+        private void ObserveMiniGameController()
+        {
+            var controller = BattleMiniGameController.For(player);
+            if (ReferenceEquals(controller, miniGames)) return;
+            if (miniGames != null) miniGames.EventSpawned -= OnMiniGameSpawned;
+            miniGames = controller;
+            if (miniGames != null) miniGames.EventSpawned += OnMiniGameSpawned;
+        }
+
+        private void OnMiniGameSpawned(BattleMiniGameEventDefinition definition) =>
+            tutorials.Report(TutorialEvents.MiniGameSpawned, eventLocationId: spawner.SelectedLocationId);
+
         private void OnNodeAllocated(Node node)
         {
             if (node.IsAllocated && !node.IsApplyingSavedState && node.NodeType == NodeType.Travel)

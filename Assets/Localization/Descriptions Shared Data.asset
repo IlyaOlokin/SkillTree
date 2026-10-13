@@ -735,6 +735,26 @@ MonoBehaviour:
     m_Key: ui.playerStats.showAllStats
     m_Metadata:
       m_Items: []
+  - m_Id: 65615572848742400
+    m_Key: effect.fortification.reduction
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65615572878102528
+    m_Key: effect.fortification.limit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65615572878102529
+    m_Key: effect.fortification.consumption
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65630384962015232
+    m_Key: enum.StatType.MinimumFortificationStacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65630384974598144
+    m_Key: enum.StatType.MaximumFortificationStacks
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

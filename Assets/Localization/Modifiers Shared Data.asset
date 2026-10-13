@@ -2531,6 +2531,62 @@ MonoBehaviour:
     m_Key: modifier.container.added.PainReceived
     m_Metadata:
       m_Items: []
+  - m_Id: 3686930137092096
+    m_Key: modifier.minimumFortificationStacks.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3692136736362496
+    m_Key: modifier.maximumFortificationStacks.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683775369216
+    m_Key: modifier.container.added.MinimumFortificationStacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340736
+    m_Key: modifier.container.increased.MinimumFortificationStacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340737
+    m_Key: modifier.container.decreased.MinimumFortificationStacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340738
+    m_Key: modifier.container.more.MinimumFortificationStacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340739
+    m_Key: modifier.container.less.MinimumFortificationStacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340740
+    m_Key: modifier.container.none.MinimumFortificationStacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340741
+    m_Key: modifier.container.added.MaximumFortificationStacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340742
+    m_Key: modifier.container.increased.MaximumFortificationStacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340743
+    m_Key: modifier.container.decreased.MaximumFortificationStacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340744
+    m_Key: modifier.container.more.MaximumFortificationStacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340745
+    m_Key: modifier.container.less.MaximumFortificationStacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340746
+    m_Key: modifier.container.none.MaximumFortificationStacks
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -2542,4 +2598,3 @@ MonoBehaviour:
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
       data:
         m_CustomEpoch: 1791037062100
-

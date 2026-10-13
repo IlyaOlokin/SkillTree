@@ -7,7 +7,7 @@ namespace Battle
         Ignite = 2,
         Chill = 3,
         Overcharge = 4,
-        NextHitDamageMitigation = 5,
+        // ID 5 retired with NextHitDamageMitigation; do not reuse serialized IDs.
         LightAbsorptionDebuff = 6,
         DarknessAbsorptionDebuff = 7,
         NextAttackModifierEffect = 8,

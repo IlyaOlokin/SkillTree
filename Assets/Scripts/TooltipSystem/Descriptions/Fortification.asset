@@ -15,4 +15,6 @@ MonoBehaviour:
   title: effect.fortification.name
   showTooltipTitle: 1
   descriptions:
-  - effect.fortification.description
+  - effect.fortification.reduction
+  - effect.fortification.limit
+  - effect.fortification.consumption

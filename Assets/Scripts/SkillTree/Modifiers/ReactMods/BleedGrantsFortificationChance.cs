@@ -27,7 +27,7 @@ namespace SkillTree
                 int count = 0;
                 foreach (var active in controller.Effects)
                     if (active.Effect is FortificationEffect) count++;
-                if (count >= FortificationEffect.MaxStacks) return;
+                if (count >= unit.Fortification.Maximum) return;
 
                 if (scaledChance < 1f && UnityEngine.Random.Range(0f, 1f) >= scaledChance) return;
 

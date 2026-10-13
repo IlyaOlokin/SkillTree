@@ -25,7 +25,12 @@ namespace Tutorials
         [SerializeField] private TMP_Text closeLabel;
         [SerializeField] private TMP_Text skipAllLabel;
         [SerializeField] private ScrollRect textScroll;
+        [Tooltip("Panel width in reference-resolution UI units.")]
         [SerializeField, Min(160f)] private float panelWidthPixels = 480f;
+        [Tooltip("Screen height at which the tutorial uses its authored font sizes and spacing.")]
+        [SerializeField, Min(360f)] private float referenceScreenHeight = 1440f;
+        [Tooltip("Maximum panel width as a fraction of the game screen width.")]
+        [SerializeField, Range(0.01f, 1f)] private float maxScreenWidthFraction = 0.3125f;
         [SerializeField, Min(0.01f)] private float duration = 0.35f;
         [SerializeField, Range(0f, 1f)] private float dimOpacity = 0.7f;
         [Tooltip("Death, reward, transition and minigame roots which must finish before a tutorial starts.")]
@@ -62,6 +67,7 @@ namespace Tutorials
 
         private void LateUpdate()
         {
+            if (windowRoot.activeSelf) UpdatePanelWidth();
             tutorials.SetContext(spawner.SelectedLocationId, level.Level);
             if (ownsPause || transitioning || !tutorials.IsReady) return;
             foreach (var blocker in blockingWindows)
@@ -106,15 +112,20 @@ namespace Tutorials
             skipAll.SetIsOnWithoutNotify(false);
             closeButton.interactable = false;
             if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(closeButton.gameObject);
-            // Panel is edge-anchored, independent of aspect ratio and CanvasScaler scale.
+            // Scale the whole tutorial together, preserving fonts and spacing across resolutions.
             bool left = definition.side == TutorialSide.Left;
             panel.anchorMin = new Vector2(left ? 0f : 1f, 0f);
             panel.anchorMax = new Vector2(left ? 0f : 1f, 1f);
             panel.pivot = new Vector2(left ? 0f : 1f, 0.5f);
-            var canvas = panel.GetComponentInParent<Canvas>().rootCanvas;
-            panel.sizeDelta = new Vector2(panelWidthPixels / Mathf.Max(0.01f, canvas.scaleFactor), 0f);
+            UpdatePanelWidth();
             Canvas.ForceUpdateCanvases();
-            if (textScroll != null) textScroll.verticalNormalizedPosition = 1f;
+            if (textScroll != null)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(textScroll.content);
+                Canvas.ForceUpdateCanvases();
+                textScroll.StopMovement();
+                textScroll.verticalNormalizedPosition = 1f;
+            }
             hiddenX = (left ? -1f : 1f) * (panel.rect.width + 32f);
             panel.anchoredPosition = new Vector2(hiddenX, 0f);
             dimmer.blocksRaycasts = true;
@@ -122,6 +133,30 @@ namespace Tutorials
                 .Join(panel.DOAnchorPosX(0f, duration).SetEase(Ease.OutCubic))
                 .Join(dimmer.DOFade(dimOpacity, duration))
                 .OnComplete(() => { transitioning = false; closeButton.interactable = true; });
+        }
+
+        private void UpdatePanelWidth()
+        {
+            UpdateResponsiveLayout(new Vector2(Screen.width, Screen.height));
+        }
+
+        public void UpdateResponsiveLayout(Vector2 screenSize)
+        {
+            if (panel == null || screenSize.x <= 0f || screenSize.y <= 0f) return;
+            var canvas = panel.GetComponentInParent<Canvas>().rootCanvas;
+            float width = Mathf.Max(160f, panelWidthPixels);
+            float scale = Mathf.Min(screenSize.y / referenceScreenHeight,
+                screenSize.x * maxScreenWidthFraction / width);
+            var scaler = canvas.GetComponent<CanvasScaler>();
+            if (scaler != null)
+            {
+                scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
+                scaler.scaleFactor = scale;
+            }
+            canvas.scaleFactor = scale;
+            if (!Mathf.Approximately(panel.sizeDelta.x, width))
+                panel.sizeDelta = new Vector2(width, 0f);
+            hiddenX = (panel.pivot.x == 0f ? -1f : 1f) * (width + 32f);
         }
 
         private void Close()

@@ -22,6 +22,7 @@ namespace Battle
         [SerializeField] private WeaponType weaponType = WeaponType.Unarmed;
 
         public BaseUnitModifiers BaseUnitModifiers;
+        public FortificationController Fortification { get; private set; }
 
         private List<Modifier> _outerModifiers = new List<Modifier>();
         private readonly List<IModifierRuntimeBinding> _modifierRuntimeBindings = new List<IModifierRuntimeBinding>();
@@ -109,6 +110,7 @@ namespace Battle
             BaseUnitModifiers = new BaseUnitModifiers();
             health.Init(this);
             effectController.Init(this);
+            Fortification = new FortificationController(this);
             mysticHealth.Init(this);
             barrier.Init(this);
             attacker.Init(this);
@@ -127,6 +129,7 @@ namespace Battle
 
         public DamageInstance ReceiveDamage(DamageInfo damageInfo)
         {
+            FortificationEffect.MitigateAndConsume(this, damageInfo.DamageInstance);
             barrier.TakeDamage(damageInfo.DamageInstance, damageInfo.DealsDoubleDamageToBarrier ? 2f : 1f,
                 damageInfo.MaxBarriersLostPerAttack);
             mysticHealth.ApplyMysticDamageAsAbsorption(damageInfo.DamageInstance);
@@ -237,6 +240,7 @@ namespace Battle
 
         public void ReceiveDoT(DamageInstance damageInstance)
         {
+            FortificationEffect.MitigateAndConsume(this, damageInstance);
             health.TakeDamage(damageInstance, false);
         }
 
@@ -355,6 +359,8 @@ namespace Battle
             attributes.Reset();
             health.ResetSacredHealthSegmentsSwap();
             BaseUnitModifiers.Reset();
+            BaseUnitModifiers.ChangeModifierValue(new ModifierContainer(
+                ModifierType.Added, StatType.MaximumFortificationStacks, FortificationEffect.MaxStacks));
             baseInnateModifiers.ApplyEffect(this);
             innateModifiers.ApplyEffect(this);
         }
@@ -439,6 +445,7 @@ namespace Battle
 
         protected virtual void OnDestroy()
         {
+            Fortification?.Dispose();
             health.OnHealthZero -= Death;
             UnbindModifierRuntimes();
             UnregisterFromBattleTickSystem();

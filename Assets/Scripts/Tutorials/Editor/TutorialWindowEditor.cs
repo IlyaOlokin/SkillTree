@@ -18,7 +18,7 @@ internal sealed class TutorialWindowEditor : Editor
             if (GUILayout.Button("Справа")) Preview(true);
             if (GUILayout.Button("Скрыть")) Hide();
         }
-        EditorGUILayout.HelpBox("Предпросмотр не запускает события и не меняет прогресс обучения. Ширина указана в пикселях игрового экрана.", MessageType.Info);
+        EditorGUILayout.HelpBox("Размеры и шрифты масштабируются от Reference Screen Height. Panel Width Pixels задаёт ширину в эталонных единицах; Max Screen Width Fraction ограничивает долю экрана.", MessageType.Info);
     }
 
     private void Preview(bool right)
@@ -34,9 +34,11 @@ internal sealed class TutorialWindowEditor : Editor
         panel.anchorMin = new Vector2(right ? 1f : 0f, 0f);
         panel.anchorMax = new Vector2(right ? 1f : 0f, 1f);
         panel.pivot = new Vector2(right ? 1f : 0f, .5f);
-        var canvas = panel.GetComponentInParent<Canvas>();
-        float scale = canvas == null ? 1f : Mathf.Max(.01f, canvas.rootCanvas.scaleFactor);
-        panel.sizeDelta = new Vector2(serializedObject.FindProperty("panelWidthPixels").floatValue / scale, 0f);
+        var canvas = panel.GetComponentInParent<Canvas>().rootCanvas;
+        Undo.RecordObject(canvas, "Preview tutorial scale");
+        var scaler = canvas.GetComponent<UnityEngine.UI.CanvasScaler>();
+        if (scaler != null) Undo.RecordObject(scaler, "Preview tutorial scale");
+        ((TutorialWindow)target).UpdateResponsiveLayout(Handles.GetMainGameViewSize());
         panel.anchoredPosition = Vector2.zero;
         Canvas.ForceUpdateCanvases();
         EditorSceneManager.MarkSceneDirty(root.scene);

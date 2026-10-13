@@ -1543,7 +1543,9 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 487906223460364
-    m_Localized: Each lost {barrier|Barrier} grants one stack of {barrierSurge|Barrier Surge} for [[2]] seconds. Each stack grants [[0]]% increased Barrier Regeneration Speed and [[1]]% increased {elemental|Elemental} Damage and has its own duration.
+    m_Localized: Each lost {barrier|Barrier} grants one stack of {barrierSurge|Barrier
+      Surge} for [[2]] seconds. Each stack grants [[0]]% increased Barrier Regeneration
+      Speed and [[1]]% increased {elemental|Elemental} Damage and has its own duration.
     m_Metadata:
       m_Items: []
   - m_Id: 5084156906311680
@@ -2116,11 +2118,14 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46845500000000018
-    m_Localized: 'Each restored {barrier|Barrier} has a [[0]]% chance to restore 1 additional Barrier, up to your maximum. Additional Barriers cannot trigger this bonus.'
+    m_Localized: Each restored {barrier|Barrier} has a [[0]]% chance to restore 1
+      additional Barrier, up to your maximum. Additional Barriers cannot trigger
+      this bonus.
     m_Metadata:
       m_Items: []
   - m_Id: 46845500000000019
-    m_Localized: 'Gain [[0]]% of your {armor|Armor} as additional {mysticNegation|Mystic Negation}.'
+    m_Localized: Gain [[0]]% of your {armor|Armor} as additional {mysticNegation|Mystic
+      Negation}.
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000010
@@ -2144,7 +2149,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000015
-    m_Localized: 'You have no {parryChance|Parry Chance}'
+    m_Localized: You have no {parryChance|Parry Chance}
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000022
@@ -2168,7 +2173,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000027
-    m_Localized: 'You have no {parryPower|Parry Power}'
+    m_Localized: You have no {parryPower|Parry Power}
     m_Metadata:
       m_Items: []
   - m_Id: 46845600000000028
@@ -2176,15 +2181,18 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46845700000000001
-    m_Localized: 'A single attack against you can destroy at most [[0]] {barrier|Barriers}. Remaining damage passes through.'
+    m_Localized: A single attack against you can destroy at most [[0]] {barrier|Barriers}.
+      Remaining damage passes through.
     m_Metadata:
       m_Items: []
   - m_Id: 46845800000000001
-    m_Localized: '[[0]]% chance when you apply {overcharge|Overcharge} to apply it again'
+    m_Localized: '[[0]]% chance when you apply {overcharge|Overcharge} to apply it
+      again'
     m_Metadata:
       m_Items: []
   - m_Id: 46845900000000001
-    m_Localized: '[[0]]% chance to take all Fire, Cold and Lightning Damage from an incoming attack as Physical Damage instead, before mitigation.'
+    m_Localized: '[[0]]% chance to take all Fire, Cold and Lightning Damage from
+      an incoming attack as Physical Damage instead, before mitigation.'
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000001
@@ -2208,7 +2216,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000006
-    m_Localized: 'You have no Damage Mitigation'
+    m_Localized: You have no Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000007
@@ -2232,7 +2240,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000012
-    m_Localized: 'You have no Elemental Damage Mitigation'
+    m_Localized: You have no Elemental Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000013
@@ -2256,7 +2264,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000018
-    m_Localized: 'You have no Mystic Damage Mitigation'
+    m_Localized: You have no Mystic Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000019
@@ -2280,7 +2288,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000024
-    m_Localized: 'You have no Physical Damage Mitigation'
+    m_Localized: You have no Physical Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000025
@@ -2304,7 +2312,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000030
-    m_Localized: 'You have no Fire Damage Mitigation'
+    m_Localized: You have no Fire Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000031
@@ -2328,7 +2336,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000036
-    m_Localized: 'You have no Cold Damage Mitigation'
+    m_Localized: You have no Cold Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000037
@@ -2352,7 +2360,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000042
-    m_Localized: 'You have no Lightning Damage Mitigation'
+    m_Localized: You have no Lightning Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000043
@@ -2376,7 +2384,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000048
-    m_Localized: 'You have no Light Damage Mitigation'
+    m_Localized: You have no Light Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000049
@@ -2400,7 +2408,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000054
-    m_Localized: 'You have no Darkness Damage Mitigation'
+    m_Localized: You have no Darkness Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000055
@@ -2424,11 +2432,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000060
-    m_Localized: 'You have no Poison Damage Mitigation'
+    m_Localized: You have no Poison Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000061
-    m_Localized: 'Each Evade grants a charge: [[0]]% added Damage Mitigation per charge. All charges are removed after taking a hit.'
+    m_Localized: 'On Evade: gain [[0]] stacks of {fortification|Fortification}.'
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000062
@@ -2460,7 +2468,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46847000000000300
-    m_Localized: "Before every [[0]] attacks, spend up to [[1]] available {barrier|Barriers}. Grant '[[2]]' to that attack per Barrier spent, as one modifier with its value multiplied by the number spent. Counts completed attacks, including misses. Spent Barriers and the bonus are lost on a miss. Spending triggers Barrier loss reactions."
+    m_Localized: Before every [[0]] attacks, spend up to [[1]] available {barrier|Barriers}.
+      Grant '[[2]]' to that attack per Barrier spent, as one modifier with its value
+      multiplied by the number spent. Counts completed attacks, including misses.
+      Spent Barriers and the bonus are lost on a miss. Spending triggers Barrier
+      loss reactions.
     m_Metadata:
       m_Items: []
   - m_Id: 46847000000000301
@@ -2468,39 +2480,46 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46849000000000001
-    m_Localized: 'Start combat in Offence: [[0]]% increased Damage. After [[1]] completed attacks, including misses, switch to Defence: [[2]]% increased Armor and Evasion instead. After [[3]] incoming attacks that are not evaded, return to Offence. Blocked and fully absorbed attacks count.'
+    m_Localized: 'Start combat in Offence: [[0]]% increased Damage. After [[1]] completed
+      attacks, including misses, switch to Defence: [[2]]% increased Armor and Evasion
+      instead. After [[3]] incoming attacks that are not evaded, return to Offence.
+      Blocked and fully absorbed attacks count.'
     m_Metadata:
       m_Items: []
   - m_Id: 46850000000000001
-    m_Localized: '[[0]]% of attack damage that would remove Health after defences becomes a debt, paid evenly over [[1]] seconds. Each hit has its own deadline. Damage over Time and mystic absorption are not deferred. Debt payments bypass defences and cannot create new debt.'
+    m_Localized: '[[0]]% of attack damage that would remove Health after defences
+      becomes a debt, paid evenly over [[1]] seconds. Each hit has its own deadline.
+      Damage over Time and mystic absorption are not deferred. Debt payments bypass
+      defences and cannot create new debt.'
     m_Metadata:
       m_Items: []
   - m_Id: 46851000000000001
-    m_Localized: 'Killing an enemy restores 1 {barrier|Barrier}'
+    m_Localized: Killing an enemy restores 1 {barrier|Barrier}
     m_Metadata:
       m_Items: []
   - m_Id: 46852000000000001
-    m_Localized: 'Bleed on you restores Health instead of dealing Damage.'
+    m_Localized: Bleed on you restores Health instead of dealing Damage.
     m_Metadata:
       m_Items: []
   - m_Id: 46853000000000001
-    m_Localized: 'Each restored {barrier|Barrier} grants 1 stack of {fortification|Fortification}.'
+    m_Localized: Each restored {barrier|Barrier} grants [[0]] stacks of {fortification|Fortification}.
     m_Metadata:
       m_Items: []
   - m_Id: 46854000000000001
-    m_Localized: 'The two lowest-damage elements in each attack fully penetrate their Resistances.'
+    m_Localized: The two lowest-damage elements in each attack fully penetrate their
+      Resistances.
     m_Metadata:
       m_Items: []
   - m_Id: 46855000000000001
-    m_Localized: 'Non-critical hits grant a charge of {criticalCharge|Critical Charge}.'
+    m_Localized: Non-critical hits grant a charge of {criticalCharge|Critical Charge}.
     m_Metadata:
       m_Items: []
   - m_Id: 46856000000000001
-    m_Localized: 'Adds ''[[0]]'' for each Wisp you have, counting all Wisp types'
+    m_Localized: Adds '[[0]]' for each Wisp you have, counting all Wisp types
     m_Metadata:
       m_Items: []
   - m_Id: 46856000000000002
-    m_Localized: 'Requires a Base Modifier with a non-Wisp stat'
+    m_Localized: Requires a Base Modifier with a non-Wisp stat
     m_Metadata:
       m_Items: []
   - m_Id: 46857000000000010
@@ -2524,23 +2543,26 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46857000000000015
-    m_Localized: 'You have no {blockPower|Block Power}'
+    m_Localized: You have no {blockPower|Block Power}
     m_Metadata:
       m_Items: []
   - m_Id: 46858000000000001
-    m_Localized: 'For this attack, gain ''[[0]]'' per {bleed|Bleed} on the target'
+    m_Localized: For this attack, gain '[[0]]' per {bleed|Bleed} on the target
     m_Metadata:
       m_Items: []
   - m_Id: 46858000000000002
-    m_Localized: 'Requires a stat modifier'
+    m_Localized: Requires a stat modifier
     m_Metadata:
       m_Items: []
   - m_Id: 46859000000000001
-    m_Localized: 'When you apply {bleed|Bleed}, you have a [[0]]% chance to gain 1 stack of {fortification|Fortification}.'
+    m_Localized: When you apply {bleed|Bleed}, you have a [[0]]% chance to gain 1
+      stack of {fortification|Fortification}.
     m_Metadata:
       m_Items: []
   - m_Id: 46860000000000001
-    m_Localized: 'When you receive an unblocked hit, gain 1 stack of Block Power Momentum. Each stack grants 10% increased {blockPower|Block Power}. Maximum 10 stacks. Blocking a hit removes all stacks.'
+    m_Localized: When you receive an unblocked hit, gain 1 stack of Block Power Momentum.
+      Each stack grants 10% increased {blockPower|Block Power}. Maximum 10 stacks.
+      Blocking a hit removes all stacks.
     m_Metadata:
       m_Items: []
   - m_Id: 46861000000000001
@@ -2560,11 +2582,67 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46861000000000005
-    m_Localized: 'You cannot gain {pain|Pain}'
+    m_Localized: You cannot gain {pain|Pain}
     m_Metadata:
       m_Items: []
   - m_Id: 46861000000000006
     m_Localized: '[[0]] {pain|Pain} gained'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3686930137092096
+    m_Localized: +[[0]] to minimum {fortification|Fortification} stacks.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3692136736362496
+    m_Localized: '[[0]] to maximum {fortification|Fortification} stacks.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683775369216
+    m_Localized: '[[0]] to minimum {fortification|Fortification} stacks.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340736
+    m_Localized: '[[0]]% increased minimum {fortification|Fortification} stacks.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340737
+    m_Localized: '[[0]]% decreased minimum {fortification|Fortification} stacks.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340738
+    m_Localized: '[[0]]% more minimum {fortification|Fortification} stacks.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340739
+    m_Localized: '[[0]]% less minimum {fortification|Fortification} stacks.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340740
+    m_Localized: Your minimum number of {fortification|Fortification} stacks is 0.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340741
+    m_Localized: '[[0]] to maximum {fortification|Fortification} stacks.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340742
+    m_Localized: '[[0]]% increased maximum {fortification|Fortification} stacks.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340743
+    m_Localized: '[[0]]% decreased maximum {fortification|Fortification} stacks.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340744
+    m_Localized: '[[0]]% more maximum {fortification|Fortification} stacks.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340745
+    m_Localized: '[[0]]% less maximum {fortification|Fortification} stacks.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3695683796340746
+    m_Localized: Your maximum number of {fortification|Fortification} stacks is 0.
     m_Metadata:
       m_Items: []
   references:

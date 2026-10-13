@@ -10,6 +10,9 @@ namespace Battle
     {
         private List<SkillTree.Modifier> _runtimeModifiers;
 
+        public virtual bool CanApply(Unit owner) => true;
+        public virtual bool CanRemove(Unit owner) => true;
+
         protected T CreateRuntimeModifier<T>() where T : SkillTree.Modifier
         {
             T modifier = UnityEngine.ScriptableObject.CreateInstance<T>();

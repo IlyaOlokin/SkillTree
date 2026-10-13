@@ -131,6 +131,38 @@ MonoBehaviour:
     m_Key: tutorial.travelNodes.paragraph2
     m_Metadata:
       m_Items: []
+  - m_Id: 8029132485169152
+    m_Key: tutorial.locationStructure.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8029132506140672
+    m_Key: tutorial.locationStructure.paragraph1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8029132506140673
+    m_Key: tutorial.locationStructure.paragraph2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8029132506140674
+    m_Key: tutorial.locationStructure.paragraph3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8060882976378880
+    m_Key: tutorial.miniGames.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8060883001544704
+    m_Key: tutorial.miniGames.paragraph1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8060883001544705
+    m_Key: tutorial.miniGames.paragraph2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8060883001544706
+    m_Key: tutorial.miniGames.paragraph3
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

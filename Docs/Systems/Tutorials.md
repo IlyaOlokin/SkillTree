@@ -51,6 +51,7 @@ only clears `Current`; scene teardown does not acknowledge the topic.
 | `player.ailment.received` | Player `OnEffectAdded` reports Bleed, Ignite, Chill or Overcharge, including stack updates |
 | `world_map.opened` | LocationFlowController returns to the map after `level-1` is completed; event location is explicitly `level-1` |
 | `tree.travel.allocated` | TutorialEventAdapter observes an allocated Travel node through Node.OnAnyNodeAllocatedChanged; refunds and saved-state application are excluded |
+| `minigame.spawned` | TutorialEventAdapter listens to the player's BattleMiniGameController.EventSpawned after an activator is created; controller subscriptions are refreshed on Tick and removed on disposal |
 
 The ailment event does not require an EnemyUnit source. It listens to effect-list
 notifications, not the source-side effect event. A fully barrier-absorbed elemental
@@ -59,6 +60,14 @@ not reach the receipt callback. See [combat](CombatAndEffects.md) and
 [effect events](../Reference/EffectApplicationEvents.md) for these distinct boundaries.
 
 ## Catalog snapshot
+
+Added on 2026-10-13: `mini_games`, triggered by `minigame.spawned` without
+prerequisites. `Definitions/MiniGames.asset` is registered in the catalog and
+uses `tutorial.miniGames.title` and `tutorial.miniGames.paragraph1` through
+`paragraph3` in the `Tutorial` table. English text explains periodic activators,
+clicking their icons, success bonuses and skill-tree unlocks. Completion uses
+the existing per-profile tutorial persistence; skip-all also suppresses this topic.
+The existing window pauses scaled time, preserving activator lifetime while open.
 
 The inspected `Assets/Scripts/Tutorials/TutorialCatalog.asset` references these
 definitions in this order. This table records current authoring, not mandatory
@@ -73,6 +82,18 @@ rules for future content.
 | `ailments` | `player.ailment.received >= 0`, event location `level-2` | `damage_types` |
 | `world_map` | `world_map.opened >= 0`, event location `level-1` | None |
 | `travel_nodes` | `tree.travel.allocated >= 0`, any location | None |
+| `location_structure` | `location.level >= 1`, event location `level-2` | None |
+
+Added 2026-10-13: `Definitions/LocationStructure.asset` introduces locations,
+stages and waves on entry to the second location. It explains that clearing all
+waves unlocks the next stage, and that the hero receives no full restoration
+between waves; moving to another stage restores health and barriers. Ordinary
+healing is not described as disabled. English entries in `Tutorial` use
+`tutorial.locationStructure.title` and `tutorial.locationStructure.paragraph1`
+through `paragraph3`; other locales are unchanged. The existing completed-topic
+and skip-all rules apply. Verified through a Unity Editor script: asset creation,
+single catalog registration, trigger location and all four English entries.
+The script compiled without diagnostics; in-game presentation was not playtested.
 
 Added 2026-10-08: `Definitions/TravelNodes.asset` explains variable skill-point
 costs (most nodes cost 1, Travel nodes cost 0.5) and describes small Travel
@@ -99,7 +120,18 @@ a BattleTickSystem pause lock, remembers `Time.timeScale`, sets it to zero and
 disables only the explicitly configured enabled gameplay-input behaviours.
 The fullscreen dimmer blocks pointer input; it does not intercept raw hotkeys.
 
-Animations run on unscaled DOTween time. Text/localization is resolved on showing
+Animations run on unscaled DOTween time. The dedicated tutorial Canvas scales all
+fonts, controls and spacing together from `Reference Screen Height` (default 1440).
+`Panel Width Pixels` is the authored width in reference UI units, rather than a
+fixed physical width. The scale is the smaller of screen height / reference height
+and screen width × `Max Screen Width Fraction` / panel width. The fraction defaults
+to 0.3125. This preserves panel proportions on wide displays and fits narrower
+displays within the width cap. The controller owns the dedicated root Canvas and
+its CanvasScaler scale; do not place unrelated UI on this Canvas.
+Layout updates while open, including screen resizing. The custom Inspector preview
+uses the same calculation with the Game view size. Showing a topic rebuilds the
+scroll content before resetting it to the top, preventing stale text bounds.
+Text/localization is resolved on showing
 each topic. Closing is disabled during transitions. Ready topics chain without
 releasing pause between them. The chained path calls `TryBeginNext` directly and
 does not recheck `blockingWindows`; those blockers gate the initial LateUpdate
