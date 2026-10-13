@@ -50,23 +50,39 @@ Attributes, Health & Barrier, Defences, Attack and Mystic remain always visible
 without dropdown headers, preserving their authored columns/grids. Resistances
 follow Mystic; separate maximum-resistance rows are omitted. Existing resistance
 suffixes show uncapped resistance above the cap, not the cap itself. Health & Barrier
-includes MysticNegation. The Parry pair is visible when ParryChance <= 0, as explicitly
-requested by the owner; recalculation changes visibility and rebuilds layout only
-when that condition changes.
+includes MysticNegation. The Parry pair is visible only when ParryChance > 0
+(corrected on 2026-10-13), unless Show all stats is enabled. Recalculation changes
+visibility and rebuilds layout only when that condition changes.
 
-Ailments, Debuffs and Others have three serialized PlayerStatsSection entries.
+Ailments, Debuffs, Others and its five nested dropdowns have eight serialized
+PlayerStatsSection entries, each with a persistent Button callback.
 Their header Buttons have persistent ToggleSection(index) callbacks. Each entry
 exposes its title, localization key/fallback, triangle text, body and Expanded state.
 Right/down triangles identify collapsed/expanded state. Ailments retain their authored
 internal groups; Debuffs use nine separate rows. Others contains five simple
 subsections: Recovery & Pain, Sacred Health, Damage Reduction, Resistance Penetration
-and Wisps. Its five title references/keys are stored in subsectionHeadings. Bodies
+and Wisps. Their title references/keys, roots and bodies are stored in sections. Bodies
 retain the 14-unit inset and subsection rows an additional 10-unit inset.
 
-Preview All Sections on PlayerStatsWindow expands all three dropdowns in Edit Mode.
+Others subsections hide when all of their configured visibilityStats equal their
+defaultValue (currently 0, compared with Mathf.Approximately). Nonzero negative values
+also make a subsection visible. Others and its preceding divider hide when all five
+subsection roots are hidden. Visibility uses root activeSelf, so collapsing a body
+does not incorrectly make its parent empty. These conditions refresh with stats;
+foldout state is preserved when a subsection temporarily hides.
+
+A centered Show all stats Toggle is saved at the end of Content, outside Others.
+Its persistent SetShowAllStats(bool) callback immediately disables/enables the
+zero-value filter, including Parry. It does not override manually collapsed bodies.
+The toggle defaults off and lasts for the window instance, without profile storage.
+Its English Descriptions key is ui.playerStats.showAllStats = Show all stats;
+Russian/German translations remain TODOs.
+
+Preview All Sections on PlayerStatsWindow expands all eight dropdowns in Edit Mode
+and exposes empty subsections for authoring independently of the gameplay toggle.
 Turn it off to preview individual Expanded flags in the same Inspector. This preview
 updates through a deferred OnValidate callback without entering Play Mode. Awake
-applies the configured Expanded states for gameplay (all three default to collapsed).
+applies the configured Expanded states for gameplay (all eight default to collapsed).
 The runtime preserves toggles across disable/re-enable for that instance; no profile
 save field is added. Normal Buttons invoke their persistent callbacks in Play Mode;
 Edit Mode preview is controlled through the Inspector.
@@ -86,8 +102,11 @@ translations and unused older heading keys are preserved.
 Verification: the scene was authored/saved through Unity CLI in Edit Mode. Scoped
 C# compilation passed; Unity reports no current Console errors. Top/bottom isolated
 renders of the saved layout were inspected, including right scrollbar clearance.
-Direct section toggling expanded/collapsed the saved body; all three persistent
-button callbacks and eight heading references were configured. Actual pointer-click
+Direct section toggling expanded/collapsed the saved body. The 2026-10-13 checks
+covered all-zero hiding, one negative non-default value, positive Parry chance,
+nested toggling and both Show all stats states using supplied stat-value delegates,
+without changing gameplay stats. The saved nested dropdown/checkbox render was
+inspected. Actual pointer-click
 playback, combat updates and locale switching were not playtested.
 
 `TooltipTermDatabase.ActiveDatabase` is cleared by `SubsystemRegistration` before
@@ -140,6 +159,14 @@ Disabling the visual pauses draining while preserving queued/new requests; enabl
 it resumes draining. Destroying the visual discards its owned queue. Modifier
 gameplay and text notifications are unaffected.
 BlockRestoresBarrier now requests a notification via Unit.OnModifierProc only when its block reaction restores a charge. Its modifier asset owns the sprite; other combat triggers remain unconnected.
+AilmentAbsorptionCooldown also requests this floating UnitNotification icon when
+its charged effect actually absorbs an incoming ailment (2026-10-13). Charging or
+recharging alone does not emit a notification. The modifier's procIcon is passed
+to its effect, and AilmentAbsorptionCooldown_5 uses AilmentAbsorbtionIcon. The
+existing persistent status icon and shared notification queue remain in use.
+Scoped verification: `dotnet build Assembly-CSharp.csproj --no-restore -v:minimal -m:1`
+passed with zero errors and 20 dependency/other-source warnings. Notification
+appearance in live combat was not previewed.
 `UnitNotificationEffect.ShowIcon` configures a fresh instance before `Start`, hides
 its TMP text and critical decoration, and enables the preconfigured non-interactive uGUI Image
 under `objectToMove`. No components are created for icon notifications. The prefab's canvas, movement distance, position spread and

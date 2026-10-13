@@ -36,3 +36,8 @@ MonoBehaviour:
     amount: 1
     price: 200
     stockLimit: 3
+  - entryId: 63f5eb9738eb410da9ca3fb860e35143
+    itemDefinition: {fileID: 11400000, guid: 994b501ba24143e418a76b5c9dd74139, type: 2}
+    amount: 1
+    price: 250
+    stockLimit: -1

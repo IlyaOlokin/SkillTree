@@ -35,7 +35,30 @@ another owner's lock. Because the clock can use unscaled time, setting
 `Time.timeScale = 0` alone is not a reliable combat pause. See the
 [tutorial guide](../Tutorials/README.md) for its pause integration.
 
+### Battle playback controls (2026-10-13)
+
+MainScene's BattleRoot has speed and pause buttons below Map, authored in the
+scene and bound by `BattlePlaybackControls`. The two controls display white
+text/icon symbols without visible backgrounds; transparent raycast Images
+preserve their full button hit areas. Speed cycles 1x → 2x → 4x → 1x
+through `BattleTickSystem.SpeedMultiplier`; it does not change `Time.timeScale`,
+the fixed tick duration or noncombat clocks. The existing eight-tick frame budget
+still applies, so low frame rates can accumulate simulation backlog at 4x.
+The speed is instance state, without profile persistence.
+
+Pause toggles the clock's ordinary Pause/Resume flag, shared with the P shortcut.
+The procedural icon shows the next action: pause bars while running, a play
+triangle while paused. Independent pause owners disable this button so it cannot
+release tutorial/modal locks. Map/shop/death/completion flow retains ownership
+of its existing pause calls. The controller does not reset speed when hidden.
+
+Verification: Unity CLI recompile completed without compilation errors. Direct
+Edit Mode callback checks produced 2/4/1 speeds, paused/running states and preserved
+a modal owner's pause and Time.timeScale. An isolated render of the three authored
+buttons was inspected. Full combat interaction in Play Mode was not exercised.
+
 ## Attack scheduling and target ownership
+
 
 `Attacker` accumulates attack progress using calculated attack speed. One full
 cycle requires progress `1`; extra attack moments can trigger within a cycle.

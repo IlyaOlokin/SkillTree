@@ -731,6 +731,10 @@ MonoBehaviour:
     m_Key: ui.playerStats.section.sacredHealth
     m_Metadata:
       m_Items: []
+  - m_Id: 46873000000000001
+    m_Key: ui.playerStats.showAllStats
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

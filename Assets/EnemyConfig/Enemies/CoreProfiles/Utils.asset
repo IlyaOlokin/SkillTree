@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5229bcd624828784f8ed7fcbba592194, type: 3}
   m_Name: Utils
   m_EditorClassIdentifier: Assembly-CSharp::Battle.EnemyCoreProfile
+  visualShape: 0
+  visualWeapon: 0
   healthWeight: 0.36246574
   offenceWeight: 0.24164383
   defenceWeight: 0.09589041

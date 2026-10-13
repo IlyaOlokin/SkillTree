@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5229bcd624828784f8ed7fcbba592194, type: 3}
   m_Name: DamageDealer
   m_EditorClassIdentifier: Assembly-CSharp::Battle.EnemyCoreProfile
+  visualShape: 2
+  visualWeapon: 1
   healthWeight: 0.31500003
   offenceWeight: 0.5849999
   defenceWeight: 0

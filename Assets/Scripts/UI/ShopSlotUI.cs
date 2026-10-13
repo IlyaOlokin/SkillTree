@@ -68,15 +68,10 @@ namespace UI
 
             if (stockText != null)
             {
-                if (_entry == null || !_entry.HasLimitedStock)
-                {
-                    stockText.gameObject.SetActive(false);
-                }
-                else
-                {
-                    stockText.gameObject.SetActive(true);
-                    stockText.text = remainingStock.ToString();
-                }
+                stockText.gameObject.SetActive(_entry != null);
+                stockText.text = _entry == null
+                    ? string.Empty
+                    : _entry.HasLimitedStock ? remainingStock.ToString() : "\u221e";
             }
 
             if (dimGroup != null)

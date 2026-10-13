@@ -8,6 +8,7 @@ namespace SkillTree
     public class AilmentAbsorptionCooldown : Modifier
     {
         [SerializeField, Min(0f)] private float cooldown = 5f;
+        [SerializeField] private Sprite procIcon;
 
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
         {
@@ -24,7 +25,7 @@ namespace SkillTree
 
             void AddEffect()
             {
-                effectController.AddRepeatedEffect(() => new AilmentAbsorption(this, cooldown));
+                effectController.AddRepeatedEffect(() => new AilmentAbsorption(this, cooldown, procIcon));
             }
 
             return new DelegateModifierRuntimeBinding(

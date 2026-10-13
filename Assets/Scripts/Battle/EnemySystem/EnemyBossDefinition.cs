@@ -36,7 +36,7 @@ namespace Battle
                 defenceModule,
                 utilityModule,
                 affixPool,
-                WeaponType.Sword,
+                coreProfile.ResolveWeaponType(),
                 powerMultiplier);
             return true;
         }

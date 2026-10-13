@@ -32,6 +32,8 @@ public class PlayerStatsWindow : MonoBehaviour
     [SerializeField] private bool previewAllSections = true;
     [SerializeField] private GameObject _parryGroup;
     [SerializeField] private RectTransform _layoutContent;
+    [SerializeField] private UnityEngine.UI.Toggle showAllStatsToggle;
+    [SerializeField] private TMP_Text showAllStatsLabel;
 
     private void Awake()
     {
@@ -144,15 +146,6 @@ public class PlayerStatsWindow : MonoBehaviour
 
         UpdateDamageTexts();
         UpdateMysticTexts();
-        if (_parryGroup != null)
-        {
-            bool showParry = _player.BaseUnitModifiers.GetStatValue(StatType.ParryChance) <= 0f;
-            if (_parryGroup.activeSelf != showParry)
-            {
-                _parryGroup.SetActive(showParry);
-                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(_layoutContent);
-            }
-        }
         RefreshSectionTitles();
         
 
@@ -170,6 +163,7 @@ public class PlayerStatsWindow : MonoBehaviour
             statText.labelText.text = $"{label}:";
             statText.valueText.text = FormatStatValue(displayValue, isPercent, prefix, suffix, StatTypeDisplayRules.GetDecimalPlaces(statText.stat));
         }
+        UpdateConditionalVisibility(_player.BaseUnitModifiers.GetStatValue);
     }
     
     private string FormatStatValue(float value, bool isPercent, string prefix = "", string suffix = "", int decimalPlaces = 1)
@@ -349,6 +343,14 @@ public class PlayerStatsWindow : MonoBehaviour
             scroll.StopMovement();
     }
 
+    public void SetShowAllStats(bool show)
+    {
+        if (showAllStatsToggle != null)
+            showAllStatsToggle.SetIsOnWithoutNotify(show);
+        if (_player != null && _player.BaseUnitModifiers != null)
+            UpdateConditionalVisibility(_player.BaseUnitModifiers.GetStatValue);
+    }
+
     private void ApplySectionVisibility(bool previewAll)
     {
         foreach (var section in sections)
@@ -359,12 +361,67 @@ public class PlayerStatsWindow : MonoBehaviour
             if (section.arrowText != null)
                 section.arrowText.text = expanded ? "▼" : "▶";
         }
+        if (previewAll)
+        {
+            foreach (var section in sections)
+            {
+                if (section.root != null) section.root.SetActive(true);
+                if (section.separator != null) section.separator.SetActive(true);
+            }
+        }
+        else if (_player != null && _player.BaseUnitModifiers != null)
+            UpdateConditionalVisibility(_player.BaseUnitModifiers.GetStatValue);
         if (_layoutContent != null)
+            UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(_layoutContent);
+    }
+
+    private void UpdateConditionalVisibility(Func<StatType, float> getValue)
+    {
+        bool showAll = showAllStatsToggle != null && showAllStatsToggle.isOn;
+        bool changed = false;
+        void SetVisible(GameObject target, bool visible)
+        {
+            if (target == null || target.activeSelf == visible) return;
+            target.SetActive(visible);
+            changed = true;
+        }
+
+        SetVisible(_parryGroup, showAll || getValue(StatType.ParryChance) > 0f);
+        foreach (var section in sections)
+        {
+            if (!section.hideWhenDefault) continue;
+            bool visible = showAll;
+            foreach (var stat in section.visibilityStats)
+                if (!Mathf.Approximately(getValue(stat), section.defaultValue))
+                {
+                    visible = true;
+                    break;
+                }
+            SetVisible(section.root, visible);
+            SetVisible(section.separator, visible);
+        }
+        for (int i = 0; i < sections.Count; i++)
+        {
+            var parent = sections[i];
+            if (!parent.hideWhenChildrenEmpty) continue;
+            bool visible = false;
+            foreach (var child in sections)
+                if (child.parentSectionIndex == i && child.root != null && child.root.activeSelf)
+                {
+                    visible = true;
+                    break;
+                }
+            SetVisible(parent.root, visible);
+            SetVisible(parent.separator, visible);
+        }
+        if (changed && _layoutContent != null)
             UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(_layoutContent);
     }
 
     private void RefreshSectionTitles()
     {
+        if (showAllStatsLabel != null)
+            showAllStatsLabel.text = GameLocalization.Get("ui.playerStats.showAllStats", "Show all stats");
         foreach (var section in sections)
             if (section.titleText != null)
                 section.titleText.text = GameLocalization.Get(section.localizationKey, section.fallback);
@@ -418,7 +475,14 @@ public class PlayerStatsHeading
 [Serializable]
 public class PlayerStatsSection : PlayerStatsHeading
 {
+    public GameObject root;
+    public GameObject separator;
     public GameObject body;
     public TMP_Text arrowText;
     public bool expanded;
+    public bool hideWhenDefault;
+    public float defaultValue;
+    public List<StatType> visibilityStats = new();
+    public int parentSectionIndex = -1;
+    public bool hideWhenChildrenEmpty;
 }

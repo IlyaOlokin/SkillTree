@@ -1,12 +1,32 @@
 using System.Collections.Generic;
 using SkillTree;
 using UnityEngine;
+using Visual;
 
 namespace Battle
 {
     [CreateAssetMenu(menuName = "Enemies/Modules/Core Profile")]
     public class EnemyCoreProfile : ScriptableObject
     {
+        [Header("Visual")]
+        [SerializeField] private UnitShapeType visualShape = UnitShapeType.Circle;
+        [SerializeField] private EnemyWeaponSelection visualWeapon = EnemyWeaponSelection.Random;
+
+        public UnitShapeType VisualShape => visualShape;
+
+        public WeaponType ResolveWeaponType()
+        {
+            EnemyWeaponSelection selected = visualWeapon == EnemyWeaponSelection.Random
+                ? (EnemyWeaponSelection)Random.Range(1, 4)
+                : visualWeapon;
+            return selected switch
+            {
+                EnemyWeaponSelection.Hammer => WeaponType.Hammer,
+                EnemyWeaponSelection.Staff => WeaponType.FireStaff,
+                _ => WeaponType.Sword
+            };
+        }
+
         [Header("Category Weights")]
         [Range(0f, 1f)] public float healthWeight = 1f;
         [Range(0f, 1f)] public float offenceWeight;
@@ -34,6 +54,14 @@ namespace Battle
                    Mathf.Max(0f, defenceWeight) +
                    Mathf.Max(0f, utilityWeight);
         }
+    }
+
+    public enum EnemyWeaponSelection
+    {
+        Random = 0,
+        Sword = 1,
+        Staff = 2,
+        Hammer = 3
     }
 
 }

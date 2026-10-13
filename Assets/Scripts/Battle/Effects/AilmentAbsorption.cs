@@ -10,6 +10,7 @@ namespace Battle
     public class AilmentAbsorption : BaseEffect
     {
         private Modifier _sourceModifier;
+        private Sprite _procIcon;
         private float _cooldown;
         private float _timeLeft;
         private bool _isCharged;
@@ -20,9 +21,10 @@ namespace Battle
 
         public bool IsCharged => _isCharged;
 
-        public AilmentAbsorption(Modifier sourceModifier, float cooldown)
+        public AilmentAbsorption(Modifier sourceModifier, float cooldown, Sprite procIcon = null)
         {
             _sourceModifier = sourceModifier;
+            _procIcon = procIcon;
             _cooldown = Mathf.Max(0f, cooldown);
             _timeLeft = _cooldown;
         }
@@ -43,6 +45,7 @@ namespace Battle
             }
 
             _sourceModifier = absorption._sourceModifier;
+            _procIcon = absorption._procIcon;
             _cooldown = absorption._cooldown;
 
             if (_isCharged)
@@ -147,6 +150,7 @@ namespace Battle
             {
                 if (absorptions[i]?.Effect is AilmentAbsorption absorption && absorption.TryAbsorb())
                 {
+                    target.NotifyModifierProc(absorption._procIcon);
                     return true;
                 }
             }

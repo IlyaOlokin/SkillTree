@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Zenject;
+using Visual;
 
 namespace Battle
 {
@@ -26,6 +27,11 @@ namespace Battle
             SpawnData = data;
             innateModifiers = data.Modifiers;
             SetWeaponType(data.Definition != null ? data.Definition.WeaponType : WeaponType.Sword);
+            var shapeView = GetComponentInChildren<UnitShapeView>(true);
+            if (shapeView != null)
+                shapeView.SetShape(data.Definition?.CoreProfile != null
+                    ? data.Definition.CoreProfile.VisualShape
+                    : UnitShapeType.Circle);
            
             RaiseOnModsChanged();
             ResetCombatState();

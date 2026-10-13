@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillTree.AilmentAbsorptionCooldown
   <Priorities>k__BackingField: 00000000
   cooldown: 5
+  procIcon: {fileID: 21300000, guid: 593abf75f85ff834cbaf3d926a80866e, type: 3}

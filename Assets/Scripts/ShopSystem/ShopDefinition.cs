@@ -58,15 +58,15 @@ namespace ShopSystem
         [SerializeField] private ItemDefinition itemDefinition;
         [SerializeField] [Min(1)] private int amount = 1;
         [SerializeField] [Min(0)] private int price = 1;
-        [Tooltip("0 means unlimited stock. Positive values are saved permanently per profile.")]
-        [SerializeField] [Min(0)] private int stockLimit = 1;
+        [Tooltip("-1 means unlimited stock. 0 means sold out. Positive values limit purchases permanently per profile.")]
+        [SerializeField] [Min(-1)] private int stockLimit = 1;
 
         public string EntryId => string.IsNullOrWhiteSpace(entryId) ? GetFallbackEntryId() : entryId;
         public ItemDefinition ItemDefinition => itemDefinition;
         public int Amount => Mathf.Max(1, amount);
         public int Price => Mathf.Max(0, price);
-        public int StockLimit => Mathf.Max(0, stockLimit);
-        public bool HasLimitedStock => StockLimit > 0;
+        public int StockLimit => Mathf.Max(-1, stockLimit);
+        public bool HasLimitedStock => StockLimit >= 0;
 
         public InventoryItem CreateItem()
         {
@@ -82,7 +82,7 @@ namespace ShopSystem
         {
             amount = Mathf.Max(1, amount);
             price = Mathf.Max(0, price);
-            stockLimit = Mathf.Max(0, stockLimit);
+            stockLimit = Mathf.Max(-1, stockLimit);
 
             if (usedEntryIds == null)
             {

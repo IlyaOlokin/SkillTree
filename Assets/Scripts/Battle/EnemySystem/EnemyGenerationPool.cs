@@ -68,7 +68,7 @@ namespace Battle
                 defenceModule,
                 utilityModule,
                 affixPool,
-                WeaponType.Sword);
+                coreProfile.ResolveWeaponType());
             return true;
         }
 

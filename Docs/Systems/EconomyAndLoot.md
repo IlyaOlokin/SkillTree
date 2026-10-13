@@ -35,8 +35,14 @@ transaction: wallet/inventory listeners can observe intermediate changes.
 | --- | --- |
 | Amount | Units delivered per purchase, at least one |
 | Price | Gold per purchase, zero or higher; free purchases skip spending |
-| Stock limit | Number of purchases, not total item units; zero means unlimited |
+| Stock limit | Number of purchases, not total item units; `-1` means unlimited, zero means sold out, positive values limit purchases |
 | Remaining stock | `-1` means unlimited |
+
+Stock authoring and UI update, 2026-10-13: `ShopEntry` accepts a minimum stock
+limit of `-1`. `ShopSlotUI` displays unlimited stock as `∞` instead of hiding
+the quantity label. Successful purchases still record purchase history, but this
+history does not reduce unlimited stock. Existing entries authored with zero now
+mean sold out; use `-1` for unlimited entries. No save-format migration is needed.
 
 `TrySellInventorySlot` removes the whole inventory entry and credits the positive
 gold amount supplied by its caller. It does not derive a unit price from the item

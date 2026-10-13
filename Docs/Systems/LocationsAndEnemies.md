@@ -92,6 +92,14 @@ Source: `Assets/Scripts/Battle/EnemySystem/EnemyStatBudgetConfig.cs`,
 
 ## Death, wave clear and completion
 
+PreviousButton and NextButton call `EnemySpawner.SelectPreviousLevel` and
+`SelectNextLevel`. Both reset the player's combat state after selecting the stage:
+health and barriers are restored, mystic health is reset, effects are cleared,
+and attack cooldown is reset through `Unit.ResetCombatState`. Automatic progression
+uses the same next-stage path; the completion-window branch resets separately,
+so either path resets once. Added on 2026-10-13; button interaction still requires
+Play Mode verification.
+
 An active enemy death is handled once: remove it, unsubscribe and resolve gold.
 Only the last active enemy clears the wave. Reaching the stage's wave quota records
 completion; automatic progression resets combat and unlocks the next stage.
@@ -117,6 +125,24 @@ See [gold completion rewards](EconomyAndLoot.md#gold-completion-rewards-2026-10-
 for authoring, display and immediate-credit behavior.
 
 ## Verification when changing this area
+
+### Core-profile visuals (2026-10-13)
+
+`EnemyCoreProfile` owns editable `visualShape` (Circle, Square, Triangle) and
+`visualWeapon` (Random, Sword, Staff, Hammer) enum fields, exposed by its custom
+Inspector. DamageDealer is authored as Triangle/Sword, Defensive as Square/Hammer,
+and Normal and Utils as Circle/Random. Newly created profiles default to Circle/Random.
+These are asset settings, not rules inferred from profile names.
+
+Both ordinary generation and boss definitions resolve the weapon once per generated
+enemy; Random gives Sword, Staff or Hammer with equal probability. Staff uses the
+existing FireStaff weapon type for staff animation, hit visuals and audio; it does
+not change damage stats. EnemyUnit.Initialize applies the profile shape to its
+child UnitShapeView, including inactive children, so pooled enemies refresh their
+shape on reuse. A missing profile falls back to Circle; a missing shape view is
+ignored. Changes take effect on the next enemy initialization/generation.
+
+Source review and Unity compilation are scoped separately from combat visual QA.
 
 - Check first entry, replay of an earlier stage and return to the frontier.
 - Check OR prerequisites, branching/overlapping ranges and restore after a catalog change.

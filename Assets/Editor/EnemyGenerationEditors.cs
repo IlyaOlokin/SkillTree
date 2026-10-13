@@ -152,6 +152,9 @@ public class EnemyCoreProfileEditor : Editor
     {
         serializedObject.Update();
 
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("visualShape"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("visualWeapon"));
+
         EnemyWeightEditorGUI.DrawBalancedWeightGroup(
             serializedObject,
             "Category Weights",

@@ -16,6 +16,11 @@ MonoBehaviour:
   displayName: 
   description: 
   entries:
+  - entryId: f8d8c60972c84c09886d1d1246ab220c
+    itemDefinition: {fileID: 11400000, guid: 994b501ba24143e418a76b5c9dd74139, type: 2}
+    amount: 1
+    price: 100
+    stockLimit: 5
   - entryId: 80aa681d57f54022ab3eaa6468359166
     itemDefinition: {fileID: 11400000, guid: c04ae7b3bf8b4d7588fa6f8e27a83da5, type: 2}
     amount: 1
@@ -51,3 +56,23 @@ MonoBehaviour:
     amount: 1
     price: 100
     stockLimit: 3
+  - entryId: d381e93846c3400d9e2c2505bca27df3
+    itemDefinition: {fileID: 11400000, guid: 3d13f2b1a8ff4bcb8710347e5f663b7a, type: 2}
+    amount: 1
+    price: 1000
+    stockLimit: 1
+  - entryId: 2c25c98dca324b7691b445a0e98ffc5a
+    itemDefinition: {fileID: 11400000, guid: 484ee74a362dbe349bd9bbfaaeaeec40, type: 2}
+    amount: 1
+    price: 1000
+    stockLimit: 1
+  - entryId: 2bcaf12a6646437ab07d5ebd747aab66
+    itemDefinition: {fileID: 11400000, guid: ab7b7bcbd2267a445a2b90e7b693ab42, type: 2}
+    amount: 1
+    price: 1000
+    stockLimit: 1
+  - entryId: ab921bf0070e4484a7c783348aeafc94
+    itemDefinition: {fileID: 11400000, guid: 246f05a48cb3e654f8b0b92e562522f9, type: 2}
+    amount: 1
+    price: 1000
+    stockLimit: -1

@@ -48,6 +48,7 @@ namespace Battle
         }
         private readonly HashSet<object> _pauseOwners = new();
         public bool IsPaused => _isPaused || _pauseOwners.Count > 0;
+        public bool HasPauseOwners => _pauseOwners.Count > 0;
 
         // Independent modal locks cannot be cleared by the existing Resume() callers.
         public void AcquirePause(object owner)

@@ -112,6 +112,7 @@ namespace Battle
         public void SelectPreviousLevel()
         {
             SetSelectedLevel(SelectedLevel - 1);
+            _player.ResetCombatState();
 
             if (!_battleActive)
                 return;
@@ -123,6 +124,7 @@ namespace Battle
         public void SelectNextLevel()
         {
             SetSelectedLevel(SelectedLevel + 1);
+            _player.ResetCombatState();
 
             if (!_battleActive)
                 return;
@@ -390,11 +392,12 @@ namespace Battle
                 _locationProgress != null &&
                 _locationProgress.AutoProgressionEnabled)
             {
-                _player.ResetCombatState();
                 _locationProgress.UnlockNextLevel();
 
                 if (!shouldShowLocationComplete)
                     SelectNextLevel();
+                else
+                    _player.ResetCombatState();
             }
 
             OnWaveCleared?.Invoke();
