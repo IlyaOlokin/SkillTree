@@ -186,6 +186,28 @@ is 30 days. No regression-test step is present in the inspected workflow.
 from a supplied build run ID and matching version. It requires ITCH_USER/ITCH_GAME
 repository variables, BUTLER_API_KEY and the configured Butler executable. It pushes
 the Windows and WebGL channels with the supplied user version; it does not rebuild.
+The channels are configurable, defaulting to `windows` and `webgl`. Platform jobs
+are independent (`fail-fast: false`), so a rejected Windows push does not skip
+WebGL. Deploy runs are serialized, and each artifact is extracted to a unique
+run/attempt/platform directory to avoid leftovers from earlier deployments.
+Each job prints authenticated channel status after the push, including on failure.
+An accepted upload is not verified publication: itch.io processing and visibility
+must be checked separately. The workflow emits a warning and summary to that effect.
+
+Incident, 2026-10-13: run 38413634385 retrieved version 0.1.12 from build
+38405884001, but itch.io rejected Windows with `latest build is still processing`.
+The previous workflow consequently skipped WebGL. Local Butler status returned
+no channels, which conflicts with the Actions response; it does not prove that
+the server-side pending build is gone or that the local and CI identities agree.
+Do not repeatedly delete uploads or retry the blocked channel. A one-time fresh
+channel (`windows-recovery` / `webgl-recovery`) can bypass a channel-specific
+block, but cannot repair the itch.io processing service. Configure new upload
+platform tags and select the WebGL upload as playable in the browser on Edit game.
+Alternatively, download the version-named ZIP artifacts from the successful build
+and upload them through Edit game; the WebGL ZIP must have `index.html` at its root.
+If new uploads also remain processing, contact itch.io support with the project,
+channel names, timestamps and failed run link. No backend reset was performed.
+The revised workflow has not been remotely dispatched during this investigation.
 Review artifact identity before dispatching. This document does not authorize a
 deployment or assert runner credentials/tool availability.
 
