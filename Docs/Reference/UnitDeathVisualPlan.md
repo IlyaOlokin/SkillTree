@@ -41,10 +41,18 @@ Keep the death-local appearance formulas in parity when changing the body shader
 
 Configured assets:
 
-- `Assets/Resources/Visual/UnitDeath/CurvedWisp.asset`: default 0.5-second profile.
+- `Assets/Resources/Visual/UnitDeath/CurvedWisp.asset`: default 0.7-second profile.
 - `Assets/Resources/Visual/UnitDeath/CurvedWispSurface.mat`.
 - `Assets/Resources/Visual/UnitDeath/CurvedWispRibbon.mat`.
 - `Assets/Prefabs/Visual/UnitDeath/CurvedWispDeath.prefab`.
+
+Timing update, 2026-10-14: the owner extended the profile from 0.5 to 0.7 seconds.
+All motion, breakup, particle and fade phases use normalized lifetime and therefore
+stretch uniformly by 1.4. The earlier 0–500 ms captures and verification observations
+below document the original timing; they are not new captures of the 0.7-second profile.
+This update changed the serialized profile only and verified its saved duration
+through the Unity Editor. No runtime code, compilation or additional playback check
+was needed for this parameter change.
 
 The common `Assets/Prefabs/Unit.prefab` is a visual/component base with no concrete
 Unit component. It now contains the emitter and its shape/profile references;
