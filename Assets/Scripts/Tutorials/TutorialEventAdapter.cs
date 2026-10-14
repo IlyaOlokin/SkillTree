@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 using Battle;
 using Battle.MiniGames;
 using SkillTree;
@@ -16,6 +19,7 @@ namespace Tutorials
         public const string MysticHit = "player.hit.mystic";
         public const string AilmentReceived = "player.ailment.received";
         public const string TravelNodeAllocated = "tree.travel.allocated";
+        public const string MysticNodeInvested = "tree.mystic.invested";
         public const string MiniGameSpawned = "minigame.spawned";
     }
 
@@ -45,6 +49,7 @@ namespace Tutorials
             player.OnGettingHit += OnHit;
             player.effectController.OnEffectAdded += OnEffectAdded;
             Node.OnAnyNodeAllocatedChanged += OnNodeAllocated;
+            Node.OnAnyNodeInvested += OnNodeInvested;
             ObserveMiniGameController();
         }
 
@@ -56,6 +61,7 @@ namespace Tutorials
             player.OnGettingHit -= OnHit;
             player.effectController.OnEffectAdded -= OnEffectAdded;
             Node.OnAnyNodeAllocatedChanged -= OnNodeAllocated;
+            Node.OnAnyNodeInvested -= OnNodeInvested;
             if (miniGames != null) miniGames.EventSpawned -= OnMiniGameSpawned;
         }
 
@@ -90,6 +96,67 @@ namespace Tutorials
         {
             if (node.IsAllocated && !node.IsApplyingSavedState && node.NodeType == NodeType.Travel)
                 tutorials.Report(TutorialEvents.TravelNodeAllocated, eventLocationId: spawner.SelectedLocationId);
+        }
+
+        private void OnNodeInvested(Node node)
+        {
+            if (node.Modifiers == null) return;
+            var visited = new HashSet<Modifier>();
+            foreach (var modifier in node.Modifiers)
+            {
+                if (!HasMysticRule(modifier, visited)) continue;
+                tutorials.Report(TutorialEvents.MysticNodeInvested, eventLocationId: spawner.SelectedLocationId);
+                return;
+            }
+        }
+
+        // Inspect authored data only: applying modifiers or creating effects here
+        // would mutate combat state. Serialized fields also cover conditional containers.
+        private static bool HasMysticRule(Modifier modifier, HashSet<Modifier> visited)
+        {
+            if (modifier == null || !visited.Add(modifier)) return false;
+            if (modifier is AddedFireDamageConvertedToLightDamage
+                || modifier is AddedColdDamageConvertedToDarknessDamage
+                || modifier is ArmorGrantsMysticNegation)
+                return true;
+
+            for (var type = modifier.GetType(); type != null && type != typeof(Modifier); type = type.BaseType)
+            {
+                foreach (var field in type.GetFields(BindingFlags.Instance | BindingFlags.Public
+                    | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
+                {
+                    if (field.IsStatic || field.IsNotSerialized
+                        || (!field.IsPublic && !field.IsDefined(typeof(UnityEngine.SerializeField), false)))
+                        continue;
+                    var value = field.GetValue(modifier);
+                    if (value is ModifierContainer container && IsMysticContainer(container)) return true;
+                    if (value is StatType stat && IsMysticStat(stat)) return true;
+                    if (!(value is IList list)) continue;
+                    foreach (var item in list)
+                    {
+                        if (item is ModifierContainer entry && IsMysticContainer(entry)) return true;
+                        if (item is Modifier nested && HasMysticRule(nested, visited)) return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private static bool IsMysticContainer(ModifierContainer container)
+        {
+            if (container == null) return false;
+            if (IsMysticStat(container.statType)) return true;
+            return container.statType == StatType.BarrierDamageTypeMask
+                && (((DamageType)UnityEngine.Mathf.RoundToInt(container.value)
+                    & (DamageType.Light | DamageType.Darkness)) != 0);
+        }
+
+        private static bool IsMysticStat(StatType stat)
+        {
+            return stat == StatType.MysticDamage || stat == StatType.LightDamage
+                || stat == StatType.DarknessDamage || stat == StatType.MysticNegation
+                || stat == StatType.MysticCleansePerSecond || stat == StatType.MysticDamageMitigation
+                || stat == StatType.LightDamageMitigation || stat == StatType.DarknessDamageMitigation;
         }
         private void OnLocationLevel()
         {

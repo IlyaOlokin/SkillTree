@@ -29,7 +29,9 @@ save behaviour are maintained in the runtime page rather than duplicated here.
 
 Ailment receipt and world-map events are already implemented. Consult the
 [current event table](../Systems/Tutorials.md#current-event-producers) before adding
-another producer. Mystic-node-specific integrations are outside the reviewed set.
+another producer. Mystic point investment is reported through
+`Node.OnAnyNodeInvested`; the adapter checks authored damage/defence modifiers.
+Saved-state application and refunds do not report this event.
 
 ## Connect the window
 

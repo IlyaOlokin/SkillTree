@@ -163,6 +163,22 @@ MonoBehaviour:
     m_Key: tutorial.miniGames.paragraph3
     m_Metadata:
       m_Items: []
+  - m_Id: 8326452915208192
+    m_Key: tutorial.mystic.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8326452915208193
+    m_Key: tutorial.mystic.paragraph1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8326452915208194
+    m_Key: tutorial.mystic.paragraph2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8326452915208195
+    m_Key: tutorial.mystic.paragraph3
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

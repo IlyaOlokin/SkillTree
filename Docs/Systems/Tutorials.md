@@ -51,6 +51,7 @@ only clears `Current`; scene teardown does not acknowledge the topic.
 | `player.ailment.received` | Player `OnEffectAdded` reports Bleed, Ignite, Chill or Overcharge, including stack updates |
 | `world_map.opened` | LocationFlowController returns to the map after `level-1` is completed; event location is explicitly `level-1` |
 | `tree.travel.allocated` | TutorialEventAdapter observes an allocated Travel node through Node.OnAnyNodeAllocatedChanged; refunds and saved-state application are excluded |
+| `tree.mystic.invested` | Node.OnAnyNodeInvested reports successful point investment; TutorialEventAdapter checks authored modifiers for Mystic damage or defence, including conditional containers and conversion modifiers |
 | `minigame.spawned` | TutorialEventAdapter listens to the player's BattleMiniGameController.EventSpawned after an activator is created; controller subscriptions are refreshed on Tick and removed on disposal |
 
 The ailment event does not require an EnemyUnit source. It listens to effect-list
@@ -82,7 +83,47 @@ rules for future content.
 | `ailments` | `player.ailment.received >= 0`, event location `level-2` | `damage_types` |
 | `world_map` | `world_map.opened >= 0`, event location `level-1` | None |
 | `travel_nodes` | `tree.travel.allocated >= 0`, any location | None |
-| `location_structure` | `location.level >= 1`, event location `level-2` | None |
+| `mini_games` | `minigame.spawned >= 0`, any location | None |
+| `mystic` | `player.hit.mystic >= 0` OR `tree.mystic.invested >= 0`, any location | None |
+
+Added 2026-10-14: `Definitions/Mystic.asset` briefly introduces Light/Darkness,
+absorption that weakens and kills at the current-health threshold, opposing-type
+cancellation, Mystic Negation and cleanse. Three concise paragraphs explain the
+purpose of these mechanics; numerical formulas and specific penalties belong in
+tooltips.
+The `Tutorial` table uses `tutorial.mystic.title` and
+`tutorial.mystic.paragraph1` through `paragraph3`.
+Only English entries were added; Russian/German translations remain TODOs.
+The existing queue, completed-topic persistence and skip-all rules apply.
+No prerequisite or location restriction is imposed.
+
+`Node.OnAnyNodeInvested` fires after successful point expenditure, including
+additional Infinite-node investment. Loading saved allocations, refunds and
+activation changes do not emit it. Mystic detection reads serialized stat
+containers, stat selectors, nested modifier lists, Mystic barrier masks and the
+existing fire-to-Light, cold-to-Darkness and armor-to-negation modifiers. It does
+not apply modifiers or instantiate effects to inspect them. New custom modifiers
+with implicit Mystic rules need explicit recognition if their serialized fields
+do not expose a relevant stat.
+
+Verification on 2026-10-14: `dotnet build Assembly-CSharp.csproj --no-restore
+-v:q /clp:ErrorsOnly` succeeded with zero errors and 21 warnings. Definition
+script GUID, both trigger IDs, single catalog registration and initially seven matching
+Shared Data/English entry IDs were checked from serialized files. The live
+Editor's main thread stopped responding during script refresh; its Pipeline
+ground-truth snapshot remained stale with `compiling=true`. Consequently the
+definition, catalog reference and localization entries were authored directly
+using their existing serialization format. Unity import and in-game trigger/
+presentation verification remain outstanding after the Editor recovers.
+
+The owner's subsequent revisions condensed the tutorial to three short paragraphs
+and removed paragraph4 through paragraph6 and their localization keys. The
+definition now has four English entries including the title. Serialized references
+were checked; these text-only revisions required no additional compilation.
+
+The 2026-10-14 serialized catalog has no `location_structure` entry. The following
+addition record is historical and does not establish current wiring; this Mystic
+task did not restore or remove that topic.
 
 Added 2026-10-13: `Definitions/LocationStructure.asset` introduces locations,
 stages and waves on entry to the second location. It explains that clearing all

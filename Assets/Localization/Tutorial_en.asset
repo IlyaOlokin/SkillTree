@@ -204,6 +204,22 @@ MonoBehaviour:
       to find new ways to support your hero in battle.
     m_Metadata:
       m_Items: []
+  - m_Id: 8326452915208192
+    m_Localized: 'Mystic Damage and Defence'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8326452915208193
+    m_Localized: 'Light and Darkness are Mystic damage types. Instead of directly reducing health, they build absorption. Absorption weakens the target and becomes fatal when it reaches the target''s current health.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8326452915208194
+    m_Localized: 'Light and Darkness cancel each other''s absorption. Incoming damage of the opposite type first cancels existing absorption, while more damage of the same type increases it.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8326452915208195
+    m_Localized: 'Mystic Negation reduces incoming Mystic damage, helping prevent absorption from building up. Mystic Cleanse gradually removes existing absorption.'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

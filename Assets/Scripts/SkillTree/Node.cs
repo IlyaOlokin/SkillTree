@@ -74,6 +74,7 @@ namespace SkillTree
         public event Action<Node> OnActiveChanged;
         public event Action<Node> OnNodeChanged;
         public static event Action<Node> OnAnyNodeAllocatedChanged;
+        public static event Action<Node> OnAnyNodeInvested;
 
         public Func<bool> AdditionalAllocatedCondition;
         public Func<bool> AdditionalActivationCondition;
@@ -143,6 +144,7 @@ namespace SkillTree
             {
                 InvestedSkillPoints++;
                 RaiseNodeChanged();
+                OnAnyNodeInvested?.Invoke(this);
                 return true;
             }
             InvestedSkillPoints = 1;
@@ -154,6 +156,7 @@ namespace SkillTree
             OnAllocatedChanged?.Invoke(this);
             OnAnyNodeAllocatedChanged?.Invoke(this);
             RaiseNodeChanged();
+            OnAnyNodeInvested?.Invoke(this);
             return true;
         }
 
