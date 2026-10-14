@@ -19,6 +19,28 @@ Seed, Fill Amount and Fill Softness are shared across styles. Each observed tran
 
 The Inspector Glow section shades each branch from a saturated colored rim to a bright HDR core. Glow Color and Glow Intensity control the core, Core Width controls its width, Core Sharpness shapes the center-to-edge gradient, Edge Brightness controls the colored rim, and Glow Falloff fades core emission toward the current fill endpoint. The shader evaluates paired outer/core distances in the existing segment loops, without an extra rendering pass. Each Light/Darkness preset remembers these values. Mystic Colors Config only overrides the base color. Set Glow Intensity to 0 to disable this layer. Emission stays within the existing silhouette and obeys fill, alpha and UI masks; the surrounding bloom is still provided by the camera post-processing path.
 
+## Painterly color
+
+Added on **2026-10-14**. The Mystic Absorption root uses the shared
+`Assets/Shaders/PainterlyColor.hlsl` filter used by units and attacks. The
+component's **Painterly Color** section exposes Paint Strength, Paint Tonal
+Steps, Paint Patch Size and Paint Variation, saved independently for Light
+and Darkness. Defaults are 1, 5, 0.14 and 0.65 respectively. Set Strength to
+0 to restore smooth shading.
+
+Angular patches and logarithmic brightness bands process the combined body
+and emissive core while preserving hue and HDR values. Patch coordinates
+follow the full Graphic in bar-height units, so fill changes do not stretch
+the pattern. Root geometry, subpixel coverage, fill taper, alpha and UI mask
+fades keep their existing calculations. No time-based scrolling is added.
+
+Verification on 2026-10-14: Unity CLI `recompile` imported the C# changes;
+after domain reload, live inspection confirmed the new fields on existing
+MainScene components with Strength 1 and Patch Size 0.14. ShaderUtil reported
+no messages. An isolated Canvas render compared smooth and painted Light and
+Darkness using the active slider's settings; the image was visually inspected.
+Temporary scene objects were removed. No gameplay test or player build was run.
+
 ## Branches and shape
 
 - Branch Count: number of deterministic primary branch candidates, default 64, range 8–96.

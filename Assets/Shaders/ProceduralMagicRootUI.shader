@@ -11,6 +11,11 @@ Shader "UI/Procedural Magic Root"
         _CoreSharpness ("Core Sharpness", Range(0.5,4)) = 1.5
         _EdgeBrightness ("Edge Brightness", Range(0,1)) = 0.5
         _GlowFalloff ("Glow Falloff", Range(0,4)) = 1.2
+        [Header(Painterly Color)]
+        _PaintStrength ("Paint Strength", Range(0,1)) = 1
+        _PaintSteps ("Paint Tonal Steps", Range(2,12)) = 5
+        _PaintPatchSize ("Paint Patch Size", Range(0.001,0.5)) = 0.14
+        _PaintVariation ("Paint Patch Variation", Range(0,2)) = 0.65
         _Alpha ("Alpha", Range(0,1)) = 1
         _Seed ("Seed", Float) = 17
         _StyleBlend ("Style Blend", Range(0,1)) = 0
@@ -80,10 +85,12 @@ Shader "UI/Procedural Magic Root"
             #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
             #pragma multi_compile_local _ UNITY_UI_ALPHACLIP
             #include "UnityCG.cginc"
+            #include "PainterlyColor.hlsl"
 
             float4 _Color, _GlowColor, _RootRect, _ClipRect;
             float _GlowIntensity;
             float _CoreWidth, _CoreSharpness, _EdgeBrightness, _GlowFalloff;
+            float _PaintStrength, _PaintSteps, _PaintPatchSize, _PaintVariation;
             float4x4 _RootWorldToLocal;
             float _UIMaskSoftnessX, _UIMaskSoftnessY;
             float _Intensity, _Alpha, _Seed, _StyleBlend, _Thickness, _EndThickness;
@@ -235,7 +242,15 @@ Shader "UI/Procedural Magic Root"
                 float3 emission = _GlowColor.rgb * max(0,_GlowIntensity) * saturate(_GlowColor.a) * core * energy;
                 float3 body = _Color.rgb * _Intensity * lerp(_EdgeBrightness,1,core);
                 float3 rgb = i.color.rgb * (body + emission);
-                float4 color=float4(rgb*(1+_LeftIntensityBoost*pow(saturate(1-i.uv.x),3)), i.color.a*_Color.a*_Alpha*coverage*fill);
+                rgb *= 1+_LeftIntensityBoost*pow(saturate(1-i.uv.x),3);
+                if (_PaintStrength > 0.001)
+                {
+                    // Bar-height coordinates keep patches proportional on long bars.
+                    // Keep geometric antialiasing, fill and UI mask fades continuous.
+                    float patch = SkillTreePaintPatch(float2(i.uv.x*_AspectRatio, i.uv.y-0.5), _PaintPatchSize);
+                    rgb = SkillTreePaintColor(rgb, patch, _PaintStrength, _PaintSteps, _PaintVariation);
+                }
+                float4 color=float4(rgb, i.color.a*_Color.a*_Alpha*coverage*fill);
                 #ifdef UNITY_UI_CLIP_RECT
                 float2 m=saturate((_ClipRect.zw-_ClipRect.xy-abs(i.mask.xy))*i.mask.zw);
                 color.a*=m.x*m.y;

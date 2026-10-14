@@ -36,6 +36,11 @@ public sealed class ProceduralMagicRootUI : MonoBehaviour
     [Tooltip("How quickly core emission fades toward the current fill endpoint. Zero keeps it constant along the bar.")]
     [Range(0f, 4f)] public float GlowFalloff = 1.2f;
 
+    [Header("Painterly Color")]
+    [Range(0f, 1f)] public float PaintStrength = 1f;
+    [Range(2f, 12f)] public float PaintSteps = 5f;
+    [Range(0.001f, 0.5f)] public float PaintPatchSize = 0.14f;
+    [Range(0f, 2f)] public float PaintVariation = 0.65f;
 
     [Header("Fill")]
     [Range(0f, 1f)] public float FillAmount = 1f;
@@ -93,6 +98,10 @@ public sealed class ProceduralMagicRootUI : MonoBehaviour
     private static readonly int EdgeBrightnessId = Shader.PropertyToID("_EdgeBrightness");
     private static readonly int GlowFalloffId = Shader.PropertyToID("_GlowFalloff");
     private static readonly int GlowIntensityId = Shader.PropertyToID("_GlowIntensity");
+    private static readonly int PaintStrengthId = Shader.PropertyToID("_PaintStrength");
+    private static readonly int PaintStepsId = Shader.PropertyToID("_PaintSteps");
+    private static readonly int PaintPatchSizeId = Shader.PropertyToID("_PaintPatchSize");
+    private static readonly int PaintVariationId = Shader.PropertyToID("_PaintVariation");
     private static readonly int IntensityId = Shader.PropertyToID("_Intensity");
     private static readonly int AlphaId = Shader.PropertyToID("_Alpha");
     private static readonly int SeedId = Shader.PropertyToID("_Seed");
@@ -227,6 +236,10 @@ public sealed class ProceduralMagicRootUI : MonoBehaviour
         material.SetFloat(CoreSharpnessId, Mathf.Clamp(CoreSharpness, 0.5f, 4f));
         material.SetFloat(EdgeBrightnessId, Mathf.Clamp(EdgeBrightness, 0f, 1f));
         material.SetFloat(GlowFalloffId, Mathf.Clamp(GlowFalloff, 0f, 4f));
+        material.SetFloat(PaintStrengthId, Mathf.Clamp01(PaintStrength));
+        material.SetFloat(PaintStepsId, Mathf.Clamp(PaintSteps, 2f, 12f));
+        material.SetFloat(PaintPatchSizeId, Mathf.Clamp(PaintPatchSize, 0.001f, 0.5f));
+        material.SetFloat(PaintVariationId, Mathf.Clamp(PaintVariation, 0f, 2f));
 
         material.SetFloat(GlowIntensityId, Mathf.Max(0f, GlowIntensity));
         material.SetFloat(IntensityId, Intensity);
@@ -382,6 +395,10 @@ public sealed class ProceduralMagicRootUI : MonoBehaviour
         public float CoreSharpness = 1.5f;
         public float EdgeBrightness = 0.5f;
         public float GlowFalloff = 1.2f;
+        public float PaintStrength = 1f;
+        public float PaintSteps = 5f;
+        public float PaintPatchSize = 0.14f;
+        public float PaintVariation = 0.65f;
 
         public float Intensity;
         public float Alpha;
@@ -460,6 +477,10 @@ public sealed class ProceduralMagicRootUI : MonoBehaviour
             CoreSharpness = root.CoreSharpness;
             EdgeBrightness = root.EdgeBrightness;
             GlowFalloff = root.GlowFalloff;
+            PaintStrength = root.PaintStrength;
+            PaintSteps = root.PaintSteps;
+            PaintPatchSize = root.PaintPatchSize;
+            PaintVariation = root.PaintVariation;
 
             Intensity = root.Intensity;
             Alpha = root.Alpha;
@@ -503,6 +524,10 @@ public sealed class ProceduralMagicRootUI : MonoBehaviour
             root.CoreSharpness = CoreSharpness;
             root.EdgeBrightness = EdgeBrightness;
             root.GlowFalloff = GlowFalloff;
+            root.PaintStrength = PaintStrength;
+            root.PaintSteps = PaintSteps;
+            root.PaintPatchSize = PaintPatchSize;
+            root.PaintVariation = PaintVariation;
 
             root.Intensity = Intensity;
             root.Alpha = Alpha;
