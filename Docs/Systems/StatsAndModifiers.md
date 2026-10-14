@@ -29,8 +29,15 @@ uses generic `BaseEffect.CanApply` / `CanRemove` hooks to enforce upper/lower
 bounds in every effect insertion/removal path. ClearAllEffects bypasses removal
 restrictions; controller destruction clears change listeners before teardown.
 `EffectController` contains no Fortification-specific formulas or registrations.
-Barrier/Evade/Bleed producers read `unit.Fortification.Maximum`. Reduction remains
-1% per stack and is capped at 100%; positive damage consumes up to five stacks
+Barrier/Evade/Bleed producers read `unit.Fortification.Maximum`. Each stack grants
+1% More Defence through one controller-owned runtime BaseModifier: 30 stacks
+contribute one +0.30 More value (a 1.30 multiplier), never thirty +0.01 values.
+The Defence aggregate expands to Armor, Evasion, BarrierCapacity and BlockChance.
+Stack changes queue the ordinary deferred stat recalculation; the controller
+removes its modifier at zero stacks and disposes it on owner destruction.
+Fortification no longer directly reduces incoming attack or DoT damage.
+Receiving an attack with positive incoming damage consumes up to five stacks;
+DoT does not consume Fortification stacks. Consumption respects the minimum
 above the minimum. Existing status visuals/name/glossary are reused. Stat-name tooltip links map to the existing registered fortification term through StatTypeTooltipFormatter.
 
 Removed `SpecialMods/MinimumFortificationStacks.cs` and
@@ -66,6 +73,16 @@ priority. Do not manually add another base maximum of 30. Configure node icons
 manually. The registered fortification glossary remains valid; its static text
 states the base maximum 30 and does not dynamically show a particular owner's
 modified limits. A tooltip asset/configuration change remains manual.
+
+Bonus update (2026-10-14): English Descriptions entries
+`effect.fortification.reduction` and `effect.fortification.consumption` now describe
+the aggregate More Defence bonus and consumption up to the minimum floor.
+Existing ru/de translations need updating. The registered tooltip asset, keys,
+effect display name and status icon are reused without serialized wiring changes.
+Verification for the bonus update: Unity CLI `recompile` / `recompile_status`
+targeting C:/UnityProjects/SkillTree completed with no compilation errors.
+Source review checked one aggregate contribution, zero-stack removal and disposal.
+No tests, player build or runtime playtest were performed.
 
 Icon Generation Prompt (proposed style, minimum): Create a square painterly
 fantasy RPG icon of a steel shield anchored by interlocking luminous cyan plates.
@@ -702,16 +719,13 @@ integer). The grant count does not scale with node power. RestoreFull/combat res
 is not a restoration trigger.
 Restoration, Evade and Bleed producers share the thirty-stack cap.
 
-Fortification no longer owns a timed PhysicalDamageMitigation modifier. Following
-existing direct damage processing in `Unit.ReceiveDamage`, its helper reads live
-active effects and reduces every incoming damage component by 1% per stack, then
-removes up to five stacks. Thirty stacks reduce this receipt by 30%; the next receipt
-uses twenty-five stacks and 25%, even within the same Actions phase. This is a separate
-multiplicative reduction after ordinary mitigation and block, before Barrier and
-mystic absorption. Zero-damage/fully blocked attacks and evasion consume nothing;
-positive damage absorbed by Barrier consumes up to five stacks. `ReceiveDoT` applies the
-same rule per positive DoT receipt. Deferred damage-debt payments bypass this
-helper because they directly call Health and must not be mitigated twice.
+Fortification grants one aggregate More Defence contribution of 1% per stack,
+owned by FortificationController and updated through deferred stat recalculation.
+It does not directly reduce incoming damage. In `Unit.ReceiveDamage`, its helper
+reads live effects and removes up to five stacks on positive attack damage,
+respecting the minimum stack floor. Zero-damage/fully blocked attacks and evasion
+consume nothing; positive attack damage absorbed by Barrier consumes stacks.
+`ReceiveDoT` and deferred damage-debt payments do not consume stacks.
 
 Stacks have no time limit. Removing a producer leaves earned stacks; ordinary
 combat reset/effect clearing removes them. Node power does not scale stack
@@ -723,17 +737,17 @@ Existing definition (unchanged):
 Existing glossary registration points to `Descriptions/Fortification.asset` and
 uses Descriptions keys. On 2026-10-13 the tooltip asset was split into three
 separate `descriptions` entries so the UI creates separate paragraph blocks:
-`effect.fortification.reduction` = `Each stack reduces incoming damage by 1%.`,
+Current English text for `effect.fortification.reduction` = `Each stack grants 1% more Defence.`,
 `effect.fortification.limit` = `Maximum 30 stacks.`, and
 `effect.fortification.consumption` =
-`Taking damage removes 5 stacks after applying their damage reduction.`
+`Receiving an attack removes up to 5 stacks, without going below your minimum.`
 The shared/English entries were saved through Unity API; ru/de are translator
 TODOs. TooltipTerms' existing fortification registration was maintained and its
 lookup was verified against the same tooltip asset. The full description key
 remains available for code fallback. This asset-only change required no compilation.
 
-Updated English `Descriptions` / `effect.fortification.description` (blank lines
-separate semantic parts):
+Historical English `Descriptions` / `effect.fortification.description` from
+2026-10-13, superseded by the split entries and current code fallback:
 
 > Each stack reduces incoming damage by 1%.
 >

@@ -129,7 +129,7 @@ namespace Battle
 
         public DamageInstance ReceiveDamage(DamageInfo damageInfo)
         {
-            FortificationEffect.MitigateAndConsume(this, damageInfo.DamageInstance);
+            FortificationEffect.ConsumeOnDamage(this, damageInfo.DamageInstance);
             barrier.TakeDamage(damageInfo.DamageInstance, damageInfo.DealsDoubleDamageToBarrier ? 2f : 1f,
                 damageInfo.MaxBarriersLostPerAttack);
             mysticHealth.ApplyMysticDamageAsAbsorption(damageInfo.DamageInstance);
@@ -240,7 +240,6 @@ namespace Battle
 
         public void ReceiveDoT(DamageInstance damageInstance)
         {
-            FortificationEffect.MitigateAndConsume(this, damageInstance);
             health.TakeDamage(damageInstance, false);
         }
 

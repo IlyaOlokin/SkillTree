@@ -798,7 +798,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 65615572848742400
-    m_Localized: Each stack reduces incoming damage by 1%.
+    m_Localized: Each stack grants 1% more Defence.
     m_Metadata:
       m_Items: []
   - m_Id: 65615572878102528
@@ -806,7 +806,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 65615572878102529
-    m_Localized: Taking damage removes 5 stacks after applying their damage reduction.
+    m_Localized: Receiving an attack removes up to 5 stacks, without going below your minimum.
     m_Metadata:
       m_Items: []
   - m_Id: 65630384962015232

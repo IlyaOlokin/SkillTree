@@ -7,17 +7,16 @@ namespace Battle
     {
         public const int MaxStacks = 30;
         public const int StacksConsumedPerHit = 5;
-        public const float DamageMitigationPerStack = 0.01f;
-        public const string Description = "Each stack reduces incoming damage by 1%.\n\nMaximum 30 stacks.\n\nTaking damage removes 5 stacks after applying their damage reduction.";
+        public const float DefencePerStack = 0.01f;
+        public const string Description = "Each stack grants 1% more Defence.\n\nMaximum 30 stacks.\n\nReceiving an attack removes up to 5 stacks, without going below your minimum.";
         public override bool IsStackable { get; set; } = false;
         public override EffectVisualType VisualType => EffectVisualType.Fortification;
         public override bool CanApply(Unit owner)
             => owner?.Fortification != null && owner.Fortification.Count < owner.Fortification.Maximum;
         public override bool CanRemove(Unit owner)
             => owner?.Fortification == null || owner.Fortification.Count > owner.Fortification.Minimum;
-        // Read live effects rather than deferred stat caches: consecutive damage
-        // receipts in the same Actions phase must observe the consumed stack.
-        public static void MitigateAndConsume(Unit unit, DamageInstance damage)
+        // Read live effects so consecutive receipts respect the current stack floor.
+        public static void ConsumeOnDamage(Unit unit, DamageInstance damage)
         {
             var controller = unit.effectController;
             if (controller == null || damage == null) return;
@@ -36,10 +35,6 @@ namespace Battle
                 if (pair.Value > 0f) { hasDamage = true; break; }
             if (!hasDamage) return;
 
-            float multiplier = System.Math.Max(0f,
-                1f - System.Math.Min(count, unit.Fortification.Maximum) * DamageMitigationPerStack);
-            foreach (var type in new List<DamageType>(damage.Damage.Keys))
-                damage.Damage[type] *= multiplier;
             foreach (var stack in stacksToConsume)
                 controller.RemoveEffect(stack);
         }

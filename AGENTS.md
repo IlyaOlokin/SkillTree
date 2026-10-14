@@ -24,6 +24,10 @@ referenced project guides.
 
 ## Tooltip authoring
 
+Player-facing descriptions must be concise. Never include examples or text in
+parentheses. Keep implementation details out of descriptions; state only the
+gameplay rule the player needs.
+
 Whenever creating or updating a `TooltipDescriptionData` asset, also update
 `Assets/Scripts/TooltipSystem/TooltipTerms.asset` (the `TooltipTermDatabase`):
 register new terms and keep existing term IDs and description references correct.
