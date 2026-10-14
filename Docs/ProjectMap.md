@@ -55,6 +55,10 @@ connects those rewards and enemy gold to inventory, wallet and shop purchase his
 Unit geometry and painterly shader controls are described in
 [Unit shape rendering](Reference/UnitShapeRendering.md).
 
+The [procedural unit death module](Reference/UnitDeathVisualPlan.md) implements
+8B Curved Wisp with randomized shader rendering, detached playback and a bounded
+visual pool. The record includes prefab/scene wiring and scoped Play Mode captures.
+
 The [BonusZone animated visual implementation](Reference/BonusZoneVisualPlan.md)
 keeps SpriteShape authoring and derives a moving fill and glowing spark contour from
 one spline. It is applied in MainScene and records the separate manually configured

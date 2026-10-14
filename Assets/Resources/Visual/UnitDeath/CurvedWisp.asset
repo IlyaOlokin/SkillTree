@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cfc7871ef10f624ab6e1050c1eeeb8a, type: 3}
+  m_Name: CurvedWisp
+  m_EditorClassIdentifier: Assembly-CSharp::Visual.UnitDeath.DeathVisualProfile
+  viewPrefab: {fileID: 677418965806807043, guid: c2eede050caa4174b8442bd37737c510, type: 3}
+  surfaceMaterial: {fileID: 2100000, guid: f2536dc6b581a36469948deb50cbc05d, type: 2}
+  ribbonMaterial: {fileID: 2100000, guid: 526ef33ffa1226840b93a686913d5ff2, type: 2}
+  duration: 0.5
+  riseRange: {x: 0.65, y: 1}
+  sidewaysRange: {x: 0.15, y: 0.35}
+  fragmentRange: {x: 6, y: 12}
+  gapRange: {x: 6, y: 10}
+  ribbonWidth: 0.025
+  trailLength: 0.4

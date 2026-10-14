@@ -98,6 +98,14 @@ close BL-032 or establish optimal-build balance.
 | BL-031 | P3 / Decision | Build script logs `-buildNumber` without applying a platform build-number setting. | Confirm whether consumers require a platform build number; implement and inspect output metadata if required, otherwise document the argument as informational. | [Build arguments](Reference/EditorAndBuildTools.md#build-entry-points) |
 | BL-032 | P2 / Verification gap | Source review did not verify scene/prefab wiring, complete translations/fonts, audio routing/imports, target performance or current visual appearance. Historical render tests are not current results. | Split into scoped verification tasks when preparing a release or changing these areas; record platform, scene, steps and evidence. This umbrella entry is not a claim that all those areas are broken. | [Coverage limits](ProjectMap.md#coverage-limits-and-future-maintenance), [visual history](Reference/ProceduralMagicRootUI.md#historical-validation-record) |
 
+BL-032 evidence update, 2026-10-14: [8B unit death](Reference/UnitDeathVisualPlan.md#implementation-record)
+compiled and was wired to player/enemy prefabs and MainScene. Real BattleCamera
+captures verified shape-aware contour breakup and a single moving core. A lethal
+enemy receipt launched a detached view; live playback returned it to its pool
+while battle ticks were paused, and map exit cleared three active views. The
+player game-over composition, full instant-respawn path, maximum pool load and
+target-device performance were not separately checked. BL-032 remains open.
+
 Warning-maintenance note, 2026-10-03: the `CodexTwoClusters` UDR0001 diagnostics
 refer to its intentional Editor-domain lifetime. They are locally suppressed with
 an explanation; its polling and file-triggered behavior are unchanged. **BL-029
