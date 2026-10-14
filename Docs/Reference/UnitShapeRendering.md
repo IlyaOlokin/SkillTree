@@ -13,6 +13,10 @@ For the proposed ailment application/presence layer, see the
 shape math. The subsequent [implementation record](AilmentVisualRendering.md)
 describes the new layer and its verification limits.
 
+The [8B procedural death module](UnitDeathVisualPlan.md) copies effective shader
+appearance into independent playback after the live unit is disabled. Its separate
+surface and ribbon shaders reuse the painterly functions and source paint settings.
+
 `SkillTree/Unit Shape SDF` uses stepped glow/core energy and broad, angular
 procedural patches. The patch pattern uses sheared, warped triangular cells in
 shape-local coordinates; it follows the shape's rotation and mirroring without

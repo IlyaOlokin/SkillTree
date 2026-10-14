@@ -402,6 +402,7 @@ GameObject:
   - component: {fileID: 2016979454613314505}
   - component: {fileID: 4229086917038102674}
   - component: {fileID: 236433187644165001}
+  - component: {fileID: 5643480893462488324}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -755,6 +756,21 @@ MonoBehaviour:
   pulseAmount: 0.108
   pulseSpeed: 1.35
   contourSpinSpeed: 0.1
+--- !u!114 &5643480893462488324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5973140120424880838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eea71f2f32362fa498d529c4d83f2ca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Visual.UnitDeath.UnitDeathVisualEmitter
+  unit: {fileID: 0}
+  shape: {fileID: 236433187644165001}
+  profile: {fileID: 11400000, guid: 1e0e864349873114ab5ba67362d84205, type: 2}
 --- !u!1 &6924754677918175935
 GameObject:
   m_ObjectHideFlags: 0
