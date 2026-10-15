@@ -41,7 +41,7 @@ namespace Visual
                 attackAnimationController != null ? attackAnimationController.CombatDirection : Vector2.right);
 
             
-            unit.health.OnHealthChangedDelta += DisplayHealthChangedNotification;
+            unit.health.OnHealthChangedNotification += DisplayHealthChangedNotification;
             unit.OnGettingHit += DisplayGettingHitEffect;
             unit.OnAttack += DisplayAttackAnimation;
             unit.OnEvade += DisplayEvadeNotification;
@@ -74,7 +74,7 @@ namespace Visual
 
             if (unit != null && unit.health != null)
             {
-                unit.health.OnHealthChangedDelta -= DisplayHealthChangedNotification;
+                unit.health.OnHealthChangedNotification -= DisplayHealthChangedNotification;
             }
 
             effectsController?.ClearAllEffectIcons();
@@ -102,13 +102,13 @@ namespace Visual
             ailmentController?.LateUpdate();
         }
 
-        private void DisplayHealthChangedNotification(float deltaHealth)
+        private void DisplayHealthChangedNotification(float deltaHealth, bool isCritical)
         {
             if (deltaHealth == 0f) return;
             var newEffect = Instantiate(unitNotificationEffect, transform.position, Quaternion.identity);
             if (deltaHealth > 0f)
             {
-                newEffect.WriteDamage(Mathf.Abs(deltaHealth));
+                newEffect.WriteDamage(Mathf.Abs(deltaHealth), isCritical: isCritical);
             }
             else if (deltaHealth < 0f)
             {

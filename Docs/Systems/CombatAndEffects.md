@@ -274,3 +274,14 @@ After OnGettingHit, positive actual attack HP loss is converted using the cached
 PainReceived stat, with existing low-life doubling, before OnHealthDamageTaken.
 No DamageTakenAsPain runtime bindings are used. DoT remains outside this path.
 See [Pain stat](ReactiveCombatEffects.md#pain-received-stat-2026-10-12).
+
+## Critical damage number context (2026-10-15)
+
+ReceiveDamage forwards the attack's IsCritical flag into Health.TakeDamage solely
+for notification styling. When displayDamage is enabled, Health emits the HP
+delta and flag through OnHealthChangedNotification alongside the existing
+OnHealthChangedDelta event. UnitVisual subscribes to the contextual event only.
+Healing supplies a false flag; hidden DoT/debt payments emit neither notification.
+Damage arithmetic and existing combat-event timing are unchanged. See
+[critical number presentation](HudAndTooltips.md#critical-damage-numbers) for
+prefab controls and verification limits.

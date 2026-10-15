@@ -105,6 +105,7 @@ namespace Battle
         }
 
         public event Action<float> OnHealthChangedDelta;
+        public event Action<float, bool> OnHealthChangedNotification;
         public event Action OnHealthChanged;
         public event Action OnMaximumHealthChanged;
         public event Action OnProfanedHealthChanged;
@@ -146,7 +147,12 @@ namespace Battle
 
             float previousHealth = CurrentHealth;
             CurrentHealth += amount;
-            if (displayHeal) OnHealthChangedDelta?.Invoke(previousHealth - CurrentHealth);
+            if (displayHeal)
+            {
+                float delta = previousHealth - CurrentHealth;
+                OnHealthChangedDelta?.Invoke(delta);
+                OnHealthChangedNotification?.Invoke(delta, false);
+            }
             OnHealthChanged?.Invoke();
             OnProfanedHealthChanged?.Invoke();
             OnHallowedHealthChanged?.Invoke();
@@ -164,7 +170,7 @@ namespace Battle
             return amount * Mathf.Max(0f, 1f + healingReceived);
         }
 
-        public DamageInstance TakeDamage(DamageInstance damageInstance, bool displayDamage = true)
+        public DamageInstance TakeDamage(DamageInstance damageInstance, bool displayDamage = true, bool isCritical = false)
         {
             float previousHealth = CurrentHealth;
             foreach (var damagePair in damageInstance.Damage)
@@ -175,7 +181,12 @@ namespace Battle
                 CurrentHealth -= damagePair.Value;
             }
             
-            if (displayDamage) OnHealthChangedDelta?.Invoke(previousHealth - CurrentHealth);
+            if (displayDamage)
+            {
+                float delta = previousHealth - CurrentHealth;
+                OnHealthChangedDelta?.Invoke(delta);
+                OnHealthChangedNotification?.Invoke(delta, isCritical);
+            }
             OnHealthChanged?.Invoke();
             OnProfanedHealthChanged?.Invoke();
             OnHallowedHealthChanged?.Invoke();

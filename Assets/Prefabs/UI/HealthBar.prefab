@@ -73,53 +73,53 @@ MonoBehaviour:
   targetGraphic: {fileID: 9005984527397576425}
   mysticColorsConfig: {fileID: 11400000, guid: 5293deee444da194b9f0f23469b7a7c2, type: 2}
   rootShader: {fileID: 4800000, guid: 4ff16c3e9256d5d43b6f55afcbd57ec6, type: 3}
-  Style: 0
-  Color: {r: 1, g: 0.84313726, b: 0.61960787, a: 1}
-  Intensity: 1.5
+  Style: 1
+  Color: {r: 0.19103765, g: 0, b: 0.764151, a: 1}
+  Intensity: 1
   Alpha: 1
   Seed: 45472
-  StyleBlend: 0
+  StyleBlend: 1
   LeftIntensityBoost: 0.2
-  GlowColor: {r: 2, g: 1.6937469, b: 1.2344135, a: 0}
+  GlowColor: {r: 1.0931835, g: 0, b: 4.4334683, a: 1}
   GlowIntensity: 0.4
   CoreWidth: 0.05
-  CoreSharpness: 0.69
-  EdgeBrightness: 0
-  GlowFalloff: 0
+  CoreSharpness: 0.86
+  EdgeBrightness: 0.064
+  GlowFalloff: 0.21
   PaintStrength: 1
   PaintSteps: 3
-  PaintPatchSize: 0.022
+  PaintPatchSize: 0.025
   PaintVariation: 0.649
   FillAmount: 1
   FillSoftness: 0.002
-  Thickness: 0.055
-  EndThickness: 0.0144
-  VerticalScale: 1.16
+  Thickness: 0.06
+  EndThickness: 0.0157
+  VerticalScale: 1
   MainPathAmplitude: 0.09
-  MainPathFrequency: 10.84
+  MainPathFrequency: 8
   MainPathOffset: 0
-  MainPathSharpness: 0
+  MainPathSharpness: 0.9
   BranchCount: 60
   BranchDensity: 1
-  BranchLength: 0.61
-  BranchWidth: 1
-  BranchAngle: 29.6
-  BranchAngleRandomness: 0.056
-  BranchLengthRandomness: 0.423
-  SecondaryBranchDensity: 0.2
+  BranchLength: 0.95
+  BranchWidth: 0.7
+  BranchAngle: 37
+  BranchAngleRandomness: 0.644
+  BranchLengthRandomness: 0.45
+  SecondaryBranchDensity: 0.65
   SecondaryBranchLength: 0.4
   MaxBranchSegments: 6
-  Smoothness: 0.65
-  Jaggedness: 0.027
+  Smoothness: 0.12
+  Jaggedness: 0.035
   JaggedFrequency: 20
-  SpikeAmount: 0
-  Curvature: 0.16
-  TipSharpness: 1.5
+  SpikeAmount: 0.85
+  Curvature: 0.06
+  TipSharpness: 2.2
   TaperPower: 1.2
-  ThicknessFalloff: 0.91
-  LengthFalloff: 0.3
-  DensityFalloff: 0.2
-  appliedStyle: 0
+  ThicknessFalloff: 0.92
+  LengthFalloff: 0.55
+  DensityFalloff: 0.29
+  appliedStyle: 1
   lightPreset:
     Color: {r: 1, g: 0.84313726, b: 0.61960787, a: 1}
     GlowColor: {r: 2, g: 1.6937469, b: 1.2344135, a: 0}
@@ -164,7 +164,7 @@ MonoBehaviour:
     LengthFalloff: 0.3
     DensityFalloff: 0.2
   darknessPreset:
-    Color: {r: 0.42352942, g: 0.23137255, b: 1, a: 1}
+    Color: {r: 0.19103765, g: 0, b: 0.764151, a: 1}
     GlowColor: {r: 1.0931835, g: 0, b: 4.4334683, a: 1}
     GlowIntensity: 0.4
     CoreWidth: 0.05

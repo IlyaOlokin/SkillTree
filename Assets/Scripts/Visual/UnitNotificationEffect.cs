@@ -16,8 +16,22 @@ namespace Visual
     [SerializeField] private float effectDuration;
     [SerializeField] private float scaleMultiplier;
     [SerializeField] private float moveDistance;
-    [SerializeField] private float lerpSpeed;
     [SerializeField] private float posSpreading;
+    [Header("Text flight")]
+    [Tooltip("World XY direction, normalized at spawn. Zero keeps text stationary.")]
+    [SerializeField] private Vector2 textMoveDirection = Vector2.up;
+    [SerializeField, Range(0f, 90f)] private float textDirectionSpread = 16f;
+    [SerializeField, Range(0f, 0.5f)] private float textDistanceVariation = 0.12f;
+    [Tooltip("Sideways arc height as a fraction of Move Distance.")]
+    [SerializeField, Range(0f, 0.5f)] private float textArc = 0.12f;
+    [SerializeField, Range(0.1f, 1f)] private float textStartScale = 0.6f;
+    [SerializeField, Range(0f, 0.5f)] private float textStretch = 0.2f;
+    [SerializeField, Range(0f, 20f)] private float textTilt = 7f;
+    [SerializeField, Range(0.05f, 0.8f)] private float textFadePortion = 0.32f;
+    [Header("Critical damage text")]
+    [SerializeField, Min(1f)] private float criticalTextSpeedMultiplier = 1.4f;
+    [SerializeField, Min(1f)] private float criticalTextScaleMultiplier = 1.2f;
+    [SerializeField] private Color criticalTextColor = new(1f, 0.68f, 0.16f, 1f);
     [Header("Icon notification")]
     [SerializeField] private Vector2 iconSize = new(48f, 48f);
     [SerializeField] private Vector2 iconMoveDirection = new(-1f, 1f);
@@ -29,6 +43,7 @@ namespace Visual
     [SerializeField] private Image icon;
     private bool _isIcon;
     private Sequence _iconSequence;
+    private Sequence _textSequence;
     
     [Header("Colors")]
     [SerializeField] private Color dmgColor = Color.white;
@@ -36,11 +51,8 @@ namespace Visual
     [SerializeField] private Color healColor = Color.green;
     [SerializeField] private Color messageColor = new(1f, 0.82f, 0.18f, 1f);
     private Camera _worldCamera;
-    private float timer;
-    private Vector3 targetScale;
-    private Vector3 startScale;
-    private Vector3 startPos;
-    private Vector3 targetPos;
+    private Vector2? _directionOverride;
+    private bool _isCriticalText;
 
     void Start()
     {
@@ -55,40 +67,87 @@ namespace Visual
             return;
         }
 
-        Destroy(gameObject, Mathf.Max(0.01f, lifeTime));
-        startScale = objectToMove.localScale;
-        targetScale = startScale * scaleMultiplier;
-        startPos = objectToMove.position;
-        targetPos = objectToMove.position + Vector3.up * moveDistance;
+        PlayTextAnimation();
     }
 
-    private void Update()
+    private void PlayTextAnimation()
     {
-        if (_isIcon) return;
-        timer += Time.deltaTime;
-        if (timer <= effectDuration)
+        if (criticalEffect != null) criticalEffect.gameObject.SetActive(false);
+        Vector3 startScale = objectToMove.localScale * (_isCriticalText ? Mathf.Max(1f, criticalTextScaleMultiplier) : 1f);
+        Vector3 peakScale = startScale * scaleMultiplier;
+        Vector3 startPos = objectToMove.position;
+        Quaternion startRotation = objectToMove.localRotation;
+        float tilt = Random.Range(-textTilt, textTilt);
+        Vector2 direction = _directionOverride ?? textMoveDirection;
+        direction = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.zero;
+        direction = Quaternion.Euler(0f, 0f, Random.Range(-textDirectionSpread, textDirectionSpread)) * direction;
+        float distance = moveDistance * Random.Range(1f - textDistanceVariation, 1f + textDistanceVariation);
+        Vector3 targetPos = startPos + (Vector3)direction * distance;
+        Vector3 arcOffset = new Vector3(-direction.y, direction.x) * (distance * textArc * Random.Range(-1f, 1f));
+        float speed = _isCriticalText ? Mathf.Max(1f, criticalTextSpeedMultiplier) : 1f;
+        float settleDuration = Mathf.Min(effectDuration, lifeTime * 0.6f) / speed;
+        float growDuration = settleDuration * 0.28f;
+        float fadeDuration = lifeTime * textFadePortion;
+        float fadeStart = lifeTime - fadeDuration;
+        Vector3 animatedScale = startScale * textStartScale;
+        float stretch = 0f;
+        float fadeScale = 1f;
+
+        // Compose these channels so configurable fade and growth can safely overlap.
+        void ApplyScale()
         {
-            objectToMove.localScale = Vector2.Lerp(startScale, targetScale, timer / effectDuration);
-            objectToMove.position = Vector2.Lerp(objectToMove.position, targetPos, lerpSpeed);
+            objectToMove.localScale = Vector3.Scale(animatedScale,
+                new Vector3(1f - stretch * 0.5f, 1f + stretch, 1f)) * fadeScale;
         }
-        else
+
+        void SetScale(Vector3 value)
         {
-            objectToMove.localScale = Vector2.Lerp(targetScale, startScale,
-                (timer - effectDuration) / Mathf.Max(0.01f, lifeTime - effectDuration));
+            animatedScale = value;
+            ApplyScale();
         }
+
+        ApplyScale();
+        objectToMove.localRotation = startRotation * Quaternion.Euler(0f, 0f, tilt);
+        _textSequence = DOTween.Sequence().SetEase(Ease.Linear);
+        _textSequence.Insert(0f, DOVirtual.Float(0f, 1f, lifeTime / speed, travel =>
+        {
+            objectToMove.position = Vector3.LerpUnclamped(startPos, targetPos, travel)
+                + arcOffset * Mathf.Sin(Mathf.PI * travel);
+        }).SetEase(_isCriticalText ? Ease.OutExpo : Ease.OutCubic));
+        _textSequence.Insert(0f,
+            DOTween.To(() => animatedScale, SetScale, peakScale, growDuration).SetEase(Ease.OutCubic));
+        _textSequence.Insert(growDuration,
+            DOTween.To(() => animatedScale, SetScale, startScale, settleDuration - growDuration)
+                .SetEase(Ease.InOutSine));
+        _textSequence.Insert(0f, DOVirtual.Float(0f, 1f, growDuration, phase =>
+        {
+            stretch = Mathf.Sin(phase * Mathf.PI) * textStretch;
+            ApplyScale();
+        }).SetEase(Ease.Linear));
+        _textSequence.Insert(growDuration,
+            objectToMove.DOLocalRotateQuaternion(startRotation, settleDuration - growDuration)
+                .SetEase(Ease.InOutSine));
+        _textSequence.Insert(fadeStart, DOVirtual.Float(1f, 0.82f, fadeDuration, value =>
+        {
+            fadeScale = value;
+            ApplyScale();
+        }).SetEase(Ease.InOutSine));
+        _textSequence.Insert(fadeStart, text.DOFade(0f, fadeDuration).SetEase(Ease.InOutSine));
+        _textSequence.OnComplete(() => Destroy(gameObject));
     }
 
-    public void WriteDamage(float dmg, bool energyShield = false)
+    public void WriteDamage(float dmg, bool energyShield = false, bool isCritical = false)
     {
         EnsureRuntimeReferences();
-        if (energyShield) text.color = dmgEnergyShieldColor;
-        else text.color = dmgColor;
+        _isCriticalText = isCritical;
+        text.color = isCritical ? criticalTextColor : energyShield ? dmgEnergyShieldColor : dmgColor;
         text.text = Math.Round(dmg).ToString();
     }
 
     public void WriteHeal(float heal)
     {
         EnsureRuntimeReferences();
+        _isCriticalText = false;
         text.color = healColor;
         text.text = Math.Round(heal).ToString();
     }
@@ -96,6 +155,7 @@ namespace Visual
     public void WriteMessage(string message)
     {
         EnsureRuntimeReferences();
+        _isCriticalText = false;
         text.color = messageColor;
         text.text = message;
     }
@@ -149,10 +209,12 @@ namespace Visual
 
     private void OnDisable()
     {
+        _textSequence?.Kill();
+        _textSequence = null;
         _iconSequence?.Kill();
         _iconSequence = null;
         // Notifications are disposable; a killed sequence must not leave an orphan.
-        if (_isIcon) Destroy(gameObject);
+        if (_isIcon || Application.isPlaying) Destroy(gameObject);
     }
 
     public void SetWorldCamera(Camera worldCamera)
@@ -164,18 +226,10 @@ namespace Visual
     public void InitTargetPos(Vector3 damagerPos, bool isCritical)
     {
         EnsureRuntimeReferences();
-        if ((damagerPos - objectToMove.position).magnitude < posSpreading)
-        {
-            targetPos = objectToMove.position + new Vector3(0, moveDistance);
-            return;
-        }
-        var dir = (objectToMove.position - damagerPos).normalized;
-        targetPos = objectToMove.position + dir * moveDistance;
-
-        if (!isCritical || criticalEffect == null) return;
-        criticalEffect.gameObject.SetActive(true);
-        float angle = Mathf.Atan2(dir.y, dir.x) * 180 / Mathf.PI;
-        criticalEffect.eulerAngles = new Vector3(0, 0, angle - 90);
+        Vector2 away = objectToMove.position - damagerPos;
+        _directionOverride = away.sqrMagnitude < posSpreading * posSpreading
+            ? textMoveDirection : away.normalized;
+        // Retain the legacy API without re-enabling the retired critical decoration.
     }
 
     private void EnsureRuntimeReferences()
@@ -204,9 +258,6 @@ namespace Visual
 
         if (scaleMultiplier <= 0f)
             scaleMultiplier = 1.25f;
-
-        if (lerpSpeed <= 0f)
-            lerpSpeed = 0.08f;
 
         if (moveDistance <= 0f)
             moveDistance = transform is RectTransform ? 45f : 0.45f;

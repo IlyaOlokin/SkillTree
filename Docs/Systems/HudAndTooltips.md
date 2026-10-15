@@ -177,8 +177,89 @@ then shrinks and fades it to zero. The UnitNotification prefab exposes icon size
 (48 x 48 local units), lifetime (0.9 s), growth (0.2 s), disappearance (0.25 s)
 and peak scale (1.2 times the moving transform's initial scale).
 Animation uses scaled time. Completion destroys the instance; disabling it kills
-its sequence and destroys it. Text notifications retain their existing animation.
-Visual timing and appearance have not been previewed in Unity.
+its sequence and destroys it. Text notifications use the separate animation below.
+Icon timing and appearance have not been previewed in Unity.
+
+## Floating text direction and impact (2026-10-15)
+
+`UnitNotificationEffect` animates damage, healing and message text through the
+existing TMP component. Its shared code also serves GoldNotification. Proc icons
+retain their own direction, timing and DOTween sequence. No combat values or
+critical-hit mechanics change; the retired critical decoration stays disabled.
+
+Configure **Text flight** on `Assets/Prefabs/Visual/UnitNotification.prefab`:
+
+- Text Move Direction is a normalized world XY vector: `0, 1` up, `1, 0` right,
+  `-1, 0` left, `1, 1` diagonally up-right. Zero keeps the spawned text stationary.
+- Text Direction Spread adds a random angle in either direction; the currently
+  authored prefab uses 12 degrees and 10% Text Distance Variation. Its direction
+  is `0.35, 1` and Move Distance is 1.5. Set spread to zero for an exact direction.
+- Move Distance remains the total travel distance. Text Arc adds a random sideways
+  bend as a fraction of that distance, default 0.12; zero makes the path straight.
+- Life Time remains 0.8 seconds. Movement starts quickly and decelerates using
+  elapsed scaled time, replacing the previous frame-dependent position Lerp.
+- Text starts at 0.6 of its authored scale, reaches Scale Multiplier (1.4) in
+  0.084 seconds, and settles to the authored scale by Effect Duration (0.3 seconds).
+  Text Stretch controls the brief vertical stretch and horizontal squash;
+  Text Tilt controls the initial random tilt, which settles to the authored rotation.
+- Text Fade Portion fades alpha and slightly shrinks the text over the final 32%
+  of its lifetime. Original damage/shield/heal/message colors are preserved.
+
+Text animation now runs in a scaled-time DOTween Sequence, without a component
+Update timer. A virtual movement tween uses OutCubic for ordinary text and InCubic
+for critical text, including the sideways arc. Separate tweens drive OutCubic
+growth, linear-phase sinusoidal stretch, InOutSine settling/rotation, and InOutSine
+fade/shrink. Growth, stretch and fade scale compose independently, so changing the
+fade window to overlap growth does not create competing transform writes.
+Z position and scale are preserved. Sequence completion destroys the notification;
+OnDisable kills the text and icon sequences, then destroys the disposable instance
+during gameplay. The legacy InitTargetPos entry point
+can supply an away-from-attacker direction before Start, without activating a
+critical decoration; current health notifications use the prefab direction.
+
+Verification on 2026-10-15: Unity CLI `recompile_status` reported completion with no
+compilation errors. An isolated preview rendered the actual prefab at five times
+for up, up-right and left, and the frames were inspected. The preview scene was
+closed without saving the user's active scene. This verifies phase appearance and
+direction changes, not live combat overlap, sustained burst readability or runtime
+performance. No tests or player build were run.
+
+### Critical damage numbers
+
+The **Critical damage text** settings on UnitNotification configure critical
+numbers: Critical Text Speed Multiplier defaults to 1.4, Critical Text Scale
+Multiplier to 1.2, and Critical Text Color to golden orange (`#FFAD29`).
+Speed shortens travel and the initial pop/settle animation, preserving the same
+distance, direction, lifetime and fade window so numbers remain readable.
+Critical movement uses InCubic easing: it starts slowly and accelerates toward
+the destination. Ordinary text movement retains OutCubic easing. The size
+multiplier applies to both the initial peak and settled text.
+
+`Unit.ReceiveDamage` passes `DamageInfo.IsCritical` to the optional isCritical
+parameter of `Health.TakeDamage`. Health emits OnHealthChangedNotification with
+the actual HP delta and that flag when displayDamage is enabled. Healing emits
+the same event with a false flag. UnitVisual uses this event instead of
+OnHealthChangedDelta, producing one number per displayed nonzero delta; the old
+event remains available for existing listeners. There is no pending critical
+state that could carry over to another hit. Fully absorbed attacks display no HP
+number, and DoT/debt paths retain their existing displayDamage=false behavior.
+Crit styling takes priority over the optional shield tint in WriteDamage.
+The old critical particle decoration remains disabled.
+
+Scoped verification: Unity compilation completed without errors. The actual saved
+prefab was rendered at five matching times for ordinary and critical text; size,
+color and faster travel were visually inspected. Console had no current errors;
+its retained historical entries concern the earlier preview cleanup and an
+unrelated death visual. The event routing was source-reviewed, not playtested in
+combat. No tests or player build were run.
+
+DOTween refactor verification, 2026-10-15: Unity `recompile_status` completed
+without errors. An isolated preview sought the actual text Sequence through five
+times for normal and critical numbers, rendered both rows and inspected the
+result. No current Console errors were reported. The preview compiler reported
+CS1701 compatibility warnings for DOTween's older mscorlib reference; execution
+succeeded. This is phase/render evidence, not live combat or completion/pause
+playback. The active scene and serialized animation settings were not changed.
 
 ## Verification and sources
 

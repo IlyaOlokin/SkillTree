@@ -143,7 +143,7 @@ namespace Battle
                 OnBeforeAttackHealthDamage.Invoke(healthDamage);
             }
             float healthBeforeDamage = health.CurrentHealth;
-            DamageInstance receivedDamage = health.TakeDamage(healthDamage);
+            DamageInstance receivedDamage = health.TakeDamage(healthDamage, isCritical: damageInfo.IsCritical);
             float healthLost = Mathf.Max(0f, healthBeforeDamage - health.CurrentHealth);
             damageInfo.SetHealthDamageTaken(healthLost);
             OnGettingHit?.Invoke(damageInfo);
