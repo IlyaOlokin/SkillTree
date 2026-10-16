@@ -64,6 +64,11 @@ public static class StatTypeDisplayRules
         StatType.ProfanedHealthPercent,
         StatType.HallowedHealthPercent,
         StatType.PainReceived,
+        StatType.AttackProgressOnHitTaken,
+        StatType.AttackProgressOnMiss,
+        StatType.AttackProgressOnAilmentApplied,
+        StatType.ElementalDamageTakenAsPhysicalChance,
+        StatType.ArmorAsMysticNegation,
         StatType.HealingReceived
     };
 

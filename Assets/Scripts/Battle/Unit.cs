@@ -146,6 +146,8 @@ namespace Battle
             DamageInstance receivedDamage = health.TakeDamage(healthDamage, isCritical: damageInfo.IsCritical);
             float healthLost = Mathf.Max(0f, healthBeforeDamage - health.CurrentHealth);
             damageInfo.SetHealthDamageTaken(healthLost);
+            // Apply the net gain/loss once, before the progress floor or extra attacks.
+            attacker?.ModifyAttackProgress(BaseUnitModifiers.GetStatValue(StatType.AttackProgressOnHitTaken));
             OnGettingHit?.Invoke(damageInfo);
             if (healthLost > 0f)
             {
@@ -181,6 +183,7 @@ namespace Battle
 
         public void OnAttackMissed(ITarget target)
         {
+            attacker?.ModifyAttackProgress(BaseUnitModifiers.GetStatValue(StatType.AttackProgressOnMiss));
             OnMiss?.Invoke(target);
         }
 
@@ -230,6 +233,7 @@ namespace Battle
                 return;
             }
 
+            attacker?.ModifyAttackProgress(BaseUnitModifiers.GetStatValue(StatType.AttackProgressOnAilmentApplied));
             OnAilmentApplied?.Invoke(target);
         }
 

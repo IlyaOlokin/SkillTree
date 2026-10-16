@@ -253,6 +253,10 @@ namespace Battle
                 ? ActiveDatabase.StatBudgetConfig.GetRule(StatType.PhysicalDamage)
                 : EnemyStatBudgetRuleDefaults.Get(StatType.PhysicalDamage);
             physicalDamage = rule.Evaluate(physicalBudget, normalEnemyOffenceRatio);
+            float enemyPower = totalPower * NormalEnemyWaveWeight;
+            physicalDamage *= ActiveDatabase.StatBudgetConfig != null
+                ? ActiveDatabase.StatBudgetConfig.GetDamageMultiplier(enemyPower)
+                : EnemyStatBudgetConfig.CalculateDamageMultiplier(enemyPower);
             return true;
         }
 

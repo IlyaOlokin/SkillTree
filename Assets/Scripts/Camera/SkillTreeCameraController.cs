@@ -47,7 +47,9 @@ public class SkillTreeCameraController : MonoBehaviour
             if (!IsMouseOverThisCamera())
                 return;
             
-            if (IsPointerBlocked(dragBlockLayers))
+            // Nodes support both release-to-allocate clicks and dragging the tree.
+            int dragBlockingMask = dragBlockLayers.value & ~LayerMask.GetMask("Node");
+            if (IsPointerBlocked(dragBlockingMask))
                 return;
 
             dragging = true;

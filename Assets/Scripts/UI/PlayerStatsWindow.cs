@@ -363,6 +363,9 @@ public class PlayerStatsWindow : MonoBehaviour
         }
         if (previewAll)
         {
+            foreach (var stat in statTexts)
+                if (stat.hideWhenDefault && stat.rowRoot != null)
+                    stat.rowRoot.SetActive(true);
             foreach (var section in sections)
             {
                 if (section.root != null) section.root.SetActive(true);
@@ -387,6 +390,9 @@ public class PlayerStatsWindow : MonoBehaviour
         }
 
         SetVisible(_parryGroup, showAll || getValue(StatType.ParryChance) > 0f);
+        foreach (var stat in statTexts)
+            if (stat.hideWhenDefault)
+                SetVisible(stat.rowRoot, showAll || !Mathf.Approximately(getValue(stat.stat), 0f));
         foreach (var section in sections)
         {
             if (!section.hideWhenDefault) continue;
@@ -411,6 +417,15 @@ public class PlayerStatsWindow : MonoBehaviour
                     visible = true;
                     break;
                 }
+            // A section may also contain rows outside its nested dropdowns.
+            if (!visible && parent.body != null)
+                foreach (var stat in statTexts)
+                    if (stat.rowRoot != null && stat.rowRoot.transform.parent == parent.body.transform
+                        && stat.rowRoot.activeSelf)
+                    {
+                        visible = true;
+                        break;
+                    }
             SetVisible(parent.root, visible);
             SetVisible(parent.separator, visible);
         }
@@ -462,6 +477,8 @@ public class StatText
     public StatType stat;
     public string overrideText;
     public bool needToOverrideText;
+    public GameObject rowRoot;
+    public bool hideWhenDefault;
 }
 
 [Serializable]

@@ -222,7 +222,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 0.735849, g: 0.11881929, b: 0.107600555, a: 1}
@@ -436,7 +436,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7696773481751260540
 RectTransform:
   m_ObjectHideFlags: 0
@@ -453,8 +453,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 29.2, y: -25}
-  m_SizeDelta: {x: -22.48, y: -11.53}
+  m_AnchoredPosition: {x: 35.9, y: -30.6}
+  m_SizeDelta: {x: -18.04, y: -12.97}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7735442038910209780
 CanvasRenderer:
@@ -511,8 +511,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 5
-  m_fontSizeBase: 5
+  m_fontSize: 2
+  m_fontSizeBase: 2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -649,7 +649,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 0.735849, g: 0.11881929, b: 0.107600555, a: 1}
@@ -1025,10 +1025,10 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7514751793277906650, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4976340269340515809}
+      addedObject: {fileID: 7503999516946654171}
     - targetCorrespondingSourceObject: {fileID: 7514751793277906650, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7503999516946654171}
+      addedObject: {fileID: 4976340269340515809}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4884718464874992480, guid: f7cb094e03e4e90468a971cfe3fd2107, type: 3}
       insertIndex: 2

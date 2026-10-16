@@ -141,9 +141,10 @@ effect and `Health` implementation before extending DoT mitigation behavior.
 See [resource formulas](DefencesAndResources.md) and
 [ailment damage pools](AilmentsAndDebuffs.md#damage-over-time-pools) for details.
 
-Fortification grants one aggregate More Defence modifier (1% per stack) through
-the normal deferred stat recalculation, rather than directly reducing received
-damage. DoT does not gain direct mitigation from this bonus.
+Fortification grants one aggregate Added DamageMitigation modifier (1% per stack)
+through the normal deferred stat recalculation. AttackProcessor applies the
+resulting per-type mitigation before ailments and block, before stack consumption
+in ReceiveDamage. It does not reduce existing DoT pools on each tick.
 
 ## Effect lifecycle and stacking
 

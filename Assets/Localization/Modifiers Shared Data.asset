@@ -2587,6 +2587,126 @@ MonoBehaviour:
     m_Key: modifier.container.none.MaximumFortificationStacks
     m_Metadata:
       m_Items: []
+  - m_Id: 4773972505923584
+    m_Key: modifier.container.added.AttackProgressOnHitTaken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283712
+    m_Key: modifier.container.increased.AttackProgressOnHitTaken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283713
+    m_Key: modifier.container.decreased.AttackProgressOnHitTaken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283714
+    m_Key: modifier.container.more.AttackProgressOnHitTaken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283715
+    m_Key: modifier.container.less.AttackProgressOnHitTaken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283716
+    m_Key: modifier.container.none.AttackProgressOnHitTaken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283717
+    m_Key: modifier.container.added.AttackProgressOnMiss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283718
+    m_Key: modifier.container.increased.AttackProgressOnMiss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283719
+    m_Key: modifier.container.decreased.AttackProgressOnMiss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283720
+    m_Key: modifier.container.more.AttackProgressOnMiss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283721
+    m_Key: modifier.container.less.AttackProgressOnMiss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283722
+    m_Key: modifier.container.none.AttackProgressOnMiss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283723
+    m_Key: modifier.container.added.AttackProgressOnAilmentApplied
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283724
+    m_Key: modifier.container.increased.AttackProgressOnAilmentApplied
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283725
+    m_Key: modifier.container.decreased.AttackProgressOnAilmentApplied
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283726
+    m_Key: modifier.container.more.AttackProgressOnAilmentApplied
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283727
+    m_Key: modifier.container.less.AttackProgressOnAilmentApplied
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283728
+    m_Key: modifier.container.none.AttackProgressOnAilmentApplied
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283729
+    m_Key: modifier.container.added.ElementalDamageTakenAsPhysicalChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283730
+    m_Key: modifier.container.increased.ElementalDamageTakenAsPhysicalChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283731
+    m_Key: modifier.container.decreased.ElementalDamageTakenAsPhysicalChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283732
+    m_Key: modifier.container.more.ElementalDamageTakenAsPhysicalChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283733
+    m_Key: modifier.container.less.ElementalDamageTakenAsPhysicalChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283734
+    m_Key: modifier.container.none.ElementalDamageTakenAsPhysicalChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283735
+    m_Key: modifier.container.added.ArmorAsMysticNegation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283736
+    m_Key: modifier.container.increased.ArmorAsMysticNegation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283737
+    m_Key: modifier.container.decreased.ArmorAsMysticNegation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283738
+    m_Key: modifier.container.more.ArmorAsMysticNegation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283739
+    m_Key: modifier.container.less.ArmorAsMysticNegation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283740
+    m_Key: modifier.container.none.ArmorAsMysticNegation
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

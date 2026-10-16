@@ -755,6 +755,26 @@ MonoBehaviour:
     m_Key: enum.StatType.MaximumFortificationStacks
     m_Metadata:
       m_Items: []
+  - m_Id: 66708673617072128
+    m_Key: enum.StatType.AttackProgressOnHitTaken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66708673696763904
+    m_Key: enum.StatType.AttackProgressOnMiss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66708673696763905
+    m_Key: enum.StatType.AttackProgressOnAilmentApplied
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66708673696763906
+    m_Key: enum.StatType.ElementalDamageTakenAsPhysicalChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66708673696763907
+    m_Key: enum.StatType.ArmorAsMysticNegation
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

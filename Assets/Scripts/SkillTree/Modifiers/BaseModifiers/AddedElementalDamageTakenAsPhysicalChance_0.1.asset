@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8f95f6bc6a123d42a109b58af2af08b, type: 3}
-  m_Name: ArmorGrantsMysticNegation_0.3
-  m_EditorClassIdentifier: Assembly-CSharp::SkillTree.ArmorGrantsMysticNegation
+  m_Script: {fileID: 11500000, guid: 4ae2ce54539276c4fa2012760a983831, type: 3}
+  m_Name: AddedElementalDamageTakenAsPhysicalChance_0.1
+  m_EditorClassIdentifier: Assembly-CSharp::SkillTree.BaseModifier
   <Priorities>k__BackingField: 00000000
-  armorPercent: 0.3
+  modifierContainer:
+    modifierType: 0
+    statType: 100
+    value: 0.1

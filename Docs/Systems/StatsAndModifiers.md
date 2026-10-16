@@ -30,12 +30,13 @@ bounds in every effect insertion/removal path. ClearAllEffects bypasses removal
 restrictions; controller destruction clears change listeners before teardown.
 `EffectController` contains no Fortification-specific formulas or registrations.
 Barrier/Evade/Bleed producers read `unit.Fortification.Maximum`. Each stack grants
-1% More Defence through one controller-owned runtime BaseModifier: 30 stacks
-contribute one +0.30 More value (a 1.30 multiplier), never thirty +0.01 values.
-The Defence aggregate expands to Armor, Evasion, BarrierCapacity and BlockChance.
+1% Damage Mitigation through one controller-owned runtime BaseModifier: 30 stacks
+contribute one Added DamageMitigation value of 0.30. This aggregate expands to
+per-type mitigation and combines with other contributions through ordinary stat arithmetic.
 Stack changes queue the ordinary deferred stat recalculation; the controller
 removes its modifier at zero stacks and disposes it on owner destruction.
-Fortification no longer directly reduces incoming attack or DoT damage.
+AttackProcessor applies the resulting mitigation before ailments, block and damage
+receipt, clamped to 0–100%. Existing DoT pools are not recalculated or reduced on each tick.
 Receiving an attack with positive incoming damage consumes up to five stacks;
 DoT does not consume Fortification stacks. Consumption respects the minimum
 above the minimum. Existing status visuals/name/glossary are reused. Stat-name tooltip links map to the existing registered fortification term through StatTypeTooltipFormatter.
@@ -74,15 +75,25 @@ manually. The registered fortification glossary remains valid; its static text
 states the base maximum 30 and does not dynamically show a particular owner's
 modified limits. A tooltip asset/configuration change remains manual.
 
-Bonus update (2026-10-14): English Descriptions entries
-`effect.fortification.reduction` and `effect.fortification.consumption` now describe
-the aggregate More Defence bonus and consumption up to the minimum floor.
+Bonus update (2026-10-16): restored 1% Added DamageMitigation per stack,
+replacing the 2026-10-14 More Defence bonus. English Descriptions entries
+`effect.fortification.reduction` and `effect.fortification.description` now use
+`Each stack grants 1% Damage Mitigation.` as their first paragraph. The full
+description and `effect.fortification.consumption` describe consumption up to the minimum floor.
 Existing ru/de translations need updating. The registered tooltip asset, keys,
 effect display name and status icon are reused without serialized wiring changes.
 Verification for the bonus update: Unity CLI `recompile` / `recompile_status`
 targeting C:/UnityProjects/SkillTree completed with no compilation errors.
 Source review checked one aggregate contribution, zero-stack removal and disposal.
 No tests, player build or runtime playtest were performed.
+
+Verification for the 2026-10-16 mitigation restoration: Unity CLI `recompile` /
+`recompile_status` targeting C:/UnityProjects/SkillTree completed without compiler
+errors. `run_script` updated both existing English keys and verified that the
+`fortification` glossary term resolves to the existing description asset. Scoped
+diff checks passed. No new definitions, localization keys, enum values, runtime
+bindings or manual Editor configuration are needed. ru/de text remains a
+translator TODO. No tests, player build or runtime playtest were performed.
 
 Icon Generation Prompt (proposed style, minimum): Create a square painterly
 fantasy RPG icon of a steel shield anchored by interlocking luminous cyan plates.
@@ -719,9 +730,10 @@ integer). The grant count does not scale with node power. RestoreFull/combat res
 is not a restoration trigger.
 Restoration, Evade and Bleed producers share the thirty-stack cap.
 
-Fortification grants one aggregate More Defence contribution of 1% per stack,
+Fortification grants one aggregate Added DamageMitigation contribution of 1% per stack,
 owned by FortificationController and updated through deferred stat recalculation.
-It does not directly reduce incoming damage. In `Unit.ReceiveDamage`, its helper
+The ordinary per-type mitigation stage reduces incoming attack damage before
+ailment generation and block. Existing DoT pools are unchanged. In `Unit.ReceiveDamage`, its helper
 reads live effects and removes up to five stacks on positive attack damage,
 respecting the minimum stack floor. Zero-damage/fully blocked attacks and evasion
 consume nothing; positive attack damage absorbed by Barrier consumes stacks.
@@ -737,7 +749,7 @@ Existing definition (unchanged):
 Existing glossary registration points to `Descriptions/Fortification.asset` and
 uses Descriptions keys. On 2026-10-13 the tooltip asset was split into three
 separate `descriptions` entries so the UI creates separate paragraph blocks:
-Current English text for `effect.fortification.reduction` = `Each stack grants 1% more Defence.`,
+Current English text for `effect.fortification.reduction` = `Each stack grants 1% Damage Mitigation.`,
 `effect.fortification.limit` = `Maximum 30 stacks.`, and
 `effect.fortification.consumption` =
 `Receiving an attack removes up to 5 stacks, without going below your minimum.`

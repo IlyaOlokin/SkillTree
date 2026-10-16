@@ -74,8 +74,9 @@ budget contributions to MaximumHealth and BarrierCapacity by
 `max(1, finalPower / survivabilityStartPower) ^ survivabilityGrowth`. This applies
 to both core/module budgets and affix-added stat weights. It preserves the existing
 budget allocation and stat conversion rules; other stats are not directly scaled.
-The shared config currently uses these defaults. Missing configs use the same
-defaults. A growth of zero disables the additional scaling; the denominator is
+The shared config currently uses start power 15 and growth 0.1, as inspected on
+2026-10-16; missing configs use the code defaults of 12 and 0.1. A growth of zero
+disables the additional scaling; the denominator is
 bounded to 0.0001 and growth to nonnegative values at evaluation time.
 
 The input is individual final enemy power, including wave weight, rarity,
@@ -89,6 +90,44 @@ fight duration is guaranteed by the formula.
 
 Source: `Assets/Scripts/Battle/EnemySystem/EnemyStatBudgetConfig.cs`,
 `Assets/Scripts/Battle/EnemySystem/EnemyStatPackageBuilder.cs`.
+
+## Slower enemy damage growth (2026-10-16)
+
+Select `Assets/EnemyConfig/EnemyStatBudgetConfig.asset` in Unity. Alongside the
+survivability controls, `Damage Start Power` sets the threshold, and
+`Damage Growth Reduction` sets how strongly damage growth slows. The initial
+settings are 15 and 0.1, respectively. Higher reduction means slower growth;
+zero restores the original curve. The reduction is clamped to 0–1 and the
+threshold to at least 0.0001. Missing configs use the same damage defaults.
+
+Budget-derived damage is multiplied by
+`max(1, finalPower / damageStartPower) ^ -damageGrowthReduction`.
+This covers all damage types, including generic/elemental/mystic damage weights
+and affix-added weights. For unchanged composition and linear damage rules,
+damage above the threshold grows as power to 0.9 with the initial setting.
+At power 15/150/1500 the multiplier relative to the previous curve is
+1/0.794/0.631. A reduction of 1 makes linear budget damage flat above the threshold.
+These values are an initial tuning choice, not a playtested balance target.
+
+The input is individual final enemy power, including wave weight, rarity,
+definition multipliers and variance. Direct definition/global/affix modifiers,
+attack speed, crit stats and ailment power retain their existing rules; resulting
+combat damage can therefore grow differently. Damage-based ailments can change
+indirectly. HP growth, level-power tables and rewards retain their existing rules.
+The HUD's normal-enemy physical-damage estimate applies the same multiplier to
+its representative enemy power. Config edits affect newly generated enemies.
+
+Verification on 2026-10-16: Unity CLI `recompile` / `recompile_status` completed
+with `failed: false`. Live evaluation saved the shared asset through SerializedObject
+and returned multipliers 1, 0.7943282 and 0.630957365 at powers 15, 150 and 1500;
+the existing HP controls remained 15 and 0.1. `console_status` reported zero errors
+and eight warnings; warning attribution was not investigated. No combat playtest,
+test suite or player build was run. The required location-content checker remains
+absent, as recorded in BL-028; its checks were not run.
+
+Source: `Assets/Scripts/Battle/EnemySystem/EnemyStatBudgetConfig.cs`,
+`Assets/Scripts/Battle/EnemySystem/EnemyStatPackageBuilder.cs`,
+`Assets/Scripts/Battle/EnemySystem/EnemySpawner.cs`.
 
 ## Death, wave clear and completion
 

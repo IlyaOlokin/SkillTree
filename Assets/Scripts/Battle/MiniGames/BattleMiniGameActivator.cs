@@ -14,6 +14,7 @@ namespace Battle.MiniGames
         private float _timeLeft;
         private float _duration;
         private bool _bound;
+        private MiniGameFeedback _feedback;
 
         public BattleMiniGameEventDefinition Definition => _definition;
 
@@ -54,6 +55,11 @@ namespace Battle.MiniGames
             _timeLeft = _duration;
             _bound = true;
 
+            _feedback = GetComponent<MiniGameFeedback>();
+            if (_feedback != null)
+                _feedback.Initialize(definition != null && definition.MiniGamePrefab != null &&
+                    definition.MiniGamePrefab.GetComponent<RapidClickMiniGameView>() != null, true);
+
             UpdateTimerFill();
         }
 
@@ -76,11 +82,13 @@ namespace Battle.MiniGames
 
         private void HandleClick()
         {
+            _feedback?.NotifyClick();
             _controller?.TryActivate(this);
         }
 
         private void UpdateTimerFill()
         {
+            _feedback?.ActivatorTime(_timeLeft / Mathf.Max(.01f, _duration));
             if (timerFill != null)
             {
                 timerFill.fillAmount = Mathf.Clamp01(_timeLeft / _duration);

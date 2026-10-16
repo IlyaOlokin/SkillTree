@@ -39,6 +39,62 @@ MonoBehaviour:
     m_Key: ui.locationReward.gold.title
     m_Metadata:
       m_Items: []
+  - m_Id: 61304729969496064
+    m_Key: minigame.damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965056
+    m_Key: minigame.speed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965057
+    m_Key: minigame.align
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965058
+    m_Key: minigame.now
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965059
+    m_Key: minigame.rapid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965060
+    m_Key: minigame.perfect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965061
+    m_Key: minigame.success
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965062
+    m_Key: minigame.early
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965063
+    m_Key: minigame.late
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965064
+    m_Key: minigame.timeout
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965065
+    m_Key: minigame.damageReward
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965066
+    m_Key: minigame.speedReward
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965067
+    m_Key: minigame.noReward
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61309397672005632
+    m_Key: minigame.wait
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

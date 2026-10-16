@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   survivabilityStartPower: 15
   survivabilityGrowth: 0.1
+  damageStartPower: 15
+  damageGrowthReduction: 0.1
   rules: []

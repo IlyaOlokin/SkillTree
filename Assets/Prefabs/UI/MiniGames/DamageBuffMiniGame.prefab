@@ -348,6 +348,7 @@ GameObject:
   - component: {fileID: 1949177209353567764}
   - component: {fileID: 2513023941993494883}
   - component: {fileID: 8983837608385573815}
+  - component: {fileID: 3065860195960918294}
   m_Layer: 5
   m_Name: DamageBuffMiniGame
   m_TagString: Untagged
@@ -443,6 +444,19 @@ MonoBehaviour:
   resultIconShowEase: 27
   resultIconHideEase: 26
   useUnscaledTweens: 1
+--- !u!114 &3065860195960918294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7513513224078512546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8035dc49891585a4babb97c8b6ab4f39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Battle.MiniGames.MiniGameFeedback
+  font: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
 --- !u!1 &8262532256459626620
 GameObject:
   m_ObjectHideFlags: 0

@@ -116,8 +116,7 @@ namespace Tutorials
         {
             if (modifier == null || !visited.Add(modifier)) return false;
             if (modifier is AddedFireDamageConvertedToLightDamage
-                || modifier is AddedColdDamageConvertedToDarknessDamage
-                || modifier is ArmorGrantsMysticNegation)
+                || modifier is AddedColdDamageConvertedToDarknessDamage)
                 return true;
 
             for (var type = modifier.GetType(); type != null && type != typeof(Modifier); type = type.BaseType)
@@ -155,6 +154,7 @@ namespace Tutorials
         {
             return stat == StatType.MysticDamage || stat == StatType.LightDamage
                 || stat == StatType.DarknessDamage || stat == StatType.MysticNegation
+                || stat == StatType.ArmorAsMysticNegation
                 || stat == StatType.MysticCleansePerSecond || stat == StatType.MysticDamageMitigation
                 || stat == StatType.LightDamageMitigation || stat == StatType.DarknessDamageMitigation;
         }

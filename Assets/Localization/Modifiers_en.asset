@@ -2645,6 +2645,127 @@ MonoBehaviour:
     m_Localized: Your maximum number of {fortification|Fortification} stacks is 0.
     m_Metadata:
       m_Items: []
+  - m_Id: 4773972505923584
+    m_Localized: When you are hit, change Attack Progress by [[0]].
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283712
+    m_Localized: '[[0]]% increased Attack Progress Change on Hit Taken'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283713
+    m_Localized: '[[0]]% decreased Attack Progress Change on Hit Taken'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283714
+    m_Localized: '[[0]]% more Attack Progress Change on Hit Taken'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283715
+    m_Localized: '[[0]]% less Attack Progress Change on Hit Taken'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283716
+    m_Localized: You have no Attack Progress Change on Hit Taken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283717
+    m_Localized: 'On Miss: change Attack Progress by [[0]].'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283718
+    m_Localized: '[[0]]% increased Attack Progress Change on Miss'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283719
+    m_Localized: '[[0]]% decreased Attack Progress Change on Miss'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283720
+    m_Localized: '[[0]]% more Attack Progress Change on Miss'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283721
+    m_Localized: '[[0]]% less Attack Progress Change on Miss'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283722
+    m_Localized: You have no Attack Progress Change on Miss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283723
+    m_Localized: When you apply an Ailment, change Attack Progress by [[0]].
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283724
+    m_Localized: '[[0]]% increased Attack Progress Change on Ailment Applied'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283725
+    m_Localized: '[[0]]% decreased Attack Progress Change on Ailment Applied'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283726
+    m_Localized: '[[0]]% more Attack Progress Change on Ailment Applied'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283727
+    m_Localized: '[[0]]% less Attack Progress Change on Ailment Applied'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283728
+    m_Localized: You have no Attack Progress Change on Ailment Applied
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283729
+    m_Localized: '[[0]] chance to take Fire, Cold and Lightning Damage from incoming
+      attacks as Physical Damage.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283730
+    m_Localized: '[[0]]% increased Chance to Take Elemental Damage as Physical'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283731
+    m_Localized: '[[0]]% decreased Chance to Take Elemental Damage as Physical'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283732
+    m_Localized: '[[0]]% more Chance to Take Elemental Damage as Physical'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283733
+    m_Localized: '[[0]]% less Chance to Take Elemental Damage as Physical'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283734
+    m_Localized: You have no Chance to Take Elemental Damage as Physical
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283735
+    m_Localized: Gain [[0]] of Armor as additional Mystic Negation.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283736
+    m_Localized: '[[0]]% increased Armor Gained as Mystic Negation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283737
+    m_Localized: '[[0]]% decreased Armor Gained as Mystic Negation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283738
+    m_Localized: '[[0]]% more Armor Gained as Mystic Negation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283739
+    m_Localized: '[[0]]% less Armor Gained as Mystic Negation'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4773972535283740
+    m_Localized: You have no Armor Gained as Mystic Negation
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

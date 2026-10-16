@@ -121,4 +121,11 @@ public enum StatType
     PainReceived = 94,
     MinimumFortificationStacks = 95,
     MaximumFortificationStacks = 96,
+
+    // Signed fractions of one attack cycle; sum before changing progress.
+    AttackProgressOnHitTaken = 97,
+    AttackProgressOnMiss = 98,
+    AttackProgressOnAilmentApplied = 99,
+    ElementalDamageTakenAsPhysicalChance = 100,
+    ArmorAsMysticNegation = 101,
 }

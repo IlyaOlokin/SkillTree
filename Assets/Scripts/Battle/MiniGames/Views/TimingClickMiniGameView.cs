@@ -77,6 +77,7 @@ namespace Battle.MiniGames
         private Vector2 _failMoveInitialPosition;
         private Sequence _resolveSequence;
         private Tween _approachColorTween;
+        private MiniGameFeedback _feedback;
 
         public event Action<BattleMiniGameResult> Completed;
 
@@ -148,6 +149,12 @@ namespace Battle.MiniGames
             SetTargetColor(targetIdleColor);
             SetApproachColor(approachIdleColor);
             UpdateApproachRing();
+            _feedback = GetComponent<MiniGameFeedback>();
+            if (_feedback != null)
+            {
+                _feedback.Initialize(false, false);
+                UpdateFeedback();
+            }
         }
 
         private void Update()
@@ -160,6 +167,7 @@ namespace Battle.MiniGames
             _elapsed += Time.deltaTime;
             UpdateApproachRing();
             UpdateApproachWindowColor();
+            UpdateFeedback();
 
             if (_elapsed > GetSuccessEndTime())
             {
@@ -180,6 +188,7 @@ namespace Battle.MiniGames
             }
 
             float error = Mathf.Abs(_elapsed - perfectTimeSeconds);
+            _feedback?.NotifyClick();
             if (_elapsed < GetSuccessStartTime() || _elapsed > GetSuccessEndTime())
             {
                 Resolve(BattleMiniGameResult.Fail());
@@ -251,6 +260,21 @@ namespace Battle.MiniGames
             return Mathf.Max(0f, perfectTimeSeconds - successWindowBeforeSeconds);
         }
 
+        private void UpdateFeedback()
+        {
+            if (_feedback == null) return;
+            float start = GetSuccessStartTime();
+            float end = GetSuccessEndTime();
+            float ratio;
+            if (_elapsed < start)
+                ratio = Mathf.Lerp(2f, 1.125f, _elapsed / Mathf.Max(.001f, start));
+            else if (_elapsed <= perfectTimeSeconds)
+                ratio = Mathf.Lerp(1.125f, 1f, (_elapsed - start) / Mathf.Max(.001f, perfectTimeSeconds - start));
+            else
+                ratio = Mathf.Lerp(1f, .875f, (_elapsed - perfectTimeSeconds) / Mathf.Max(.001f, end - perfectTimeSeconds));
+            _feedback.Timing(ratio, _elapsed >= start && _elapsed <= end);
+        }
+
         private float GetSuccessEndTime()
         {
             return perfectTimeSeconds + successWindowAfterSeconds;
@@ -282,6 +306,14 @@ namespace Battle.MiniGames
             _completed = true;
 
             _context?.Complete(result);
+            if (_feedback != null)
+            {
+                _feedback.Resolve(result, result.IsSuccess && result.Score01 >= .999f, _elapsed < GetSuccessStartTime());
+                _resolveSequence = DOTween.Sequence()
+                    .AppendInterval(MiniGameFeedback.ResultDuration)
+                    .OnComplete(() => { _resolveSequence = null; Complete(result); });
+                return;
+            }
             SetTargetColor(result.IsSuccess ? targetSuccessColor : targetFailColor);
             PlayResolveAnimation(result);
         }

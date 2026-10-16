@@ -103,13 +103,22 @@ nodes. Selection affects what a click means:
 
 1. Left-click with a selected node-use item routes to `NodeItemUseService`.
 2. Left-click a socket with a selected gem routes to [gem placement](Gems.md).
-3. Otherwise left-click requests allocation or an allocation path through the tree.
+3. Otherwise releasing the left mouse button on the pressed node requests allocation
+   or an allocation path through the tree. Moving beyond the EventSystem pixel drag
+   threshold (5 pixels without an EventSystem), leaving the node, or disabling its
+   input handler cancels the pending allocation click. UI and discovery guards are
+   checked again on release. Item use and gem placement still run on button press.
 4. Right-click on a filled socket attempts gem extraction before ordinary refunds.
 5. Other right-click handling cancels a queued allocation, clears a selected item,
    or requests a dependent refund, depending on current state.
 
 Pending bridge placement has its own cancellation handling. Test node input with
 both an empty selection and a selected item; these are different interaction paths.
+
+`SkillTreeCameraController` excludes the `Node` layer from its drag-block mask,
+so dragging can start over a node as well as over empty tree space. UI and other
+configured blocking layers still prevent drag initiation. A drag cancels the
+pending allocation click through `NodeInputHandler`'s movement threshold.
 
 ## Paths, queues and refunds
 

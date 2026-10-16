@@ -44,6 +44,13 @@ Evidence types:
 
 ## Combat mini-games, effects and modal flow
 
+Source follow-up, 2026-10-15: `DamageBuff.asset` and `AttackSpeedBuff.asset` both
+currently declare the mini-game ID `damage`; `FindAvailableEventById` takes the
+first available match. Actual authored ID-based call reachability was not checked.
+The [visual redesign](Reference/BattleMiniGameVisuals.md) identifies its activator
+motif by view type and leaves these event IDs, timing and reward contracts unchanged.
+This observation does not close BL-013 through BL-016.
+
 | ID | Priority / evidence | Finding and possible impact | Next step and closure criterion | Reference |
 | --- | --- | --- | --- | --- |
 | BL-013 | P2 / Observed gap | Rapid and Timing mini-games use local timing fields rather than `context.Duration`. Game-time bonuses may not affect these views. | Trace which authored bonuses target these games; compare baseline/bonus runs and define which timing parameters should scale. | [Mini-game timing](Systems/BattleMiniGames.md#views-and-timing) |
@@ -68,6 +75,11 @@ Evidence types:
 | BL-027 | P3 / Risk | GSlider fill tween does not explicitly use unscaled time. A resource update during a zero-time-scale modal may leave an animated bar behind its numeric value. | Test updates while paused and decide whether HUD animations should continue; verify fill/text consistency under the chosen policy. | [HUD values](Systems/HudAndTooltips.md#values-and-presentation) |
 
 ## Tooling and remaining verification
+
+BL-028 follow-up, 2026-10-16: `Tools/Locations/check_locations.py` is still
+absent during the enemy damage-growth change. The required content checker
+could not be run; this remains a tooling limitation. See the
+[damage controls and formula](Systems/LocationsAndEnemies.md#slower-enemy-damage-growth-2026-10-16).
 
 BL-032 evidence update, 2026-10-04: a [live first-location balance playtest](Reference/BalancePlaytest20261004.md)
 completed nine one-point starting-node comparisons and one Fire/barrier route

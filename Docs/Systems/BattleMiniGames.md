@@ -81,6 +81,62 @@ by result score. MiniGameMoreStatBuffEffect replaces same-type magnitude and res
 duration to the incoming value on reapplication; it does not accumulate copies.
 Removal detaches and releases its runtime modifier. See [effect ownership](CombatAndEffects.md).
 
+## Visual presentation, 2026-10-15
+
+The two game prefabs and the shared activator prefab now include `MiniGameFeedback`.
+It creates a texture-free uGUI widget, instruction plaques and result text at runtime,
+using the existing counter font. `MiniGameSigilGraphic` draws broad functional rings,
+press segments, activator symbols and large result marks in one mesh. The owner-requested
+simplification removes ornamental rims, ticks, runes, rotating blades and small sparks.
+The previous child graphics are disabled at initialization; their serialized
+references remain intact for the legacy view path. The existing Button and listener
+are retained, with the hit area reparented beside the new visual to avoid legacy
+Target movement. Decorative geometry and text do not receive raycasts.
+
+- Damage shows one complete light ring shrinking toward a broad fixed amber band.
+  Its center reaches the band's outer edge at success start, the band's middle at
+  perfect time and its inner edge at success end. This piecewise mapping uses the
+  view's actual timing fields. The center label changes from `WAIT` to `CLICK NOW`
+  only during that same success window. The legacy approach-ring geometry is hidden.
+- Attack speed uses the actual remaining time and press count. Each press lights a
+  thick segment and produces a ring ripple. A large count occupies the center;
+  the remaining time is a thin outer circle. Its disappearing gap starts at twelve
+  o'clock and grows clockwise. The hit ripple stays inside the charge segments,
+  away from that timer. Lit segments use an integer count, so one press lights one
+  segment in the authored five-press game. A scoped Editor check reproduced the old
+  fractional comparison lighting two segments for one registered press; the integer
+  calculation removes that precision boundary. More than 32 required presses retain
+  a bounded 32-segment grouped display.
+- Activators choose the motif from the definition's game view type, rather than its
+  ID. They show a plain sword or two broad speed chevrons, one lifetime arc, soft
+  breathing glow and an entry fade.
+- Success shows a large check, one expanding ring and the reward type. Timing can
+  show `PERFECT`; rapid success does not imply a precision grade. Failure shows a
+  large X and early/late/timeout text with `NO BONUS`.
+- Rewards still resolve immediately through the context. The view's `Completed`
+  event waits for the 1.2-second result presentation. Appearance, pulses, result
+  hold and exit use scaled time, matching the game clock. View disable cancels the
+  completion tween through the existing lifecycle.
+- The visual and Button stay centered on the controller's authored spawn point.
+  The feedback layer does not clamp or recenter them against Canvas bounds.
+  Appearance uses alpha only, starting at zero. Hover and clicks smoothly enlarge
+  the artwork through one `SmoothDamp` scale, while the sibling Button keeps a fixed
+  hit area. Hover contributes 3%; each click adds 4% to a decaying envelope capped
+  at 7%, so their combined target never exceeds 110%. Input never resets the current
+  scale or smoothing velocity. Leaving hover and repeated presses blend into the
+  existing motion. Rapid accepted presses, timing clicks and activator clicks feed
+  this envelope; result hover releases smoothly. Ring ripples remain separate.
+
+The root has no generated icon texture dependency. Icon prompts, localization keys,
+authoring commands and verification limits are in the
+[visual authoring reference](../Reference/BattleMiniGameVisuals.md).
+BL-013 through BL-016 remain outside this presentation change.
+
+Source observation: both currently inspected event assets use `id: damage`.
+`FindAvailableEventById` returns the first matching available definition. This was
+not changed in the visual task; motif selection deliberately avoids that ambiguous
+ID. Reachability through authored ID-based calls was not investigated.
+
 ## Verification and sources
 
 Suggested checks: unlock reference counts, random versus triggered entry points,

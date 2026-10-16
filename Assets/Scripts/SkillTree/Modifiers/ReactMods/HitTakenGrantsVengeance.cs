@@ -9,21 +9,26 @@ namespace SkillTree
     {
         [SerializeField, Range(0f, 1f)] private float attackProgressLoss = 0.3f;
 
+        public override bool IsInPriority(ModifierPriority priority) => priority == ModifierPriority.PreAttribute;
+
+        public override void ApplyEffect(Unit unit)
+        {
+            // Preserve the fixed penalty while combining it with every other hit-taken contribution.
+            unit.BaseUnitModifiers.ChangeModifierValue(new ModifierContainer(
+                ModifierType.Added, StatType.AttackProgressOnHitTaken, -Mathf.Clamp01(attackProgressLoss)));
+        }
+
         public override IModifierRuntimeBinding CreateRuntimeBinding(Unit unit)
         {
             EffectController effectController = unit.effectController;
-            Attacker attacker = unit.attacker;
-            if (effectController == null && attacker == null)
+            if (effectController == null)
             {
                 return null;
             }
 
-            float clampedAttackProgressLoss = Mathf.Clamp01(attackProgressLoss);
-
             void HandleGettingHit(DamageInfo _)
             {
-                attacker?.ModifyAttackProgress(-clampedAttackProgressLoss);
-                effectController?.AddEffect(() => new Vengeance(1));
+                effectController.AddEffect(() => new Vengeance(1));
             }
 
             return new DelegateModifierRuntimeBinding(

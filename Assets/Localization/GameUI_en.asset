@@ -45,6 +45,62 @@ MonoBehaviour:
     m_Localized: Gold
     m_Metadata:
       m_Items: []
+  - m_Id: 61304729969496064
+    m_Localized: DAMAGE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965056
+    m_Localized: ATTACK SPEED
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965057
+    m_Localized: CLICK WHEN RINGS ALIGN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965058
+    m_Localized: CLICK NOW
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965059
+    m_Localized: CLICK RAPIDLY
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965060
+    m_Localized: PERFECT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965061
+    m_Localized: SUCCESS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965062
+    m_Localized: TOO EARLY
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965063
+    m_Localized: TOO LATE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965064
+    m_Localized: TIME'S UP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965065
+    m_Localized: DAMAGE BOOSTED
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965066
+    m_Localized: ATTACK SPEED BOOSTED
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61304730065965067
+    m_Localized: NO BONUS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61309397672005632
+    m_Localized: WAIT
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

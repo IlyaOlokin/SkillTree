@@ -15,6 +15,8 @@ namespace SkillTree
         [Inject(Optional = true)] private MainSkillTree _skillTree;
         private Node _node;
         private SkillTreeFogOfWarController _fogOfWarController;
+        private bool _allocationClickPending;
+        private Vector2 _allocationPressPosition;
 
         private void Awake()
         {
@@ -53,12 +55,8 @@ namespace SkillTree
                 }
 
                 if (_gemPlacementService != null && _gemPlacementService.IsPlacingBridge) return;
-                if (_skillTree != null)
-                    _skillTree.TryAllocateOrQueue(_node);
-                else
-                    _node.Allocate();
-
-                _tooltipUI?.RefreshCurrentTooltip();
+                _allocationClickPending = true;
+                _allocationPressPosition = Input.mousePosition;
             }
             else if (Input.GetMouseButtonDown(1))
             {
@@ -92,6 +90,47 @@ namespace SkillTree
 
                 _tooltipUI?.RefreshCurrentTooltip();
             }
+        }
+
+        private void OnMouseDrag()
+        {
+            if (HasDragged())
+                _allocationClickPending = false;
+        }
+
+        private void OnMouseUpAsButton()
+        {
+            bool shouldAllocate = _allocationClickPending && !HasDragged();
+            _allocationClickPending = false;
+            if (!shouldAllocate || IsPointerOverUI()) return;
+            if (_fogOfWarController != null && !_fogOfWarController.IsNodeDiscovered(_node)) return;
+            if (_gemPlacementService != null
+                && (_gemPlacementService.IsPlacingBridge
+                    || _gemPlacementService.SelectionState.HasSelectedNodeItem
+                    || (_node is SocketNode && _gemPlacementService.SelectionState.HasSelectedGem))) return;
+
+            if (_skillTree != null)
+                _skillTree.TryAllocateOrQueue(_node);
+            else
+                _node.Allocate();
+
+            _tooltipUI?.RefreshCurrentTooltip();
+        }
+
+        private void OnMouseExit()
+        {
+            _allocationClickPending = false;
+        }
+
+        private void OnDisable()
+        {
+            _allocationClickPending = false;
+        }
+
+        private bool HasDragged()
+        {
+            float threshold = EventSystem.current != null ? EventSystem.current.pixelDragThreshold : 5f;
+            return ((Vector2)Input.mousePosition - _allocationPressPosition).sqrMagnitude > threshold * threshold;
         }
 
         private static bool IsPointerOverUI()

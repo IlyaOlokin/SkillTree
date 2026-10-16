@@ -174,6 +174,13 @@ namespace Battle
                     : EnemyStatBudgetConfig.CalculateSurvivabilityMultiplier(power);
                 value *= survivabilityMultiplier;
             }
+            else if (IsOffenceStat(statType))
+            {
+                float damageMultiplier = statBudgetConfig != null
+                    ? statBudgetConfig.GetDamageMultiplier(power)
+                    : EnemyStatBudgetConfig.CalculateDamageMultiplier(power);
+                value *= damageMultiplier;
+            }
 
             if (value <= 0f)
                 return;

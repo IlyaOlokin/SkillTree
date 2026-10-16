@@ -59,6 +59,7 @@ namespace Battle
                 DamageCalculator.CalculateAttackDamage(damageInfo);
 
                 RunModifiers(defender.UnitObject.GetAllModifiers(), ModifierPriority.IncomingPreMitigation, defender.UnitObject, context);
+                ApplyElementalDamageTakenAsPhysical(damageInfo.DamageInstance, defender.UnitObject.BaseUnitModifiers);
                 
                 //Mitigation
                 Armor.ApplyArmorMitigation(damageInfo.DamageInstance, defender.UnitObject, attackerUnit);
@@ -112,6 +113,20 @@ namespace Battle
                     FlushPostAttackActions();
                 }
             }
+        }
+
+        private static void ApplyElementalDamageTakenAsPhysical(DamageInstance damage, BaseUnitModifiers defenderModifiers)
+        {
+            float chance = Mathf.Clamp01(defenderModifiers.GetStatValue(StatType.ElementalDamageTakenAsPhysicalChance));
+            var amounts = damage.Damage;
+            float elemental = amounts[DamageType.Fire] + amounts[DamageType.Cold] + amounts[DamageType.Lightning];
+            if (elemental <= 0f || chance <= 0f || (chance < 1f && UnityEngine.Random.Range(0f, 1f) >= chance))
+                return;
+
+            amounts[DamageType.Physical] += elemental;
+            amounts[DamageType.Fire] = 0f;
+            amounts[DamageType.Cold] = 0f;
+            amounts[DamageType.Lightning] = 0f;
         }
 
         public static void ApplyDamageMitigation(DamageInstance damage, BaseUnitModifiers defenderModifiers)

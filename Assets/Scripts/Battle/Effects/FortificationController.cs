@@ -10,7 +10,7 @@ namespace Battle
         private readonly Unit _owner;
         private readonly EffectController _effects;
         private bool _refreshing;
-        private BaseModifier _defenceModifier;
+        private BaseModifier _mitigationModifier;
         public int Minimum { get; private set; }
         public int Maximum { get; private set; } = FortificationEffect.MaxStacks;
 
@@ -66,29 +66,29 @@ namespace Battle
                     _effects.RemoveEffect(stacks[i]);
                 for (int i = Count; i < Minimum; i++)
                     _effects.AddEffect(new FortificationEffect());
-                UpdateDefenceBonus();
+                UpdateMitigationBonus();
             }
             finally { _refreshing = false; }
         }
 
-        private void UpdateDefenceBonus()
+        private void UpdateMitigationBonus()
         {
-            float value = Count * FortificationEffect.DefencePerStack;
-            if (_defenceModifier != null && _defenceModifier.modifierContainer.value == value) return;
+            float value = Count * FortificationEffect.MitigationPerStack;
+            if (_mitigationModifier != null && _mitigationModifier.modifierContainer.value == value) return;
 
-            if (_defenceModifier != null) _owner.RemoveOuterModifier(_defenceModifier);
+            if (_mitigationModifier != null) _owner.RemoveOuterModifier(_mitigationModifier);
             if (value <= 0f)
             {
-                if (_defenceModifier != null) UnityEngine.Object.Destroy(_defenceModifier);
-                _defenceModifier = null;
+                if (_mitigationModifier != null) UnityEngine.Object.Destroy(_mitigationModifier);
+                _mitigationModifier = null;
                 return;
             }
 
-            if (_defenceModifier == null)
-                _defenceModifier = ScriptableObject.CreateInstance<BaseModifier>();
-            // One aggregate More contribution, never one multiplier per stack.
-            _defenceModifier.modifierContainer = new ModifierContainer(ModifierType.More, StatType.Defence, value);
-            _owner.AddOuterModifier(_defenceModifier);
+            if (_mitigationModifier == null)
+                _mitigationModifier = ScriptableObject.CreateInstance<BaseModifier>();
+            // Stacks add percentage points through the ordinary mitigation stat.
+            _mitigationModifier.modifierContainer = new ModifierContainer(ModifierType.Added, StatType.DamageMitigation, value);
+            _owner.AddOuterModifier(_mitigationModifier);
         }
 
         public void Dispose()
@@ -96,11 +96,11 @@ namespace Battle
             _owner.OnStatsRecalculated -= UpdateLimits;
             _owner.OnCombatStateReset -= RefreshStacks;
             if (_effects != null) _effects.OnEffectsChanged -= RefreshStacks;
-            if (_defenceModifier != null)
+            if (_mitigationModifier != null)
             {
-                _owner.RemoveOuterModifier(_defenceModifier);
-                UnityEngine.Object.Destroy(_defenceModifier);
-                _defenceModifier = null;
+                _owner.RemoveOuterModifier(_mitigationModifier);
+                UnityEngine.Object.Destroy(_mitigationModifier);
+                _mitigationModifier = null;
             }
         }
     }

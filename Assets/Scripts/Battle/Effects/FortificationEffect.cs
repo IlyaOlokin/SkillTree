@@ -7,8 +7,8 @@ namespace Battle
     {
         public const int MaxStacks = 30;
         public const int StacksConsumedPerHit = 5;
-        public const float DefencePerStack = 0.01f;
-        public const string Description = "Each stack grants 1% more Defence.\n\nMaximum 30 stacks.\n\nReceiving an attack removes up to 5 stacks, without going below your minimum.";
+        public const float MitigationPerStack = 0.01f;
+        public const string Description = "Each stack grants 1% Damage Mitigation.\n\nMaximum 30 stacks.\n\nReceiving an attack removes up to 5 stacks, without going below your minimum.";
         public override bool IsStackable { get; set; } = false;
         public override EffectVisualType VisualType => EffectVisualType.Fortification;
         public override bool CanApply(Unit owner)

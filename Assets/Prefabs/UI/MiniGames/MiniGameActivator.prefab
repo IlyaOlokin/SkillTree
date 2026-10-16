@@ -205,6 +205,7 @@ GameObject:
   m_Component:
   - component: {fileID: 52991618312762137}
   - component: {fileID: 8830385646892942105}
+  - component: {fileID: 6648207759132060151}
   m_Layer: 5
   m_Name: MiniGameActivator
   m_TagString: Untagged
@@ -247,3 +248,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Battle.MiniGames.BattleMiniGameActivator
   button: {fileID: 8450799905119382801}
   timerFill: {fileID: 4581828601419217193}
+--- !u!114 &6648207759132060151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6270856319063007783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8035dc49891585a4babb97c8b6ab4f39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Battle.MiniGames.MiniGameFeedback
+  font: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

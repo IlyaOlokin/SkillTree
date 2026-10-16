@@ -76,6 +76,7 @@ namespace Battle.MiniGames
         private Vector2 _failMoveInitialPosition;
         private Tween _pressBounceTween;
         private Sequence _resolveSequence;
+        private MiniGameFeedback _feedback;
 
         public event Action<BattleMiniGameResult> Completed;
 
@@ -154,6 +155,12 @@ namespace Battle.MiniGames
             SetResultColor(idleColor);
             UpdateCounter();
             UpdateTimerFill();
+            _feedback = GetComponent<MiniGameFeedback>();
+            if (_feedback != null)
+            {
+                _feedback.Initialize(true, false);
+                UpdateFeedback();
+            }
         }
 
         private void Update()
@@ -165,6 +172,7 @@ namespace Battle.MiniGames
 
             _elapsed += Time.deltaTime;
             UpdateTimerFill();
+            UpdateFeedback();
 
             if (_elapsed >= timeLimitSeconds)
             {
@@ -181,7 +189,8 @@ namespace Battle.MiniGames
 
             _remainingPresses = Mathf.Max(0, _remainingPresses - 1);
             UpdateCounter();
-            PlayPressBounce();
+            if (_feedback == null) PlayPressBounce();
+            UpdateFeedback();
 
             if (_remainingPresses <= 0)
             {
@@ -198,6 +207,12 @@ namespace Battle.MiniGames
             }
 
             timerFillImage.fillAmount = Mathf.Clamp01(1f - _elapsed / Mathf.Max(0.001f, timeLimitSeconds));
+        }
+
+        private void UpdateFeedback()
+        {
+            _feedback?.Rapid(1f - _elapsed / Mathf.Max(.001f, timeLimitSeconds),
+                requiredPresses - _remainingPresses, requiredPresses);
         }
 
         private void UpdateCounter()
@@ -248,6 +263,14 @@ namespace Battle.MiniGames
 
             MiniGameTweenUtility.Kill(ref _pressBounceTween);
             _context?.Complete(result);
+            if (_feedback != null)
+            {
+                _feedback.Resolve(result);
+                _resolveSequence = DOTween.Sequence()
+                    .AppendInterval(MiniGameFeedback.ResultDuration)
+                    .OnComplete(() => { _resolveSequence = null; Complete(result); });
+                return;
+            }
             SetResultColor(result.IsSuccess ? successColor : failColor);
             SetTimerActive(false);
             PlayResolveAnimation(result);

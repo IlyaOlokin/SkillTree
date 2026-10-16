@@ -55,6 +55,10 @@ before subsequent mitigation. This is an arithmetic example, not a balance targe
 
 Per-type damage mitigation then applies `1 - clamp01(mitigation)` to each component.
 It is separate from resistance, penetration and ailment-specific protection.
+Fortification contributes Added DamageMitigation of 0.01 per live stack through
+its controller-owned runtime modifier, updated by ordinary deferred stat
+recalculation. Since this stage precedes ailment generation, it also reduces the
+damage used to create Bleed/Ignite pools; it does not rescale existing pools.
 
 Mystic negation uses
 `(max(0, MaximumHealth) + max(0, BarrierCapacity)) * max(0, MysticNegation) + max(0, additionalNegation)`.

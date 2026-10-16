@@ -12,6 +12,14 @@ namespace TooltipSystem
                 return string.Empty;
             }
 
+            // These numeric rules have no dedicated glossary entry.
+            if (statType == StatType.AttackProgressOnHitTaken
+                || statType == StatType.AttackProgressOnMiss
+                || statType == StatType.AttackProgressOnAilmentApplied
+                || statType == StatType.ElementalDamageTakenAsPhysicalChance
+                || statType == StatType.ArmorAsMysticNegation)
+                return localizedText;
+
             return $"{{{GetTooltipId(statType)}|{localizedText}}}";
         }
 

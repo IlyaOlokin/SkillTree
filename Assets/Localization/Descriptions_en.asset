@@ -679,14 +679,14 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 46853000000000003
-    m_Localized: 'Each stack reduces incoming damage by 1%.
+    m_Localized: 'Each stack grants 1% Damage Mitigation.
 
 
       Maximum 30 stacks.
 
 
-      Taking
-      damage removes 5 stacks after applying their damage reduction.'
+      Receiving
+      an attack removes up to 5 stacks, without going below your minimum.'
     m_Metadata:
       m_Items: []
   - m_Id: 46855000000000002
@@ -798,7 +798,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 65615572848742400
-    m_Localized: Each stack grants 1% more Defence.
+    m_Localized: Each stack grants 1% Damage Mitigation.
     m_Metadata:
       m_Items: []
   - m_Id: 65615572878102528
@@ -806,7 +806,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 65615572878102529
-    m_Localized: Receiving an attack removes up to 5 stacks, without going below your minimum.
+    m_Localized: Receiving an attack removes up to 5 stacks, without going below
+      your minimum.
     m_Metadata:
       m_Items: []
   - m_Id: 65630384962015232
@@ -815,6 +816,26 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 65630384974598144
     m_Localized: Maximum Fortification Stacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66708673617072128
+    m_Localized: Attack Progress Change on Hit Taken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66708673696763904
+    m_Localized: Attack Progress Change on Miss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66708673696763905
+    m_Localized: Attack Progress Change on Ailment Applied
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66708673696763906
+    m_Localized: Chance to Take Elemental Damage as Physical
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66708673696763907
+    m_Localized: Armor Gained as Mystic Negation
     m_Metadata:
       m_Items: []
   references:

@@ -14,7 +14,10 @@ namespace Battle
             float negationPercent = Mathf.Max(0f, defender.BaseUnitModifiers.GetStatValue(StatType.MysticNegation));
             float maximumHealth = Mathf.Max(0f, defender.health.MaxHealth);
             float barrierCapacity = Mathf.Max(0f, defender.BaseUnitModifiers.GetStatValue(StatType.BarrierCapacity));
+            float armor = Mathf.Max(0f, defender.BaseUnitModifiers.GetStatValue(StatType.Armor));
+            float armorFraction = Mathf.Max(0f, defender.BaseUnitModifiers.GetStatValue(StatType.ArmorAsMysticNegation));
             float negationAmount = (maximumHealth + barrierCapacity) * negationPercent
+                                   + armor * armorFraction
                                    + Mathf.Max(0f, additionalNegation);
             if (negationAmount <= 0f)
             {

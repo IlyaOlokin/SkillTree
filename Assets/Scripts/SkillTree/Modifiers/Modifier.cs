@@ -345,6 +345,23 @@ namespace SkillTree
 
         private string GetFallbackTemplate()
         {
+            if (modifierType == ModifierType.Added)
+            {
+                switch (statType)
+                {
+                    case StatType.AttackProgressOnHitTaken:
+                        return "When you are hit, change Attack Progress by [[0]].";
+                    case StatType.AttackProgressOnMiss:
+                        return "On Miss: change Attack Progress by [[0]].";
+                    case StatType.AttackProgressOnAilmentApplied:
+                        return "When you apply an Ailment, change Attack Progress by [[0]].";
+                    case StatType.ElementalDamageTakenAsPhysicalChance:
+                        return "[[0]] chance to take Fire, Cold and Lightning Damage from incoming attacks as Physical Damage.";
+                    case StatType.ArmorAsMysticNegation:
+                        return "Gain [[0]] of Armor as additional Mystic Negation.";
+                }
+            }
+
             if (statType == StatType.PainReceived)
             {
                 return modifierType switch

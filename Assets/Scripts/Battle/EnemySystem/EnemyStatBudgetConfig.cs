@@ -60,11 +60,17 @@ namespace Battle
     {
         public const float DefaultSurvivabilityStartPower = 12f;
         public const float DefaultSurvivabilityGrowth = 0.1f;
+        public const float DefaultDamageStartPower = 15f;
+        public const float DefaultDamageGrowthReduction = 0.1f;
 
         [Tooltip("Enemy power up to which health and barrier capacity retain their existing scaling.")]
         [SerializeField, Min(0.0001f)] private float survivabilityStartPower = DefaultSurvivabilityStartPower;
         [Tooltip("Additional health and barrier capacity growth above the starting power. Zero disables it.")]
         [SerializeField, Min(0f)] private float survivabilityGrowth = DefaultSurvivabilityGrowth;
+        [Tooltip("Enemy power up to which damage retains its existing scaling.")]
+        [SerializeField, Min(0.0001f)] private float damageStartPower = DefaultDamageStartPower;
+        [Tooltip("Slows damage growth above the starting power. Zero keeps the original growth; one makes linear budget damage stop growing.")]
+        [SerializeField, Range(0f, 1f)] private float damageGrowthReduction = DefaultDamageGrowthReduction;
         [SerializeField] private List<EnemyStatBudgetRule> rules = new();
 
         public IReadOnlyList<EnemyStatBudgetRule> Rules => rules;
@@ -82,6 +88,21 @@ namespace Battle
             return Mathf.Pow(
                 Mathf.Max(1f, power / Mathf.Max(0.0001f, startPower)),
                 Mathf.Max(0f, growth));
+        }
+
+        public float GetDamageMultiplier(float power)
+        {
+            return CalculateDamageMultiplier(power, damageStartPower, damageGrowthReduction);
+        }
+
+        public static float CalculateDamageMultiplier(
+            float power,
+            float startPower = DefaultDamageStartPower,
+            float growthReduction = DefaultDamageGrowthReduction)
+        {
+            return Mathf.Pow(
+                Mathf.Max(1f, power / Mathf.Max(0.0001f, startPower)),
+                -Mathf.Clamp01(growthReduction));
         }
 
         public EnemyStatBudgetRule GetRule(StatType statType)

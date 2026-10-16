@@ -67,7 +67,9 @@ namespace BalanceParity
                 Add(owner, StatType.BarrierCount, 3); Add(owner, StatType.BarrierCapacity, 30);
                 Add(owner, StatType.BarrierDamageTypeMask, (float)DamageType.Physical);
                 Add(owner, StatType.BarrierRegenerationSpeed, 1); Add(owner, StatType.FireDamage, 10);
-                progressModifier = Definition<GainAttackProgressOnHit>(); Set(progressModifier, typeof(GainAttackProgressOnHit), "attackProgressGain", 0.25f);
+                var progressStat = Definition<BaseModifier>();
+                progressStat.modifierContainer = new ModifierContainer(ModifierType.Added, StatType.AttackProgressOnHitTaken, 0.25f);
+                progressModifier = progressStat;
                 owner.AddOuterModifier(progressModifier);
                 var surge = Definition<BarrierLossGrantsBarrierSurge>(); Set(surge, typeof(BarrierLossGrantsBarrierSurge), "duration", step * 3);
                 owner.AddOuterModifier(surge);
