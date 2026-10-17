@@ -71,14 +71,17 @@ resource and event boundaries are described in [defences](DefencesAndResources.m
 
 Chill supplies an `Increased AttackSpeed` modifier of
 `-0.2 * (1 + ChillPower)`. Additional payload modifiers are scaled by the same
-power. Duration is `3 * (1 - recipientChillDurationReduction)` seconds.
+power. Duration is `max(0, 3 * (1 - recipientChillDurationReduction))` seconds.
 Reapplication preserves the longer remaining duration but replaces modifier values
 with the newest Chill, even when the new effect is weaker. Removal releases its
 outer modifiers.
 
-**Boundary concern:** duration reduction is not clamped in this constructor.
-Values above one create a negative duration, which the controller treats as
-untimed. This is an implementation risk to test, not an intended immunity rule.
+Boundary fix, 2026-10-17: duration reduction of 100% or more prevents Chill.
+The ordinary path exits before consuming ailment absorption or notifying application
+listeners/registering a Freeze upgrade. CanApply also rejects zero-duration repeat
+snapshots. AilmentGuard expansion contributes to this protection; negative protection
+still extends duration. Unity compilation passed; live gameplay was not run.
+See the [fix record](../Reference/StatTypeFixes20261017.md).
 
 A hit that applies Chill upgrades it to Freeze if recorded HP damage divided by
 the original defender's maximum HP is **strictly greater than 0.4**. The check is

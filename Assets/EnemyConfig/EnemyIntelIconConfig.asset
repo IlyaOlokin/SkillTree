@@ -15,34 +15,34 @@ MonoBehaviour:
   defaultIcon: {fileID: 21300000, guid: 145ee4ceb3e1cfd468a64c3d119ed1ca, type: 3}
   icons:
   - featureType: 3
-    icon: {fileID: 21300000, guid: 0e1ab67eb67874542b1606233616c377, type: 3}
+    icon: {fileID: 21300000, guid: 653d39313e6fbd542aedd2507700702f, type: 3}
   - featureType: 4
-    icon: {fileID: 21300000, guid: 85f6db0efa996b342ac40bb7aa6eb2f9, type: 3}
+    icon: {fileID: 21300000, guid: d6d044ef6fe0244439c393776e1b404f, type: 3}
   - featureType: 5
-    icon: {fileID: 21300000, guid: a658ec0d4c286ed489843b72ebb7a3a0, type: 3}
+    icon: {fileID: 21300000, guid: 816a1416d52ee364b94b11407a42bbc0, type: 3}
   - featureType: 6
-    icon: {fileID: 21300000, guid: 66b19d43466315e4caff1240bfe0da43, type: 3}
+    icon: {fileID: 21300000, guid: b4f5ccee3c4e6a647a36f22bb2f0d2fa, type: 3}
   - featureType: 10
-    icon: {fileID: 21300000, guid: d8e8912eb0e430d499d921be1c3cf4be, type: 3}
+    icon: {fileID: 21300000, guid: 02eed514c63daf940a02e7915f6dc6bd, type: 3}
   - featureType: 11
-    icon: {fileID: 21300000, guid: d98b775a6f3c03e43ba95a50dd259d3f, type: 3}
+    icon: {fileID: 21300000, guid: 98fcaa1045edb4f4ebbbed5e48d488e6, type: 3}
   - featureType: 12
-    icon: {fileID: 21300000, guid: 6402e62a7d64d494ca6f3fd91f490099, type: 3}
+    icon: {fileID: 21300000, guid: 601ee20c3aaf68243899837d20cd1d40, type: 3}
   - featureType: 13
-    icon: {fileID: 21300000, guid: 341e922fbff1ebe4daf1ca0c2ca9ce27, type: 3}
+    icon: {fileID: 21300000, guid: 68480f93e767b6b4b9bc52c7f6540e64, type: 3}
   - featureType: 14
-    icon: {fileID: 21300000, guid: 4abf3c14149faf443ba21990a107d80a, type: 3}
+    icon: {fileID: 21300000, guid: 12092ae501e759748bd34c4ced1967d3, type: 3}
   - featureType: 15
-    icon: {fileID: 21300000, guid: 1fe784c0346a64742a9ab94ab0dd7617, type: 3}
+    icon: {fileID: 21300000, guid: b3842d05de878de4f8f93d5c667e5cfe, type: 3}
   - featureType: 16
-    icon: {fileID: 21300000, guid: 04841b8a9cae96b42aa2a2689b689515, type: 3}
+    icon: {fileID: 21300000, guid: 904477ff3c09fbc47a5cc3b9fc38d91f, type: 3}
   - featureType: 17
-    icon: {fileID: 21300000, guid: 8124fde2ebe01954895333c53b755f61, type: 3}
+    icon: {fileID: 21300000, guid: 08beb10cc012a124fa0bed07f825c53c, type: 3}
   - featureType: 18
-    icon: {fileID: 21300000, guid: 227a8556eab6d764483c31ec867d61d2, type: 3}
+    icon: {fileID: 21300000, guid: ab35166f2080079468f7bece76855fd9, type: 3}
   - featureType: 21
-    icon: {fileID: 21300000, guid: e0d28137676e2ba428d9594922a7cfd3, type: 3}
+    icon: {fileID: 21300000, guid: a3379d8b2e405254f895c981d60d7916, type: 3}
   - featureType: 22
-    icon: {fileID: 21300000, guid: 7e55dad170b82e54d9ef2f91f42835ef, type: 3}
+    icon: {fileID: 21300000, guid: 6a4d16743f9ad5e449508db4d1409434, type: 3}
   - featureType: 28
-    icon: {fileID: 21300000, guid: a75085037fd278148ab9bc1455cf53dc, type: 3}
+    icon: {fileID: 21300000, guid: 0f05a4ca635533c40aa727b0d6fa84fc, type: 3}

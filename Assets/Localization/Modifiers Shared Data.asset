@@ -303,30 +303,6 @@ MonoBehaviour:
     m_Key: modifier.container.none.DarknessDamage
     m_Metadata:
       m_Items: []
-  - m_Id: 7780251602997
-    m_Key: modifier.container.added.PoisonDamage
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251602998
-    m_Key: modifier.container.increased.PoisonDamage
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251602999
-    m_Key: modifier.container.decreased.PoisonDamage
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603000
-    m_Key: modifier.container.more.PoisonDamage
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603001
-    m_Key: modifier.container.less.PoisonDamage
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603002
-    m_Key: modifier.container.none.PoisonDamage
-    m_Metadata:
-      m_Items: []
   - m_Id: 7780251603003
     m_Key: modifier.container.added.AilmentPower
     m_Metadata:
@@ -2389,30 +2365,6 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 46846000000000054
     m_Key: modifier.container.none.DarknessDamageMitigation
-    m_Metadata:
-      m_Items: []
-  - m_Id: 46846000000000055
-    m_Key: modifier.container.added.PoisonDamageMitigation
-    m_Metadata:
-      m_Items: []
-  - m_Id: 46846000000000056
-    m_Key: modifier.container.increased.PoisonDamageMitigation
-    m_Metadata:
-      m_Items: []
-  - m_Id: 46846000000000057
-    m_Key: modifier.container.decreased.PoisonDamageMitigation
-    m_Metadata:
-      m_Items: []
-  - m_Id: 46846000000000058
-    m_Key: modifier.container.more.PoisonDamageMitigation
-    m_Metadata:
-      m_Items: []
-  - m_Id: 46846000000000059
-    m_Key: modifier.container.less.PoisonDamageMitigation
-    m_Metadata:
-      m_Items: []
-  - m_Id: 46846000000000060
-    m_Key: modifier.container.none.PoisonDamageMitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000061

@@ -8,6 +8,14 @@ or performance audit. Existing specialized visual records retain their own limit
 
 ## Values and presentation
 
+Stat display fix, 2026-10-17: PlayerStatsWindow's simplified DPS clamps expected
+ordinary critical layers to 0–1, and uses nonnegative uncapped chance when an
+applicable OnAttack MultiCritModifier is collected. Nonpositive attack speed gives
+zero estimated DPS. Zero/negative barrier regeneration displays an em dash, with
+no seconds suffix, rather than an invalid interval. See the
+[fix record](../Reference/StatTypeFixes20261017.md). Unity compilation passed;
+no visual check or gameplay playtest was performed.
+
 HealthBar subscribes to health, maximum-health, sacred-region and mystic absorption
 changes, and removes those subscriptions on destruction. Its primary fill displays
 CurrentHealth01; its text rounds current/maximum HP upward. Profaned and hallowed

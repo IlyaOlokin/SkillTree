@@ -29,16 +29,17 @@ block, consume barrier charges or reapply armor/resistance on each tick.
 ## Evasion and armor
 
 Evasion clamps accuracy and evasion ratings to nonnegative values. With positive
-evasion, hit chance is `clamp(0.8 * (accuracy + 5) / evasion, 0.01, 1)`; zero
+evasion, hit chance is `clamp(1.25 * (accuracy + 5) / evasion, 0.01, 1)`; zero
 evasion means a guaranteed hit. Dodge chance is its complement. The stability
-term `+5` means equal ratings do not yield exactly 80% hit chance.
+term `+5` and multiplier 1.25 mean equal nonnegative ratings reach the 100% hit cap.
+The constant was rechecked in source on 2026-10-17; no balance change was made.
 
 For incoming physical damage `D` and armor `A`, the attack path leaves
 `D * D / (A + D)` physical damage; it returns unchanged when either value is zero.
 Thus the reduction for nonnegative values is `A / (A + D)`, which depends on hit
-size. **Boundary mismatch:** the display/helper calculation clamps negative inputs,
-but `ApplyArmorMitigation` does not. Do not assume the helper proves the attack
-path safe for negative armor or an invalid denominator; this pass makes no code fix.
+size. As of 2026-10-17, both combat and the display/helper clamp armor and physical
+damage to nonnegative inputs. Negative armor therefore behaves as zero armor,
+avoiding the old zero-denominator/negative-damage boundary (BL-004).
 
 ## Resistance, penetration and mitigation
 
@@ -61,12 +62,19 @@ recalculation. Since this stage precedes ailment generation, it also reduces the
 damage used to create Bleed/Ignite pools; it does not rescale existing pools.
 
 Mystic negation uses
-`(max(0, MaximumHealth) + max(0, BarrierCapacity)) * max(0, MysticNegation) + max(0, additionalNegation)`.
+`(max(0, MaximumHealth) + max(0, BarrierCapacity)) * max(0, MysticNegation) + max(0, Armor) * max(0, ArmorAsMysticNegation) + max(0, additionalNegation)`.
 When this is positive and light-minus-darkness is nonzero, the code cancels the two
 components and subtracts the amount from their absolute difference, leaving only
 the surviving type. The capacity term is one capacity stat, not capacity times
 current barrier charges. Zero negation or equal light/darkness returns unchanged
 at this stage; later type mitigation and barrier masking still operate separately.
+
+Source follow-up, 2026-10-17: the negative-armor boundary is corrected and Unity
+compilation passed; gameplay verification is pending. Both barrier and lifesteal
+masks still use scalar stat arithmetic, so
+overlapping grants/removals can change unintended bits (BL-040). See the
+[initial review](../Reference/StatTypeReview20261017.md) and
+[fix record](../Reference/StatTypeFixes20261017.md) for examples and limits.
 
 ## Block and parry
 

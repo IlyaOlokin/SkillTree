@@ -18,6 +18,8 @@ namespace SkillTree
         private int _treeChangeDepth;
         private bool _treeChangePending;
         private bool _modifiersChangedPending;
+        private bool _collectedModifiersDirty = true;
+        private readonly List<CollectedModifier> _collectedNodeModifiers = new();
         private readonly Dictionary<Node, Action> _queueVisualListeners = new();
         private static readonly ProfilerMarker AvailabilityMarker = new("SkillTree.RefreshAvailability");
         private static readonly ProfilerMarker QueueVisualMarker = new("SkillTree.PublishQueuePresentation");
@@ -120,6 +122,7 @@ namespace SkillTree
 
         private void UpdateTree()
         {
+            InvalidateModifierCollection();
             _modifiersChangedPending = true;
             RaiseOnSkillTreeChanged();
         }
@@ -313,7 +316,32 @@ namespace SkillTree
         public List<CollectedModifier> CollectAllModifiers()
         {
             List<CollectedModifier> modifiers = new List<CollectedModifier>();
+            CollectAllModifiers(modifiers);
+            return modifiers;
+        }
 
+        internal void InvalidateModifierCollection() => _collectedModifiersDirty = true;
+
+        // Append to the caller's phase snapshot. Keep zone refreshes live because
+        // loading can update their nodes without individual notifications.
+        public void CollectAllModifiers(List<CollectedModifier> modifiers)
+        {
+            if (_collectedModifiersDirty || _treeChangeDepth > 0)
+            {
+                _collectedNodeModifiers.Clear();
+                CollectNodeModifiers(_collectedNodeModifiers);
+                _collectedModifiersDirty = false;
+            }
+            modifiers.AddRange(_collectedNodeModifiers);
+
+            foreach (var bonusZone in bonusZones)
+            {
+                modifiers.Add(CollectedModifier.WithoutPower(bonusZone.CollectModifier()));
+            }
+        }
+
+        private void CollectNodeModifiers(List<CollectedModifier> modifiers)
+        {
             foreach (var allocatedNode in _allocatedNodes)
             {
                 ModifierPowerContext powerContext = ModifierPowerContext.FromNode(allocatedNode);
@@ -331,13 +359,6 @@ namespace SkillTree
                     }
                 }
             }
-
-            foreach (var bonusZone in bonusZones)
-            {
-                modifiers.Add(CollectedModifier.WithoutPower(bonusZone.CollectModifier()));
-            }
-
-            return modifiers;
         }
 
         private void RaiseOnSkillTreeChanged()
@@ -366,6 +387,7 @@ namespace SkillTree
 
         private void RaiseAnyNodeChanged(Node node)
         {
+            InvalidateModifierCollection();
             BeginTreeChange();
             try
             {
@@ -455,6 +477,7 @@ namespace SkillTree
 
         public void RebuildAllocatedNodes()
         {
+            InvalidateModifierCollection();
             _allocatedNodes.Clear();
             foreach (Node node in EnumerateNodes())
             {

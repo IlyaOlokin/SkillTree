@@ -282,30 +282,6 @@ MonoBehaviour:
     m_Localized: You have no {darkness|Darkness} {damage|Damage}
     m_Metadata:
       m_Items: []
-  - m_Id: 7780251602997
-    m_Localized: '[[0]] to Poison {damage|Damage}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251602998
-    m_Localized: '[[0]]% increased Poison {damage|Damage}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251602999
-    m_Localized: '[[0]]% decreased Poison {damage|Damage}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603000
-    m_Localized: '[[0]]% more Poison {damage|Damage}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603001
-    m_Localized: '[[0]]% less Poison {damage|Damage}'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 7780251603002
-    m_Localized: You have no Poison {damage|Damage}
-    m_Metadata:
-      m_Items: []
   - m_Id: 7780251603003
     m_Localized: '[[0]] to {ailment|Ailment} {power|Power}'
     m_Metadata:
@@ -2409,30 +2385,6 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 46846000000000054
     m_Localized: You have no Darkness Damage Mitigation
-    m_Metadata:
-      m_Items: []
-  - m_Id: 46846000000000055
-    m_Localized: '[[0]] to Poison Damage Mitigation'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 46846000000000056
-    m_Localized: '[[0]]% increased Poison Damage Mitigation'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 46846000000000057
-    m_Localized: '[[0]]% decreased Poison Damage Mitigation'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 46846000000000058
-    m_Localized: '[[0]]% more Poison Damage Mitigation'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 46846000000000059
-    m_Localized: '[[0]]% less Poison Damage Mitigation'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 46846000000000060
-    m_Localized: You have no Poison Damage Mitigation
     m_Metadata:
       m_Items: []
   - m_Id: 46846000000000061

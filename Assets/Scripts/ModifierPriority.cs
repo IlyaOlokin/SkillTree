@@ -10,4 +10,6 @@ public enum ModifierPriority
     PreAttribute2 = 5,
     IncomingPreMitigation = 6,
     AfterCriticalHit = 7,
+    // After AllAttributes expansion, before attribute-derived modifiers.
+    AttributeFinalization = 8,
 }

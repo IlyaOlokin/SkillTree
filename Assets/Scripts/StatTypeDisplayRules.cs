@@ -16,7 +16,6 @@ public static class StatTypeDisplayRules
         StatType.LightningDamageMitigation,
         StatType.LightDamageMitigation,
         StatType.DarknessDamageMitigation,
-        StatType.PoisonDamageMitigation,
         StatType.CritChance,
         StatType.CritDamageBonus,
         StatType.LifeSteal,
@@ -130,7 +129,7 @@ public static class StatTypeDisplayRules
 
         if (statType == StatType.BarrierRegenerationSpeed)
         {
-            return Barrier.BarrierCooldown / rawValue;
+            return rawValue > 0f ? Barrier.BarrierCooldown / rawValue : float.PositiveInfinity;
         }
 
         return ScaleForDisplay(statType, rawValue);

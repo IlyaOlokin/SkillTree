@@ -58,17 +58,14 @@ namespace SkillTree
 
         private static bool TryGetHighestElementDamageStat(BaseUnitModifiers sourceModifiers, out StatType statType)
         {
-            BaseUnitModifiers mergedModifiers = new BaseUnitModifiers(sourceModifiers);
-            StatCalculator.MergeDamageModifiers(mergedModifiers);
-
             DamageType highestDamageType = ElementalDamageTypes[0];
-            float highestDamage = GetDamageValue(mergedModifiers, highestDamageType);
+            float highestDamage = GetDamageValue(sourceModifiers, highestDamageType);
             bool hasTie = false;
 
             for (int i = 1; i < ElementalDamageTypes.Length; i++)
             {
                 DamageType damageType = ElementalDamageTypes[i];
-                float damage = GetDamageValue(mergedModifiers, damageType);
+                float damage = GetDamageValue(sourceModifiers, damageType);
 
                 if (damage > highestDamage)
                 {
@@ -89,7 +86,7 @@ namespace SkillTree
         private static float GetDamageValue(BaseUnitModifiers modifiers, DamageType damageType)
         {
             StatType statType = StatCalculator.GetCorespondingDamageStat(damageType);
-            return StatCalculator.GetStat(modifiers, statType);
+            return StatCalculator.GetStatWithGroup(modifiers, statType, StatType.Damage, StatType.ElementalDamage);
         }
 
         private static string FormatAddedValue(float value)

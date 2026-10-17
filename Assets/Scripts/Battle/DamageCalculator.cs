@@ -9,12 +9,19 @@ namespace Battle
 {
     public static class DamageCalculator
     {
+        private static readonly DamageType[] DamageTypes = (DamageType[])Enum.GetValues(typeof(DamageType));
+
+        public static float GetExpectedCriticalLayerCount(float critChance, bool allowsMultiCrit)
+        {
+            return allowsMultiCrit ? Mathf.Max(0f, critChance) : Mathf.Clamp01(critChance);
+        }
+
         // public static DamageInstance CalculateStraightDamage(DamageInfo damageInfo) ????????????
         public static void CalculateAttackDamage(DamageInfo damageInfo)
         {
             StatCalculator.LightRecalculateAttackStats(damageInfo.BaseUnitModifiers);
 
-            foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
+            foreach (DamageType damageType in DamageTypes)
             {
                 damageInfo.DamageInstance.Damage[damageType] =
                     damageInfo.BaseUnitModifiers.GetStatValue(StatCalculator.GetCorespondingDamageStat(damageType));

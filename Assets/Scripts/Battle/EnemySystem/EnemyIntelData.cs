@@ -14,7 +14,7 @@ namespace Battle
         LightningDamage = 6,
         LightDamage = 7,
         DarknessDamage = 8,
-        PoisonDamage = 9,
+        // ID 9 is retired. Do not reuse.
         Armor = 10,
         Evasion = 11,
         Block = 12,

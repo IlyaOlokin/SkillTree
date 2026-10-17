@@ -27,6 +27,7 @@ namespace Battle
         private List<Modifier> _outerModifiers = new List<Modifier>();
         private readonly List<IModifierRuntimeBinding> _modifierRuntimeBindings = new List<IModifierRuntimeBinding>();
         private bool _modsChangedPending;
+        internal int StatRevision { get; private set; }
         private BattleTickSystem _battleTickSystem;
         private bool _isRegisteredInBattleTickSystem;
         private float _lowLifeThreshold01 = DefaultLowLifeThreshold01;
@@ -301,6 +302,7 @@ namespace Battle
 
         public void RequestModRecalculation()
         {
+            if (this is PlayerUnit player) player.SkillTree?.InvalidateModifierCollection();
             if (!_isRegisteredInBattleTickSystem || _battleTickSystem == null || _battleTickSystem.IsPaused)
             {
                 OnModsChanged?.Invoke();
@@ -357,6 +359,8 @@ namespace Battle
 
         protected void ResetUnit()
         {
+            unchecked { StatRevision++; }
+            if (this is PlayerUnit player) player.SkillTree?.InvalidateModifierCollection();
             UnbindModifierRuntimes();
             _lowLifeThreshold01 = DefaultLowLifeThreshold01;
             attributes.Reset();
@@ -392,17 +396,23 @@ namespace Battle
         public List<CollectedModifier> GetAllModifiers()
         {
             List<CollectedModifier> mods = new List<CollectedModifier>();
+            GetAllModifiers(mods);
+            return mods;
+        }
+
+        // Fill a caller-owned snapshot; never expose a mutable shared cache.
+        public void GetAllModifiers(List<CollectedModifier> mods)
+        {
+            mods.Clear();
             AddWithoutPower(mods, baseInnateModifiers.GetRuntimeModifiers());
             AddWithoutPower(mods, innateModifiers.GetRuntimeModifiers());
 
             if (this is PlayerUnit playerUnit)
             {
-                mods.AddRange(playerUnit.SkillTree.CollectAllModifiers());
+                playerUnit.SkillTree.CollectAllModifiers(mods);
             }
 
             AddWithoutPower(mods, _outerModifiers);
-
-            return mods;
         }
 
         private static void AddWithoutPower(List<CollectedModifier> target, IEnumerable<Modifier> modifiers)

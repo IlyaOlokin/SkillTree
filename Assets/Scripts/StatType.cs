@@ -15,7 +15,7 @@ public enum StatType
     LightningDamage = 7,
     LightDamage = 8,
     DarknessDamage  = 9,
-    PoisonDamage = 10,
+    // ID 10 is retired. Do not reuse.
     
     // Negative Effects
     AilmentPower  = 11,
@@ -66,7 +66,7 @@ public enum StatType
     LightningDamageMitigation = 81,
     LightDamageMitigation = 82,
     DarknessDamageMitigation = 83,
-    PoisonDamageMitigation = 84,
+    // ID 84 is retired. Do not reuse.
 
     Armor = 19,
     Evasion = 20,

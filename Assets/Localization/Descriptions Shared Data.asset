@@ -587,10 +587,6 @@ MonoBehaviour:
     m_Key: enum.StatType.DarknessDamageMitigation
     m_Metadata:
       m_Items: []
-  - m_Id: 46846000000000010
-    m_Key: enum.StatType.PoisonDamageMitigation
-    m_Metadata:
-      m_Items: []
   - m_Id: 46847000000000000
     m_Key: enum.StatType.SteelWisp
     m_Metadata:

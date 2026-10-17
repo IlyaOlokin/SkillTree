@@ -546,8 +546,7 @@ namespace Battle
                 || statType == StatType.ColdDamage
                 || statType == StatType.LightningDamage
                 || statType == StatType.LightDamage
-                || statType == StatType.DarknessDamage
-                || statType == StatType.PoisonDamage;
+                || statType == StatType.DarknessDamage;
         }
 
         private static bool IsDefenceStat(StatType statType)

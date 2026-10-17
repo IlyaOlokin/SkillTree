@@ -1,5 +1,11 @@
 # Stats and Modifiers
 
+Source review, 2026-10-17: [StatType consumers, correctness findings and optimization
+priorities](../Reference/StatTypeReview20261017.md). The subsequent
+[fix record](../Reference/StatTypeFixes20261017.md) documents the implemented
+corrections, collection/storage optimizations, Poison removal and successful Unity
+compilation. Mask semantics remain unchanged; gameplay/performance checks are pending.
+
 ## Fortification limits as stats (2026-10-13)
 
 `StatType.MinimumFortificationStacks = 95` and
@@ -388,7 +394,7 @@ innate modifiers, player-tree modifiers when applicable, and outer modifiers.
 
 1. Applicable low-life-threshold modifiers.
 2. `PreAttribute`, then `PreAttribute2` modifiers.
-3. Expand `AllAttributes`, then apply attribute scaling rules.
+3. Expand `AllAttributes`, run `AttributeFinalization`, then apply attribute scaling rules.
 4. `Secondary`, then `Special` modifiers.
 5. Expand damage, mitigation, defence and ailment groups.
 6. Cache final values.
@@ -396,6 +402,14 @@ innate modifiers, player-tree modifiers when applicable, and outer modifiers.
 Finally the unit binds the collected runtime bindings and emits
 `OnStatsRecalculated`. Phase order is explicit in the calculator: the numeric order
 of `ModifierPriority` enum members is not the execution order.
+
+AttributeFinalization (appended ID 8) is the redistribution boundary. The modifier
+reads rounded final individual totals including AllAttributes, replaces their
+scalar buckets with the distributed results and consumes the already-applied
+multipliers. No serialized priority migration is needed for the existing definition.
+
+StatType IDs 10 and 84 and EnemyIntelFeatureType ID 9 are retired after Poison
+removal; do not reuse them. Other explicit IDs are preserved.
 
 `RequestModRecalculation` normally defers work to the combat `Mods` phase. When the
 unit is unregistered, has no tick system or combat is paused, it recalculates
@@ -482,7 +496,11 @@ from gameplay verification. No playtest, test runner or build was performed.
 An attack modifier must change `DamageInfo.BaseUnitModifiers`, the attack snapshot,
 rather than `DamageInfo.Owner.BaseUnitModifiers`. The attack processor includes an
 Editor diagnostic hash check for unintended mutation of the attacker's persistent
-buckets. See [combat order](CombatAndEffects.md) before choosing a phase.
+buckets. Both hash computation and assertion calls are Editor-only; legitimate
+synchronous stat rebuilds are excluded through a unit revision. Reused phase
+buffers and the tree collection cache preserve independent snapshots and observe
+changes between phases. See the [fix record](../Reference/StatTypeFixes20261017.md)
+and [combat order](CombatAndEffects.md) before choosing a phase.
 
 `LightRecalculateAttackStats` expands damage and ailment groups and refreshes damage
 and its explicit list of attack stats. It does not rerun the full attribute/defence

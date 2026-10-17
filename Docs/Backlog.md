@@ -6,7 +6,8 @@ Compiled **2026-09-28** from the findings already recorded in this vault. This i
 a triage list, not a new code audit, a runtime reproduction report or an approved
 redesign. No gameplay fixes or tests were performed while compiling it.
 
-All entries are **Open**. IDs are stable; retain them when updating an entry.
+Entries are **Open** unless an implementation update states otherwise. IDs are
+stable; retain them when updating an entry.
 Priorities are provisional: **P1** first investigation (lost rewards/progress,
 economy integrity or combat correctness), **P2** normal investigation, **P3**
 hardening, tooling or requirements clarification. Reachability in current content
@@ -26,10 +27,36 @@ Evidence types:
 | --- | --- | --- | --- | --- |
 | BL-001 | P1 / Observed gap | Direct and animated location rewards ignore failed `TryAddItem` and then record the claim. A full inventory can lose the reward permanently. | Reproduce both delivery paths with failed insertion; retain a recoverable unclaimed reward until delivery succeeds, and verify retry/reload cannot duplicate it. | [Reward delivery](Systems/EconomyAndLoot.md#items-and-location-rewards) |
 | BL-002 | P1 / Observed gap | Wallet `Tick` adds 1,000 gold on Y without an editor-only guard. The debug path may ship in a player build. | Check the active player-build input path; remove it or restrict it to an explicitly approved development mode. Verify normal builds cannot grant gold this way. | [Wallet](Systems/EconomyAndLoot.md#wallet-and-persistence) |
-| BL-003 | P1 / Risk | Chill duration reduction above one yields negative duration, treated as untimed by the controller. More duration reduction could create persistent Chill. | Trace attainable modifier values and reproduce below/at/above 100%; define boundary semantics and verify no accidental untimed effect. | [Chill boundary](Systems/AilmentsAndDebuffs.md#chill-and-freeze) |
-| BL-004 | P1 / Risk | Armor helpers clamp negative inputs, but the actual mitigation path does not. Negative armor or a zero/invalid denominator may produce invalid combat damage. | Trace attainable inputs; test negative armor and denominator boundaries; agree on semantics and make runtime calculation and displayed prediction consistent. | [Armor](Systems/DefencesAndResources.md#evasion-and-armor) |
+| BL-003 | P1 / Implemented; compilation verified | Chill protection at/above 100% now prevents application instead of producing an untimed effect; zero-duration repeat snapshots are rejected. | Play Mode verification below/at/above 100%, with redirection, absorption and repeats, remains pending. | [Chill boundary](Systems/AilmentsAndDebuffs.md#chill-and-freeze), [fix record](Reference/StatTypeFixes20261017.md) |
+| BL-004 | P1 / Implemented; compilation verified | The attack armor path now clamps armor/physical damage to nonnegative values, matching the display/helper input policy. | Play Mode verification with strong Sunder and mixed damage remains pending. | [Armor](Systems/DefencesAndResources.md#evasion-and-armor), [fix record](Reference/StatTypeFixes20261017.md) |
 | BL-005 | P1 / Risk | Item effects apply before consumption, without general rollback; node use ignores failed `TryConsumeItem`. Inventory-changing callbacks could grant an effect without consuming the item. | Reproduce use with callbacks that remove/change selection or inventory; ensure one successful effect corresponds to the required consumption, or an explicitly handled failure. | [Item use](Systems/InventoryAndItems.md#using-items) |
 | BL-006 | P1 / Risk | Definition catalogs silently keep the first duplicate ID; unresolved definitions are skipped on restore. Ambiguous IDs or unavailable definitions can restore the wrong item or omit it. | Audit authored IDs and player-build catalog coverage; test duplicate/unresolved IDs and define recovery behavior before changing content IDs. Close with deterministic resolution and visible actionable failure handling. | [Save IDs](Systems/SavesAndProfiles.md#ids-and-version-changes), [fallback IDs](Systems/InventoryAndItems.md#persistence-and-definition-identity) |
+
+### Stat source review, 2026-10-17
+
+The [initial review](Reference/StatTypeReview20261017.md) recorded the pre-fix
+boundaries. The subsequent owner-authorized
+[implementation](Reference/StatTypeFixes20261017.md) corrected BL-003/004/039/041/042,
+removed Poison and applied scoped allocation optimizations. Unity compilation
+passed; no tests, gameplay playtest or performance capture ran. Mask semantics
+(BL-040) were explicitly excluded by the owner and remain unchanged.
+
+| ID | Priority / evidence | Finding and possible impact | Next step and closure criterion | Reference |
+| --- | --- | --- | --- | --- |
+| BL-039 | P2 / Implemented; compilation verified | Redistribution now runs in AttributeFinalization after AllAttributes expansion, consumes rounded final individual totals and clears already-applied multipliers before writing results. Existing definition/GUID retained. | Play Mode verification with unequal multipliers, AllAttributes and duplicate copies remains pending. | [Fix record](Reference/StatTypeFixes20261017.md) |
+| BL-040 | P2 / Source-confirmed conditional mask failure | BarrierDamageTypeMask and LifeStealTypeMask use scalar arithmetic. Innate Physical=1 plus two elemental mask grants of 14 produces 29, losing Fire and gaining Light. The lifesteal grant is referenced twice in MainScene; simultaneous eligibility was not established. | Define integer grant/removal precedence, handle repeated/overlapping grants and removals, and exclude scalar Increased/More. Preserve existing signed removal content deliberately. | [Stat review](Reference/StatTypeReview20261017.md#correctness-findings) |
+| BL-041 | P2 / Implemented; compilation verified | NoArmor now evaluates Armor plus unexpanded Defence without copying or merging source buckets. | Play Mode verification of the condition with Added/Increased/More Defence remains pending. | [Fix record](Reference/StatTypeFixes20261017.md) |
+| BL-042 | P3 / Implemented; compilation verified | DPS uses ordinary/multi-crit expected-layer semantics; disabled barrier regeneration displays an em dash instead of an invalid interval. | Live panel verification remains pending; DPS intentionally remains a simplified estimate. | [Fix record](Reference/StatTypeFixes20261017.md) |
+
+BL-037 implementation follow-up, 2026-10-17: the before-hash is now Editor-only
+and float bit conversion no longer allocates byte arrays. Stat resets/clears reuse
+More lists; aggregate predicates no longer clone complete stat storage. Phase and
+effect-tick snapshots reuse separate nested-call buffers; effect membership uses
+a hash set. Active tree/gem collection is cached with node/tree/recalculation
+invalidation; zone refreshes and per-phase innate/outer collection remain live.
+Unity compilation passed. No measured performance improvement or attribution of
+the historical capture is claimed; BL-037 remains open. See the
+[fix record](Reference/StatTypeFixes20261017.md).
 
 ## Economy, inventory and persistence
 

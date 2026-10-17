@@ -8,12 +8,15 @@ namespace Battle
     public static class AttackProcessor
     {
         private static readonly Queue<Action> _postAttackActions = new Queue<Action>();
+        private static readonly Stack<List<CollectedModifier>> _modifierBuffers = new Stack<List<CollectedModifier>>();
+        private static readonly DamageType[] DamageTypes = (DamageType[])Enum.GetValues(typeof(DamageType));
         private static int _attackDepth;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStaticState()
         {
             _postAttackActions.Clear();
+            _modifierBuffers.Clear();
             _attackDepth = 0;
         }
 
@@ -31,7 +34,10 @@ namespace Battle
             try
             {
                 // All Modifiers are applied on unit update
-                int attackerStateHashBefore = attackerUnit.BaseUnitModifiers.ComputeDeterministicHash(); // Diagnostics
+#if UNITY_EDITOR
+                int attackerStateHashBefore = attackerUnit.BaseUnitModifiers.ComputeDeterministicHash();
+                int attackerStatRevisionBefore = attackerUnit.StatRevision;
+#endif
                 AttackContext context = new AttackContext(attackerUnit, defender, damageInfo);
                 
                 //Evasion
@@ -40,7 +46,9 @@ namespace Battle
                     context.IsEvaded = true;
                     defender.OnHitEvaded(damageInfo.DamageInstance);
                     attackerUnit.OnAttackMissed(defender);
-                    AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics
+#if UNITY_EDITOR
+                    AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore, attackerStatRevisionBefore);
+#endif
                     return;
                 }
 
@@ -49,16 +57,16 @@ namespace Battle
                 Overcharge.ApplyOverchargeEffect(context);
                 Pain.ApplyPainEffect(context);
                 Vengeance.ApplyVengeanceEffect(context);
-                RunModifiers(attackerUnit.GetAllModifiers(), ModifierPriority.OnAttack, attackerUnit, context);
+                RunModifiers(ModifierPriority.OnAttack, attackerUnit, context);
 
                 StatCalculator.RecalculateAttackStat(damageInfo.BaseUnitModifiers, StatType.CritChance);
                 DamageCalculator.RollCriticalHit(damageInfo);
                 CriticalCharge.ApplyCriticalCharge(context);
-                RunModifiers(attackerUnit.GetAllModifiers(), ModifierPriority.AfterCriticalHit, attackerUnit, context);
+                RunModifiers(ModifierPriority.AfterCriticalHit, attackerUnit, context);
 
                 DamageCalculator.CalculateAttackDamage(damageInfo);
 
-                RunModifiers(defender.UnitObject.GetAllModifiers(), ModifierPriority.IncomingPreMitigation, defender.UnitObject, context);
+                RunModifiers(ModifierPriority.IncomingPreMitigation, defender.UnitObject, context);
                 ApplyElementalDamageTakenAsPhysical(damageInfo.DamageInstance, defender.UnitObject.BaseUnitModifiers);
                 
                 //Mitigation
@@ -67,7 +75,7 @@ namespace Battle
                 MysticNegation.ApplyMysticNegationMitigation(damageInfo.DamageInstance, defender.UnitObject, context.AdditionalMysticNegation);
                 ApplyDamageMitigation(damageInfo.DamageInstance, defender.UnitObject.BaseUnitModifiers);
                 
-                RunModifiers(defender.UnitObject.GetAllModifiers(), ModifierPriority.OnGettingHit, defender.UnitObject, context);
+                RunModifiers(ModifierPriority.OnGettingHit, defender.UnitObject, context);
                 
                 // Ailments
                 Bleed.Apply(attackerUnit, damageInfo, defender.UnitObject);
@@ -103,7 +111,9 @@ namespace Battle
                 }
                 attackerUnit.DamageDealt(damageDealt);
                 context.ConsumeQueuedEffects();
-                AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore); // Diagnostics
+#if UNITY_EDITOR
+                AssertAttackerSnapshotIntegrity(attackerUnit, attackerStateHashBefore, attackerStatRevisionBefore);
+#endif
             }
             finally
             {
@@ -131,7 +141,7 @@ namespace Battle
 
         public static void ApplyDamageMitigation(DamageInstance damage, BaseUnitModifiers defenderModifiers)
         {
-            foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
+            foreach (DamageType damageType in DamageTypes)
             {
                 if (!damage.Damage.ContainsKey(damageType))
                     continue;
@@ -174,23 +184,36 @@ namespace Battle
         }
 
         private static void RunModifiers(
-            List<CollectedModifier> mods,
             ModifierPriority priority,
             Unit owner,
             AttackContext context)
         {
-            foreach (CollectedModifier mod in mods)
+            // Each phase gets its own snapshot, including during nested attacks.
+            // Recollect to preserve callbacks changing modifiers between phases.
+            var mods = _modifierBuffers.Count > 0 ? _modifierBuffers.Pop() : new List<CollectedModifier>();
+            try
             {
-                if (mod.IsInPriority(priority) && mod.IsApplicable(owner))
+                owner.GetAllModifiers(mods);
+                foreach (CollectedModifier mod in mods)
                 {
-                    mod.ApplyEffect(context);
+                    if (mod.IsInPriority(priority) && mod.IsApplicable(owner))
+                    {
+                        mod.ApplyEffect(context);
+                    }
                 }
+            }
+            finally
+            {
+                mods.Clear();
+                _modifierBuffers.Push(mods);
             }
         }
 
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
-        private static void AssertAttackerSnapshotIntegrity(Unit attackerUnit, int attackerStateHashBefore)
+        private static void AssertAttackerSnapshotIntegrity(Unit attackerUnit, int attackerStateHashBefore, int statRevisionBefore)
         {
+            // Paused/unregistered actors can legitimately rebuild during callbacks.
+            if (attackerUnit.StatRevision != statRevisionBefore) return;
             int attackerStateHashAfter = attackerUnit.BaseUnitModifiers.ComputeDeterministicHash();
             Debug.Assert(
                 attackerStateHashBefore == attackerStateHashAfter,

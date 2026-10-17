@@ -292,6 +292,14 @@ The tree collects modifiers from active nodes, active local-modifier gems and
 bonus zones. Modifier implementations and `StatCalculator` determine actual
 stat behavior; a tooltip or asset name is not a substitute for checking them.
 
+As of 2026-10-17, active node/gem modifier collection is cached. Node notifications,
+tree rebuilds/changes and player stat recalculation requests/resets invalidate it;
+collection during a nested tree operation rebuilds immediately. BonusZone refreshes
+remain live on every collection. Public collection methods return independent lists;
+the attack path fills its own reusable snapshot for each phase, including nested
+attacks. Runtime definition edits bypassing node notifications must request player
+recalculation. See [implementation and limits](../Reference/StatTypeFixes20261017.md).
+
 BonusZone membership is its serialized `nodes` list, not a polygon containment
 query. The current count uses `Node.IsActive`, despite the `AllocatedNodesCount`
 name. Editing the SpriteShape visual boundary does not update that list.

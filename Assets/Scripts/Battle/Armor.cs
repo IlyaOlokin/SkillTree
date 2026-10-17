@@ -8,11 +8,11 @@ namespace Battle
     {
         public static void ApplyArmorMitigation(DamageInstance damage, Unit defender, Unit attacker)
         {
-            float armor = defender.BaseUnitModifiers.GetStatValue(StatType.Armor);
-            
-            float K = damage.Damage[DamageType.Physical];
-            if (armor == 0 || K == 0) return;
-            damage.Damage[DamageType.Physical] *= K / (armor + K);
+            float armor = Mathf.Max(0f, defender.BaseUnitModifiers.GetStatValue(StatType.Armor));
+            float physicalDamage = Mathf.Max(0f, damage.Damage[DamageType.Physical]);
+            damage.Damage[DamageType.Physical] = armor == 0f || physicalDamage == 0f
+                ? physicalDamage
+                : physicalDamage * (physicalDamage / (armor + physicalDamage));
         }
 
         public static float CalculatePhysicalMitigation(float armor, float physicalDamage)

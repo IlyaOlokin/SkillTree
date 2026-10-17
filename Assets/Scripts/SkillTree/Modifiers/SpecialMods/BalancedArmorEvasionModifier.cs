@@ -67,11 +67,8 @@ namespace SkillTree
 
         private static void GetDefenceValues(BaseUnitModifiers sourceModifiers, out float armor, out float evasion)
         {
-            BaseUnitModifiers modifiers = new BaseUnitModifiers(sourceModifiers);
-            StatCalculator.MergeDefenceModifiers(modifiers);
-
-            armor = StatCalculator.GetStat(modifiers, StatType.Armor);
-            evasion = StatCalculator.GetStat(modifiers, StatType.Evasion);
+            armor = StatCalculator.GetStatWithGroup(sourceModifiers, StatType.Armor, StatType.Defence);
+            evasion = StatCalculator.GetStatWithGroup(sourceModifiers, StatType.Evasion, StatType.Defence);
         }
 
         private bool IsWithinAllowedDifference(float armor, float evasion)

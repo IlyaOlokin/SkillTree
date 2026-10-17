@@ -200,6 +200,12 @@ holds an effect and its remaining time. `EffectController` owns the active list.
   not added separately; otherwise a new active entry is added afterward.
 - Tick iteration uses a snapshot and checks membership again after callbacks.
   A callback may remove effects, add replacements or clear the owner.
+  As of 2026-10-17, snapshots use reusable per-invocation lists and membership
+  uses a hash set synchronized by controller add/remove operations. Nested ticks
+  retain separate snapshots, and buffers are returned in finally. Effect callbacks
+  must mutate through the controller rather than editing Effects directly so
+  membership and runtime-modifier cleanup remain consistent. See the
+  [stat fix record](../Reference/StatTypeFixes20261017.md).
 - Timed effects receive at most their remaining lifetime in the last tick.
   Negative remaining time denotes an untimed effect, still subject to its
   `IsReadyToBeRemoved` condition.

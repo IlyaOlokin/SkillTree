@@ -6,6 +6,7 @@ using UnityEngine;
 
 public static class StatCalculator
 {
+    private static readonly DamageType[] DamageTypes = (DamageType[])Enum.GetValues(typeof(DamageType));
     private static readonly StatType[] AttackSnapshotDirectStats =
     {
         // All DamageTypes as well
@@ -47,6 +48,10 @@ public static class StatCalculator
         }
         
         MergeAttributeModifiers(unit.BaseUnitModifiers);
+        foreach (var mod in mods)
+        {
+            if (mod.IsInPriority(ModifierPriority.AttributeFinalization) && mod.IsApplicable(unit)) mod.ApplyEffect(unit);
+        }
         ApplyAttributes(unit);
             
         foreach (var mod in mods)
@@ -82,7 +87,7 @@ public static class StatCalculator
     {
         MergeDamageModifiers(baseUnitModifiers);
 
-        foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
+        foreach (DamageType damageType in DamageTypes)
         {
             var damageStatType = GetCorespondingDamageStat(damageType);
             baseUnitModifiers.SetStatValue(damageStatType, GetStat(baseUnitModifiers, damageStatType));
@@ -103,7 +108,7 @@ public static class StatCalculator
 
     public static void MergeDamageModifiers(BaseUnitModifiers baseUnitModifiers)
     {
-        foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
+        foreach (DamageType damageType in DamageTypes)
         {
             baseUnitModifiers.MergeModifier(GetCorespondingDamageStat(damageType), baseUnitModifiers.GetModifier(StatType.Damage));
         }
@@ -180,6 +185,23 @@ public static class StatCalculator
         return FortificationController.NormalizeStat(statType, WispStats.Normalize(statType, result));
     }
 
+    // Read the result of a group merge without copying or changing any buckets.
+    public static float GetStatWithGroup(BaseUnitModifiers modifiers, StatType statType,
+        StatType group, StatType secondGroup = StatType.Empty)
+    {
+        var concrete = modifiers.GetModifier(statType);
+        var first = modifiers.GetModifier(group);
+        var second = secondGroup == StatType.Empty ? default : modifiers.GetModifier(secondGroup);
+        float added = concrete.Added.Value + first.Added.Value + second.Added.Value;
+        float increased = concrete.Increased.Value + first.Increased.Value + second.Increased.Value;
+        float result = added * (1f + increased);
+        foreach (float more in concrete.More) result *= 1f + more;
+        foreach (float more in first.More) result *= 1f + more;
+        if (second.More != null)
+            foreach (float more in second.More) result *= 1f + more;
+        return FortificationController.NormalizeStat(statType, WispStats.Normalize(statType, result));
+    }
+
     private static void CacheStatValues(Unit unit)
     {
         foreach (var statType in unit.BaseUnitModifiers.GetStatTypes())
@@ -201,13 +223,11 @@ public static class StatCalculator
 
     public static void MergeDamageMitigationModifiers(BaseUnitModifiers modifiers)
     {
-        foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
+        foreach (DamageType damageType in DamageTypes)
         {
             modifiers.MergeModifier(GetCorrespondingDamageMitigationStat(damageType), modifiers.GetModifier(StatType.DamageMitigation));
         }
 
-        // Poison has a stat but is not currently an active DamageType.
-        modifiers.MergeModifier(StatType.PoisonDamageMitigation, modifiers.GetModifier(StatType.DamageMitigation));
         modifiers.MergeModifier(StatType.FireDamageMitigation, modifiers.GetModifier(StatType.ElementalDamageMitigation));
         modifiers.MergeModifier(StatType.ColdDamageMitigation, modifiers.GetModifier(StatType.ElementalDamageMitigation));
         modifiers.MergeModifier(StatType.LightningDamageMitigation, modifiers.GetModifier(StatType.ElementalDamageMitigation));

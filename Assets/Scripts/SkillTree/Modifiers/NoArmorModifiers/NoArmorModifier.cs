@@ -17,7 +17,7 @@ namespace SkillTree
                 return false;
             }
 
-            float currentArmor = StatCalculator.GetStat(unit.BaseUnitModifiers, StatType.Armor);
+            float currentArmor = StatCalculator.GetStatWithGroup(unit.BaseUnitModifiers, StatType.Armor, StatType.Defence);
             return currentArmor <= 0f;
         }
 

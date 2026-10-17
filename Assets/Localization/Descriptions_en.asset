@@ -621,10 +621,6 @@ MonoBehaviour:
     m_Localized: Darkness Damage Mitigation
     m_Metadata:
       m_Items: []
-  - m_Id: 46846000000000010
-    m_Localized: Poison Damage Mitigation
-    m_Metadata:
-      m_Items: []
   - m_Id: 46847000000000000
     m_Localized: Steel Wisp
     m_Metadata:

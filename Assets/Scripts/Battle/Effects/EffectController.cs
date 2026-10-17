@@ -8,6 +8,8 @@ namespace Battle
     {
         private Unit _owner;
         private bool _isClearing;
+        private readonly Stack<List<ActiveEffect>> _tickBuffers = new Stack<List<ActiveEffect>>();
+        private readonly HashSet<ActiveEffect> _activeEffects = new HashSet<ActiveEffect>();
 
         public readonly List<ActiveEffect> Effects = new List<ActiveEffect>();
         public event Action<Func<BaseEffect>> OnEffectReceived;
@@ -95,6 +97,7 @@ namespace Battle
             var active = new ActiveEffect(newEffect);
 
             Effects.Add(active);
+            _activeEffects.Add(active);
             newEffect.OnApply(_owner);
             OnEffectsChanged?.Invoke();
 
@@ -115,34 +118,50 @@ namespace Battle
         public void CombatTick(float deltaTime)
         {
             // Tick callbacks can clear effects, kill the owner, or add replacements.
-            var snapshot = Effects.ToArray();
-            for (int i = snapshot.Length - 1; i >= 0; i--)
+            if (Effects.Count == 0)
             {
-                var e = snapshot[i];
-                if (!Effects.Contains(e)) continue;
-
-                float tickDuration = e.TimeLeft < 0f
-                    ? Mathf.Max(0f, deltaTime)
-                    : Mathf.Min(Mathf.Max(0f, deltaTime), e.TimeLeft);
-                e.Effect.OnTick(_owner, tickDuration);
-                if (!Effects.Contains(e)) continue;
-
-                if (e.Effect.IsReadyToBeRemoved(_owner))
+                _activeEffects.Clear();
+                return;
+            }
+            var snapshot = _tickBuffers.Count > 0 ? _tickBuffers.Pop() : new List<ActiveEffect>();
+            snapshot.AddRange(Effects);
+            _activeEffects.Clear();
+            _activeEffects.UnionWith(Effects);
+            try
+            {
+                for (int i = snapshot.Count - 1; i >= 0; i--)
                 {
-                    RemoveEffect(e);
-                    continue;
-                }
+                    var e = snapshot[i];
+                    if (!_activeEffects.Contains(e)) continue;
 
-                if (e.TimeLeft < 0)
-                {
-                    continue;
-                }
+                    float tickDuration = e.TimeLeft < 0f
+                        ? Mathf.Max(0f, deltaTime)
+                        : Mathf.Min(Mathf.Max(0f, deltaTime), e.TimeLeft);
+                    e.Effect.OnTick(_owner, tickDuration);
+                    if (!_activeEffects.Contains(e)) continue;
 
-                e.TimeLeft -= tickDuration;
-                if (e.TimeLeft <= 0)
-                {
-                    RemoveEffect(e);
+                    if (e.Effect.IsReadyToBeRemoved(_owner))
+                    {
+                        RemoveEffect(e);
+                        continue;
+                    }
+
+                    if (e.TimeLeft < 0)
+                    {
+                        continue;
+                    }
+
+                    e.TimeLeft -= tickDuration;
+                    if (e.TimeLeft <= 0)
+                    {
+                        RemoveEffect(e);
+                    }
                 }
+            }
+            finally
+            {
+                snapshot.Clear();
+                _tickBuffers.Push(snapshot);
             }
         }
 
@@ -212,6 +231,7 @@ namespace Battle
             if (!_isClearing && !activeEffect.Effect.CanRemove(_owner)) return;
 
             Effects.RemoveAt(index);
+            _activeEffects.Remove(activeEffect);
             try
             {
                 activeEffect.Effect.OnRemove(_owner);

@@ -20,7 +20,7 @@ namespace Battle
         
         private Chill(DamageInfo damageInfo, Unit defender, float duration)
         {
-            Duration = duration * (1f - defender.BaseUnitModifiers.GetStatValue(StatType.ChillDurationReduction));
+            Duration = Mathf.Max(0f, duration * (1f - defender.BaseUnitModifiers.GetStatValue(StatType.ChillDurationReduction)));
             CalculateChillPowerMultiplier(damageInfo);
             SetModifierContainers(damageInfo.AttackEffectPayload.GetEffectModifiers<Chill>());
         }
@@ -32,6 +32,8 @@ namespace Battle
             CopyModifierContainers(modifierContainers);
         }
         
+        public override bool CanApply(Unit owner) => Duration > 0f;
+
         public override void OnApply(Unit unit)
         {
             ApplyModifiers(unit);
@@ -140,9 +142,10 @@ namespace Battle
             if (Random.Range(0f, 1f) < damagePercentOfMaxHealth)
             {
                 Unit effectTarget = damageInfo.AttackEffectPayload.IsRedirectedToOwner<Chill>() ? attacker : defender;
+                Chill chillSnapshot = new Chill(damageInfo, effectTarget, BASE_DURATION);
+                if (chillSnapshot.Duration <= 0f) return;
                 if (AilmentAbsorption.TryAbsorbIncomingAilment(effectTarget)) return;
 
-                Chill chillSnapshot = new Chill(damageInfo, effectTarget, BASE_DURATION);
                 BaseEffect CreateChillFromSnapshot() => chillSnapshot.CloneForReapply();
                 effectTarget.effectController.AddEffect(CreateChillFromSnapshot, attacker);
                 damageInfo.RegisterAppliedChill(effectTarget, CreateChillFromSnapshot);

@@ -459,9 +459,6 @@ namespace Battle
                 case StatType.DarknessDamage:
                     featureType = EnemyIntelFeatureType.DarknessDamage;
                     return true;
-                case StatType.PoisonDamage:
-                    featureType = EnemyIntelFeatureType.PoisonDamage;
-                    return true;
                 case StatType.Armor:
                     featureType = EnemyIntelFeatureType.Armor;
                     return true;

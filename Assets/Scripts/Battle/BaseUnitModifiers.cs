@@ -8,6 +8,7 @@ namespace Battle
 {
     public class BaseUnitModifiers
     {
+        private static readonly StatType[] StatTypes = (StatType[])Enum.GetValues(typeof(StatType));
         private readonly Dictionary<StatType, StatModifier> _statModifiers =
             new Dictionary<StatType, StatModifier>();
         private readonly Dictionary<StatType, float> _statValues =
@@ -26,16 +27,17 @@ namespace Battle
 
         public void Reset()
         {
-            _statModifiers.Clear();
             _statValues.Clear();
-            
-            foreach (StatType type in Enum.GetValues(typeof(StatType)))
+
+            foreach (StatType type in StatTypes)
             {
-                _statModifiers.Add(type, new StatModifier(new List<float>()));
-            }
-            foreach (StatType type in Enum.GetValues(typeof(StatType)))
-            {
-                _statValues.Add(type, 0);
+                if (!_statModifiers.TryGetValue(type, out var modifier))
+                    modifier = new StatModifier(new List<float>());
+                modifier.Added = default;
+                modifier.Increased = default;
+                modifier.More.Clear();
+                _statModifiers[type] = modifier;
+                _statValues.Add(type, 0f);
             }
         }
 
@@ -46,12 +48,13 @@ namespace Battle
 
         public void CopyFrom(BaseUnitModifiers other)
         {
+            if (ReferenceEquals(this, other)) return;
             if (_statModifiers.Count == 0 || _statValues.Count == 0)
             {
                 Reset();
             }
 
-            foreach (StatType statType in Enum.GetValues(typeof(StatType)))
+            foreach (StatType statType in StatTypes)
             {
                 var sourceModifier = other.GetModifier(statType);
                 var targetModifier = _statModifiers[statType];
@@ -162,20 +165,20 @@ namespace Battle
 
         public void MergeModifier(StatType statType, StatModifier other)
         {
-            ChangeModifierValue(new ModifierContainer(ModifierType.Added, statType, other.Added.Value));
-            ChangeModifierValue(new ModifierContainer(ModifierType.Increased, statType, other.Increased.Value));
-
-            foreach (var modValue in other.More)
-            {
-                ChangeModifierValue(new ModifierContainer(ModifierType.More, statType, modValue));
-            }
+            var modifier = _statModifiers[statType];
+            modifier.Added.ChangeValue(other.Added.Value);
+            modifier.Increased.ChangeValue(other.Increased.Value);
+            modifier.More.AddRange(other.More);
+            _statModifiers[statType] = modifier;
         }
         
         public void ClearModifier(StatType statType)
         {
-            SetModifierValue(new ModifierContainer(ModifierType.Added, statType, 0));
-            SetModifierValue(new ModifierContainer(ModifierType.Increased, statType, 0));
-            SetModifierValue(ModifierType.More, statType, new List<float>());
+            var modifier = _statModifiers[statType];
+            modifier.Added = default;
+            modifier.Increased = default;
+            modifier.More.Clear();
+            _statModifiers[statType] = modifier;
         }
         
         public int ComputeDeterministicHash()
@@ -183,7 +186,7 @@ namespace Battle
             unchecked
             {
                 int hash = 17;
-                foreach (StatType statType in Enum.GetValues(typeof(StatType)))
+                foreach (StatType statType in StatTypes)
                 {
                     hash = hash * 31 + (int)statType;
                     hash = hash * 31 + ToIntBits(GetStatValue(statType));
@@ -204,7 +207,7 @@ namespace Battle
 
         private static int ToIntBits(float value)
         {
-            return BitConverter.ToInt32(BitConverter.GetBytes(value), 0);
+            return BitConverter.SingleToInt32Bits(value);
         }
     }
 

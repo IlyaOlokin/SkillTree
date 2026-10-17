@@ -168,6 +168,7 @@ public class PlayerStatsWindow : MonoBehaviour
     
     private string FormatStatValue(float value, bool isPercent, string prefix = "", string suffix = "", int decimalPlaces = 1)
     {
+        if (float.IsNaN(value) || float.IsInfinity(value)) return "—";
         bool isDoubleDigit = Mathf.Abs(value) >= 10f;
         float multiplier = Mathf.Pow(10f, decimalPlaces);
         float roundedValue = isDoubleDigit && decimalPlaces <= 1
@@ -187,7 +188,18 @@ public class PlayerStatsWindow : MonoBehaviour
         float attackSpeed = _player.BaseUnitModifiers.GetStatValue(StatType.AttackSpeed);
         float critChance = _player.BaseUnitModifiers.GetStatValue(StatType.CritChance);
         float critDamageBonus = _player.BaseUnitModifiers.GetStatValue(StatType.CritDamageBonus);
-        DPSText.text = $"{FormatStatValue(damage * attackSpeed * (1 + critChance * critDamageBonus), false)}";
+        bool allowsMultiCrit = false;
+        foreach (var mod in _player.GetAllModifiers())
+        {
+            if (mod.Modifier is SkillTree.MultiCritModifier
+                && mod.IsInPriority(ModifierPriority.OnAttack) && mod.IsApplicable(_player))
+            {
+                allowsMultiCrit = true;
+                break;
+            }
+        }
+        float expectedCritLayers = DamageCalculator.GetExpectedCriticalLayerCount(critChance, allowsMultiCrit);
+        DPSText.text = $"{FormatStatValue(damage * Mathf.Max(0f, attackSpeed) * (1 + expectedCritLayers * critDamageBonus), false)}";
         DamageText.text = $"{FormatStatValue(damage, false)}";
         AttackSpeedText.text = $"{FormatStatValue(attackSpeed, false, decimalPlaces: StatTypeDisplayRules.GetDecimalPlaces(StatType.AttackSpeed))}";
         CritChanceText.text = $"{FormatStatValue(StatTypeDisplayRules.GetDisplayValue(StatType.CritChance, critChance), true)}";
