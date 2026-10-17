@@ -126,6 +126,10 @@ public enum StatType
     AttackProgressOnHitTaken = 97,
     AttackProgressOnMiss = 98,
     AttackProgressOnAilmentApplied = 99,
+    AttackProgressOnEvade = 102,
+    AttackProgressOnCrit = 103,
+
     ElementalDamageTakenAsPhysicalChance = 100,
-    ArmorAsMysticNegation = 101,
+    ArmorAsMysticNegation = 101
 }
+    

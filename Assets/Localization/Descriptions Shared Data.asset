@@ -771,6 +771,14 @@ MonoBehaviour:
     m_Key: enum.StatType.ArmorAsMysticNegation
     m_Metadata:
       m_Items: []
+  - m_Id: 67053830229069824
+    m_Key: enum.StatType.AttackProgressOnEvade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67055895399501824
+    m_Key: enum.StatType.AttackProgressOnCrit
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

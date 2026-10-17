@@ -66,6 +66,8 @@ public static class StatTypeDisplayRules
         StatType.AttackProgressOnHitTaken,
         StatType.AttackProgressOnMiss,
         StatType.AttackProgressOnAilmentApplied,
+        StatType.AttackProgressOnEvade,
+        StatType.AttackProgressOnCrit,
         StatType.ElementalDamageTakenAsPhysicalChance,
         StatType.ArmorAsMysticNegation,
         StatType.HealingReceived

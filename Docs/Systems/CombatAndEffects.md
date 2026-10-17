@@ -64,6 +64,11 @@ buttons was inspected. Full combat interaction in Play Mode was not exercised.
 cycle requires progress `1`; extra attack moments can trigger within a cycle.
 The loop is bounded to 128 cycles per tick and retains accumulated progress.
 External progress locks block `ModifyAttackProgress`, not ordinary clock advancement.
+`Unit.OnHitEvaded` applies the owner's final `AttackProgressOnEvade` value before
+OnEvade listeners, using that same API. See [stat and asset details](StatsAndModifiers.md#attack-progress-on-evade-2026-10-17).
+`Unit.OnCritLanded` likewise applies `AttackProgressOnCrit` before OnCrit listeners,
+once per critical attack after damage receipt, including blocked critical hits.
+See [Crit migration and description templates](StatsAndModifiers.md#attack-progress-descriptions-and-crit-migration-2026-10-17).
 The current suppression check prevents attacking while the owner has Freeze.
 
 `AttackResolver` provides the player's current enemy target. `Attacker` resolves

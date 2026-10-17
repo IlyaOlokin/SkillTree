@@ -203,6 +203,7 @@ namespace Battle
 
         public void OnCritLanded(ITarget target)
         {
+            attacker?.ModifyAttackProgress(BaseUnitModifiers.GetStatValue(StatType.AttackProgressOnCrit));
             OnCrit?.Invoke(target);
         }
 
@@ -265,6 +266,7 @@ namespace Battle
 
         public void OnHitEvaded(DamageInstance damageInstance)
         {
+            attacker?.ModifyAttackProgress(BaseUnitModifiers.GetStatValue(StatType.AttackProgressOnEvade));
             OnEvade?.Invoke();
         }
 

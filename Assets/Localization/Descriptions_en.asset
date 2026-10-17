@@ -834,6 +834,14 @@ MonoBehaviour:
     m_Localized: Armor Gained as Mystic Negation
     m_Metadata:
       m_Items: []
+  - m_Id: 67053830229069824
+    m_Localized: Attack Progress on Evade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67055895399501824
+    m_Localized: Attack Progress on Crit
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

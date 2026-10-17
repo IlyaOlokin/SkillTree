@@ -6,6 +6,137 @@ priorities](../Reference/StatTypeReview20261017.md). The subsequent
 corrections, collection/storage optimizations, Poison removal and successful Unity
 compilation. Mask semantics remain unchanged; gameplay/performance checks are pending.
 
+## Attack Progress descriptions and Crit migration (2026-10-17)
+
+Added attack-progress descriptions now use `On <trigger>: gain [[0]] Attack Progress`.
+The existing argument already includes its sign and percent suffix, so 0.1 displays
+as +10% without another percent sign in the template. Signed totals and gameplay
+arithmetic remain unchanged, including negative values.
+
+`StatType.AttackProgressOnCrit = 103` follows AttackProgressOnEvade and the other
+ordinary progress stats. `Unit.OnCritLanded` applies the owner's final cached value
+once before OnCrit listeners. AttackProcessor emits this notification after damage
+receipt for each critical attack, including blocked critical hits, once regardless
+of critical layers. Misses, noncritical hits and DoT do not trigger it. Ordinary
+node power, Added/Increased/More arithmetic and external progress locks apply.
+No runtime binding, effect, status icon or glossary term is required.
+
+The new BaseModifier definition is
+`Assets/Scripts/SkillTree/Modifiers/BaseModifiers/AddedAttackProgressOnCrit_0.1.asset`,
+with Added AttackProgressOnCrit = 0.1 and the old PreAttribute priority retained.
+The live Editor migration replaced the single effective MainScene node assignment
+and the other stale out-of-range prefab override reference. The latter node's
+modifier list remains empty. No node IDs, allocation rules, values or icons changed.
+Removed the obsolete GainAttackProgressOnCrit class, definition and their metas.
+The unused legacy localization key is retained for historical compatibility.
+
+Updated English entries in Modifiers:
+
+| Key | English text |
+| --- | --- |
+| modifier.container.added.AttackProgressOnHitTaken | On Hit Taken: gain [[0]] Attack Progress |
+| modifier.container.added.AttackProgressOnMiss | On Miss: gain [[0]] Attack Progress |
+| modifier.container.added.AttackProgressOnAilmentApplied | On Ailment Applied: gain [[0]] Attack Progress |
+| modifier.container.added.AttackProgressOnEvade | On Evade: gain [[0]] Attack Progress |
+
+Added shared/English entries:
+
+| Table | Key | English text |
+| --- | --- | --- |
+| Descriptions | enum.StatType.AttackProgressOnCrit | Attack Progress on Crit |
+| Modifiers | modifier.container.added.AttackProgressOnCrit | On Crit: gain [[0]] Attack Progress |
+| Modifiers | modifier.container.increased.AttackProgressOnCrit | [[0]]% increased Attack Progress gained on Crit. |
+| Modifiers | modifier.container.decreased.AttackProgressOnCrit | [[0]]% decreased Attack Progress gained on Crit. |
+| Modifiers | modifier.container.more.AttackProgressOnCrit | [[0]]% more Attack Progress gained on Crit. |
+| Modifiers | modifier.container.less.AttackProgressOnCrit | [[0]]% less Attack Progress gained on Crit. |
+| Modifiers | modifier.container.none.AttackProgressOnCrit | You gain no Attack Progress on Crit. |
+
+ru/de translations are TODO for new and revised entries; no existing translations
+were overwritten and no empty locale entries were added. There is no effect-name key.
+Manual Unity Editor Steps: none required for migration; the replacement is already
+assigned. Existing node icons remain; an optional new icon can be assigned manually.
+
+Icon Generation Prompt, proposed style without an inspected visual reference:
+Create a square painterly dark-fantasy RPG skill icon of a silver dagger striking
+a brilliant golden weak-point spark, with a short crimson motion arc curling
+forward into a second strike. Bold centered dagger silhouette, silver, gold and
+crimson palette, dramatic rim lighting, dark smoky background, simple high-contrast
+shapes readable at small skill-tree sizes. No text, letters, numbers, logos or
+watermarks.
+
+Verification: live run_script checked the replacement value, BaseModifier script
+GUID, effective node assignment, serialized overrides and localization shared IDs.
+Source review confirmed the critical event timing and one reward per critical
+attack. Final Unity CLI recompile/recompile_status targeting
+`C:/UnityProjects/SkillTree` completed after obsolete class removal with
+failed=false, compilationFailed=false and no compiler errors. The saved scene
+contains both replacement GUID references and no old asset or script references
+remain under Assets. Scoped source/localization/document diff checks passed;
+the scene diff retains Unity-authored trailing spaces on empty YAML values.
+No tests, player build or combat playtest were performed.
+
+## Attack Progress on Evade (2026-10-17)
+
+`StatType.AttackProgressOnEvade = 102` adds an ordinary signed scalar stat,
+following AttackProgressOnMiss. `Unit.OnHitEvaded` applies the owner's cached
+total once through `Attacker.ModifyAttackProgress`, before notifying OnEvade.
+One attack cycle is 1, so the supplied Added value 0.1 grants 10% progress per
+successful evade. Existing enum IDs are unchanged. Block, damage receipt and
+DoT do not grant this stat's reward.
+
+Ordinary BaseModifier/container arithmetic and node power apply: Added values
+sum, then Increased and More scale the total. The default is zero; negative
+totals reduce progress through the same API. The existing external progress lock
+prevents the change, the progress floor remains zero and existing extra-attack
+threshold handling is reused. There is no extra runtime binding, persistent
+effect, duration, stacking counter, EffectVisualType or status icon.
+
+Definition created through the live Editor:
+`Assets/Scripts/SkillTree/Modifiers/BaseModifiers/AddedAttackProgressOnEvade_0.1.asset`.
+It uses BaseModifier script GUID `4ae2ce54539276c4fa2012760a983831`, Added,
+AttackProgressOnEvade, Value 0.1 and the ordinary PreAttribute priority.
+The stat displays as a percentage. Its name remains plain text in tooltips,
+following the other attack-progress stats, so no unresolved glossary link is emitted.
+
+Added shared/English localization entries:
+
+| Table | Key | English text |
+| --- | --- | --- |
+| Descriptions | enum.StatType.AttackProgressOnEvade | Attack Progress on Evade |
+| Modifiers | modifier.container.added.AttackProgressOnEvade | On Evade: gain [[0]] Attack Progress |
+| Modifiers | modifier.container.increased.AttackProgressOnEvade | [[0]]% increased Attack Progress gained on Evade. |
+| Modifiers | modifier.container.decreased.AttackProgressOnEvade | [[0]]% decreased Attack Progress gained on Evade. |
+| Modifiers | modifier.container.more.AttackProgressOnEvade | [[0]]% more Attack Progress gained on Evade. |
+| Modifiers | modifier.container.less.AttackProgressOnEvade | [[0]]% less Attack Progress gained on Evade. |
+| Modifiers | modifier.container.none.AttackProgressOnEvade | You gain no Attack Progress on Evade. |
+
+No effect-display-name entry is needed. ru/de translations of these seven keys
+remain translator TODOs; existing translations are preserved and no empty entries
+were added. The Added fallback matches the English template; generic localized
+stat-name fallbacks cover the other modifier types.
+
+Manual Unity Editor Steps: assign the supplied definition to the intended node's
+modifier list and choose its node icon. Nodes, icon mappings and TooltipTerms
+were not changed; no new glossary term is required by this plain-text description.
+The supplied asset is not yet assigned to gameplay content.
+
+Icon Generation Prompt, proposed style without an inspected image reference:
+Create a square painterly dark-fantasy RPG skill icon of a silver dagger sweeping
+forward as a ghostly teal silhouette slips past an incoming crimson blade. Use
+one bold centered silhouette and a short curved teal motion trail to communicate
+an avoided strike accelerating a counterattack. Silver, teal and muted crimson
+palette, sharp rim lighting, dark smoky background, strong contrast and simple
+shapes readable at small skill-tree sizes. No text, letters, numbers, logos or
+watermarks.
+
+Verification: Unity CLI recompile/recompile_status targeting
+`C:/UnityProjects/SkillTree` completed with failed=false,
+compilationFailed=false and no compiler errors. Live run_script created the asset
+and English entries and checked settings, script GUID and shared key/ID pairing.
+Source review covered event timing, ordinary stat caching, arithmetic, percentage
+formatting and external progress locks. No tests, player build or gameplay
+playtest were performed.
+
 ## Fortification limits as stats (2026-10-13)
 
 `StatType.MinimumFortificationStacks = 95` and

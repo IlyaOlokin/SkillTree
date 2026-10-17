@@ -2598,7 +2598,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4773972505923584
-    m_Localized: When you are hit, change Attack Progress by [[0]].
+    m_Localized: 'On Hit Taken: gain [[0]] Attack Progress'
     m_Metadata:
       m_Items: []
   - m_Id: 4773972535283712
@@ -2622,7 +2622,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4773972535283717
-    m_Localized: 'On Miss: change Attack Progress by [[0]].'
+    m_Localized: 'On Miss: gain [[0]] Attack Progress'
     m_Metadata:
       m_Items: []
   - m_Id: 4773972535283718
@@ -2646,7 +2646,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4773972535283723
-    m_Localized: When you apply an Ailment, change Attack Progress by [[0]].
+    m_Localized: 'On Ailment Applied: gain [[0]] Attack Progress'
     m_Metadata:
       m_Items: []
   - m_Id: 4773972535283724
@@ -2716,6 +2716,54 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 4773972535283740
     m_Localized: You have no Armor Gained as Mystic Negation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5119129122115584
+    m_Localized: 'On Evade: gain [[0]] Attack Progress'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5119129155670016
+    m_Localized: '[[0]]% increased Attack Progress gained on Evade.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5119129155670017
+    m_Localized: '[[0]]% decreased Attack Progress gained on Evade.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5119129155670018
+    m_Localized: '[[0]]% more Attack Progress gained on Evade.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5119129155670019
+    m_Localized: '[[0]]% less Attack Progress gained on Evade.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5119129155670020
+    m_Localized: You gain no Attack Progress on Evade.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5121194254798848
+    m_Localized: 'On Crit: gain [[0]] Attack Progress'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5121194254798849
+    m_Localized: '[[0]]% increased Attack Progress gained on Crit.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5121194254798850
+    m_Localized: '[[0]]% decreased Attack Progress gained on Crit.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5121194254798851
+    m_Localized: '[[0]]% more Attack Progress gained on Crit.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5121194254798852
+    m_Localized: '[[0]]% less Attack Progress gained on Crit.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5121194254798853
+    m_Localized: You gain no Attack Progress on Crit.
     m_Metadata:
       m_Items: []
   references:

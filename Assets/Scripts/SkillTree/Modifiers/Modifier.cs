@@ -350,11 +350,15 @@ namespace SkillTree
                 switch (statType)
                 {
                     case StatType.AttackProgressOnHitTaken:
-                        return "When you are hit, change Attack Progress by [[0]].";
+                        return "On Hit Taken: gain [[0]] Attack Progress";
                     case StatType.AttackProgressOnMiss:
-                        return "On Miss: change Attack Progress by [[0]].";
+                        return "On Miss: gain [[0]] Attack Progress";
                     case StatType.AttackProgressOnAilmentApplied:
-                        return "When you apply an Ailment, change Attack Progress by [[0]].";
+                        return "On Ailment Applied: gain [[0]] Attack Progress";
+                    case StatType.AttackProgressOnEvade:
+                        return "On Evade: gain [[0]] Attack Progress";
+                    case StatType.AttackProgressOnCrit:
+                        return "On Crit: gain [[0]] Attack Progress";
                     case StatType.ElementalDamageTakenAsPhysicalChance:
                         return "[[0]] chance to take Fire, Cold and Lightning Damage from incoming attacks as Physical Damage.";
                     case StatType.ArmorAsMysticNegation:

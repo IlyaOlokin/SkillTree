@@ -2659,6 +2659,54 @@ MonoBehaviour:
     m_Key: modifier.container.none.ArmorAsMysticNegation
     m_Metadata:
       m_Items: []
+  - m_Id: 5119129122115584
+    m_Key: modifier.container.added.AttackProgressOnEvade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5119129155670016
+    m_Key: modifier.container.increased.AttackProgressOnEvade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5119129155670017
+    m_Key: modifier.container.decreased.AttackProgressOnEvade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5119129155670018
+    m_Key: modifier.container.more.AttackProgressOnEvade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5119129155670019
+    m_Key: modifier.container.less.AttackProgressOnEvade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5119129155670020
+    m_Key: modifier.container.none.AttackProgressOnEvade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5121194254798848
+    m_Key: modifier.container.added.AttackProgressOnCrit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5121194254798849
+    m_Key: modifier.container.increased.AttackProgressOnCrit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5121194254798850
+    m_Key: modifier.container.decreased.AttackProgressOnCrit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5121194254798851
+    m_Key: modifier.container.more.AttackProgressOnCrit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5121194254798852
+    m_Key: modifier.container.less.AttackProgressOnCrit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5121194254798853
+    m_Key: modifier.container.none.AttackProgressOnCrit
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

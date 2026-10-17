@@ -16,6 +16,8 @@ namespace TooltipSystem
             if (statType == StatType.AttackProgressOnHitTaken
                 || statType == StatType.AttackProgressOnMiss
                 || statType == StatType.AttackProgressOnAilmentApplied
+                || statType == StatType.AttackProgressOnEvade
+                || statType == StatType.AttackProgressOnCrit
                 || statType == StatType.ElementalDamageTakenAsPhysicalChance
                 || statType == StatType.ArmorAsMysticNegation)
                 return localizedText;
