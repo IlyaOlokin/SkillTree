@@ -25,6 +25,310 @@ HP on application and grants that value as Increased Armor and Added AilmentGuar
 while applying the negative value as Added HealingReceived. Removal detaches all
 three modifiers. Changing maximum HP does not recalculate the stored fraction here.
 
+## Periodic elemental charge generation (2026-10-18)
+
+`PeriodicElementalCharges` in
+`Assets/Scripts/SkillTree/Modifiers/ReactMods/PeriodicElementalCharges.cs` grants
+an internal `PeriodicElementalChargesEffect`. It follows the timer/reset binding
+pattern of AilmentAbsorptionCooldown and the direct self-buff insertion of
+CombatStartGrantsElementalCharges. No battle-flow changes or new events are needed.
+
+Inspector fields are Charge Type (Embers=0, Rime=1, Sparks=2, Random=3), Interval
+(default 2 seconds, minimum 0.01), and Stacks (default 1, nonnegative integer).
+The first grant occurs after one complete interval. Random independently chooses
+one type with equal probability for each grant; the entire batch has that type.
+Each contribution grants `max(0, floor(Stacks * powerContext.Multiplier))` charges;
+power changes count only, not interval or the damage per charge. Zero count
+creates no generator. Long combat ticks process every elapsed interval.
+
+Each collected contribution has an independent timer, including repeated copies
+of the same asset. The untimed, non-stackable generator uses controller effect
+ticks, so it respects the normal combat pause. Rebinding after stat recalculation
+reclaims an unbound effect with the same source modifier and source node and
+updates its settings without restarting the remaining interval. Removal unbinds
+the generator immediately; its next effect tick removes it without granting.
+Already granted charges retain their ordinary consumption/reset lifecycle.
+OnCombatStateReset clears the old generator and charges, then creates a fresh
+timer through the binding's reset subscription. This is the existing reset
+boundary, including map/shop transitions, rather than a new battle-start event.
+
+The generator is hidden through `BaseEffect.ShowStatusIcon = false`; the existing
+Embers/Rime/Sparks effects provide the visible icons, counts, names and glossary
+links. `UnitVisualEffectsController` checks this flag, which defaults to true for
+all other effects. VisualType.None alone is insufficient to hide an effect because
+the icon resolver supplies a default sprite. No new EffectVisualType, effect-name
+key, tooltip asset, tooltip database entry or serialized icon mapping is needed.
+Direct insertions have no repeat factory/source attribution, so received-effect
+repetition does not multiply the generator or charge grants.
+
+Created modifier definition:
+`Assets/Scripts/SkillTree/Modifiers/ReactMods/PeriodicElementalCharges_Random_2s_1.asset`.
+Its script GUID is `32531ace296714a4782abb473c879da3`; settings are Random, 2, 1.
+The [LocalModifiers gem](Gems.md#periodic-elemental-charge-gem-2026-10-18) references
+it and is sold in [Shop4](EconomyAndLoot.md#elemental-charge-gem-in-shop4-2026-10-18).
+
+Added shared/English entries in **Modifiers**:
+
+| Key | English text |
+| --- | --- |
+| modifier.periodicElementalCharges.embers.description | Every [[0]] seconds, gain [[1]] {embers\|Embers} charges. |
+| modifier.periodicElementalCharges.rime.description | Every [[0]] seconds, gain [[1]] {rime\|Rime} charges. |
+| modifier.periodicElementalCharges.sparks.description | Every [[0]] seconds, gain [[1]] {sparks\|Sparks} charges. |
+| modifier.periodicElementalCharges.random.description | Every [[0]] seconds, gain [[1]] charges of a random type: {embers\|Embers}, {rime\|Rime} or {sparks\|Sparks}. |
+
+Added **Descriptions**, literal key `Elemental Charge Gem`, English value
+`Elemental Charge Gem`. The literal key is also the gem's readable English
+fallback when a locale has no translation. Modifier descriptions have matching
+English code fallbacks. Existing charge display-name keys are reused. These five
+new entries need ru/de translations; no empty entries or translations were added.
+
+**Manual Unity Editor Steps:** none required for the supplied gem and Shop4 entry.
+For another variant, create a Periodic Elemental Charges modifier and choose Charge
+Type, Interval and Stacks; assign it to the desired node or gem manually. The
+supplied gem uses the existing Steel Gem placeholder sprite
+`Assets/Sprites/IconsDepricated/skill_316.png`; an optional dedicated icon can be
+imported and assigned to its Icon field. No image was generated.
+
+**Icon Generation Prompt** — proposed style; no image reference inspected:
+Create a square painterly dark-fantasy RPG skill icon of a crystalline hourglass
+releasing a glowing orange ember, a sharp icy-blue frost crystal and a golden
+electric spark from its lower chamber. Use one bold centered hourglass silhouette
+with three compact elemental accents to communicate a recurring supply of energy.
+Deep violet crystal, orange, icy blue and gold palette, dramatic rim lighting,
+dark charcoal background, simple high-contrast shapes readable at small skill-tree
+icon sizes. No text, letters, numbers, logos or watermarks.
+
+Verification: live Unity CLI run_script created the modifier/gem and appended one
+Shop4 entry with amount 1, price 250 and stock limit 3. It verified the script
+reference, modifier defaults, gem settings/save ID, existing shop entry IDs,
+English/shared localization IDs, registered charge terms and GemDefinitionCatalog
+resolution. Final Unity CLI recompile/recompile_status targeting
+`C:/UnityProjects/SkillTree` completed after the status-icon filter was added:
+status completed, failed=false, compilationFailed=false and no compiler errors.
+Source review covered binding reuse, reset/removal, multiple copies, random batch
+selection and tick catch-up. No tests, player build, combat or visual playtest.
+
+## Elemental charges: Embers, Rime and Sparks (2026-10-18)
+
+These three independent, untimed buffs use `ElementalChargeEffect`. Every charge
+grants fixed Added 10 Fire, Cold or Lightning Damage respectively. There is no
+gameplay stack cap. Same-type applications merge their charge counts; different
+elements remain separate. Constructors accept an optional integer charge count,
+default one: `new Embers(stacks)`, `new Rime(stacks)`, `new Sparks(stacks)`.
+Nonpositive applications are rejected. The combat-start producer described below
+grants these buffs after a combat reset; node assignment remains manual.
+
+Like `RelentlessMomentum`, each element has a merged count. Like
+`TimedNextAttackModifierEffect`, consumption happens at attack completion.
+`OnAttackPrepared` adds 10 times the current charge count to that attack's typed
+Added bucket, preserving ordinary Increased/More/critical scaling without changing
+the owner's persistent stats or waiting for the Mods phase. `OnAttackCompleted`
+removes exactly one charge from each participating buff, including missed or
+blocked attacks. All charges contribute before consumption. Each extra attack
+prepares and spends independently. DoT does neither. A buff first granted after
+preparation waits for the next attack. Replenishing an existing buff during an
+attack does not alter the already-prepared damage.
+
+Zero charges remove the effect immediately through EffectController. Removal and
+combat reset unsubscribe both attack callbacks. There is no source lifetime,
+timer, separate runtime modifier, runtime binding or new attack hook. Calling
+AttackProcessor directly without the Unit preparation/completion lifecycle does
+not use these buffs, matching other preparation-event mechanics.
+
+Appended `EffectVisualType` IDs: Embers 30, Rime 31, Sparks 32. Each status icon
+shows the charge count, including one. Each effect resolves its registered
+TooltipDescriptionData through `embers`, `rime` or `sparks` in TooltipTerms.
+The matching assets are `Assets/Scripts/TooltipSystem/Descriptions/Embers.asset`,
+`Rime.asset` and `Sparks.asset`. Titles use the corresponding effect-name keys
+and are enabled for linked tooltips. Descriptions use the effect-description keys
+below. Literal 10 keeps separately opened glossary tooltips independent of runtime
+formatting arguments. The English code fallback uses the same text. Descriptions
+contain no nested glossary links.
+
+Added shared/English entries in **Descriptions**:
+
+| Key | English text |
+| --- | --- |
+| effect.embers.name | Embers |
+| effect.embers.description | Each charge grants +10 Fire Damage. Attacks consume 1 charge. |
+| effect.rime.name | Rime |
+| effect.rime.description | Each charge grants +10 Cold Damage. Attacks consume 1 charge. |
+| effect.sparks.name | Sparks |
+| effect.sparks.description | Each charge grants +10 Lightning Damage. Attacks consume 1 charge. |
+
+These effect classes need no Modifiers keys; the producer's keys are listed below.
+ru/de translations of these six keys remain translator TODOs; existing translations
+are preserved and no empty locale entries were added.
+
+**Manual Unity Editor Steps:** assign sprites for the three new visual types in
+`Assets/Scripts/Visual/EffectIconsConfig.asset`. Until then status slots have charge
+text and tooltips but no sprite. The combat-start producer is described below.
+There is no ScriptableObject effect definition to create or link to a node.
+The tooltip assets and database registration are already configured.
+
+**Icon Generation Prompts** — proposed style; no image reference inspected:
+
+- Embers: Square painterly fantasy RPG icon of clustered glowing embers, centered
+  bold silhouette, orange-red palette, hot core lighting, dark charcoal background,
+  readable at small sizes. No text, letters, numbers, logos or watermarks.
+- Rime: Square painterly fantasy RPG icon of clustered sharp frost crystals,
+  centered bold silhouette, icy blue-white palette, cold rim lighting, dark navy
+  background, readable at small sizes. No text, letters, numbers, logos or watermarks.
+- Sparks: Square painterly fantasy RPG icon of clustered electric sparks around
+  a bright core, centered bold silhouette, gold-violet palette, electric glow
+  lighting, dark purple background, readable at small sizes. No text, letters,
+  numbers, logos or watermarks.
+
+Source: `Assets/Scripts/Battle/Effects/ElementalChargeEffect.cs`, `Embers.cs`,
+`Rime.cs`, `Sparks.cs` and `EffectVisualType.cs`. Localization assets:
+`Assets/Localization/Descriptions_en.asset` and `Descriptions Shared Data.asset`.
+Verification: Unity CLI `recompile` / `recompile_status`, explicitly targeting
+`C:/UnityProjects/SkillTree`, completed with `failed=false`,
+`compilationFailed=false` and no compiler errors. Live `run_script` saved and
+verified the six shared/English entries and matching shared IDs. Scoped diff
+checks covered the sources, generated script metas, localization and this page.
+The live authoring script also verified all three term IDs resolve to their
+corresponding description assets.
+No tests, player build or gameplay playtest were run. Attack lifecycle behavior
+is source-reviewed; runtime behavior and status-icon appearance remain unverified.
+
+### Embers on enemy kill (2026-10-18)
+
+`EnemyKillGrantsEmbers` is a reactive producer in
+`Assets/Scripts/SkillTree/Modifiers/ReactMods/EnemyKillGrantsEmbers.cs`.
+It follows `EnemyKillRestoresBarrier` for the per-owner `OnEnemyKilled`
+delegate binding and `CombatStartGrantsElementalCharges` for powered charge
+grants. Inspector `Stacks` is a nonnegative integer, default 1. Each notification
+grants the active owner `max(0, floor(Stacks * powerContext.Multiplier))` Embers.
+Zero grants nothing; rounding is per copy. Multiple copies add to the existing
+Embers count without introducing a cap or changing damage per charge.
+
+The existing `EnemyUnit.Death` notification credits enemy deaths to the injected
+player target, including DoT deaths, without checking the final damage source.
+The health death guard prevents duplicate notifications until reset. No new
+battle event or flow change is introduced. Direct self-effect insertion supplies
+no repeat factory/source attribution. Rebinding never grants charges; unbinding
+stops future grants while earned charges retain their normal consumption/reset
+lifecycle. A first grant during a killing attack waits for the next prepared
+attack; a replenished existing Embers effect still consumes its usual one charge
+at that attack's completion. No separate effect or visual type is needed.
+
+Definition: `Assets/Scripts/SkillTree/Modifiers/ReactMods/EnemyKillGrantsEmbers_1.asset`,
+with `stacks: 1`, ordinary PreAttribute priority and script GUID
+`9d87cf2840135a64da44a18660aee6f5`. Added shared/English **Modifiers** entry
+`modifier.enemyKillGrantsEmbers.description`:
+`On Kill: gain [[0]] {embers|Embers} charges.`
+The displayed count uses the same power scaling and rounding as the grant.
+Existing `Descriptions` entries `effect.embers.name` = `Embers` and
+`effect.embers.description` = `Each charge grants +10 Fire Damage. Attacks consume 1 charge.`
+are reused without edits. The registered `embers` term resolves to the existing
+Embers description asset. ru/de translation of the new modifier key remains a
+translator TODO; no empty entries were added and existing translations remain.
+
+**Manual Unity Editor Steps:** assign the supplied definition to the intended
+node's modifier list; adjust Stacks if needed and choose a node icon. Existing
+Embers status visuals, count and glossary are reused. No new effect-name key,
+tooltip asset, database registration or effect-icon configuration is required.
+The modifier is not assigned to gameplay content by this change.
+
+**Icon Generation Prompt:** Create a square painterly dark-fantasy RPG skill
+icon matching the angular brushwork and glowing charcoal of EmbersIcon.png.
+Show a crumbling charcoal skull releasing a compact cluster of burning embers
+upward, with one bold centered silhouette and a clear separation between the
+fallen skull and rising coals. Use black charcoal, deep crimson and brilliant
+orange-yellow cracks, intense hot-core lighting and a dark smoky background.
+Keep the shapes simple and readable at small skill-tree icon sizes. No text,
+letters, numbers, logos or watermarks.
+
+Verification: Unity CLI `recompile` / `recompile_status`, targeting
+`C:/UnityProjects/SkillTree`, completed with `failed=false`,
+`compilationFailed=false` and no compiler errors. The Editor reported ready
+before the authoring mutation. Live `run_script` created the definition and
+English entry and verified stacks, script GUID, shared/English ID pairing and
+the existing glossary reference. Source review covered binding cleanup, event
+attribution, same-type stacking and killing-attack consumption boundaries.
+No tests, player build or combat playtest were performed.
+
+### Combat-start charge modifier (2026-10-18)
+
+`CombatStartGrantsElementalCharges` is a reactive reset producer in
+`Assets/Scripts/SkillTree/Modifiers/ReactMods/CombatStartGrantsElementalCharges.cs`.
+It reuses the per-owner `DelegateModifierRuntimeBinding` and
+`OnCombatStateReset` subscription pattern from `AilmentAbsorptionCooldown`, but
+deliberately does not grant anything on Bind. Unit recalculation unbinds/rebinds
+runtime subscriptions, so granting on Bind would refill charges during tree or
+stat changes. There is no new effect class, battle event or combat-flow change.
+
+Inspector fields select `ChargeType` (Embers=0, Rime=1, Sparks=2) and nonnegative
+integer `Stacks`, default 1. Each reset grants the owner
+`max(0, floor(Stacks * powerContext.Multiplier))` charges of the selected type.
+Rounding happens per modifier copy. Multiple copies add through the existing
+same-type charge merge; different types remain independent. Zero grants nothing.
+Power scales the grant count, not the fixed 10 damage per charge. Description
+formatting uses the same rounded count and powered-value highlighting.
+
+`Unit.ResetCombatState` clears existing effects before emitting the event, so each
+reset replaces the previous combat's reserves with fresh grants. PlayerUnit.Start
+binds modifiers before its initial reset. Current level/location-entry and restart
+paths reset combat, and map/shop transitions also reset it: charges can therefore
+be visible outside battle, then be cleared and granted again on entry. This is
+the existing reset boundary, not a new battle-start event. Allocating the modifier
+mid-combat waits for the next reset; ordinary recalculation never refills spent
+charges. Unbinding prevents future grants but leaves earned charges under their
+normal attack-consumption/reset lifecycle. Direct self-effect insertion supplies
+no repeat factory or source attribution, so generic effect-receipt repeats do not
+multiply the grant.
+
+Three definitions were created through the live Editor under
+`Assets/Scripts/SkillTree/Modifiers/ReactMods/`, each with Stacks=1 and the matching
+ChargeType:
+
+- `CombatStartGrantsEmbers_1.asset`
+- `CombatStartGrantsRime_1.asset`
+- `CombatStartGrantsSparks_1.asset`
+
+Their script GUID is `5125514bdb0058949bfeae0383167e6b`. No node is assigned.
+Existing effect visual types, status icons/counts, display-name keys and registered
+`embers`, `rime`, `sparks` tooltip descriptions are reused. No new tooltip asset,
+database entry or effect-name key is required. Missing modifier translations use
+the matching English code fallback through GameLocalization.
+
+Added shared/English entries in **Modifiers**:
+
+| Key | English text |
+| --- | --- |
+| modifier.combatStartGrantsEmbers.description | At the start of combat, gain [[0]] {embers\|Embers} charges. |
+| modifier.combatStartGrantsRime.description | At the start of combat, gain [[0]] {rime\|Rime} charges. |
+| modifier.combatStartGrantsSparks.description | At the start of combat, gain [[0]] {sparks\|Sparks} charges. |
+
+Assets changed: `Assets/Localization/Modifiers Shared Data.asset` and
+`Assets/Localization/Modifiers_en.asset`. ru/de translations of these three keys
+are translator TODOs; no existing translations or empty locale entries were added.
+
+**Manual Unity Editor Steps:** choose a supplied definition, set Stacks to the
+desired starting amount and assign it to the intended node's modifier list. Choose
+the node icon manually. To author another variant, use Create > Modifiers >
+Reactive > Combat Start Grants Elemental Charges and select Charge Type/Stacks.
+Existing effect-icon/glossary configuration is reused without changes by this task.
+
+**Icon Generation Prompt** — proposed style, no image reference inspected:
+Create a square painterly dark-fantasy RPG skill icon of an open silver reliquary
+holding three compact clusters of stored elemental energy: glowing orange embers,
+sharp icy blue frost crystals and golden electric sparks. Arrange them around one
+bold centered silhouette to suggest a prepared reserve released as battle begins.
+Use orange, icy blue and gold accents, dramatic rim lighting and a dark charcoal
+background. Keep the composition simple, high contrast and readable at small
+skill-tree icon sizes. No text, letters, numbers, logos or watermarks.
+
+Verification: Unity CLI `recompile` / `recompile_status` targeting
+`C:/UnityProjects/SkillTree` completed with `failed=false`,
+`compilationFailed=false` and no compiler errors. Live `run_script` created and
+checked all three definitions, their script GUID, selected type/count and the
+shared/English key-ID pairs. Source review covered reset ordering, symmetric
+binding cleanup, no Bind grant, stacking and matching description counts.
+No tests, player build or combat playtest were performed. Actual gameplay timing
+and UI appearance remain unverified.
+
 ## Temporary modifier families
 
 | Effect | State and modifier contract |

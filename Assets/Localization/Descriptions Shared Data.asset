@@ -779,6 +779,34 @@ MonoBehaviour:
     m_Key: enum.StatType.AttackProgressOnCrit
     m_Metadata:
       m_Items: []
+  - m_Id: 67299829736411136
+    m_Key: effect.embers.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67299829782548480
+    m_Key: effect.embers.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67299829782548481
+    m_Key: effect.rime.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67299829782548482
+    m_Key: effect.rime.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67299829782548483
+    m_Key: effect.sparks.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67299829782548484
+    m_Key: effect.sparks.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67325012312461312
+    m_Key: Elemental Charge Gem
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

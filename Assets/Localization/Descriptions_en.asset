@@ -842,6 +842,34 @@ MonoBehaviour:
     m_Localized: Attack Progress on Crit
     m_Metadata:
       m_Items: []
+  - m_Id: 67299829736411136
+    m_Localized: Embers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67299829782548480
+    m_Localized: Each charge grants +10 Fire Damage. Attacks consume 1 charge.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67299829782548481
+    m_Localized: Rime
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67299829782548482
+    m_Localized: Each charge grants +10 Cold Damage. Attacks consume 1 charge.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67299829782548483
+    m_Localized: Sparks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67299829782548484
+    m_Localized: Each charge grants +10 Lightning Damage. Attacks consume 1 charge.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67325012312461312
+    m_Localized: Elemental Charge Gem
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -2707,6 +2707,38 @@ MonoBehaviour:
     m_Key: modifier.container.none.AttackProgressOnCrit
     m_Metadata:
       m_Items: []
+  - m_Id: 5374850631864320
+    m_Key: modifier.combatStartGrantsEmbers.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5374851089043456
+    m_Key: modifier.combatStartGrantsRime.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5374851508473856
+    m_Key: modifier.combatStartGrantsSparks.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5390307594211328
+    m_Key: modifier.periodicElementalCharges.embers.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5390308495986688
+    m_Key: modifier.periodicElementalCharges.rime.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5390309292904448
+    m_Key: modifier.periodicElementalCharges.sparks.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5390310119182336
+    m_Key: modifier.periodicElementalCharges.random.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5408252609302528
+    m_Key: modifier.enemyKillGrantsEmbers.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

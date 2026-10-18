@@ -46,6 +46,7 @@ namespace Battle
 
         public abstract bool IsStackable { get; set; }
         public virtual EffectVisualType VisualType => EffectVisualType.None;
+        public virtual bool ShowStatusIcon => true;
         public virtual bool CanDisplayMultipleIcons => false;
         public float Duration = -1;
 

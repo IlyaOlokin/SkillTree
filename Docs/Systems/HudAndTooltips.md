@@ -296,6 +296,16 @@ modifier asset gets its own indicator; copies of one asset share it. Actual swor
 and shield sprites must be assigned manually in EffectIconsConfig. Without these
 mappings, its configured default icon is used. No scene/UI visual check was run.
 
+## Hidden service effects (2026-10-18)
+
+Status visibility update, 2026-10-18: BaseEffect.ShowStatusIcon defaults to true.
+UnitVisualEffectsController skips effects that opt out before icon grouping.
+PeriodicElementalChargesEffect opts out to hide its internal generation timer;
+the resulting Embers, Rime and Sparks retain their existing icons and counts.
+No serialized UI settings or EffectVisualType IDs changed. See
+[periodic charges](ReactiveCombatEffects.md#periodic-elemental-charge-generation-2026-10-18).
+Compilation/source verification is recorded there; no visual playtest was run.
+
 ## Damage debt status (2026-10-03)
 
 DamageDebtEffect entries share one default icon group while keeping independent

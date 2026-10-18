@@ -23,6 +23,19 @@ regenerating them can reset the apparent stock history.
 without an editor-only guard. This is a debug input in the inspected source, not
 an approved economy rule. This documentation pass does not change it.
 
+## Elemental Charge Gem in Shop4 (2026-10-18)
+
+Appended one entry to `Assets/EnemyConfig/Locations/Shops/Shop4Definition.asset`
+(shop ID `4`) for
+`Assets/Resources/Items/Gems/ModifierGems/PeriodicElementalChargesGem.asset`:
+amount 1, price 250 gold, stock limit 3 purchases per profile, following the
+existing Shop4 gem settings. Existing entry IDs and contents are preserved.
+The existing shop-4 location already references this shop definition; its unlock
+rules are unchanged. See [gem configuration](Gems.md#periodic-elemental-charge-gem-2026-10-18)
+and [generator behavior](ReactiveCombatEffects.md#periodic-elemental-charge-generation-2026-10-18).
+The live Editor authoring command verified the saved entry and gem catalog
+resolution. No purchase, save/reload, balance or visual playtest was performed.
+
 ## Shop purchase and sale contracts
 
 `ShopService.TryBuy` validates the entry, remaining stock, funds, item construction

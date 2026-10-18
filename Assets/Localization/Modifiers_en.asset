@@ -2766,6 +2766,39 @@ MonoBehaviour:
     m_Localized: You gain no Attack Progress on Crit.
     m_Metadata:
       m_Items: []
+  - m_Id: 5374850631864320
+    m_Localized: At the start of combat, gain [[0]] {embers|Embers} charges.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5374851089043456
+    m_Localized: At the start of combat, gain [[0]] {rime|Rime} charges.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5374851508473856
+    m_Localized: At the start of combat, gain [[0]] {sparks|Sparks} charges.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5390307594211328
+    m_Localized: Every [[0]] seconds, gain [[1]] {embers|Embers} charges.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5390308495986688
+    m_Localized: Every [[0]] seconds, gain [[1]] {rime|Rime} charges.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5390309292904448
+    m_Localized: Every [[0]] seconds, gain [[1]] {sparks|Sparks} charges.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5390310119182336
+    m_Localized: 'Every [[0]] seconds, gain [[1]] charges of a random type: {embers|Embers},
+      {rime|Rime} or {sparks|Sparks}.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5408252609302528
+    m_Localized: 'On Kill: gain [[0]] {embers|Embers} charges.'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

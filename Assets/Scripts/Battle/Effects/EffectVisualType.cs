@@ -32,6 +32,9 @@ namespace Battle
         Fortification = 27,
         CriticalCharge = 28,
         BlockPowerMomentum = 29,
+        Embers = 30,
+        Rime = 31,
+        Sparks = 32,
     }
 }
 

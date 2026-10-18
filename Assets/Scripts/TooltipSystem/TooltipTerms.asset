@@ -107,3 +107,9 @@ MonoBehaviour:
     description: {fileID: 11400000, guid: b0183830a9a54eaea283f02662a572b2, type: 2}
   - id: parryChance
     description: {fileID: 11400000, guid: 7d10f1ea9aad41c4a8654127e55f6a94, type: 2}
+  - id: embers
+    description: {fileID: 11400000, guid: 67a3b5f2b31482e439274441bd75b21f, type: 2}
+  - id: rime
+    description: {fileID: 11400000, guid: 0373f4211c26c0c49aaf8152bed373c7, type: 2}
+  - id: sparks
+    description: {fileID: 11400000, guid: b67868e6dc6e36442934da020b5a17d1, type: 2}

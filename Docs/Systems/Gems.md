@@ -5,6 +5,27 @@
 Status: **source-reviewed, 2026-09-27**. Scope: gem kinds, placement, influence and
 tree/save integration. No Unity playtest was performed for this page.
 
+## Periodic elemental charge gem (2026-10-18)
+
+`Assets/Resources/Items/Gems/ModifierGems/PeriodicElementalChargesGem.asset` is a
+LocalModifiers gem named Elemental Charge Gem, with maxStack 99 and save ID
+`ebc43741912f429d9f165517b150f3c1`. Its single template is
+`Assets/Scripts/SkillTree/Modifiers/ReactMods/PeriodicElementalCharges_Random_2s_1.asset`:
+gain one charge of a randomly selected Embers/Rime/Sparks type every two combat
+seconds, starting after a full interval. It operates only through an active
+socket. Each active copy has its own timer. See the
+[generation contract](ReactiveCombatEffects.md#periodic-elemental-charge-generation-2026-10-18)
+for power, pause, reset and rebinding rules.
+
+The gem uses the existing Steel Gem placeholder sprite. The English Descriptions
+entry uses literal key/value `Elemental Charge Gem`, preserving a readable
+fallback in untranslated locales; ru/de translation is TODO. Its normal tooltip
+includes the modifier's description and existing registered charge links.
+Resources/Items placement and live GemDefinitionCatalog resolution were checked.
+Distribution is the [Shop4 entry](EconomyAndLoot.md#elemental-charge-gem-in-shop4-2026-10-18).
+No socket assignments, gem-system code or player save format changed. No gameplay
+or visual playtest was performed.
+
 ## Definitions, instances and sockets
 
 `GemDefinition` is an item definition asset containing kind, modifier templates,

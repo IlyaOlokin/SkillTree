@@ -59,6 +59,9 @@ namespace Visual
             for (int i = 0; i < activeEffects.Count; i++)
             {
                 var activeEffect = activeEffects[i];
+                if (activeEffect?.Effect == null || !activeEffect.Effect.ShowStatusIcon)
+                    continue;
+
                 string key = GetEffectIconGroupKey(activeEffect);
                 if (!_effectIconGroups.TryGetValue(key, out var iconGroup))
                 {
