@@ -25,6 +25,61 @@ HP on application and grants that value as Increased Armor and Added AilmentGuar
 while applying the negative value as Added HealingReceived. Removal detaches all
 three modifiers. Changing maximum HP does not recalculate the stored fraction here.
 
+## Sparks on critical hits (2026-10-18)
+
+`CritGrantsSparks` in
+`Assets/Scripts/SkillTree/Modifiers/ReactMods/CritGrantsSparks.cs` subscribes to
+the owner's `Unit.OnCrit` with the symmetric per-owner delegate binding used by
+CriticalRegenerationOnCrit. A successful roll directly adds the existing Sparks
+effect, following CombatStartGrantsElementalCharges. It has no repeat factory or
+source attribution, so generic received-effect repetition does not multiply grants.
+No new effect, event, battle-flow change or EffectVisualType is required.
+
+The supplied definition is
+`Assets/Scripts/SkillTree/Modifiers/ReactMods/CritGrantsSparks_0.4_2.asset`, with
+script GUID `3373e640491de7f4aba16d508a114385`, Chance 0.4 and Stacks 2. Chance is
+clamped to 0..1 and does not scale with power. The grant count is
+`max(0, floor(Stacks * powerContext.Multiplier))`, matching the existing elemental
+charge generators. Zero chance/count creates no binding. Each collected copy
+rolls independently; removing or rebuilding a binding unsubscribes its handler
+without clearing already granted charges.
+
+OnCrit fires once after damage receipt for a critical attack, including blocked
+critical hits and regardless of critical-layer count. Misses, noncritical attacks
+and DoT do not trigger it. Gained charges cannot change the current attack's
+already prepared snapshot. A newly created Sparks effect starts consumption on
+the next prepared attack; an existing prepared Sparks effect still consumes one
+charge at current attack completion. Sparks retain their normal stacking, lack
+of timed expiry, attack consumption and combat-reset clearing.
+
+Added shared/English entry in **Modifiers**, key
+`modifier.critGrantsSparks.description`:
+`On Crit: [[0]]% chance to gain [[1]] {sparks|Sparks} charges.`
+The default description displays 40% and 2. No new effect-name entry or empty
+ru/de entries were added; ru/de translation of this key is a translator TODO.
+The existing Sparks status icon/count, display name and registered `sparks`
+glossary description are reused; no tooltip asset or database update is needed.
+
+Manual Unity Editor Steps: assign the supplied definition to the intended node's
+modifier list and choose its node icon. The definition is not assigned to content
+by this change. Keep Chance 0.4 and Stacks 2 for the requested base behavior.
+
+Icon Generation Prompt, proposed style without an inspected image reference:
+Create a square painterly dark-fantasy RPG skill icon of a silver blade striking
+a bright golden weak-point flash, releasing two distinct electric-blue sparks
+that curl inward toward a small glowing core. Bold centered blade silhouette,
+electric blue, silver and gold palette, dramatic rim lighting, dark smoky
+background, simple high-contrast shapes readable at small skill-tree icon sizes.
+No text, letters, numbers, logos or watermarks.
+
+Verification: Unity CLI recompile/recompile_status targeting
+`C:/UnityProjects/SkillTree` completed with failed=false,
+compilationFailed=false and no compiler errors. Live run_script created the asset
+and English/shared localization entry and checked the serialized values, script
+GUID, shared key/ID pairing and default description. Source inspection covered
+critical event timing, direct insertion, power/count agreement and unsubscription.
+No tests, player build or combat playtest were performed.
+
 ## Periodic elemental charge generation (2026-10-18)
 
 `PeriodicElementalCharges` in

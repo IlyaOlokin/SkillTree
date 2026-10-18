@@ -2739,6 +2739,10 @@ MonoBehaviour:
     m_Key: modifier.enemyKillGrantsEmbers.description
     m_Metadata:
       m_Items: []
+  - m_Id: 5444660782829568
+    m_Key: modifier.critGrantsSparks.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
